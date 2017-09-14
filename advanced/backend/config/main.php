@@ -51,16 +51,8 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-    /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
-            ],
-        ],
-        */
 
-
+       
     ],
     'as access' => [
         'class' => 'mdm\admin\components\AccessControl',
