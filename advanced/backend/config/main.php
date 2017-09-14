@@ -67,8 +67,14 @@ return [
             //controller/action
             'site/*',
             'admin/*',
+            'user/*',
             '/*',
+
         ]
     ],
     'params' => $params,
+    //语言
+    'language' => 'zh-CN',
+    //时区
+    'timeZone' => 'Asia/Chongqing',
 ];
