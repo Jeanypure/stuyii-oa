@@ -22,13 +22,21 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login','signup','logout', 'error'],
+                        'actions' => ['login','error'],
                         'allow' => true,
                     ],
                     [
                         'actions' => ['logout', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['update'],
+                        // 自定义一个规则，返回true表示满足该规则，可以访问，false表示不满足规则，也就不可以访问actions里面的操作啦
+                        'matchCallback' => function ($rule, $action) {
+                            return Yii::$app->user->id == 1 ? true : false;
+                        },
+                        'allow' => true,
                     ],
                 ],
             ],
