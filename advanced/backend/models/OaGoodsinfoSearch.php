@@ -18,9 +18,8 @@ class OaGoodsinfoSearch extends OaGoodsinfo
     public function rules()
     {
         return [
-            [['pid', 'IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged', 'SupplierID', 'SampleFlag', 'SampleCount', 'GroupFlag', 'SellCount', 'SellDays', 'PackageCount', 'StockDays', 'StoreID'], 'integer'],
-            [['description', 'Notes', 'SampleMemo', 'CreateDate', 'SalerName', 'PackName', 'GoodsStatus', 'DevDate', 'SalerName2', 'ChangeStatusTime', 'Purchaser', 'LinkUrl', 'LinkUrl2', 'LinkUrl3'], 'safe'],
-            [['PackFee', 'BatchPrice', 'MaxSalePrice', 'RetailPrice', 'MarketPrice'], 'number'],
+            [['pid', 'IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged', 'SupplierID'], 'integer'],
+            [['description'], 'safe'],
         ];
     }
 
@@ -66,35 +65,9 @@ class OaGoodsinfoSearch extends OaGoodsinfo
             'isMagnetism' => $this->isMagnetism,
             'IsCharged' => $this->IsCharged,
             'SupplierID' => $this->SupplierID,
-            'SampleFlag' => $this->SampleFlag,
-            'SampleCount' => $this->SampleCount,
-            'CreateDate' => $this->CreateDate,
-            'GroupFlag' => $this->GroupFlag,
-            'SellCount' => $this->SellCount,
-            'SellDays' => $this->SellDays,
-            'PackFee' => $this->PackFee,
-            'DevDate' => $this->DevDate,
-            'BatchPrice' => $this->BatchPrice,
-            'MaxSalePrice' => $this->MaxSalePrice,
-            'RetailPrice' => $this->RetailPrice,
-            'MarketPrice' => $this->MarketPrice,
-            'PackageCount' => $this->PackageCount,
-            'ChangeStatusTime' => $this->ChangeStatusTime,
-            'StockDays' => $this->StockDays,
-            'StoreID' => $this->StoreID,
         ]);
 
-        $query->andFilterWhere(['like', 'description', $this->description])
-            ->andFilterWhere(['like', 'Notes', $this->Notes])
-            ->andFilterWhere(['like', 'SampleMemo', $this->SampleMemo])
-            ->andFilterWhere(['like', 'SalerName', $this->SalerName])
-            ->andFilterWhere(['like', 'PackName', $this->PackName])
-            ->andFilterWhere(['like', 'GoodsStatus', $this->GoodsStatus])
-            ->andFilterWhere(['like', 'SalerName2', $this->SalerName2])
-            ->andFilterWhere(['like', 'Purchaser', $this->Purchaser])
-            ->andFilterWhere(['like', 'LinkUrl', $this->LinkUrl])
-            ->andFilterWhere(['like', 'LinkUrl2', $this->LinkUrl2])
-            ->andFilterWhere(['like', 'LinkUrl3', $this->LinkUrl3]);
+        $query->andFilterWhere(['like', 'description', $this->description]);
 
         return $dataProvider;
     }
