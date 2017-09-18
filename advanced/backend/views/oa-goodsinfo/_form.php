@@ -24,62 +24,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'description')->textInput() ?>
 
-    <?= $form->field($model, 'Notes')->textInput() ?>
 
-    <?= $form->field($model, 'SampleFlag')->textInput() ?>
-
-    <?= $form->field($model, 'SampleCount')->textInput() ?>
-
-    <?= $form->field($model, 'SampleMemo')->textInput() ?>
-
-    <?= $form->field($model, 'CreateDate')->textInput() ?>
-
-    <?= $form->field($model, 'GroupFlag')->textInput() ?>
-
-    <?= $form->field($model, 'SalerName')->textInput() ?>
-
-    <?= $form->field($model, 'SellCount')->textInput() ?>
-
-    <?= $form->field($model, 'SellDays')->textInput() ?>
-
-    <?= $form->field($model, 'PackFee')->textInput() ?>
-
-    <?= $form->field($model, 'PackName')->textInput() ?>
-
-    <?= $form->field($model, 'GoodsStatus')->textInput() ?>
-
-    <?= $form->field($model, 'DevDate')->textInput() ?>
-
-    <?= $form->field($model, 'SalerName2')->textInput() ?>
-
-    <?= $form->field($model, 'BatchPrice')->textInput() ?>
-
-    <?= $form->field($model, 'MaxSalePrice')->textInput() ?>
-
-    <?= $form->field($model, 'RetailPrice')->textInput() ?>
-
-    <?= $form->field($model, 'MarketPrice')->textInput() ?>
-
-    <?= $form->field($model, 'PackageCount')->textInput() ?>
-
-    <?= $form->field($model, 'ChangeStatusTime')->textInput() ?>
-
-    <?= $form->field($model, 'StockDays')->textInput() ?>
-
-    <?= $form->field($model, 'StoreID')->textInput() ?>
-
-    <?= $form->field($model, 'Purchaser')->textInput() ?>
-
-    <?= $form->field($model, 'LinkUrl')->textInput() ?>
-
-    <?= $form->field($model, 'LinkUrl2')->textInput() ?>
-
-    <?= $form->field($model, 'LinkUrl3')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-    </div>
 
+
+    </div>
     <?php ActiveForm::end(); ?>
 
 </div>

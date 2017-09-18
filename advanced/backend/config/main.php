@@ -12,6 +12,12 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'modules' => [
+        'gridview' =>[
+            'class' => '\kartik\grid\Module',
+//            'class' => 'yii\i18n\PhpMessageSource',
+//            'basePath' => '@kvgrid/messages',
+//            'forceTranslation' => true
+        ],
         'admin' => [
             'class' => 'mdm\admin\Module',
 //            'layout' => 'left-menu',//yii2-admin的导航菜单
@@ -60,7 +66,12 @@ return [
             'errorAction' => 'site/error',
         ],
 
-       
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+        ],
+
+
     ],
 
     'as access' => [
