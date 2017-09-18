@@ -2,9 +2,9 @@
 
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
-use yii\bootstrap\Tabs;
-use kartik\grid\GridView;
 
+use kartik\grid\GridView;
+//use yii\helpers\Helper;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\OaGoodsinfoSearch */
@@ -18,22 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="oa-goodsinfo-index">
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-    <?php
-    $items[] = [
-        'label' => '产品',
-        'content' => 122,
-        'active' => true,
-    ];
 
-    $items[] = [
-        'label' => 'SKU',
-        'content' => 666
-
-    ];
-    echo Tabs::widget([
-        'items' => $items,
-    ]);
-    ?>
 
 
     <p>
@@ -73,20 +58,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'isMagnetism',
             'IsCharged',
             'SupplierID',
-            'IsPowder',
-            'isMagnetism',
-            'IsCharged',
-            'SupplierID',
-            'IsPowder',
-            'isMagnetism',
-            'IsCharged',
-            'SupplierID',
-            'IsPowder',
-            'isMagnetism',
-            'IsCharged',
-            'SupplierID',
 
-             [
+            [
              'attribute'=> 'description',
              'value'=> function($data){
                 return "<a href=\"$data[description]\" >$data[description]</a>";
@@ -95,7 +68,24 @@ $this->params['breadcrumbs'][] = $this->title;
              'format' => 'raw',
              ],
 
-            ['class' => 'kartik\grid\ActionColumn'],
+            [
+                'class' => 'kartik\grid\ActionColumn',
+                'template' =>'{view} {update} {delete} {active}',
+                'buttons' => [
+                    'active' => function ($url, $model, $key) {
+                        $options = [
+                            'title' => '审核',
+                            'aria-label' => '审核',
+                            'data-confirm' => '你确定通过这条审核吗?',
+                            'data-method' => 'post',
+                            'data-pjax' => '0',
+                        ];
+                        return Html::a('<span class="glyphicon glyphicon-check"></span>', $url, $options);
+                    }
+                ],
+
+
+            ],
         ],
 
 
