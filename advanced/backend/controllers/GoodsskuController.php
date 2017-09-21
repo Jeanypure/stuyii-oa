@@ -3,17 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\OaGoodsinfo;
-use backend\models\OaGoodsinfoSearch;
 use backend\models\Goodssku;
+use backend\models\GoodsskuSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * OaGoodsinfoController implements the CRUD actions for OaGoodsinfo model.
+ * GoodsskuController implements the CRUD actions for Goodssku model.
  */
-class OaGoodsinfoController extends Controller
+class GoodsskuController extends Controller
 {
     /**
      * @inheritdoc
@@ -31,12 +30,12 @@ class OaGoodsinfoController extends Controller
     }
 
     /**
-     * Lists all OaGoodsinfo models.
+     * Lists all Goodssku models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new OaGoodsinfoSearch();
+        $searchModel = new GoodsskuSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,8 +44,20 @@ class OaGoodsinfoController extends Controller
         ]);
     }
 
+    public function actionDemo()
+    {
+        $searchModel = new GoodsskuSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->renderAjax('demo', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+
     /**
-     * Displays a single OaGoodsinfo model.
+     * Displays a single Goodssku model.
      * @param integer $id
      * @return mixed
      */
@@ -58,16 +69,16 @@ class OaGoodsinfoController extends Controller
     }
 
     /**
-     * Creates a new OaGoodsinfo model.
+     * Creates a new Goodssku model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new OaGoodsinfo();
+        $model = new Goodssku();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->pid]);
+            return $this->redirect(['view', 'id' => $model->sid]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -76,52 +87,38 @@ class OaGoodsinfoController extends Controller
     }
 
     /**
-     * Updates an existing OaGoodsinfo model.
+     * Updates an existing Goodssku model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
      */
     public function actionUpdate($id)
     {
-//        var_dump($id);
-//        $model = $this->findModel($id);
-//        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-//            return $this->redirect(['view', 'id' => $model->pid]);
-//        } else {
-//            return $this->render('upda22', [
-//                'model' => $model,
-//            ]);
-//        }
-       $info = OaGoodsinfo::findOne($id);
+        $model = $this->findModel($id);
 
-        if (!$info) {
-            throw new NotFoundHttpException("The p was not found.");
-        }
-
-
-        if($info->load(Yii::$app->request->post()) && $info->save()){
-          return $this->redirect(['view', 'id' =>$info->pid ]);
-        }else{
-            return $this->render('upda22',[
-                'info'=>$info,
-
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->sid]);
+        } else {
+            return $this->render('update', [
+                'model' => $model,
             ]);
-
         }
+    }
 
+    public function actionUp($id)
+    {
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        } else {
+            return $this->render('create', [
+                'model' => $model,
+            ]);
+        }
     }
 
     /**
-     * @param $id
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException
-     */
-
-
-
-
-    /**
-     * Deletes an existing OaGoodsinfo model.
+     * Deletes an existing Goodssku model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -134,15 +131,15 @@ class OaGoodsinfoController extends Controller
     }
 
     /**
-     * Finds the OaGoodsinfo model based on its primary key value.
+     * Finds the Goodssku model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return OaGoodsinfo the loaded model
+     * @return Goodssku the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = OaGoodsinfo::findOne($id)) !== null) {
+        if (($model = Goodssku::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

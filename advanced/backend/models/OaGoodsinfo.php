@@ -48,7 +48,7 @@ class OaGoodsinfo extends \yii\db\ActiveRecord
             'isMagnetism' => 'Is Magnetism',
             'IsCharged' => 'Is Charged',
             'SupplierID' => 'Supplier ID',
-            'description' => 'Description',
+//            'description' => 'Description',
         ];
     }
 }
