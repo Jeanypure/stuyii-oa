@@ -83,6 +83,7 @@ class OaGoodsinfoController extends Controller
      */
     public function actionUpdate($id)
     {
+//        var_dump($id);
 //        $model = $this->findModel($id);
 //        if ($model->load(Yii::$app->request->post()) && $model->save()) {
 //            return $this->redirect(['view', 'id' => $model->pid]);
@@ -92,24 +93,32 @@ class OaGoodsinfoController extends Controller
 //            ]);
 //        }
        $info = OaGoodsinfo::findOne($id);
+
         if (!$info) {
             throw new NotFoundHttpException("The p was not found.");
         }
-        $skuinfo = Goodssku::find()->all();
-        if(!$skuinfo){
-            throw new NotFoundHttpException("The p hasn't sku info");
+
+
+        if($info->load(Yii::$app->request->post()) && $info->save()){
+          return $this->redirect(['view', 'id' =>$info->pid ]);
+        }else{
+            return $this->render('upda22',[
+                'info'=>$info,
+
+            ]);
+
         }
 
-        return $this->render('upda22',
-            [
-                'info'=>$info,
-                'skuinfo'=>$skuinfo,
-
-        ]);
-
-
-
     }
+
+    /**
+     * @param $id
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException
+     */
+
+
+
 
     /**
      * Deletes an existing OaGoodsinfo model.

@@ -44,6 +44,18 @@ class GoodsskuController extends Controller
         ]);
     }
 
+    public function actionDemo()
+    {
+        $searchModel = new GoodsskuSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->renderAjax('demo', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+
     /**
      * Displays a single Goodssku model.
      * @param integer $id
@@ -88,6 +100,18 @@ class GoodsskuController extends Controller
             return $this->redirect(['view', 'id' => $model->sid]);
         } else {
             return $this->render('update', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    public function actionUp($id)
+    {
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        } else {
+            return $this->render('create', [
                 'model' => $model,
             ]);
         }
