@@ -106,6 +106,12 @@ class OaGoodsController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionHeart($id)
+    {
+        $model = $this->findModel($id);
+        return $this->redirect(['index']);
+    }
+
     /**
      * Finds the OaGoods model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -121,4 +127,5 @@ class OaGoodsController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
 }

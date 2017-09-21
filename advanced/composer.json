@@ -22,7 +22,9 @@
         "dmstr/yii2-adminlte-asset": "2.*",
 
         "kartik-v/yii2-grid": "@dev",
-        "kartik-v/yii2-widgets": "@dev"
+        "kartik-v/yii2-widgets": "@dev",
+        "kartik-v/yii2-widget-select2": "^2.1",
+        "kartik-v/yii2-dialog": "@dev"
 
     },
     "require-dev": {

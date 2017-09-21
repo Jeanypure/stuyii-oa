@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 //use yii\grid\GridView;
 use kartik\grid\GridView;
+use kartik\dialog\Dialog;
+
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\OaGoodsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -92,12 +94,13 @@ function centerFormat($name) {
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+//            ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'kartik\grid\SerialColumn'],
 
              centerFormat('img'),
              centerFormat('cate'),
              centerFormat('devNum'),
-            centerFormat('origin'),
+             centerFormat('origin'),
              centerFormat('hopeProfit'),
              centerFormat('develpoer'),
              centerFormat('introducer'),
@@ -106,14 +109,43 @@ function centerFormat($name) {
              centerFormat('createDate'),
              centerFormat('updateDate'),
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [ 'class' => 'kartik\grid\ActionColumn',
+                'template' =>'{view} {update} {delete} {heart}',
+                'buttons' => [
+
+                    'heart' => function ($url, $model, $key) {
+
+                        $options = [
+                            'id'=> 'oa-goods-heart',
+                            'title' => '认领',
+                            'aria-label' => '认领',
+//                            'data-confirm' => '确认认领？',
+                            'data-method' => 'post',
+                            'data-pjax' => '0',
+
+                        ];
+                        return Html::a('<span  class="glyphicon glyphicon-heart"></span>', $url, $options);
+                    }
+                ],
+            ],
         ],
     ]); ?>
 </div>
+
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script>
     $(function () {
         $('.glyphicon-eye-open').addClass('icon-cell');
         $('.wrapper').addClass('body-color');
-    })
+        $('#oa-goods-heart').click(function() {
+            var status = false;
+             krajeeDialog.confirm("Are you sure you want to proceed?", function (result) {
+           if(result){
+               $.get($('#oa-goods-heart').attr('href'));
+                }
+            });
+            return status;
+
+        });
+        });
 </script>
