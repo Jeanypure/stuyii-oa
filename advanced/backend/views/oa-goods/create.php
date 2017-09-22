@@ -11,7 +11,7 @@ $this->params['breadcrumbs'][] = ['label' => '产品推荐', 'url' => ['index']]
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="oa-goods-create">
- 
+
 
     <?= $this->render('_form', [
         'model' => $model,
