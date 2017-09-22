@@ -109,6 +109,11 @@ class OaGoodsController extends Controller
     public function actionHeart($id)
     {
         $model = $this->findModel($id);
+        $user = yii::$app->user->identity->username;
+        $model ->devStatus = '已认领';
+        $model ->develpoer = $user;
+        $model ->updateDate = strftime('%F %T');
+        $model->update(array('devStatus','developer','updateDate'));
         return $this->redirect(['index']);
     }
 

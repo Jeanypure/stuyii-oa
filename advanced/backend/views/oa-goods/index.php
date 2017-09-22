@@ -116,15 +116,17 @@ function centerFormat($name) {
                     'heart' => function ($url, $model, $key) {
 
                         $options = [
-                            'id'=> 'oa-goods-heart',
+                            'id'=> 'oa-goods-heart'.$model->nid,
+                            'name'=> 'oa-goods-heart'.$model->nid,
                             'title' => '认领',
                             'aria-label' => '认领',
 //                            'data-confirm' => '确认认领？',
                             'data-method' => 'post',
                             'data-pjax' => '0',
+                            'onclick' => "heart(".$model->nid.")"
 
                         ];
-                        return Html::a('<span  class="glyphicon glyphicon-heart"></span>', $url, $options);
+                        return Html::a('<span  class="glyphicon glyphicon-heart"></span>',"javascript:void(0);", $options);
                     }
                 ],
             ],
@@ -134,18 +136,21 @@ function centerFormat($name) {
 
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script>
+    function heart(id) {
+//                    var status = false;
+                    krajeeDialog.confirm("确定认领该产品", function (result) {
+                    if(result){
+                        $.get('/oa-goods/heart?id=' + id);
+                    }
+
+            });
+                return false;
+    }
     $(function () {
+
         $('.glyphicon-eye-open').addClass('icon-cell');
         $('.wrapper').addClass('body-color');
-        $('#oa-goods-heart').click(function() {
-            var status = false;
-             krajeeDialog.confirm("Are you sure you want to proceed?", function (result) {
-           if(result){
-               $.get($('#oa-goods-heart').attr('href'));
-                }
-            });
-            return status;
 
-        });
+
         });
 </script>
