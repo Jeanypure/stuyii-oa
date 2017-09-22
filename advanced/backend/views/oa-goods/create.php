@@ -6,13 +6,12 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\OaGoods */
 
-$this->title = 'Create Oa Goods';
-$this->params['breadcrumbs'][] = ['label' => 'Oa Goods', 'url' => ['index']];
+$this->title = '创建产品';
+$this->params['breadcrumbs'][] = ['label' => '产品推荐', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="oa-goods-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
+ 
 
     <?= $this->render('_form', [
         'model' => $model,
