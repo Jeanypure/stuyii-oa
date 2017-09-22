@@ -44,30 +44,45 @@ $this->params['breadcrumbs'][] = 'Update';
             'form'=>$form,
 //            'autoGenerateColumns'=>true,
             'rows' =>[
-                    [
-                        'contentBefore'=>'<legend class="text-info"><small>基本信息</small></legend>',
-                        'attributes'=>[
-                            'IsLiquid'=>['label'=>'是否液体','items'=>[ 1=>'Group 2'],'type'=>Form::INPUT_CHECKBOX],
-                            'IsPowder'=>['label'=>'是否粉末','items'=>[ 1=>'Group 2'],'type'=>Form::INPUT_CHECKBOX],
-                            'isMagnetism'=>['label'=>'是否带磁', 'items'=>[ 1=>'Group 2'], 'type'=>Form::INPUT_CHECKBOX],
-                            'IsCharged'=>['label'=>'是否带电', 'items'=>[0=>'Group 1'], 'type'=>Form::INPUT_CHECKBOX],
+                [
+                    'contentBefore'=>'<legend class="text-info"><small>基本信息</small></legend>',
+                    'attributes'=>[
+                        'IsLiquid'=>['label'=>'是否液体','items'=>[ 1=>'Group 2'],'type'=>Form::INPUT_CHECKBOX],
+                        'IsPowder'=>['label'=>'是否粉末','items'=>[ 1=>'Group 2'],'type'=>Form::INPUT_CHECKBOX],
+                        'isMagnetism'=>['label'=>'是否带磁', 'items'=>[ 1=>'Group 2'], 'type'=>Form::INPUT_CHECKBOX],
+                        'IsCharged'=>['label'=>'是否带电', 'items'=>[0=>'Group 1'], 'type'=>Form::INPUT_CHECKBOX],
+                    ],
+                ],
+                [
+                    'attributes' =>[
+                        'description' =>[
+                                        'label'=>'描述',
+                                        'items'=>[ 1=>'Group 2'],
+                                        'type'=>Form::INPUT_TEXTAREA,
+                                         'options'=>['rows'=>'6']
                         ],
                     ],
-                    [
-                        'attributes' =>[
-                            'description' =>[
-                                            'label'=>'描述',
-                                            'items'=>[ 1=>'Group 2'],
-                                            'type'=>Form::INPUT_TEXTAREA,
-                                             'options'=>['rows'=>'6']
-                            ],
-
-                        ],
-                    ],
-
+                ],
             ],
 
         ]);
+        foreach($skuinfo as $index=>$sku){
+//            echo FormGrid::widget([
+//                'model'=> $skuinfo,
+//                'form'=>$sku,
+//                'rows' =>[
+//                    'attributes' =>[
+//                        'sku' =>['label'=>'SKU','type'=>Form::INPUT_TEXT ],
+//                        'property1' =>['label'=>'款式1','type'=>Form::INPUT_TEXT ],
+//                        'property2' =>['label'=>'款式2','type'=>Form::INPUT_TEXT ],
+//                        'CostPrice' =>['label'=>'成本价','type'=>Form::INPUT_TEXT ],
+//                    ],
+//
+//                ],
+//            ]);
+            echo Html::encode($sku->sku).':'.$form->field($sku,"property1");
+
+        }
 
      ?>
 

@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use Yii;
+use yii\base\Model;
 use backend\models\OaGoodsinfo;
 use backend\models\OaGoodsinfoSearch;
 use backend\models\Goodssku;
@@ -92,24 +93,46 @@ class OaGoodsinfoController extends Controller
 //                'model' => $model,
 //            ]);
 //        }
+
+
+
        $info = OaGoodsinfo::findOne($id);
 
         if (!$info) {
             throw new NotFoundHttpException("The p was not found.");
         }
+        $skuinfo = Goodssku::find()->indexBy('sid')->where(['pid'=>$id])->all();
 
+        if(!$skuinfo){
+            throw new NotFoundHttpException('not found this skus');
+        }
 
-        if($info->load(Yii::$app->request->post()) && $info->save()){
+        if($info->load(Yii::$app->request->post()) && Model::loadMultiple($skuinfo,Yii::$app->request->post())){
+            $count = 0;
+            foreach ($skuinfo as $sku) {
+
+                // populate and save records for each model
+                if ($sku->save()) {
+                    // do something here after saving
+                    $count++;
+                }
+            }
+            Yii::$app->session->setFlash('success', "Processed {$count} records successfully.");
+             $info->save();
           return $this->redirect(['view', 'id' =>$info->pid ]);
         }else{
             return $this->render('upda22',[
                 'info'=>$info,
+                'skuinfo'=>$skuinfo,
 
             ]);
 
         }
 
+
+
     }
+
 
     /**
      * @param $id
