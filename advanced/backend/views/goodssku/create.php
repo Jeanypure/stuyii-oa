@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\grid\GridView;
 
 
 /* @var $this yii\web\View */
@@ -14,11 +15,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
+
+    <!-- Render create form -->
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
 
 </div>
+
+
+
 
 
 

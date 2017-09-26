@@ -8,9 +8,13 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
+
 <div class="goodssku-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+            'action' => ['/goodssku/create'], //指定action
+    ]); ?>
+
 
     <?= $form->field($model, 'pid')->textInput() ?>
 
@@ -36,9 +40,12 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'memo4')->textInput() ?>
 
+
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
+
+
 
     <?php ActiveForm::end(); ?>
 

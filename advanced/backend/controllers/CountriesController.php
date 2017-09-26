@@ -3,16 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\Goodssku;
-use backend\models\GoodsskuSearch;
+use backend\models\Countries;
+use backend\models\CountriesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * GoodsskuController implements the CRUD actions for Goodssku model.
+ * CountriesController implements the CRUD actions for Countries model.
  */
-class GoodsskuController extends Controller
+class CountriesController extends Controller
 {
     /**
      * @inheritdoc
@@ -30,34 +30,32 @@ class GoodsskuController extends Controller
     }
 
     /**
-     * Lists all Goodssku models.
+     * Lists all Countries models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new GoodsskuSearch();
+
+
+        $model = new Countries();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save())
+        {
+            $model = new Countries(); //reset model
+        }
+
+        $searchModel = new CountriesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'model' => $model,
         ]);
     }
-
-    public function actionDemo()
-    {
-        $searchModel = new GoodsskuSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->renderAjax('demo', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
 
     /**
-     * Displays a single Goodssku model.
+     * Displays a single Countries model.
      * @param integer $id
      * @return mixed
      */
@@ -69,26 +67,25 @@ class GoodsskuController extends Controller
     }
 
     /**
-     * Creates a new Goodssku model.
+     * Creates a new Countries model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
+        $model = new Countries();
 
-        $model = new Goodssku();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-           return '添加SKU成功!';
-//           return $this->redirect(['/oa-goodsinfo/update']);
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->renderAjax('create', [
+            return $this->render('create', [
                 'model' => $model,
             ]);
         }
     }
 
     /**
-     * Updates an existing Goodssku model.
+     * Updates an existing Countries model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -98,7 +95,7 @@ class GoodsskuController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->sid]);
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -106,20 +103,8 @@ class GoodsskuController extends Controller
         }
     }
 
-    public function actionUp($id)
-    {
-        $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
-
     /**
-     * Deletes an existing Goodssku model.
+     * Deletes an existing Countries model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -132,15 +117,15 @@ class GoodsskuController extends Controller
     }
 
     /**
-     * Finds the Goodssku model based on its primary key value.
+     * Finds the Countries model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Goodssku the loaded model
+     * @return Countries the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Goodssku::findOne($id)) !== null) {
+        if (($model = Countries::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

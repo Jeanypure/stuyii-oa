@@ -11,6 +11,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+use yii\grid\GridView;
+use yii\data\ActiveDataProvider;
+
 /**
  * OaGoodsinfoController implements the CRUD actions for OaGoodsinfo model.
  */
@@ -76,54 +79,35 @@ class OaGoodsinfoController extends Controller
         }
     }
 
+
     /**
      * Updates an existing OaGoodsinfo model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
      */
+
     public function actionUpdate($id)
     {
-//        var_dump($id);
-//        $model = $this->findModel($id);
-//        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-//            return $this->redirect(['view', 'id' => $model->pid]);
-//        } else {
-//            return $this->render('upda22', [
-//                'model' => $model,
-//            ]);
-//        }
-
-
-
        $info = OaGoodsinfo::findOne($id);
 
         if (!$info) {
             throw new NotFoundHttpException("The p was not found.");
         }
-        $skuinfo = Goodssku::find()->indexBy('sid')->where(['pid'=>$id])->all();
+        $dataProvider = new ActiveDataProvider([
+            'query' => Goodssku::find()->where(['pid'=>$id]),
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
 
-        if(!$skuinfo){
-            throw new NotFoundHttpException('not found this skus');
-        }
+        if($info->load(Yii::$app->request->post())&&$info->save()){
 
-        if($info->load(Yii::$app->request->post()) && Model::loadMultiple($skuinfo,Yii::$app->request->post())){
-            $count = 0;
-            foreach ($skuinfo as $sku) {
-
-                // populate and save records for each model
-                if ($sku->save()) {
-                    // do something here after saving
-                    $count++;
-                }
-            }
-            Yii::$app->session->setFlash('success', "Processed {$count} records successfully.");
-             $info->save();
           return $this->redirect(['view', 'id' =>$info->pid ]);
         }else{
             return $this->render('upda22',[
                 'info'=>$info,
-                'skuinfo'=>$skuinfo,
+                'dataProvider' => $dataProvider,
 
             ]);
 
