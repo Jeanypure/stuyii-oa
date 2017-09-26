@@ -14,5 +14,7 @@ $this->params['breadcrumbs'][] = '更新';
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
+    <? echo $form->field($model, 'devStatus')->checkboxList(['0'=>'正向','1'=>'逆向']) ?>
+
 
 </div>
