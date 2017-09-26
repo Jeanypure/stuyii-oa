@@ -7,12 +7,10 @@ use yii\widgets\DetailView;
 /* @var $model backend\models\OaGoods */
 
 $this->title = $model->devNum;
-$this->params['breadcrumbs'][] = ['label' => 'Oa Goods', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => '产品推荐', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="oa-goods-view">
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
         <?= Html::a('更新', ['update', 'id' => $model->nid], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('删除', ['delete', 'id' => $model->nid], [
