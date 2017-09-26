@@ -8,7 +8,7 @@ use backend\models\OaGoodsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use yii\data\ActiveDataProvider;
 /**
  * OaGoodsController implements the CRUD actions for OaGoods model.
  */
@@ -36,8 +36,13 @@ class OaGoodsController extends Controller
     public function actionIndex()
     {
         $searchModel = new OaGoodsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => OaGoods::find()->where(['devStatus'=>'']),
+            'pagination' => [
+                'pageSize' => 25,
+            ],
+        ]);
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -106,6 +111,8 @@ class OaGoodsController extends Controller
         return $this->redirect(['index']);
     }
 
+    // Heart for heart button
+    /*
     public function actionHeart($id)
     {
         $model = $this->findModel($id);
@@ -116,7 +123,78 @@ class OaGoodsController extends Controller
         $model->update(array('devStatus','developer','updateDate'));
         return $this->redirect(['index']);
     }
+    */
 
+    // Heart for heart modal
+
+    public function actionHeart($id)
+    {
+        $model = $this->findModel($id);
+
+        return $this->renderAjax('heart',[
+            'model' => $model,
+        ]);
+    }
+
+
+    // Forward action
+
+    public function actionForward($id)
+    {
+        $model = $this->findModel($id);
+        $user = yii::$app->user->identity->username;
+        $model ->devStatus = '正向认领';
+        $model ->develpoer = $user;
+        $model ->updateDate = strftime('%F %T');
+        $model->update(array('devStatus','developer','updateDate'));
+        return $this->redirect(['index']);
+    }
+
+    //Backward action
+
+    public function actionBackward($id)
+    {
+        $model = $this->findModel($id);
+        $user = yii::$app->user->identity->username;
+        $model ->devStatus = '逆向认领';
+        $model ->develpoer = $user;
+        $model ->updateDate = strftime('%F %T');
+        $model->update(array('devStatus','developer','updateDate'));
+        return $this->redirect(['index']);
+    }
+
+
+    // forward products
+    public function actionForwardProducts()
+    {
+        $searchModel = new OaGoodsSearch();
+        $dataProvider = new ActiveDataProvider([
+            'query' => OaGoods::find()->where(['devStatus'=>'正向认领']),
+            'pagination' => [
+                'pageSize' => 25,
+            ],
+        ]);
+        return $this->render('forwardProducts', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    // backward products
+    public function actionBackwardProducts()
+    {
+        $searchModel = new OaGoodsSearch();
+        $dataProvider = new ActiveDataProvider([
+            'query' => OaGoods::find()->where(['devStatus'=>'逆向认领']),
+            'pagination' => [
+                'pageSize' => 25,
+            ],
+        ]);
+        return $this->render('backwardProducts', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
     /**
      * Finds the OaGoods model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

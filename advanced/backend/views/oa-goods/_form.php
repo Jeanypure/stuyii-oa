@@ -25,7 +25,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'introducer')->textInput() ?>
 
-    <?= $form->field($model, 'devStatus')->textInput() ?>
+    <?= $form->field($model, 'devStatus')->textInput()?>
 
     <?= $form->field($model, 'checkStatus')->textInput() ?>
 

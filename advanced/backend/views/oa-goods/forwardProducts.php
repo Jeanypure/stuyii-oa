@@ -1,42 +1,14 @@
 <?php
 
 use yii\helpers\Html;
-//use yii\grid\GridView;
 use kartik\grid\GridView;
-use kartik\dialog\Dialog;
-use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\OaGoodsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '产品推荐';
+$this->title = '正向产品';
 $this->params['breadcrumbs'][] = $this->title;
-//创建认领模态框
-
-use yii\bootstrap\Modal;
-Modal::begin([
-    'id' => 'heart-modal',
-    'header' => '<h4 class="modal-title">认领产品</h4>',
-    'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
-]);
-//echo
-Modal::end();
-
-
-//绑定模态框事件
-
-$requestUrl = Url::toRoute('heart');
-$js = <<<JS
-    $('.data-heart').on('click',  function () {
-        $.get('{$requestUrl}',  { id: $(this).closest('tr').data('key') },
-            function (data) {
-                $('.modal-body').html(data);
-            }
-        );
-    });
-JS;
-$this->registerJs($js);
 
 //单元格居中类
 class CenterFormatter {
@@ -108,8 +80,6 @@ function centerFormat($name) {
 </style>
 <div class="oa-goods-index">
    <!-- 页面标题-->
-    <h1><?php //    Html::encode($this->title) ?></h1>
-    <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?= Html::a('新增产品', ['create'], ['class' => 'btn btn-success']) ?>
@@ -120,9 +90,7 @@ function centerFormat($name) {
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-//            ['class' => 'yii\grid\SerialColumn'],
             ['class' => 'kartik\grid\SerialColumn'],
-
              centerFormat('img'),
              centerFormat('cate'),
              centerFormat('devNum'),
@@ -134,25 +102,11 @@ function centerFormat($name) {
              centerFormat('checkStatus'),
              centerFormat('createDate'),
              centerFormat('updateDate'),
-
             [ 'class' => 'kartik\grid\ActionColumn',
                 'template' =>'{view} {update} {delete} {heart}',
                 'buttons' => [
 
                     'heart' => function ($url, $model, $key) {
-                        /*
-                        $options = [
-                            'id'=> 'oa-goods-heart'.$model->nid,
-                            'name'=> 'oa-goods-heart'.$model->nid,
-                            'title' => '认领',
-                            'aria-label' => '认领',
-                            'data-method' => 'post',
-                            'data-pjax' => '0',
-                            'onclick' => "heart(".$model->nid.")"
-
-                        ];
-                        return Html::a('<span  class="glyphicon glyphicon-heart"></span>',"javascript:void(0);", $options);
-                        */
                         $options = [
                             'title' => '认领',
                             'aria-label' => '认领',
@@ -172,24 +126,12 @@ function centerFormat($name) {
 </div>
 
 <!--<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>-->
+
+<script src="https://cdn.bootcss.com/jquery/3.2.0/jquery.min.js"></script>
+
 <script>
-    /*
-    function heart(id) {
-//                   var status = false;
-                    krajeeDialog.prompt({label:'认领到：', dropdown:'正向/逆向'}, function (result) {
-                    if(result){
-                        $.get('/oa-goods/heart?id=' + id);
-                    }
-
-            });
-                return false;
-    }
-    */
     $(function () {
-
         $('.glyphicon-eye-open').addClass('icon-cell');
         $('.wrapper').addClass('body-color');
-
-
         });
 </script>

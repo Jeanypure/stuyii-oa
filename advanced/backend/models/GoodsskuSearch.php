@@ -42,7 +42,7 @@ class GoodsskuSearch extends Goodssku
      */
     public function search($params)
     {
-        $query = Goodssku::find();
+        $query = Goodssku::find()->where(['devStatus'=>'fefefe'])->all();
 
         // add conditions that should always apply here
 
