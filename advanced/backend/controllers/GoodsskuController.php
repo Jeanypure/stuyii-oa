@@ -3,11 +3,15 @@
 namespace backend\controllers;
 
 use Yii;
+use yii\base\Model;
 use backend\models\Goodssku;
 use backend\models\GoodsskuSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+//actionSave中对应的命名空间要加上
+use yii\web\Response;
+
 
 /**
  * GoodsskuController implements the CRUD actions for Goodssku model.
@@ -77,9 +81,10 @@ class GoodsskuController extends Controller
     {
 
         $model = new Goodssku();
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-           return '添加SKU成功!';
-//           return $this->redirect(['/oa-goodsinfo/update']);
+
+        if ($model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ['result' =>$model->save() ];
         } else {
             return $this->renderAjax('create', [
                 'model' => $model,
@@ -98,25 +103,16 @@ class GoodsskuController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->sid]);
+            $pid = $_POST['Goodssku']['pid'];
+            return $this->redirect(['oa-goodsinfo/update','id'=>$pid]);
         } else {
-            return $this->render('update', [
+            return $this->renderAjax('update', [
                 'model' => $model,
             ]);
         }
     }
 
-    public function actionUp($id)
-    {
-        $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
+
 
     /**
      * Deletes an existing Goodssku model.
@@ -126,9 +122,12 @@ class GoodsskuController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        //User::find()->where(['name' => 'ttt'])->one()
+        $sku = Goodssku::find()->where(['sid'=>$id])->one();
+        $pid = $sku['pid'];
 
-        return $this->redirect(['index']);
+        $this->findModel($id)->delete();
+        return $this->redirect(['oa-goodsinfo/update','id'=>$pid]);
     }
 
     /**
@@ -146,4 +145,6 @@ class GoodsskuController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+
 }

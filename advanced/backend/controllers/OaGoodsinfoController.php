@@ -11,14 +11,21 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-use yii\grid\GridView;
+
 use yii\data\ActiveDataProvider;
+
+//actionSave中对应的命名空间要加上
+use yii\web\Response;
+use yii\widgets\ActiveForm;
+
 
 /**
  * OaGoodsinfoController implements the CRUD actions for OaGoodsinfo model.
  */
 class OaGoodsinfoController extends Controller
 {
+
+    public $pid;
     /**
      * @inheritdoc
      */
@@ -89,17 +96,21 @@ class OaGoodsinfoController extends Controller
 
     public function actionUpdate($id)
     {
+
        $info = OaGoodsinfo::findOne($id);
 
         if (!$info) {
             throw new NotFoundHttpException("The p was not found.");
         }
+
+
         $dataProvider = new ActiveDataProvider([
             'query' => Goodssku::find()->where(['pid'=>$id]),
             'pagination' => [
-                'pageSize' => 20,
+                'pageSize' => 10,
             ],
         ]);
+
 
         if($info->load(Yii::$app->request->post())&&$info->save()){
 
@@ -118,11 +129,6 @@ class OaGoodsinfoController extends Controller
     }
 
 
-    /**
-     * @param $id
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException
-     */
 
 
 
@@ -155,4 +161,43 @@ class OaGoodsinfoController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    /**
+     * Update child sku
+     * add child sku
+     */
+
+    public function actionCreatesku($id =null)
+    {
+
+        $model = new Goodssku();
+
+        if ($model->load(Yii::$app->request->post())&&$model->save()){
+            $pid = $_POST['Goodssku']['pid'];
+              $this->redirect(['oa-goodsinfo/update','id'=>$pid]);
+        } else {
+            return $this->renderAjax('createsku', [
+                'model' => $model,
+                'pid' => $id,
+            ]);
+        }
+    }
+
+    //该方法是异步校验字段，输入框失去焦点之后自动会自动请求改地址
+    public function actionValidate(){
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $model = new Goodssku();
+        $model->load(Yii::$app->request->post());
+        return ActiveForm::validate($model);
+
+    }
+
+    public function actionEditsku(){
+
+    }
+
+
+
+
+
 }
