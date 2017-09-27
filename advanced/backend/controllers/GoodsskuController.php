@@ -48,16 +48,8 @@ class GoodsskuController extends Controller
         ]);
     }
 
-    public function actionDemo()
-    {
-        $searchModel = new GoodsskuSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->renderAjax('demo', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
+
 
 
     /**
