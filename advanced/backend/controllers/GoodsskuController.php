@@ -81,6 +81,7 @@ class GoodsskuController extends Controller
     {
 
         $model = new Goodssku();
+
         if ($model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ['result' =>$model->save() ];

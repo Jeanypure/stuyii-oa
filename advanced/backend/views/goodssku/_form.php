@@ -12,7 +12,9 @@ use yii\helpers\Html;
 <div class="goodssku-form">
 
     <?php $form = ActiveForm::begin([
+
             'id' => 'add-form',
+
 
 //        'action' => Url::to(['goodssku/create']),           //此处为请求地址 Url用法查看手册
         'enableAjaxValidation' => true,

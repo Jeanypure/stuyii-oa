@@ -11,6 +11,7 @@ use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\builder\FormGrid;
 use yii\grid\GridView;
+use yii\data\ActiveDataProvider;
 
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
@@ -73,6 +74,7 @@ $this->params['breadcrumbs'][] = 'Update';
     echo "<br>";
 
         echo GridView::widget([
+
         'dataProvider' => $dataProvider,
 
         'columns' => [
@@ -102,6 +104,7 @@ $this->params['breadcrumbs'][] = 'Update';
                 'attribute' => 'RetailPrice',
                 'format' => 'text',
             ],
+
 
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -135,6 +138,7 @@ $this->params['breadcrumbs'][] = 'Update';
                         return Html::a('<span class="glyphicon glyphicon-heart"></span>', '#', $options);
                     }
 
+
                 ],
             ],
         ],
@@ -157,6 +161,7 @@ echo Html::a('+新增SKU', '#', [
 <?php
 Modal::begin([
     'id' => 'create-modal',
+
     'class' => 'add-sku',
     'header' => '<h4 class="modal-title">新增SKU</h4>',
     'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
@@ -178,6 +183,7 @@ Modal::end();
 Modal::begin([
     'id' => 'edit-sku',
     'header' => '<h4 class="modal-title">编辑SKU</h4>',
+
     'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
     'size'=>Modal::SIZE_LARGE,
     'options'=>[
@@ -185,6 +191,7 @@ Modal::begin([
         'data-keyboard'=>false,
     ],
 ]);
+
 
 $requestUrl = Url::toRoute(['createsku','id'=>$info->pid]);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
 $requestUrl2 = Url::toRoute(['/goodssku/update']);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
@@ -203,6 +210,7 @@ $('#create').on('click', function () {
     $.get('{$requestUrl}', {},
         function (data) {
             $('#create-modal').find('.modal-body').html(data);
+
         }  
     );
 });   

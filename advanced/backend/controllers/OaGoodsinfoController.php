@@ -11,11 +11,13 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+
 use yii\data\ActiveDataProvider;
 
 //actionSave中对应的命名空间要加上
 use yii\web\Response;
 use yii\widgets\ActiveForm;
+
 
 /**
  * OaGoodsinfoController implements the CRUD actions for OaGoodsinfo model.
@@ -100,6 +102,7 @@ class OaGoodsinfoController extends Controller
         if (!$info) {
             throw new NotFoundHttpException("The p was not found.");
         }
+
 
         $dataProvider = new ActiveDataProvider([
             'query' => Goodssku::find()->where(['pid'=>$id]),
