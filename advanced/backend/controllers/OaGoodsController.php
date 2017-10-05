@@ -154,6 +154,7 @@ class OaGoodsController extends Controller
         $model ->devStatus = '正向认领';
         $model ->develpoer = $user;
         $model ->updateDate = strftime('%F %T');
+//        var_dump($model);die;
         $model->update(array('devStatus','developer','updateDate'));
         return $this->redirect(['index']);
     }

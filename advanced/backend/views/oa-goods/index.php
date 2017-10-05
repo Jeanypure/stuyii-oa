@@ -154,7 +154,7 @@ function centerFormat($name) {
              centerFormat('checkStatus'),
              centerFormat('createDate'),
              centerFormat('updateDate'),
-            centerFormat('hopeSale'),
+            centerFormat('salePrice'),
             centerFormat('hopeWeight'),
             centerFormat('hopeRate'),
             centerFormat('hopeSale'),
