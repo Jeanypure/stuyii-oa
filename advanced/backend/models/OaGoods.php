@@ -11,7 +11,7 @@ use Yii;
  * @property integer $img
  * @property string $cate
  * @property string $devNum
- * @property string $origin
+ * @property string $origin1
  * @property string $hopeProfit
  * @property string $develpoer
  * @property string $introducer
@@ -36,8 +36,12 @@ class OaGoods extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['img','cate', 'devNum', 'origin', 'develpoer', 'introducer', 'devStatus', 'checkStatus'], 'string'],
-            [['hopeProfit'], 'number'],
+            [['img','cate', 'devNum', 'origin1', 'develpoer', 'introducer',
+                'devStatus', 'checkStatus','subCate','vendor1','vendor2','vendor3',
+                'origin2','origin3',
+            ], 'string'],
+            [['hopeRate','salePirce', 'hopeWeight','hopeMonthProfit'], 'number'],
+            [['hopeSale',], 'integer'],
             [['createDate', 'updateDate'], 'safe'],
         ];
     }
@@ -51,13 +55,22 @@ class OaGoods extends \yii\db\ActiveRecord
             'nid' => '编号',
             'img' => '图片',
             'cate' => '主类目',
+            'subCate' => '子类目',
+            'vendor1' => '供应商链接1',
+            'vendor2' => '供应商链接2',
+            'vendor3' => '供应商链接3',
+            'origin1' => '平台参考链接1',
+            'origin2' => '平台参考链接2',
+            'origin3' => '平台参考链接3',
             'devNum' => '开发编号',
-            'origin' => '参考链接',
-            'hopeProfit' => '预估毛利',
-            'develpoer' => '开发者',
+            'develpoer' => '开发员',
             'introducer' => '推荐人',
             'devStatus' => '认领',
             'checkStatus' => '审核',
+            'hopePrice' => '售价',
+            'hopeWeight' => '预估重量(克)',
+            'hopeRate' => '预估利润率(%)',
+            'hopeMonthProfit' => '预估月毛利($)',
             'createDate' => '创建时间',
             'updateDate' => '更新时间',
         ];
