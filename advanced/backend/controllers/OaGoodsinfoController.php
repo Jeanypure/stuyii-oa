@@ -48,7 +48,10 @@ class OaGoodsinfoController extends Controller
     public function actionIndex()
     {
         $searchModel = new OaGoodsinfoSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => OaGoodsinfoSearch::find()->orderBy('pid'),
+        ]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

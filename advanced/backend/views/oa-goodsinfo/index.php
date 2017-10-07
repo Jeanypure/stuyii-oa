@@ -36,6 +36,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
         'columns' => [
             ['class'=>'kartik\grid\SerialColumn'],
+            'GoodsName',
+            'AliasCnName',
+            'AliasEnName',
+//            'PackName',
+//            'Season',
+//            'StoreID',
 
             [
                 'attribute'=>'IsLiquid',
@@ -68,14 +74,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'SupplierID',
 
-            [
-             'attribute'=> 'description',
-             'value'=> function($data){
-                return "<a href=\"$data[description]\" >$data[description]</a>";
-             },
-
-             'format' => 'raw',
-             ],
+//            [
+//             'attribute'=> 'description',
+//             'value'=> function($data){
+//                return "<a href=\"$data[description]\" >$data[description]</a>";
+//             },
+//
+//             'format' => 'raw',
+//             ],
+//            'DictionaryName',
 
             [
                 'class' => 'kartik\grid\ActionColumn',
@@ -92,8 +99,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a('<span class="glyphicon glyphicon-check"></span>', $url, $options);
                     }
                 ],
-
-
             ],
         ],
 

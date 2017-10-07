@@ -36,13 +36,7 @@ class OaGoods extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['img','cate', 'devNum', 'origin1', 'developer', 'introducer',
-                'devStatus', 'checkStatus','subCate','vendor1','vendor2','vendor3',
-                'origin2','origin3',
-            ], 'string'],
-            [['hopeRate','salePrice', 'hopeWeight','hopeMonthProfit'], 'number'],
-            [['hopeSale','nid'], 'integer'],
-            [['createDate', 'updateDate'], 'safe'],
+      
             [['img','cate', 'subCate','origin1','salePrice','hopeWeight', 'hopeRate','hopeSale'],'required']
         ];
     }
