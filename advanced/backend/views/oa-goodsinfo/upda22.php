@@ -47,6 +47,39 @@ $this->params['breadcrumbs'][] = 'Update';
             'rows' =>[
                 [
                     'contentBefore'=>'<legend class="text-info"><small>基本信息</small></legend>',
+                    'attributes' =>[
+                        'GoodsName' =>[
+                            'label'=>'商品名称',
+                            'items'=>[ 1=>'Group 2'],
+                            'type'=>Form::INPUT_TEXT,
+                        ],
+                    ],
+                ],
+                [
+                    'attributes' =>[
+                        'AliasCnName' =>[
+                            'label'=>'中文申报名',
+                            'items'=>[ 1=>'Group 2'],
+                            'type'=>Form::INPUT_TEXT,
+                        ],
+                        'AliasEnName' =>[
+                            'label'=>'英文申报名',
+                            'items'=>[ 1=>'Group 2'],
+                            'type'=>Form::INPUT_TEXT,
+                        ],
+                    ],
+                ],
+                [
+                    'attributes' =>[
+                        'description' =>[
+                            'label'=>'描述',
+                            'items'=>[ 1=>'Group 2'],
+                            'type'=>Form::INPUT_TEXTAREA,
+                            'options'=>['rows'=>'6']
+                        ],
+                    ],
+                ],
+                [
                     'attributes'=>[
                         'IsLiquid'=>['label'=>'是否液体','items'=>[ 1=>'Group 2'],'type'=>Form::INPUT_CHECKBOX],
                         'IsPowder'=>['label'=>'是否粉末','items'=>[ 1=>'Group 2'],'type'=>Form::INPUT_CHECKBOX],
@@ -54,16 +87,39 @@ $this->params['breadcrumbs'][] = 'Update';
                         'IsCharged'=>['label'=>'是否带电', 'items'=>[0=>'Group 1'], 'type'=>Form::INPUT_CHECKBOX],
                     ],
                 ],
+
                 [
                     'attributes' =>[
-                        'description' =>[
-                                        'label'=>'描述',
-                                        'items'=>[ 1=>'Group 2'],
-                                        'type'=>Form::INPUT_TEXTAREA,
-                                         'options'=>['rows'=>'6']
+                        'StoreID' =>[
+                                    'label'=>'仓库',
+                                    'items'=>[ 1=>'Group 2','2'=>'金皖399','3'=>'幕利US','4'=>'4PXUS','5'=>'万邑通US'],
+                                    'type'=>Form::INPUT_DROPDOWN_LIST,
+                        ],
+                        'Season' =>[
+                            'label'=>'季节',
+                            'items'=>[ 0=>'春季',1=>'夏季',2=>'秋季',3=>'冬季'],
+                            'type'=>Form::INPUT_DROPDOWN_LIST,
                         ],
                     ],
                 ],
+
+                [
+
+                    'attributes' =>[
+                        'PackName' =>[
+                            'label'=>'规格',
+                            'items'=>[ 1=>'Group 2'],
+                            'type'=>Form::INPUT_TEXT,
+                        ],
+                        'SupplierID' =>[
+                                        'label'=>'供应商',
+                                        'items'=>[ '2'=>'金皖399','3'=>'幕利US','4'=>'4PXUS','5'=>'万邑通US'],
+                                        'type'=>Form::INPUT_DROPDOWN_LIST,
+                        ],
+
+                    ],
+                ],
+
             ],
 
         ]);?>
