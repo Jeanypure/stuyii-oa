@@ -132,6 +132,24 @@ class OaGoodsController extends Controller
         return $this->redirect(['index']);
     }
 
+
+
+    /**
+     *  lots fail simultaneously
+     * @param null
+     * @return mixed
+     */
+    public  function  actionFailLots()
+    {
+        $ids = yii::$app->request->post()["id"];
+        foreach ($ids as $id)
+        {
+            $model = $this->findModel($id);
+            $model->checkStatus ='已作废';
+            $model->update(['checkStatus']);
+        }
+        return $this->redirect(['index']);
+    }
     // Heart for heart button
     /*
     public function actionHeart($id)

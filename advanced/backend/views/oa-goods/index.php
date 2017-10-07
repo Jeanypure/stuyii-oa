@@ -29,6 +29,19 @@ Modal::end();
 
 $requestUrl = Url::toRoute('heart');
 $js = <<<JS
+    $('.fail-lots').on('click',function() {
+    var ids = $("#oa-goods").yiiGridView("getSelectedRows");
+    var self = $(this);
+    if(ids.length == 0) return false;
+     $.ajax({
+           url:"/oa-goods/fail-lots",
+           type:"post",
+           data:{id:ids},
+           success:function(res){
+                console.log("yeah lots failed!");
+           }
+        });
+    });
     $('.data-heart').on('click',  function () {
         $.get('{$requestUrl}',  { id: $(this).closest('tr').data('key') },
             function (data) {
@@ -120,15 +133,20 @@ function centerFormat($name) {
         <?= Html::a('新增产品', ['create'], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('批量导入', ['importLots'], ['class' => 'btn btn-info']) ?>
         <?= Html::a('批量修改', ['editLots'], ['class' => 'btn btn-warning']) ?>
-        <?= Html::a('批量作废', ['failLots'], ['class' => 'btn btn-danger']) ?>
+        <?= Html::a('批量作废',"javascript:void(0);",  ['title'=>'failLots','class' => 'fail-lots btn btn-danger']) ?>
     </p>
     <?= GridView::widget([
         'bootstrap' => true,
         'responsive'=>true,
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'id' => 'oa-goods',
         'columns' => [
-//            ['class' => 'yii\grid\SerialColumn'],
+
+            [
+                'class' => 'yii\grid\CheckboxColumn',
+            ],
+
             ['class' => 'kartik\grid\SerialColumn'],
 
              centerFormat('img'),
