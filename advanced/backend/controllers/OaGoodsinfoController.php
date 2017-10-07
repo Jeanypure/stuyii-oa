@@ -100,28 +100,42 @@ class OaGoodsinfoController extends Controller
     public function actionUpdate($id)
     {
 
-       $info = OaGoodsinfo::findOne($id);
+        $info = OaGoodsinfo::findOne($id);
 
         if (!$info) {
-            throw new NotFoundHttpException("The p was not found.");
+            throw new NotFoundHttpException("The product was not found.");
         }
-
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => Goodssku::find()->where(['pid'=>$id]),
-            'pagination' => [
-                'pageSize' => 10,
-            ],
-        ]);
-
 
         if($info->load(Yii::$app->request->post())&&$info->save()){
 
           return $this->redirect(['view', 'id' =>$info->pid ]);
         }else{
-            return $this->render('upda22',[
+            $connection = Yii::$app->db;
+
+            $sql ="SELECT NID,StoreName from B_store";
+            $command = $connection->createCommand($sql);
+            $result = $command->queryAll();
+            $res = array_column($result, 'StoreName', 'StoreName');
+
+
+            $comm = $connection->createCommand('select DictionaryName from B_Dictionary where CategoryID=9');
+            $plat = $comm->queryAll();
+            $platFrom = array_column($plat, 'DictionaryName', 'DictionaryName');
+
+
+
+
+            $dataProvider = new ActiveDataProvider([
+                'query' => Goodssku::find()->where(['pid'=>$id]),
+                'pagination' => [
+                    'pageSize' => 10,
+                ],
+            ]);
+            return $this->render('updetail',[
                 'info'=>$info,
                 'dataProvider' => $dataProvider,
+                'result' => $res,
+                'lockplantform' => $platFrom,
 
             ]);
 

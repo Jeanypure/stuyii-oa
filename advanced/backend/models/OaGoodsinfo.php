@@ -12,7 +12,7 @@ use Yii;
  * @property integer $IsPowder
  * @property integer $isMagnetism
  * @property integer $IsCharged
- * @property integer $SupplierID
+ * @property integer $SupplierName
  * @property string $description
  */
 class OaGoodsinfo extends \yii\db\ActiveRecord
@@ -31,8 +31,9 @@ class OaGoodsinfo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged', 'SupplierID'], 'integer'],
-            [['description'], 'string'],
+            [['IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged'], 'integer'],
+            [['description','SupplierName','Season','StoreName','PackName',], 'string'],
+            [['GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description',], 'required'],
         ];
     }
 
@@ -42,13 +43,20 @@ class OaGoodsinfo extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-//            'pid' => 'Pid',
-            'IsLiquid' => 'Is Liquid',
-            'IsPowder' => 'Is Powder',
-            'isMagnetism' => 'Is Magnetism',
-            'IsCharged' => 'Is Charged',
-            'SupplierID' => 'Supplier ID',
-            'description' => 'Description',
+            'GoodsName' => '商品名称',
+            'SupplierName' => '供应商名称',
+            'AliasCnName' => '中文申报名',
+            'AliasEnName' => '英文申报名',
+            'PackName' => '规格',
+            'description' => '描述',
+            'Season' => '季节',
+            'StoreName' => '仓库',
+            'IsLiquid' => '是否液体',
+            'IsPowder' => '是否粉末',
+            'isMagnetism' => '是否带磁',
+            'IsCharged' => '是否带电',
+
+
         ];
     }
 }

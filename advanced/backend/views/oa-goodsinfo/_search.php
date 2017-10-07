@@ -25,7 +25,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'IsCharged') ?>
 
-    <?php // echo $form->field($model, 'SupplierID') ?>
+    <?php // echo $form->field($model, 'SupplierName') ?>
 
     <?php // echo $form->field($model, 'description') ?>
 

@@ -18,7 +18,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
     public function rules()
     {
         return [
-            [['pid', 'IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged', 'SupplierID'], 'integer'],
+            [['pid', 'IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged', 'SupplierName'], 'integer'],
             [['description'], 'safe'],
         ];
     }
@@ -64,7 +64,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
             'IsPowder' => $this->IsPowder,
             'isMagnetism' => $this->isMagnetism,
             'IsCharged' => $this->IsCharged,
-            'SupplierID' => $this->SupplierID,
+            'SupplierName' => $this->SupplierName,
         ]);
 
         $query->andFilterWhere(['like', 'description', $this->description]);
