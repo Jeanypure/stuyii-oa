@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use kartik\dialog\Dialog;
 use yii\helpers\Url;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\OaGoodsSearch */
@@ -35,6 +36,10 @@ $js = <<<JS
             }
         );
     });
+    
+    //图标剧中
+        $('.glyphicon-eye-open').addClass('icon-cell');
+        $('.wrapper').addClass('body-color');
 JS;
 $this->registerJs($js);
 
@@ -45,11 +50,11 @@ class CenterFormatter {
     }
     public  function format() {
         // 超链接显示为超链接
-        if ($this->name === 'origin') {
+        if ($this->name === 'origin1') {
             return  [
                 'attribute' => $this->name,
                 'value' => function($data) {
-                    return "<a class='cell' href='{$data['origin']}' target='_blank'>=></a>";
+                    return "<a class='cell' href='{$data['origin1']}' target='_blank'>=></a>";
         },
                 'format' => 'raw',
 
@@ -106,13 +111,23 @@ function centerFormat($name) {
         background-color: whitesmoke;
     }
 </style>
+<?php $form = ActiveForm::begin([
+    'fieldConfig'=>[
+        'template'=> "{label}\n<div class=\"col-sm-4\">{input}</div>\n{error}",
+    ]
+]);?>
+<?= $form->field($model, 'img')->textInput() ?>
+<?= $form->field($model, 'cate')->textInput() ?>
+<?php ActiveForm::end();?>
 <div class="oa-goods-index">
    <!-- 页面标题-->
-    <h1><?php //    Html::encode($this->title) ?></h1>
     <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('新增产品', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('新增产品', ['create'], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('批量导入', ['importLots'], ['class' => 'btn btn-info']) ?>
+        <?= Html::a('批量修改', ['editLots'], ['class' => 'btn btn-warning']) ?>
+        <?= Html::a('批量作废', ['failLots'], ['class' => 'btn btn-danger']) ?>
     </p>
     <?= GridView::widget([
         'bootstrap' => true,
@@ -125,15 +140,25 @@ function centerFormat($name) {
 
              centerFormat('img'),
              centerFormat('cate'),
+            centerFormat('subCate'),
+            centerFormat('vendor1'),
+            centerFormat('vendor2'),
+            centerFormat('vendor3'),
+            centerFormat('origin1'),
+            centerFormat('origin2'),
+            centerFormat('origin3'),
              centerFormat('devNum'),
-             centerFormat('origin'),
-             centerFormat('hopeProfit'),
              centerFormat('develpoer'),
              centerFormat('introducer'),
              centerFormat('devStatus'),
              centerFormat('checkStatus'),
              centerFormat('createDate'),
              centerFormat('updateDate'),
+            centerFormat('salePrice'),
+            centerFormat('hopeWeight'),
+            centerFormat('hopeRate'),
+            centerFormat('hopeSale'),
+            centerFormat('hopeMonthProfit'),
 
             [ 'class' => 'kartik\grid\ActionColumn',
                 'template' =>'{view} {update} {delete} {heart}',
@@ -171,25 +196,3 @@ function centerFormat($name) {
     ]); ?>
 </div>
 
-<!--<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>-->
-<script>
-    /*
-    function heart(id) {
-//                   var status = false;
-                    krajeeDialog.prompt({label:'认领到：', dropdown:'正向/逆向'}, function (result) {
-                    if(result){
-                        $.get('/oa-goods/heart?id=' + id);
-                    }
-
-            });
-                return false;
-    }
-    */
-    $(function () {
-
-        $('.glyphicon-eye-open').addClass('icon-cell');
-        $('.wrapper').addClass('body-color');
-
-
-        });
-</script>

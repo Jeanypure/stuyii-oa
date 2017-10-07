@@ -18,9 +18,13 @@ class OaGoodsSearch extends OaGoods
     public function rules()
     {
         return [
-            [['nid'], 'integer'],
-            [['img','cate', 'devNum', 'origin', 'develpoer', 'introducer', 'devStatus', 'checkStatus', 'createDate', 'updateDate'], 'safe'],
-            [['hopeProfit'], 'number'],
+            [['id'], 'integer'],
+            [['img','cate', 'devNum', 'origin1', 'develpoer', 'introducer',
+                'devStatus', 'checkStatus','subCate','vendor1','vendor2','vendor3',
+                'origin2','origin3',
+            ], 'string'],
+            [['hopeRate','salePirce', 'hopeWeight','hopeMonthProfit','hopeSale','nid'], 'number'],
+            [['createDate', 'updateDate'], 'safe'],
         ];
     }
 
@@ -61,14 +65,14 @@ class OaGoodsSearch extends OaGoods
         // grid filtering conditions
         $query->andFilterWhere([
             'nid' => $this->nid,
-            'hopeProfit' => $this->hopeProfit,
+            'hopeRate' => $this->hopeRate,
             'createDate' => $this->createDate,
             'updateDate' => $this->updateDate,
         ]);
 
         $query->andFilterWhere(['like', 'cate', $this->cate])
             ->andFilterWhere(['like', 'devNum', $this->devNum])
-            ->andFilterWhere(['like', 'origin', $this->origin])
+            ->andFilterWhere(['like', 'origin1', $this->origin1])
             ->andFilterWhere(['like', 'develpoer', $this->develpoer])
             ->andFilterWhere(['like', 'introducer', $this->introducer])
             ->andFilterWhere(['like', 'devStatus', $this->devStatus])

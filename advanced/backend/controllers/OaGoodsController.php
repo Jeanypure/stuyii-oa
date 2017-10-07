@@ -36,6 +36,7 @@ class OaGoodsController extends Controller
     public function actionIndex()
     {
         $searchModel = new OaGoodsSearch();
+        $model = new OaGoods();
 //        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider = new ActiveDataProvider([
             'query' => OaGoods::find()->where(['devStatus'=>'']),
@@ -46,6 +47,7 @@ class OaGoodsController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'model' => $model
         ]);
     }
 
@@ -70,7 +72,13 @@ class OaGoodsController extends Controller
     {
         $model = new OaGoods();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        //创建时，有默认值传过去。
+        $post_data = Yii::$app->request->post();
+        $post_data['OaGoods']['devNum'] = strval(time());
+        $post_data['OaGoods']['introducer'] = yii::$app->user->identity->username;
+        $post_data['OaGoods']['createDate'] = strftime('%F %T');;
+        $post_data['OaGoods']['updateDate'] = strftime('%F %T');;
+        if ($model->load($post_data) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->nid]);
         } else {
             return $this->render('create', [
@@ -146,6 +154,7 @@ class OaGoodsController extends Controller
         $model ->devStatus = '正向认领';
         $model ->develpoer = $user;
         $model ->updateDate = strftime('%F %T');
+//        var_dump($model);die;
         $model->update(array('devStatus','developer','updateDate'));
         return $this->redirect(['index']);
     }
