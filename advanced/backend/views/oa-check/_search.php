@@ -25,7 +25,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'hopeProfit') ?>
 
-    <?php // echo $form->field($model, 'develpoer') ?>
+    <?php // echo $form->field($model, 'developer') ?>
 
     <?php // echo $form->field($model, 'introducer') ?>
 

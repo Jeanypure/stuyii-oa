@@ -100,7 +100,7 @@ function centerFormat($name) {
              centerFormat('devNum'),
              centerFormat('origin'),
              centerFormat('hopeProfit'),
-             centerFormat('develpoer'),
+             centerFormat('developer'),
              centerFormat('introducer'),
              centerFormat('devStatus'),
              centerFormat('checkStatus'),

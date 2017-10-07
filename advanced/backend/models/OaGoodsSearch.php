@@ -19,11 +19,11 @@ class OaGoodsSearch extends OaGoods
     {
         return [
             [['id'], 'integer'],
-            [['img','cate', 'devNum', 'origin1', 'develpoer', 'introducer',
+            [['img','cate', 'devNum', 'origin1', 'developer', 'introducer',
                 'devStatus', 'checkStatus','subCate','vendor1','vendor2','vendor3',
                 'origin2','origin3',
             ], 'string'],
-            [['hopeRate','salePirce', 'hopeWeight','hopeMonthProfit','hopeSale','nid'], 'number'],
+            [['hopeRate','salePrice', 'hopeWeight','hopeMonthProfit','hopeSale','nid'], 'number'],
             [['createDate', 'updateDate'], 'safe'],
         ];
     }
@@ -73,7 +73,7 @@ class OaGoodsSearch extends OaGoods
         $query->andFilterWhere(['like', 'cate', $this->cate])
             ->andFilterWhere(['like', 'devNum', $this->devNum])
             ->andFilterWhere(['like', 'origin1', $this->origin1])
-            ->andFilterWhere(['like', 'develpoer', $this->develpoer])
+            ->andFilterWhere(['like', 'developer', $this->developer])
             ->andFilterWhere(['like', 'introducer', $this->introducer])
             ->andFilterWhere(['like', 'devStatus', $this->devStatus])
             ->andFilterWhere(['like', 'checkStatus', $this->checkStatus]);

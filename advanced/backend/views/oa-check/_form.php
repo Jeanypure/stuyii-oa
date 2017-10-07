@@ -21,7 +21,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'hopeProfit')->textInput() ?>
 
-    <?= $form->field($model, 'develpoer')->textInput() ?>
+    <?= $form->field($model, 'developer')->textInput() ?>
 
     <?= $form->field($model, 'introducer')->textInput() ?>
 
