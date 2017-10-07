@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="oa-goods-create">
 
 
-    <?= $this->render('_form', [
+    <?= $this->render('_formCreate', [
         'model' => $model,
     ]) ?>
 

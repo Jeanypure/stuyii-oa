@@ -28,8 +28,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'hopeSale')->textInput() ?>
 
-    <?= $form->field($model, 'hopeMonthProfit')->textInput(['readonly'=>true]) ?>
-
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

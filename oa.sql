@@ -15,7 +15,7 @@ CREATE TABLE [dbo].[oa_goods] (
 [devNum] varchar(80) NULL ,
 [origin] varchar(300) NULL ,
 [hopeProfit] decimal(6,2) NULL ,
-[develpoer] varchar(10) NULL ,
+[developer] varchar(10) NULL ,
 [introducer] varchar(10) NULL ,
 [devStatus] varchar(20) NULL ,
 [checkStatus] varchar(20) NULL ,

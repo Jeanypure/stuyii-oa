@@ -111,14 +111,7 @@ function centerFormat($name) {
         background-color: whitesmoke;
     }
 </style>
-<?php $form = ActiveForm::begin([
-    'fieldConfig'=>[
-        'template'=> "{label}\n<div class=\"col-sm-4\">{input}</div>\n{error}",
-    ]
-]);?>
-<?= $form->field($model, 'img')->textInput() ?>
-<?= $form->field($model, 'cate')->textInput() ?>
-<?php ActiveForm::end();?>
+
 <div class="oa-goods-index">
    <!-- 页面标题-->
     <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -148,7 +141,7 @@ function centerFormat($name) {
             centerFormat('origin2'),
             centerFormat('origin3'),
              centerFormat('devNum'),
-             centerFormat('develpoer'),
+             centerFormat('developer'),
              centerFormat('introducer'),
              centerFormat('devStatus'),
              centerFormat('checkStatus'),

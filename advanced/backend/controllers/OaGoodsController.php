@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use backend\models\OaGoods;
 use backend\models\OaGoodsSearch;
+use backend\models\OaGoodsForm;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -72,14 +73,26 @@ class OaGoodsController extends Controller
     {
         $model = new OaGoods();
 
-        //创建时，有默认值传过去。
-        $post_data = Yii::$app->request->post();
-        $post_data['OaGoods']['devNum'] = strval(time());
-        $post_data['OaGoods']['introducer'] = yii::$app->user->identity->username;
-        $post_data['OaGoods']['createDate'] = strftime('%F %T');;
-        $post_data['OaGoods']['updateDate'] = strftime('%F %T');;
-        if ($model->load($post_data) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->nid]);
+        if ($model->load(Yii::$app->request->post())  ) {
+            if($model->save()) {
+                //默认值更新到当前行中
+                $id = $model->nid;
+                $current_model = $this->findModel($id);
+                $user = yii::$app->user->identity->username;
+                $current_model->devNum = '20'.date('ymd',time()).strval($id);
+                $current_model->devStatus = '';
+                $current_model->checkStatus = '';
+                $current_model ->introducer = $user;
+                $current_model ->updateDate = strftime('%F %T');
+                $current_model ->createDate = strftime('%F %T');
+                $current_model->update(array('devStatus','developer','updateDate'));
+                return $this->redirect(['view', 'id' => $model->nid]);
+            }
+            else {
+
+                echo "something Wrong!";
+            }
+
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -126,7 +139,7 @@ class OaGoodsController extends Controller
         $model = $this->findModel($id);
         $user = yii::$app->user->identity->username;
         $model ->devStatus = '已认领';
-        $model ->develpoer = $user;
+        $model ->developer = $user;
         $model ->updateDate = strftime('%F %T');
         $model->update(array('devStatus','developer','updateDate'));
         return $this->redirect(['index']);
@@ -152,7 +165,7 @@ class OaGoodsController extends Controller
         $model = $this->findModel($id);
         $user = yii::$app->user->identity->username;
         $model ->devStatus = '正向认领';
-        $model ->develpoer = $user;
+        $model ->developer = $user;
         $model ->updateDate = strftime('%F %T');
 //        var_dump($model);die;
         $model->update(array('devStatus','developer','updateDate'));
@@ -166,7 +179,7 @@ class OaGoodsController extends Controller
         $model = $this->findModel($id);
         $user = yii::$app->user->identity->username;
         $model ->devStatus = '逆向认领';
-        $model ->develpoer = $user;
+        $model ->developer = $user;
         $model ->updateDate = strftime('%F %T');
         $model->update(array('devStatus','developer','updateDate'));
         return $this->redirect(['index']);

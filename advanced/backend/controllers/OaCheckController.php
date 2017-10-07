@@ -61,7 +61,7 @@ class OaCheckController extends Controller
         $user = yii::$app->user->identity->username;
         $model ->checkStatus = '已审核';
 //        $model ->devStatus = '已认领';
-        $model ->develpoer = $user;
+        $model ->developer = $user;
         $model ->updateDate = strftime('%F %T');
         $model->update(array('checkStatus','developer','updateDate'));
         return $this->redirect(['to-check']);
@@ -79,7 +79,7 @@ class OaCheckController extends Controller
         $user = yii::$app->user->identity->username;
         $model ->checkStatus = '已作废';
 //        $model ->devStatus = '已认领';
-        $model ->develpoer = $user;
+        $model ->developer = $user;
         $model ->updateDate = strftime('%F %T');
         $model->update(array('checkStatus','developer','updateDate'));
         return $this->redirect(['to-check']);
@@ -192,7 +192,7 @@ class OaCheckController extends Controller
         $model = $this->findModel($id);
         $user = yii::$app->user->identity->username;
         $model ->devStatus = '已认领';
-        $model ->develpoer = $user;
+        $model ->developer = $user;
         $model ->updateDate = strftime('%F %T');
         $model->update(array('devStatus','developer','updateDate'));
         return $this->redirect(['index']);
@@ -218,7 +218,7 @@ class OaCheckController extends Controller
         $model = $this->findModel($id);
         $user = yii::$app->user->identity->username;
         $model ->devStatus = '正向认领';
-        $model ->develpoer = $user;
+        $model ->developer = $user;
         $model ->updateDate = strftime('%F %T');
         $model->update(array('devStatus','developer','updateDate'));
         return $this->redirect(['index']);
@@ -231,7 +231,7 @@ class OaCheckController extends Controller
         $model = $this->findModel($id);
         $user = yii::$app->user->identity->username;
         $model ->devStatus = '逆向认领';
-        $model ->develpoer = $user;
+        $model ->developer = $user;
         $model ->updateDate = strftime('%F %T');
         $model->update(array('devStatus','developer','updateDate'));
         return $this->redirect(['index']);

@@ -91,6 +91,7 @@ function centerFormat($name) {
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'kartik\grid\SerialColumn'],
+
             centerFormat('img'),
             centerFormat('cate'),
             centerFormat('subCate'),
@@ -112,6 +113,7 @@ function centerFormat($name) {
             centerFormat('hopeRate'),
             centerFormat('hopeSale'),
             centerFormat('hopeMonthProfit'),
+
             [ 'class' => 'kartik\grid\ActionColumn',
                 'template' =>'{view} {update} {delete} {heart}',
                 'buttons' => [

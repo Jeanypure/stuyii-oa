@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'origin2',
             'origin3',
             'devNum',
-            'develpoer',
+            'developer',
             'introducer',
             'devStatus',
             'checkStatus',
