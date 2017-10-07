@@ -14,24 +14,26 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'img')->textInput() ?>
     <?= $form->field($model, 'cate')->textInput() ?>
+    <?= $form->field($model, 'subCate')->textInput() ?>
+    <?= $form->field($model, 'vendor1')->textInput() ?>
+    <?= $form->field($model, 'vendor2')->textInput() ?>
+    <?= $form->field($model, 'vendor3')->textInput() ?>
+    <?= $form->field($model, 'origin1')->textInput() ?>
+    <?= $form->field($model, 'origin2')->textInput() ?>
+    <?= $form->field($model, 'origin3')->textInput() ?>
+    <?= $form->field($model, 'devNum')->textInput(['readonly'=>true]) ?>
+    <?= $form->field($model, 'develpoer')->textInput(['readonly'=>true]) ?>
+    <?= $form->field($model, 'introducer')->textInput(['readonly'=>true]) ?>
+    <?= $form->field($model, 'devStatus')->textInput(['readonly'=>true])?>
+    <?= $form->field($model, 'checkStatus')->textInput(['readonly'=>true]) ?>
+    <?= $form->field($model, 'createDate')->textInput(['readonly'=>true]) ?>
+    <?= $form->field($model, 'updateDate')->textInput(['readonly'=>true]) ?>
+    <?= $form->field($model, 'salePrice')->textInput() ?>
+    <?= $form->field($model, 'hopeWeight')->textInput() ?>
+    <?= $form->field($model, 'hopeRate')->textInput() ?>
+    <?= $form->field($model, 'hopeSale')->textInput() ?>
+    <?= $form->field($model, 'hopeMonthProfit')->textInput() ?>
 
-    <?= $form->field($model, 'devNum')->textInput() ?>
-
-    <?= $form->field($model, 'origin')->textInput() ?>
-
-    <?= $form->field($model, 'hopeProfit')->textInput() ?>
-
-    <?= $form->field($model, 'develpoer')->textInput() ?>
-
-    <?= $form->field($model, 'introducer')->textInput() ?>
-
-    <?= $form->field($model, 'devStatus')->textInput()?>
-
-    <?= $form->field($model, 'checkStatus')->textInput() ?>
-
-    <?= $form->field($model, 'createDate')->textInput() ?>
-
-    <?= $form->field($model, 'updateDate')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
