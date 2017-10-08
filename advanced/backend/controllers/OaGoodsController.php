@@ -10,6 +10,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
+use \PHPExcel;
+use app\models\UploadForm;
+use yii\web\UploadedFile;
 /**
  * OaGoodsController implements the CRUD actions for OaGoods model.
  */
@@ -132,6 +135,79 @@ class OaGoodsController extends Controller
         return $this->redirect(['index']);
     }
 
+
+
+    /**
+     *  lots fail simultaneously
+     * @param null
+     * @return mixed
+     */
+    public  function  actionFailLots()
+    {
+        $ids = yii::$app->request->post()["id"];
+        foreach ($ids as $id)
+        {
+            $model = $this->findModel($id);
+            $model->checkStatus ='已作废';
+            $model->update(['checkStatus']);
+        }
+        return $this->redirect(['index']);
+    }
+
+    /**
+     *  read uploading templates locally
+     */
+
+    public function actionTemplate()
+    {
+        $template = htmlspecialchars_decode(file_get_contents('template.xlsx'));
+        $outfile='template.xlsx';
+        header('Content-type: application/octet-stream; charset=utf8');
+        Header("Accept-Ranges: bytes");
+        header('Content-Disposition: attachment; filename='.$outfile);
+        echo $template;
+        exit();
+    }
+
+
+    /**
+     *  import excel file
+     */
+
+    public function actionUpload()
+    {
+        $model = new UploadForm();
+
+        if (Yii::$app->request->isPost) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if ($model->upload()) {
+                // 文件上传成功
+                return;
+            }
+        }
+
+        return $this->render('upload', ['model' => $model]);
+
+    }
+    /**
+     *   generate uploading templates with PHPExcel
+     * @param null
+     * @return mixed
+     */
+
+    public function actionTemplates()
+    {
+        $objPHPExcel = new PHPExcel();
+
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objPHPExcel->getActiveSheet()->setTitle('导入模板');
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', 'img');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="这里是excel文件的名称.xls"');
+        header('Cache-Control: max-age=0');
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+    }
     // Heart for heart button
     /*
     public function actionHeart($id)

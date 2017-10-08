@@ -37,7 +37,8 @@ class OaGoods extends \yii\db\ActiveRecord
     {
         return [
       
-            [['img','cate', 'subCate','origin1','salePrice','hopeWeight', 'hopeRate','hopeSale'],'required']
+            [['img','cate', 'subCate','origin1','salePrice','hopeWeight', 'hopeRate','hopeSale'],'required'],
+            [['origin2','origin3','vendor1','vendor2','vendor3'],'string']
         ];
     }
 
