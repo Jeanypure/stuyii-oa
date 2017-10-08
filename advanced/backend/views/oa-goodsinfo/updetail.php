@@ -117,7 +117,7 @@ $this->params['breadcrumbs'][] = 'Update';
 
                         'DictionaryName' =>[
                             'label'=>'禁售平台',
-                            'items'=>$lockplantform,
+                            'items'=>$lock,
                             'type'=>Form::INPUT_DROPDOWN_LIST,
                         ],
 
@@ -136,6 +136,9 @@ ActiveForm::end(); ?>
 
     <?php
     echo Html::label("<legend><small>SKU信息</small></legend>");
+    ?>
+
+<?php
     echo "<br>";
 
         echo GridView::widget([
@@ -200,7 +203,7 @@ ActiveForm::end(); ?>
                                 'data-keyboard'=>false,
                             ],
                         ];
-                        return Html::a('<span class="glyphicon glyphicon-heart"></span>', '#', $options);
+                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', '#', $options);
                     }
 
 
@@ -212,8 +215,6 @@ ActiveForm::end(); ?>
      ?>
 
 
-
-
 <?php
 echo Html::a('+新增SKU', '#', [
     'id' => 'create',
@@ -222,6 +223,8 @@ echo Html::a('+新增SKU', '#', [
     'class' => 'btn btn-success',
 ]);
 ?>
+
+
 
 <?php
 Modal::begin([
@@ -258,7 +261,7 @@ Modal::begin([
 ]);
 
 
-$requestUrl = Url::toRoute(['createsku','id'=>$info->pid]);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
+$requestUrl = Url::toRoute(['/goodssku/create','id'=>$info->pid]);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
 $requestUrl2 = Url::toRoute(['/goodssku/update']);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
 $js2 = <<<JS
     

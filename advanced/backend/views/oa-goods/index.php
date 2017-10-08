@@ -128,7 +128,6 @@ function centerFormat($name) {
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-//            ['class' => 'yii\grid\SerialColumn'],
             ['class' => 'kartik\grid\SerialColumn'],
 
              centerFormat('img'),

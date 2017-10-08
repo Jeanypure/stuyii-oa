@@ -17,6 +17,22 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'pid') ?>
 
+    <?= $form->field($model, 'GoodsName') ?>
+
+    <?php  echo $form->field($model, 'SupplierName') ?>
+
+    <?= $form->field($model, 'AliasCnName') ?>
+
+    <?= $form->field($model, 'AliasEnName') ?>
+
+    <?= $form->field($model, 'PackName') ?>
+
+    <?php  echo $form->field($model, 'description') ?>
+
+    <?= $form->field($model, 'Season') ?>
+
+    <?= $form->field($model, 'StoreName') ?>
+
     <?= $form->field($model, 'IsLiquid') ?>
 
     <?= $form->field($model, 'IsPowder') ?>
@@ -25,9 +41,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'IsCharged') ?>
 
-    <?php // echo $form->field($model, 'SupplierName') ?>
+    <?php  echo $form->field($model, 'DictionaryName') ?>
 
-    <?php // echo $form->field($model, 'description') ?>
+
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

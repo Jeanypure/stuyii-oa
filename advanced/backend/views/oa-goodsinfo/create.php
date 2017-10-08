@@ -98,7 +98,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     'DictionaryName' =>[
                         'label'=>'禁售平台',
-                        'items'=>$lockplantform,
+                        'items'=>$lock,
                         'type'=>Form::INPUT_DROPDOWN_LIST,
                     ],
 

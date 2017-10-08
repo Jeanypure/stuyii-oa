@@ -48,11 +48,7 @@ class OaGoodsinfoController extends Controller
     public function actionIndex()
     {
         $searchModel = new OaGoodsinfoSearch();
-//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider = new ActiveDataProvider([
-            'query' => OaGoodsinfoSearch::find()->orderBy('pid'),
-        ]);
-
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -83,23 +79,12 @@ class OaGoodsinfoController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->pid]);
         } else {
-            $connection = Yii::$app->db;
-
-            $sql ="SELECT StoreName from B_store";
-            $command = $connection->createCommand($sql);
-            $result = $command->queryAll();
-            $res = array_column($result, 'StoreName', 'StoreName');
-
-
-            $comm = $connection->createCommand('select DictionaryName from B_Dictionary where CategoryID=9');
-            $plat = $comm->queryAll();
-            $platFrom = array_column($plat, 'DictionaryName', 'DictionaryName');
-
+         $data = $this->actionSelectParam();
 
             return $this->render('create', [
                 'model' => $model,
-                'result' => $res,
-                'lockplantform' => $platFrom,
+                'result' => $data['res'],
+                'lock' => $data['platFrom'],
 
             ]);
         }
@@ -123,21 +108,11 @@ class OaGoodsinfoController extends Controller
         }
 
         if($info->load(Yii::$app->request->post())&&$info->save()){
-
+//            var_dump($_POST);die;
           return $this->redirect(['view', 'id' =>$info->pid ]);
         }else{
-            $connection = Yii::$app->db;
 
-            $sql ="SELECT StoreName from B_store";
-            $command = $connection->createCommand($sql);
-            $result = $command->queryAll();
-            $res = array_column($result, 'StoreName', 'StoreName');
-
-
-            $comm = $connection->createCommand('select DictionaryName from B_Dictionary where CategoryID=9');
-            $plat = $comm->queryAll();
-            $platFrom = array_column($plat, 'DictionaryName', 'DictionaryName');
-
+            $data = $this->actionSelectParam();
 
             $dataProvider = new ActiveDataProvider([
                 'query' => Goodssku::find()->where(['pid'=>$id]),
@@ -148,8 +123,8 @@ class OaGoodsinfoController extends Controller
             return $this->render('updetail',[
                 'info'=>$info,
                 'dataProvider' => $dataProvider,
-                'result' => $res,
-                'lockplantform' => $platFrom,
+                'result' => $data['res'],
+                'lock' => $data['platFrom'],
 
             ]);
 
@@ -223,8 +198,34 @@ class OaGoodsinfoController extends Controller
 
     }
 
-    public function actionEditsku(){
 
+    /**
+     * @return array $data 包含仓库 禁售平台信息
+     */
+    public function actionSelectParam(){
+        $connection = Yii::$app->db;
+        $sql ="SELECT StoreName from B_store";
+        $command = $connection->createCommand($sql);
+        $result = $command->queryAll();
+        array_push($result,['StoreName'=>'']);
+        foreach ($result as $key=>$value){
+            $StoreName[$key] = $value['StoreName'];
+        }
+        array_multisort($StoreName,SORT_ASC,$result);
+        $res = array_column($result, 'StoreName', 'StoreName');
+
+        $comm = $connection->createCommand('select DictionaryName from B_Dictionary where CategoryID=9');
+        $plat = $comm->queryAll();
+        array_push($plat,['DictionaryName'=>'']);
+        foreach ($plat as $key=>$value){
+            $DictionaryName[$key] = $value['DictionaryName'];
+        }
+        array_multisort($DictionaryName,SORT_ASC,$plat);
+        $platFrom = array_column($plat, 'DictionaryName', 'DictionaryName');
+        $data =[];
+        $data['res'] =$res;
+        $data['platFrom'] =$platFrom;
+        return $data;
     }
 
 

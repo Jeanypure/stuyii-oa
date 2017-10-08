@@ -14,12 +14,16 @@ class OaGoodsinfoSearch extends OaGoodsinfo
 {
     /**
      * @inheritdoc
+     *
      */
+
+    public $GoodsName; //<=====就是加在这里
     public function rules()
     {
         return [
-            [['pid', 'IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged', 'SupplierName'], 'integer'],
-            [['description'], 'safe'],
+            [['pid','IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged'], 'integer'],
+            [['GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName'],'safe'],
+
         ];
     }
 
@@ -60,14 +64,25 @@ class OaGoodsinfoSearch extends OaGoodsinfo
         // grid filtering conditions
         $query->andFilterWhere([
             'pid' => $this->pid,
+            'GoodsName'=>$this->GoodsName,
+            'SupplierName' => $this->SupplierName,
+            'AliasCnName'=>$this->AliasCnName,
+            'AliasEnName'=>$this->AliasEnName,
+            'PackName'=>$this->PackName,
+            'description'=>$this->description,
+            'StoreName'=>$this->StoreName,
+            'Season'=>$this->Season,
             'IsLiquid' => $this->IsLiquid,
             'IsPowder' => $this->IsPowder,
             'isMagnetism' => $this->isMagnetism,
             'IsCharged' => $this->IsCharged,
-            'SupplierName' => $this->SupplierName,
+            'DictionaryName'=>$this->DictionaryName,
+
+
         ]);
 
         $query->andFilterWhere(['like', 'description', $this->description]);
+        $query->andFilterWhere(['like', 'AliasCnName', $this->AliasCnName]);
 
         return $dataProvider;
     }
