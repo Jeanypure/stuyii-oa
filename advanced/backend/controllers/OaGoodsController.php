@@ -11,6 +11,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
 use \PHPExcel;
+use app\models\UploadForm;
+use yii\web\UploadedFile;
 /**
  * OaGoodsController implements the CRUD actions for OaGoods model.
  */
@@ -165,6 +167,27 @@ class OaGoodsController extends Controller
         header('Content-Disposition: attachment; filename='.$outfile);
         echo $template;
         exit();
+    }
+
+
+    /**
+     *  import excel file
+     */
+
+    public function actionUpload()
+    {
+        $model = new UploadForm();
+
+        if (Yii::$app->request->isPost) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if ($model->upload()) {
+                // 文件上传成功
+                return;
+            }
+        }
+
+        return $this->render('upload', ['model' => $model]);
+
     }
     /**
      *   generate uploading templates with PHPExcel

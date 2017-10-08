@@ -56,6 +56,12 @@ $js = <<<JS
     //图标剧中
         $('.glyphicon-eye-open').addClass('icon-cell');
         $('.wrapper').addClass('body-color');
+
+    //文件导入事件
+
+   
+    
+
 JS;
 $this->registerJs($js);
 
@@ -134,11 +140,13 @@ function centerFormat($name) {
 
     <p>
         <?= Html::a('新增产品', ['create'], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('批量导入', ['importLots'], ['class' => 'btn btn-info']) ?>
+        <?= Html::a('批量导入', "javascript:void(0);", ['title' => 'upload', 'class' => 'upload btn btn-info']) ?>
         <?= Html::a('批量修改', ['editLots'], ['class' => 'btn btn-warning']) ?>
         <?= Html::a('批量作废',"javascript:void(0);",  ['title'=>'failLots','class' => 'fail-lots btn btn-danger']) ?>
         <?= Html::a('下载模板', ['template'], ['class' => 'btn btn-success']) ?>
+        <input type="file" id="import" name="import" style="display: none">
     </p>
+
     <?= GridView::widget([
         'bootstrap' => true,
         'responsive'=>true,
@@ -209,5 +217,8 @@ function centerFormat($name) {
             ],
         ],
     ]); ?>
+
+    <script src="https://rawgit.com/evanplaice/jquery-csv/master/src/jquery.csv.js"></script>
+    <script></script>
 </div>
 
