@@ -4,19 +4,19 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $skuinfo backend\models\Goodssku */
+/* @var $model backend\models\Picinfo */
 
-$this->title = $skuinfo->sid;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Goodsskus'), 'url' => ['index']];
+$this->title = $model->sid;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Picinfos'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="goodssku-view">
+<div class="picinfo-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $skuinfo->sid], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $skuinfo->sid], [
+        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->sid], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->sid], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <?= DetailView::widget([
-        'model' => $skuinfo,
+        'model' => $model,
         'attributes' => [
             'sid',
             'pid',
@@ -41,6 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'memo2',
             'memo3',
             'memo4',
+            'linkurl:url',
         ],
     ]) ?>
 

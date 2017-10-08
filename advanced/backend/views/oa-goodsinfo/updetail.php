@@ -11,7 +11,6 @@ use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\builder\FormGrid;
 use yii\grid\GridView;
-use yii\data\ActiveDataProvider;
 
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
@@ -53,8 +52,14 @@ $this->params['breadcrumbs'][] = 'Update';
                             'items'=>[ 1=>'Group 2'],
                             'type'=>Form::INPUT_TEXT,
                         ],
+                        'SupplierName' =>[
+                            'label'=>'供应商名称',
+                            'type'=>Form::INPUT_TEXT,
+                        ],
                     ],
                 ],
+
+
                 [
                     'attributes' =>[
                         'AliasCnName' =>[
@@ -70,6 +75,15 @@ $this->params['breadcrumbs'][] = 'Update';
                     ],
                 ],
                 [
+                    'attributes' =>[
+                        'PackName' =>[
+                            'label'=>'规格',
+                            'items'=>[''=>NUll,'A01'=>'A01','A02'=>'A02','A03'=>'A03','A04'=>'A04','B01'=>'B01','B02'=>'B02','stamp'=>'stamp',],
+                            'type'=>Form::INPUT_DROPDOWN_LIST,
+
+                        ],
+                    ],
+                ],[
                     'attributes' =>[
                         'description' =>[
                             'label'=>'描述',
@@ -90,43 +104,41 @@ $this->params['breadcrumbs'][] = 'Update';
 
                 [
                     'attributes' =>[
-                        'StoreID' =>[
+                        'StoreName' =>[
                                     'label'=>'仓库',
-                                    'items'=>[ 1=>'Group 2','2'=>'金皖399','3'=>'幕利US','4'=>'4PXUS','5'=>'万邑通US'],
+                                    'items'=>$result,
                                     'type'=>Form::INPUT_DROPDOWN_LIST,
                         ],
                         'Season' =>[
                             'label'=>'季节',
-                            'items'=>[ 0=>'春季',1=>'夏季',2=>'秋季',3=>'冬季'],
+                            'items'=>[ ''=>'','春季'=>'春季','夏季'=>'夏季','秋季'=>'秋季','冬季'=>'冬季'],
                             'type'=>Form::INPUT_DROPDOWN_LIST,
                         ],
-                    ],
-                ],
 
-                [
-
-                    'attributes' =>[
-                        'PackName' =>[
-                            'label'=>'规格',
-                            'items'=>[ 1=>'Group 2'],
-                            'type'=>Form::INPUT_TEXT,
-                        ],
-                        'SupplierID' =>[
-                                        'label'=>'供应商',
-                                        'items'=>[ '2'=>'金皖399','3'=>'幕利US','4'=>'4PXUS','5'=>'万邑通US'],
-                                        'type'=>Form::INPUT_DROPDOWN_LIST,
+                        'DictionaryName' =>[
+                            'label'=>'禁售平台',
+                            'items'=>$lock,
+                            'type'=>Form::INPUT_DROPDOWN_LIST,
                         ],
 
                     ],
                 ],
+
+
 
             ],
 
         ]);?>
-<?php ActiveForm::end(); ?>
+
+<?php
+echo Html::submitButton($info->isNewRecord ? 'Create' : 'Update', ['class' => $info->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);
+ActiveForm::end(); ?>
 
     <?php
     echo Html::label("<legend><small>SKU信息</small></legend>");
+    ?>
+
+<?php
     echo "<br>";
 
         echo GridView::widget([
@@ -191,7 +203,7 @@ $this->params['breadcrumbs'][] = 'Update';
                                 'data-keyboard'=>false,
                             ],
                         ];
-                        return Html::a('<span class="glyphicon glyphicon-heart"></span>', '#', $options);
+                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', '#', $options);
                     }
 
 
@@ -203,8 +215,6 @@ $this->params['breadcrumbs'][] = 'Update';
      ?>
 
 
-
-
 <?php
 echo Html::a('+新增SKU', '#', [
     'id' => 'create',
@@ -213,6 +223,8 @@ echo Html::a('+新增SKU', '#', [
     'class' => 'btn btn-success',
 ]);
 ?>
+
+
 
 <?php
 Modal::begin([
@@ -249,7 +261,7 @@ Modal::begin([
 ]);
 
 
-$requestUrl = Url::toRoute(['createsku','id'=>$info->pid]);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
+$requestUrl = Url::toRoute(['/goodssku/create','id'=>$info->pid]);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
 $requestUrl2 = Url::toRoute(['/goodssku/update']);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
 $js2 = <<<JS
     

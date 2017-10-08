@@ -24,9 +24,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="createsku-form">
         <?php $form = ActiveForm::begin([
-//            'id' => 'add-form',
-//            'enableAjaxValidation' => true,
-//            'validationUrl' =>['validate'],     //数据异步校验
             'action' => ['createsku'], //指定action
         ]); ?>
 

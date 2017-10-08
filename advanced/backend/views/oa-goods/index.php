@@ -154,10 +154,10 @@ function centerFormat($name) {
         'filterModel' => $searchModel,
         'id' => 'oa-goods',
         'columns' => [
-
             [
                 'class' => 'yii\grid\CheckboxColumn',
             ],
+
 
             ['class' => 'kartik\grid\SerialColumn'],
 

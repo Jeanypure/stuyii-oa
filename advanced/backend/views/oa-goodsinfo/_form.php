@@ -12,6 +12,15 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= $form->field($model, 'GoodsName')->textInput() ?>
+    <?= $form->field($model, 'SupplierName')->textInput() ?>
+    <?= $form->field($model, 'AliasCnName')->textInput() ?>
+    <?= $form->field($model, 'AliasEnName')->textInput() ?>
+
+    <?= $form->field($model, 'PackName')->textInput()?>
+    <?= $form->field($model, 'Season')->textInput() ?>
+    <?= $form->field($model, 'StoreName')->textInput() ?>
+
     <?= $form->field($model, 'IsLiquid')->textInput() ?>
 
     <?= $form->field($model, 'IsPowder')->textInput() ?>
@@ -19,8 +28,6 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'isMagnetism')->textInput() ?>
 
     <?= $form->field($model, 'IsCharged')->textInput() ?>
-
-    <?= $form->field($model, 'SupplierID')->textInput() ?>
 
     <?= $form->field($model, 'description')->textInput() ?>
 
