@@ -25,7 +25,8 @@
         "kartik-v/yii2-widgets": "@dev",
 
         "kartik-v/yii2-builder": "^1.6",
-        "kartik-v/yii2-dialog": "*"
+        "kartik-v/yii2-dialog": "*",
+        "phpoffice/phpexcel": "dev-develop"
 
 
     },

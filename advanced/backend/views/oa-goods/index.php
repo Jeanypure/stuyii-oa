@@ -29,6 +29,7 @@ Modal::end();
 
 $requestUrl = Url::toRoute('heart');
 $js = <<<JS
+    // 批量作废
     $('.fail-lots').on('click',function() {
     var ids = $("#oa-goods").yiiGridView("getSelectedRows");
     var self = $(this);
@@ -42,6 +43,8 @@ $js = <<<JS
            }
         });
     });
+    
+    //认领对话
     $('.data-heart').on('click',  function () {
         $.get('{$requestUrl}',  { id: $(this).closest('tr').data('key') },
             function (data) {
@@ -134,6 +137,7 @@ function centerFormat($name) {
         <?= Html::a('批量导入', ['importLots'], ['class' => 'btn btn-info']) ?>
         <?= Html::a('批量修改', ['editLots'], ['class' => 'btn btn-warning']) ?>
         <?= Html::a('批量作废',"javascript:void(0);",  ['title'=>'failLots','class' => 'fail-lots btn btn-danger']) ?>
+        <?= Html::a('下载模板', ['template'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'bootstrap' => true,

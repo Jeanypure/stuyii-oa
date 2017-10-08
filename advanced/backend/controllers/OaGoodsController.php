@@ -10,6 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
+use \PHPExcel;
 /**
  * OaGoodsController implements the CRUD actions for OaGoods model.
  */
@@ -149,6 +150,40 @@ class OaGoodsController extends Controller
             $model->update(['checkStatus']);
         }
         return $this->redirect(['index']);
+    }
+
+    /**
+     *  read uploading templates locally
+     */
+
+    public function actionTemplate()
+    {
+        $template = htmlspecialchars_decode(file_get_contents('template.xlsx'));
+        $outfile='template.xlsx';
+        header('Content-type: application/octet-stream; charset=utf8');
+        Header("Accept-Ranges: bytes");
+        header('Content-Disposition: attachment; filename='.$outfile);
+        echo $template;
+        exit();
+    }
+    /**
+     *   generate uploading templates with PHPExcel
+     * @param null
+     * @return mixed
+     */
+
+    public function actionTemplates()
+    {
+        $objPHPExcel = new PHPExcel();
+
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objPHPExcel->getActiveSheet()->setTitle('导入模板');
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', 'img');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="这里是excel文件的名称.xls"');
+        header('Cache-Control: max-age=0');
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
     }
     // Heart for heart button
     /*

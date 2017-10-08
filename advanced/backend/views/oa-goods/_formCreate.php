@@ -12,21 +12,31 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'img')->textInput() ?>
+    <?= $form->field($model, 'img')->textInput(['placeholder' => '必填']) ?>
 
-    <?= $form->field($model, 'cate')->textInput() ?>
+    <?= $form->field($model, 'cate')->textInput(['placeholder' => '必填']) ?>
 
-    <?= $form->field($model, 'subCate')->textInput() ?>
+    <?= $form->field($model, 'subCate')->textInput(['placeholder' => '必填']) ?>
 
-    <?= $form->field($model, 'origin1')->textInput() ?>
+    <?= $form->field($model, 'origin1')->textInput(['placeholder' => '必填']) ?>
 
-    <?= $form->field($model, 'salePrice')->textInput() ?>
+    <?= $form->field($model, 'origin2')->textInput(['placeholder' => '选填']) ?>
 
-    <?= $form->field($model, 'hopeWeight')->textInput() ?>
+    <?= $form->field($model, 'origin3')->textInput(['placeholder' => '选填']) ?>
 
-    <?= $form->field($model, 'hopeRate')->textInput() ?>
+    <?= $form->field($model, 'vendor1')->textInput(['placeholder' => '选填']) ?>
 
-    <?= $form->field($model, 'hopeSale')->textInput() ?>
+    <?= $form->field($model, 'vendor2')->textInput(['placeholder' => '选填']) ?>
+
+    <?= $form->field($model, 'vendor3')->textInput(['placeholder' => '选填']) ?>
+
+    <?= $form->field($model, 'salePrice')->textInput(['placeholder' => '必填']) ?>
+
+    <?= $form->field($model, 'hopeWeight')->textInput(['placeholder' => '必填']) ?>
+
+    <?= $form->field($model, 'hopeRate')->textInput(['placeholder' => '必填']) ?>
+
+    <?= $form->field($model, 'hopeSale')->textInput(['placeholder' => '必填']) ?>
 
 
     <div class="form-group">
