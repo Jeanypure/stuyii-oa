@@ -11,7 +11,6 @@ use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\builder\FormGrid;
 use yii\grid\GridView;
-use yii\data\ActiveDataProvider;
 
 use yii\bootstrap\Modal;
 use yii\helpers\Url;

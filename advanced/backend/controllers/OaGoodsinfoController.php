@@ -83,8 +83,24 @@ class OaGoodsinfoController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->pid]);
         } else {
+            $connection = Yii::$app->db;
+
+            $sql ="SELECT StoreName from B_store";
+            $command = $connection->createCommand($sql);
+            $result = $command->queryAll();
+            $res = array_column($result, 'StoreName', 'StoreName');
+
+
+            $comm = $connection->createCommand('select DictionaryName from B_Dictionary where CategoryID=9');
+            $plat = $comm->queryAll();
+            $platFrom = array_column($plat, 'DictionaryName', 'DictionaryName');
+
+
             return $this->render('create', [
                 'model' => $model,
+                'result' => $res,
+                'lockplantform' => $platFrom,
+
             ]);
         }
     }
@@ -112,7 +128,7 @@ class OaGoodsinfoController extends Controller
         }else{
             $connection = Yii::$app->db;
 
-            $sql ="SELECT NID,StoreName from B_store";
+            $sql ="SELECT StoreName from B_store";
             $command = $connection->createCommand($sql);
             $result = $command->queryAll();
             $res = array_column($result, 'StoreName', 'StoreName');
@@ -121,8 +137,6 @@ class OaGoodsinfoController extends Controller
             $comm = $connection->createCommand('select DictionaryName from B_Dictionary where CategoryID=9');
             $plat = $comm->queryAll();
             $platFrom = array_column($plat, 'DictionaryName', 'DictionaryName');
-
-
 
 
             $dataProvider = new ActiveDataProvider([

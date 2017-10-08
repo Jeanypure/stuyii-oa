@@ -12,13 +12,6 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-<!--    'GoodsName',-->
-<!--    'AliasCnName',-->
-<!--    'AliasEnName',-->
-<!--    //            'PackName',-->
-<!--    //            'Season',-->
-<!--    //            'StoreID',-->
-
     <?= $form->field($model, 'GoodsName')->textInput() ?>
     <?= $form->field($model, 'SupplierName')->textInput() ?>
     <?= $form->field($model, 'AliasCnName')->textInput() ?>
