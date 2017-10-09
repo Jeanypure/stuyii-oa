@@ -13,8 +13,43 @@ use yii\helpers\Url;
 $this->title = '产品审批';
 $this->params['breadcrumbs'][] = $this->title;
 
+//注册JS
 
+$js = <<<JS
 
+//批量作废
+$('.fail-lots').on('click',function() {
+    var ids = $("#oa-check").yiiGridView("getSelectedRows");
+    var self = $(this);
+    if(ids.length == 0) return false;
+    console.log(ids);
+     $.ajax({
+           url:"/oa-check/fail-lots",
+           type:"post",
+           data:{id:ids},
+           success:function(res){
+                console.log("oh no lots failed!");
+           }
+        });
+    });
+    
+//批量审核
+$('.pass-lots').on('click',function() {
+    var ids = $("#oa-check").yiiGridView("getSelectedRows");
+    var self = $(this);
+    if(ids.length == 0) return false;
+    console.log(ids);
+     $.ajax({
+           url:"/oa-check/pass-lots",
+           type:"post",
+           data:{id:ids},
+           success:function(res){
+                console.log("oh yeah lots passed!");
+           }
+        });
+    });
+JS;
+$this->registerJs($js);
 // Example 2
 //单元格居中类
 class CenterFormatter {
@@ -85,14 +120,15 @@ function centerFormat($name) {
 <div class="oa-goods-index">
    <!-- 页面标题-->
     <p>
-        <?= Html::a('批量通过', ['passLots'], ['class' => 'btn btn-info']) ?>
-        <?= Html::a('批量作废', ['failLots'], ['class' => 'btn btn-danger']) ?>
+        <?= Html::a('批量通过',"javascript:void(0);", ['title'=>'passLots','class' => 'pass-lots btn btn-info']) ?>
+        <?= Html::a('批量作废', "javascript:void(0);", ['title'=>'failLots','class' => 'fail-lots btn btn-danger']) ?>
     </p>
     <?= GridView::widget([
         'bootstrap' => true,
         'responsive'=>true,
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'id' => 'oa-check',
         'columns' => [
             [
                 'class' => 'yii\grid\CheckboxColumn',
@@ -156,15 +192,6 @@ function centerFormat($name) {
 
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script>
-//    function heart(id) {
-//        krajeeDialog.prompt({label:'认领到：', dropdown:'正向/逆向'}, function (result) {
-//            if(result){
-//                $.get('/oa-goods/heart?id=' + id);
-//            }
-//
-//        });
-//        return false;
-//    }
     $(function () {
 
         $('.glyphicon-eye-open').addClass('icon-cell');
@@ -179,14 +206,14 @@ function centerFormat($name) {
                 }
             });
 
-        })
+        });
 
         //失败对话框
         $('.data-fail').on('click', function () {
             var id = $(this).closest('tr').data('key');
             krajeeDialog.confirm("确定作废？", function(result) {
                 if(result){
-                    $.get('/oa-check/pass?id=' + id );
+                    $.get('/oa-check/fail?id=' + id );
                 }
             });
 
