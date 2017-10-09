@@ -39,7 +39,8 @@ class OaCheckController extends Controller
     {
         $searchModel = new OaGoodsSearch();
         $dataProvider = new ActiveDataProvider([
-            'query' => OaGoods::find()->where(['checkStatus'=>'']),
+            //认领未审核的产品
+            'query' => OaGoods::find()->where(['checkStatus'=>''])->andWhere(['not in','devStatus',['']]),
             'pagination' => [
                 'pageSize' => 25,
             ],
@@ -78,7 +79,6 @@ class OaCheckController extends Controller
         $model = $this->findModel($id);
         $user = yii::$app->user->identity->username;
         $model ->checkStatus = '已作废';
-//        $model ->devStatus = '已认领';
         $model ->developer = $user;
         $model ->updateDate = strftime('%F %T');
         $model->update(array('checkStatus','developer','updateDate'));

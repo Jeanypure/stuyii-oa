@@ -215,12 +215,13 @@ class OaGoodsController extends Controller
                 $current_model ->updateDate = strftime('%F %T');
                 $current_model ->createDate = strftime('%F %T');
                 $current_model->update(array('devStatus','developer','updateDate'));
-                return $this->redirect(['index']);
+
             }
             else {
-                return $this->redirect(['index']);
+
             }
         }
+        return $this->redirect(['index']);
 
     }
     /**
