@@ -160,9 +160,12 @@ class OaGoodsController extends Controller
 
     public function actionTemplate()
     {
-        $template = htmlspecialchars_decode(file_get_contents('template.xlsx'));
-        $outfile='template.xlsx';
-        header('Content-type: application/octet-stream; charset=utf8');
+        $template = htmlspecialchars_decode(file_get_contents('template.csv'));
+//        $outfile='template.xlsx';
+        $outfile='template.csv';
+
+//        header('Content-type: application/octet-stream; charset=utf8');
+        header('Content-type: application/octet-stream; charset=GB2312');
         Header("Accept-Ranges: bytes");
         header('Content-Disposition: attachment; filename='.$outfile);
         echo $template;
