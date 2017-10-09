@@ -30,17 +30,9 @@ RegExp.escape= function(s) {
     return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 };
 
-(function () {
-    // 'use strict';
+(function ($) {
+    'use strict';
 
-    var $;
-
-    // to keep backwards compatibility
-    if (typeof jQuery !== 'undefined' && jQuery) {
-        $ = jQuery;
-    } else {
-        $ = {};
-    }
 
 
     /**
@@ -799,6 +791,7 @@ RegExp.escape= function(s) {
                     object[headers[j]] = entry[j];
                 }
                 if (options.transform !== undefined) {
+                    alert(data);
                     data.push(options.transform.call(undefined, object));
                 } else {
                     data.push(object);
@@ -972,4 +965,4 @@ RegExp.escape= function(s) {
         module.exports = $.csv;
     }
 
-}).call( this );
+}).(jQuery);
