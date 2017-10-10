@@ -17,8 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 use yii\bootstrap\Modal;
 Modal::begin([
-    'id' => 'heart-modal',
-    'header' => '<h4 class="modal-title">认领产品</h4>',
+    'id' => 'index-modal',
+//    'header' => '<h4 class="modal-title">认领产品</h4>',
     'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
 ]);
 //echo
@@ -28,6 +28,8 @@ Modal::end();
 //绑定模态框事件
 
 $requestUrl = Url::toRoute('heart');
+$viewUrl = Url::toRoute('view');
+$updateUrl = Url::toRoute('update');
 $js = <<<JS
     // 批量作废
     $('.delete-lots').on('click',function() {
@@ -58,7 +60,23 @@ $js = <<<JS
         $('.wrapper').addClass('body-color');
 
     
-   
+// 查看框
+$('.forward-view').on('click',  function () {
+        $.get('{$viewUrl}',  { id: $(this).closest('tr').data('key') },
+            function (data) {
+                $('.modal-body').html(data);
+            }
+        );
+    });
+
+//更新框
+$('.forward-update').on('click',  function () {
+        $.get('{$updateUrl}',  { id: $(this).closest('tr').data('key') },
+            function (data) {
+                $('.modal-body').html(data);
+            }
+        );
+    });   
     
 
 JS;
@@ -162,13 +180,34 @@ function centerFormat($name) {
             [ 'class' => 'kartik\grid\ActionColumn',
                 'template' =>'{view} {update} {delete} {heart}',
                 'buttons' => [
-
+                    'view' => function ($url, $model, $key) {
+                        $options = [
+                            'title' => '查看',
+                            'aria-label' => '查看',
+                            'data-toggle' => 'modal',
+                            'data-target' => '#index-modal',
+                            'data-id' => $key,
+                            'class' => 'forward-view',
+                        ];
+                        return Html::a('<span  class="glyphicon glyphicon-eye-open"></span>', '#', $options);
+                    },
+                    'update' => function ($url, $model, $key) {
+                        $options = [
+                            'title' => '更新',
+                            'aria-label' => '更新',
+                            'data-toggle' => 'modal',
+                            'data-target' => '#index-modal',
+                            'data-id' => $key,
+                            'class' => 'forward-update',
+                        ];
+                        return Html::a('<span  class="glyphicon glyphicon-pencil"></span>', '#', $options);
+                    },
                     'heart' => function ($url, $model, $key) {
                         $options = [
                             'title' => '认领',
                             'aria-label' => '认领',
                             'data-toggle' => 'modal',
-                            'data-target' => '#heart-modal',
+                            'data-target' => '#index-modal',
                             'data-id' => $key,
                             'class' => 'data-heart',
                         ];
