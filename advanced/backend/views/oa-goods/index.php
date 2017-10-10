@@ -13,8 +13,7 @@ use yii\widgets\ActiveForm;
 
 $this->title = '产品推荐';
 $this->params['breadcrumbs'][] = $this->title;
-//创建认领模态框
-
+//创建模态框
 use yii\bootstrap\Modal;
 Modal::begin([
     'id' => 'index-modal',
@@ -30,6 +29,7 @@ Modal::end();
 $requestUrl = Url::toRoute('heart');
 $viewUrl = Url::toRoute('view');
 $updateUrl = Url::toRoute('update');
+$createUrl = Url::toRoute('create');
 $js = <<<JS
     // 批量作废
     $('.delete-lots').on('click',function() {
@@ -61,7 +61,7 @@ $js = <<<JS
 
     
 // 查看框
-$('.forward-view').on('click',  function () {
+$('.index-view').on('click',  function () {
         $.get('{$viewUrl}',  { id: $(this).closest('tr').data('key') },
             function (data) {
                 $('.modal-body').html(data);
@@ -70,7 +70,7 @@ $('.forward-view').on('click',  function () {
     });
 
 //更新框
-$('.forward-update').on('click',  function () {
+$('.index-update').on('click',  function () {
         $.get('{$updateUrl}',  { id: $(this).closest('tr').data('key') },
             function (data) {
                 $('.modal-body').html(data);
@@ -78,7 +78,14 @@ $('.forward-update').on('click',  function () {
         );
     });   
     
-
+//创建框
+$('.index-create').on('click',  function () {
+        $.get('{$createUrl}',
+            function (data) {
+                $('.modal-body').html(data);
+            }
+        );
+    }); 
 JS;
 $this->registerJs($js);
 
@@ -156,7 +163,7 @@ function centerFormat($name) {
     <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('新增产品', ['create'], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('新增产品',"javascript:void(0);",  ['title'=>'create','data-toggle' => 'modal','data-target' => '#index-modal','class' => 'index-create btn btn-primary']) ?>
         <?= Html::a('批量导入', "javascript:void(0);", ['title' => 'upload', 'class' => 'upload btn btn-info']) ?>
         <?= Html::a('批量删除',"javascript:void(0);",  ['title'=>'deleteLots','class' => 'delete-lots btn btn-danger']) ?>
         <?= Html::a('下载模板', ['template'], ['class' => 'btn btn-success']) ?>
@@ -187,7 +194,7 @@ function centerFormat($name) {
                             'data-toggle' => 'modal',
                             'data-target' => '#index-modal',
                             'data-id' => $key,
-                            'class' => 'forward-view',
+                            'class' => 'index-view',
                         ];
                         return Html::a('<span  class="glyphicon glyphicon-eye-open"></span>', '#', $options);
                     },
@@ -198,7 +205,7 @@ function centerFormat($name) {
                             'data-toggle' => 'modal',
                             'data-target' => '#index-modal',
                             'data-id' => $key,
-                            'class' => 'forward-update',
+                            'class' => 'index-update',
                         ];
                         return Html::a('<span  class="glyphicon glyphicon-pencil"></span>', '#', $options);
                     },

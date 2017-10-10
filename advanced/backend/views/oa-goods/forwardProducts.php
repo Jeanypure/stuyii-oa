@@ -24,6 +24,7 @@ Modal::end();
 //模态框的方式查看和更改数据
 $viewUrl = Url::toRoute('view');
 $updateUrl = Url::toRoute('update');
+$createUrl = Url::toRoute('create');
 $js = <<<JS
 // 查看框
 $('.forward-view').on('click',  function () {
@@ -42,6 +43,16 @@ $('.forward-update').on('click',  function () {
             }
         );
     });
+
+
+//创建框
+$('.forward-create').on('click',  function () {
+        $.get('{$createUrl}',
+            function (data) {
+                $('.modal-body').html(data);
+            }
+        );
+    }); 
 JS;
 $this->registerJs($js);
 
@@ -120,10 +131,10 @@ function centerFormat($name) {
         background-color: whitesmoke;
     }
 </style>
-<div class="oa-goods-index">
+<div class="oa-goods-forward">
    <!-- 页面标题-->
     <p>
-        <?= Html::a('新增产品', ['create'], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('新增产品',"javascript:void(0);",  ['title'=>'create','data-toggle' => 'modal','data-target' => '#forward-modal','class' => 'forward-create btn btn-primary']) ?>
         <?= Html::a('批量导入', "javascript:void(0);", ['title' => 'upload', 'class' => 'upload btn btn-info']) ?>
         <?= Html::a('批量删除',"javascript:void(0);",  ['title'=>'deleteLots','class' => 'delete-lots btn btn-danger']) ?>
         <?= Html::a('下载模板', ['template'], ['class' => 'btn btn-success']) ?>
