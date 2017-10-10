@@ -96,22 +96,32 @@ class CenterFormatter {
     }
     public  function format() {
         // 超链接显示为超链接
-        if ($this->name === 'origin1') {
+        if ($this->name === 'origin'||$this->name === 'origin1'||$this->name === 'origin1'
+            ||$this->name === 'origin2'||$this->name === 'origin3'||$this->name === 'vendor1'||$this->name === 'vendor2'
+            ||$this->name === 'vendor3') {
             return  [
                 'attribute' => $this->name,
                 'value' => function($data) {
-                    return "<a class='cell' href='{$data['origin1']}' target='_blank'>=></a>";
-        },
+                    if(!empty($data[$this->name]))
+                    {
+                        return "<a class='cell' href='{$data[$this->name]}' target='_blank'>=></a>";
+                    }
+                    else
+                    {
+                        return '';
+                    }
+
+                },
                 'format' => 'raw',
 
-        ];
-        // 图片显示为图片
+            ];
+            // 图片显示为图片
         }
         if ($this->name === 'img') {
             return [
                 'attribute' => 'img',
                 'value' => function($data) {
-                    return "<img src='{$data['img']}' width='100' height='100'>";
+                    return "<img src='".$data[$this->name]."' width='100' height='100'>";
                 },
                 'format' => 'raw',
 

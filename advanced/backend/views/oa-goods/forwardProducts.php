@@ -74,6 +74,10 @@ class CenterFormatter {
                     {
                         return "<a class='cell' href='{$data[$this->name]}' target='_blank'>=></a>";
                     }
+                    else
+                    {
+                        return '';
+                    }
 
         },
                 'format' => 'raw',
