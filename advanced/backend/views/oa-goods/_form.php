@@ -10,7 +10,12 @@ use yii\widgets\ActiveForm;
 
 <div class="oa-goods-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'fieldConfig'=>[
+            'template'=> "{label}\n<div >{input}</div>\n{error}",
+        ]
+    ]); ?>
+
 
     <?= $form->field($model, 'img')->textInput() ?>
 
@@ -18,7 +23,31 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'subCate')->textInput() ?>
 
+    <?= $form->field($model, 'vendor1')->textInput() ?>
+
+    <?= $form->field($model, 'vendor2')->textInput() ?>
+
+    <?= $form->field($model, 'vendor3')->textInput() ?>
+
     <?= $form->field($model, 'origin1')->textInput() ?>
+
+    <?= $form->field($model, 'origin2')->textInput() ?>
+
+    <?= $form->field($model, 'origin3')->textInput() ?>
+
+    <?= $form->field($model, 'devNum')->textInput() ?>
+
+    <?= $form->field($model, 'developer')->textInput() ?>
+
+    <?= $form->field($model, 'introducer')->textInput(['readonly'=>true]) ?>
+
+    <?= $form->field($model, 'devStatus')->textInput() ?>
+
+    <?= $form->field($model, 'checkStatus')->textInput() ?>
+
+    <?= $form->field($model, 'createDate')->textInput() ?>
+
+    <?= $form->field($model, 'updateDate')->textInput() ?>
 
     <?= $form->field($model, 'salePrice')->textInput() ?>
 
@@ -32,7 +61,7 @@ use yii\widgets\ActiveForm;
 
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? '创建' : '更新', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

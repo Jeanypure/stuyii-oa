@@ -30,12 +30,12 @@ Modal::end();
 $requestUrl = Url::toRoute('heart');
 $js = <<<JS
     // 批量作废
-    $('.fail-lots').on('click',function() {
+    $('.delete-lots').on('click',function() {
     var ids = $("#oa-goods").yiiGridView("getSelectedRows");
     var self = $(this);
     if(ids.length == 0) return false;
      $.ajax({
-           url:"/oa-goods/fail-lots",
+           url:"/oa-goods/delete-lots",
            type:"post",
            data:{id:ids},
            success:function(res){
@@ -140,8 +140,7 @@ function centerFormat($name) {
     <p>
         <?= Html::a('新增产品', ['create'], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('批量导入', "javascript:void(0);", ['title' => 'upload', 'class' => 'upload btn btn-info']) ?>
-        <?= Html::a('批量修改', ['editLots'], ['class' => 'btn btn-warning']) ?>
-        <?= Html::a('批量作废',"javascript:void(0);",  ['title'=>'failLots','class' => 'fail-lots btn btn-danger']) ?>
+        <?= Html::a('批量删除',"javascript:void(0);",  ['title'=>'deleteLots','class' => 'delete-lots btn btn-danger']) ?>
         <?= Html::a('下载模板', ['template'], ['class' => 'btn btn-success']) ?>
         <input type="file" id="import" name="import" style="display: none" >
     </p>
@@ -156,50 +155,15 @@ function centerFormat($name) {
             [
                 'class' => 'yii\grid\CheckboxColumn',
             ],
-
-
             ['class' => 'kartik\grid\SerialColumn'],
 
-             centerFormat('img'),
-             centerFormat('cate'),
-            centerFormat('subCate'),
-            centerFormat('vendor1'),
-            centerFormat('vendor2'),
-            centerFormat('vendor3'),
-            centerFormat('origin1'),
-            centerFormat('origin2'),
-            centerFormat('origin3'),
-             centerFormat('devNum'),
-             centerFormat('developer'),
-             centerFormat('introducer'),
-             centerFormat('devStatus'),
-             centerFormat('checkStatus'),
-             centerFormat('createDate'),
-             centerFormat('updateDate'),
-            centerFormat('salePrice'),
-            centerFormat('hopeWeight'),
-            centerFormat('hopeRate'),
-            centerFormat('hopeSale'),
-            centerFormat('hopeMonthProfit'),
 
+            // action
             [ 'class' => 'kartik\grid\ActionColumn',
                 'template' =>'{view} {update} {delete} {heart}',
                 'buttons' => [
 
                     'heart' => function ($url, $model, $key) {
-                        /*
-                        $options = [
-                            'id'=> 'oa-goods-heart'.$model->nid,
-                            'name'=> 'oa-goods-heart'.$model->nid,
-                            'title' => '认领',
-                            'aria-label' => '认领',
-                            'data-method' => 'post',
-                            'data-pjax' => '0',
-                            'onclick' => "heart(".$model->nid.")"
-
-                        ];
-                        return Html::a('<span  class="glyphicon glyphicon-heart"></span>',"javascript:void(0);", $options);
-                        */
                         $options = [
                             'title' => '认领',
                             'aria-label' => '认领',
@@ -207,13 +171,35 @@ function centerFormat($name) {
                             'data-target' => '#heart-modal',
                             'data-id' => $key,
                             'class' => 'data-heart',
-//                            'onclick' => "heart(".$model->nid.")"
-
                         ];
                         return Html::a('<span  class="glyphicon glyphicon-heart"></span>', '#', $options);
                     }
                 ],
             ],
+
+             centerFormat('img'),
+             centerFormat('cate'),
+            centerFormat('subCate'),
+            centerFormat('vendor1'),
+//            centerFormat('vendor2'),
+//            centerFormat('vendor3'),
+            centerFormat('origin1'),
+//            centerFormat('origin2'),
+//            centerFormat('origin3'),
+//             centerFormat('devNum'),
+//             centerFormat('developer'),
+             centerFormat('introducer'),
+             centerFormat('devStatus'),
+             centerFormat('checkStatus'),
+             centerFormat('createDate'),
+             centerFormat('updateDate'),
+//            centerFormat('salePrice'),
+//            centerFormat('hopeWeight'),
+//            centerFormat('hopeRate'),
+//            centerFormat('hopeSale'),
+//            centerFormat('hopeMonthProfit'),
+
+
         ],
     ]); ?>
 
