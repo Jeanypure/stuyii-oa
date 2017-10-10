@@ -13,7 +13,48 @@ use yii\helpers\Url;
 $this->title = '产品审批';
 $this->params['breadcrumbs'][] = $this->title;
 
+$requestUrl = Url::toRoute('heart');
+$js = <<<JS
+    // 批量作废
+    $('.fail-lots').on('click',function() {
+    var ids = $("#oa-check").yiiGridView("getSelectedRows");
+    var self = $(this);
+    if(ids.length == 0) return false;
+     $.ajax({
+           url:"/oa-check/fail-lots",
+           type:"post",
+           data:{id:ids},
+           success:function(res){
+                console.log("oh no lots failed!");
+           }
+        });
+    });
+    
+    //批量通过
+   $('.pass-lots').on('click',function() {
+    var ids = $("#oa-check").yiiGridView("getSelectedRows");
+    var self = $(this);
+    if(ids.length == 0) return false;
+     $.ajax({
+           url:"/oa-check/pass-lots",
+           type:"post",
+           data:{id:ids},
+           success:function(res){
+                console.log("oh yeah lots passed!");
+           }
+        });
+    });
+    
+    //图标剧中
+        $('.glyphicon-eye-open').addClass('icon-cell');
+        $('.wrapper').addClass('body-color');
 
+    
+   
+    
+
+JS;
+$this->registerJs($js);
 
 // Example 2
 //单元格居中类
@@ -85,27 +126,46 @@ function centerFormat($name) {
 <div class="oa-goods-index">
    <!-- 页面标题-->
     <p>
-        <?= Html::a('新增产品', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('批量通过',"javascript:void(0);",  ['title'=>'passLots','class' => 'pass-lots btn btn-info']) ?>
+
+        <?= Html::a('批量作废',"javascript:void(0);",  ['title'=>'failLots','class' => 'fail-lots btn btn-danger']) ?>
+
     </p>
     <?= GridView::widget([
         'bootstrap' => true,
         'responsive'=>true,
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'id' => 'oa-check',
         'columns' => [
+            [
+                'class' => 'yii\grid\CheckboxColumn',
+            ],
+
+
             ['class' => 'kartik\grid\SerialColumn'],
 
-             centerFormat('img'),
-             centerFormat('cate'),
-             centerFormat('devNum'),
-             centerFormat('origin'),
-             centerFormat('hopeProfit'),
-             centerFormat('developer'),
-             centerFormat('introducer'),
-             centerFormat('devStatus'),
-             centerFormat('checkStatus'),
-             centerFormat('createDate'),
-             centerFormat('updateDate'),
+            centerFormat('img'),
+            centerFormat('cate'),
+            centerFormat('subCate'),
+            centerFormat('vendor1'),
+            centerFormat('vendor2'),
+            centerFormat('vendor3'),
+            centerFormat('origin1'),
+            centerFormat('origin2'),
+            centerFormat('origin3'),
+            centerFormat('devNum'),
+            centerFormat('developer'),
+            centerFormat('introducer'),
+            centerFormat('devStatus'),
+            centerFormat('checkStatus'),
+            centerFormat('createDate'),
+            centerFormat('updateDate'),
+            centerFormat('salePrice'),
+            centerFormat('hopeWeight'),
+            centerFormat('hopeRate'),
+            centerFormat('hopeSale'),
+            centerFormat('hopeMonthProfit'),
 
             [ 'class' => 'kartik\grid\ActionColumn',
                 'template' =>'{pass} {fail}',
@@ -160,7 +220,7 @@ function centerFormat($name) {
             var id = $(this).closest('tr').data('key');
             krajeeDialog.confirm("确定通过审核？", function(result) {
                 if(result){
-                    $.get('/oa-check/pass?id=' + id );
+                    $.get('/oa-check/fail?id=' + id );
                 }
             });
 
