@@ -160,9 +160,12 @@ class OaGoodsController extends Controller
 
     public function actionTemplate()
     {
-        $template = htmlspecialchars_decode(file_get_contents('template.xlsx'));
-        $outfile='template.xlsx';
-        header('Content-type: application/octet-stream; charset=utf8');
+        $template = htmlspecialchars_decode(file_get_contents('template.csv'));
+//        $outfile='template.xlsx';
+        $outfile='template.csv';
+
+//        header('Content-type: application/octet-stream; charset=utf8');
+        header('Content-type: application/octet-stream; charset=GB2312');
         Header("Accept-Ranges: bytes");
         header('Content-Disposition: attachment; filename='.$outfile);
         echo $template;
@@ -171,7 +174,7 @@ class OaGoodsController extends Controller
 
 
     /**
-     *  import excel file
+     *  import excel file in php way and  abandoned
      */
 
     public function actionUpload()
@@ -187,6 +190,41 @@ class OaGoodsController extends Controller
         }
 
         return $this->render('upload', ['model' => $model]);
+
+    }
+
+    /**
+     * import templates in h5 way
+     */
+    public function actionImport()
+    {
+        $model = new OaGoods();
+        $user = yii::$app->user->identity->username;
+        $data = Yii::$app->request->post('data');
+        $data = str_replace("*", '', $data);// 把标题中的星号去掉
+        $rows = json_decode($data,true)['data'];
+        foreach ($rows as $row)
+        {
+            $_model = clone $model;
+            $_model->setAttributes($row);
+            if($_model->save())
+            {
+                $id = $_model->nid;
+                $current_model = $this->findModel($id);
+                $current_model->devNum = '20'.date('ymd',time()).strval($id);
+                $current_model->devStatus = '';
+                $current_model->checkStatus = '';
+                $current_model ->introducer = $user;
+                $current_model ->updateDate = strftime('%F %T');
+                $current_model ->createDate = strftime('%F %T');
+                $current_model->update(array('devStatus','developer','updateDate'));
+
+            }
+            else {
+
+            }
+        }
+        return $this->redirect(['index']);
 
     }
     /**

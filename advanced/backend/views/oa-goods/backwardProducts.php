@@ -81,9 +81,6 @@ function centerFormat($name) {
 <div class="oa-goods-index">
    <!-- 页面标题-->
 
-    <p>
-        <?= Html::a('新增产品', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
     <?= GridView::widget([
         'bootstrap' => true,
         'responsive'=>true,
@@ -116,22 +113,6 @@ function centerFormat($name) {
 
             [ 'class' => 'kartik\grid\ActionColumn',
                 'template' =>'{view} {update} {delete} {heart}',
-                'buttons' => [
-
-                    'heart' => function ($url, $model, $key) {
-                        $options = [
-                            'title' => '认领',
-                            'aria-label' => '认领',
-                            'data-toggle' => 'modal',
-                            'data-target' => '#heart-modal',
-                            'data-id' => $key,
-                            'class' => 'data-heart',
-//                            'onclick' => "heart(".$model->nid.")"
-
-                        ];
-                        return Html::a('<span  class="glyphicon glyphicon-heart"></span>', '#', $options);
-                    }
-                ],
             ],
         ],
     ]); ?>

@@ -23,11 +23,11 @@ class CenterFormatter {
     }
     public  function format() {
         // 超链接显示为超链接
-        if ($this->name === 'origin') {
+        if ($this->name === 'origin1') {
             return  [
                 'attribute' => $this->name,
                 'value' => function($data) {
-                    return "<a class='cell' href='{$data['origin']}' target='_blank'>=></a>";
+                    return "<a class='cell' href='{$data['origin1']}' target='_blank'>=></a>";
         },
                 'format' => 'raw',
 
@@ -84,28 +84,40 @@ function centerFormat($name) {
 </style>
 <div class="oa-goods-index">
    <!-- 页面标题-->
-    <p>
-        <?= Html::a('新增产品', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
     <?= GridView::widget([
         'bootstrap' => true,
         'responsive'=>true,
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
+            [
+                'class' => 'yii\grid\CheckboxColumn',
+            ],
+
+
             ['class' => 'kartik\grid\SerialColumn'],
 
-             centerFormat('img'),
-             centerFormat('cate'),
-             centerFormat('devNum'),
-             centerFormat('origin'),
-             centerFormat('hopeProfit'),
-             centerFormat('developer'),
-             centerFormat('introducer'),
-             centerFormat('devStatus'),
-             centerFormat('checkStatus'),
-             centerFormat('createDate'),
-             centerFormat('updateDate'),
+            centerFormat('img'),
+            centerFormat('cate'),
+            centerFormat('subCate'),
+            centerFormat('vendor1'),
+            centerFormat('vendor2'),
+            centerFormat('vendor3'),
+            centerFormat('origin1'),
+            centerFormat('origin2'),
+            centerFormat('origin3'),
+            centerFormat('devNum'),
+            centerFormat('developer'),
+            centerFormat('introducer'),
+            centerFormat('devStatus'),
+            centerFormat('checkStatus'),
+            centerFormat('createDate'),
+            centerFormat('updateDate'),
+            centerFormat('salePrice'),
+            centerFormat('hopeWeight'),
+            centerFormat('hopeRate'),
+            centerFormat('hopeSale'),
+            centerFormat('hopeMonthProfit'),
 
             [ 'class' => 'kartik\grid\ActionColumn',
                 'template' =>'{pass} {fail}',
