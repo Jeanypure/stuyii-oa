@@ -23,11 +23,11 @@ class CenterFormatter {
     }
     public  function format() {
         // 超链接显示为超链接
-        if ($this->name === 'origin') {
+        if ($this->name === 'origin1') {
             return  [
                 'attribute' => $this->name,
                 'value' => function($data) {
-                    return "<a class='cell' href='{$data['origin']}' target='_blank'>=></a>";
+                    return "<a class='cell' href='{$data['origin1']}' target='_blank'>=></a>";
         },
                 'format' => 'raw',
 

@@ -160,10 +160,13 @@ class OaGoodsController extends Controller
 
     public function actionTemplate()
     {
+
         // template in csv formatter
 //        $template = htmlspecialchars_decode(file_get_contents('template.xlsx'));
 //        $outfile='template.xlsx';
 //        header('Content-type: application/octet-stream; charset=utf8');
+        $template = htmlspecialchars_decode(file_get_contents('template.csv'));
+        $outfile='template.csv';
         $template = htmlspecialchars_decode(file_get_contents('template.csv'));
         $outfile='template.csv';
         header('Content-type: application/octet-stream; charset=GB2312');
@@ -219,12 +222,13 @@ class OaGoodsController extends Controller
                 $current_model ->updateDate = strftime('%F %T');
                 $current_model ->createDate = strftime('%F %T');
                 $current_model->update(array('devStatus','developer','updateDate'));
-                return $this->redirect(['index']);
+
             }
             else {
-                return $this->redirect(['index']);
+
             }
         }
+        return $this->redirect(['index']);
 
     }
     /**
