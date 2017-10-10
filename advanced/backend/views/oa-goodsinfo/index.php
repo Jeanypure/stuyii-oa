@@ -30,18 +30,40 @@ $this->params['breadcrumbs'][] = $this->title;
         'showPageSummary'=>true,
         'pjax'=>true,
         'striped'=>true,
-//        'responsive'=>true,
+        'responsive'=>true,
         'hover'=>true,
         'panel'=>['type'=>'primary', 'heading'=>'基本信息'],
 
         'columns' => [
             ['class'=>'kartik\grid\SerialColumn'],
+            [
+                'class' => 'kartik\grid\ActionColumn',
+                'template' =>'{view} {update} {delete} {active}',
+                'buttons' => [
+                    'active' => function ($url, $model, $key) {
+                        $options = [
+                            'title' => '审核',
+                            'aria-label' => '审核',
+                            'data-confirm' => '你确定通过这条审核吗?',
+                            'data-method' => 'post',
+                            'data-pjax' => '0',
+                        ];
+                        return Html::a('<span class="glyphicon glyphicon-check"></span>', $url, $options);
+                    }
+                ],
+            ],
+            [
+                'attribute' => 'picUrl',
+                'value' =>function($model,$key, $index, $widget) {
+                    return "<img src='$model->picUrl' width='100' height='100'/>";
+                },
+                'format' => 'raw',
+                'width' => '100px',
+            ],
             'GoodsName',
             'AliasCnName',
             'AliasEnName',
-//            'PackName',
-//            'Season',
-//            'StoreID',
+
 
             [
                 'attribute'=>'IsLiquid',
@@ -71,7 +93,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'IsCharged',
                 'width' => '100px',
             ],
-
+//            'PackName',
+//            'Season',
+//            'StoreID',
 //            'SupplierName',
 
 //            [
@@ -84,22 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //             ],
 //            'DictionaryName',
 
-            [
-                'class' => 'kartik\grid\ActionColumn',
-                'template' =>'{view} {update} {delete} {active}',
-                'buttons' => [
-                    'active' => function ($url, $model, $key) {
-                        $options = [
-                            'title' => '审核',
-                            'aria-label' => '审核',
-                            'data-confirm' => '你确定通过这条审核吗?',
-                            'data-method' => 'post',
-                            'data-pjax' => '0',
-                        ];
-                        return Html::a('<span class="glyphicon glyphicon-check"></span>', $url, $options);
-                    }
-                ],
-            ],
+
         ],
 
 

@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model backend\models\OaGoodsinfo */
 
 $this->title = $model->pid;
-$this->params['breadcrumbs'][] = ['label' => 'Oa Goodsinfos', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => '属性信息', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="oa-goodsinfo-view">
@@ -25,10 +25,12 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
-    <?= DetailView::widget([
+        <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'pid',
+            'picUrl',
+            ['label'=>'picUrl','value'=>$model->picUrl,],
             'GoodsName',
             'SupplierName',
             'AliasCnName',
@@ -42,7 +44,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'isMagnetism',
             'IsCharged',
             'DictionaryName',
-        ],
+
+            ],
+//        'template' => '<tr><th>{label}</th><td><img src="{value}" width="50" height="50"/></td></tr>',
+//        'options' => ['class' => 'table table-striped table-bordered detail-view'],
+//            'formatter'=>'raw'
     ]) ?>
 
 </div>

@@ -86,7 +86,7 @@ class CenterFormatter {
             return [
                 'attribute' => 'img',
                 'value' => function($data) {
-                    return "<img src='{$data['img']}' width='100' height='100'>";
+                    return "<img  src='{$data['img']}'width='100' height='100'>";
                 },
                 'format' => 'raw',
 

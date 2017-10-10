@@ -117,12 +117,7 @@ $this->params['breadcrumbs'][] = 'Update';
                             'type'=>Form::INPUT_DROPDOWN_LIST,
                         ],
 
-//                        'DictionaryName' =>[
-//                            'label'=>'禁售平台',
-//                            'items'=>$lock,
-//                            'type'=>Form::INPUT_DROPDOWN_LIST,
-//                            'options' => ['multiple'],//这里加上
-//                        ],
+
 
                     ],
                 ],
@@ -140,13 +135,12 @@ echo Select2::widget([
     //'value' => ['red', 'green'], // initial value
     'data' => $lock,
     'maintainOrder' => true,
-    'options' => ['placeholder' => '--平台可多选--', 'multiple' => true],
+    'options' => ['placeholder' => '--可多选--', 'multiple' => true],
     'pluginOptions' => [
         'tags' => true,
         'maximumInputLength' => 5
     ],
 ]);
-
 
 ?>
 

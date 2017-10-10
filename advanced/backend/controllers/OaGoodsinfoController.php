@@ -108,11 +108,12 @@ class OaGoodsinfoController extends Controller
         }
 
         if($info->load(Yii::$app->request->post())){
-
-            $info->DictionaryName = implode(',',$_POST['DictionaryName']);
+            if (!empty($_POST['DictionaryName'])){
+                $info->DictionaryName = implode(',',$_POST['DictionaryName']);
+            }
             $info->save();
-
           return $this->redirect(['view', 'id' =>$info->pid ]);
+//          return $this->render('view', ['id' =>$info->pid ]);
         }else{
 
             $data = $this->actionSelectParam();
