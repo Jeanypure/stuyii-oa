@@ -70,6 +70,22 @@ class OaCheckController extends Controller
 
 
     /**
+     * Action of Pass Lots
+     * @return mixed
+     */
+    public function actionPassLots()
+    {
+        $ids = yii::$app->request->post()["id"];
+        foreach ($ids as $id)
+        {
+            $model = $this->findModel($id);
+            $model->checkStatus ='已审核';
+            $model->update(['checkStatus']);
+        }
+        return $this->redirect(['to-check']);
+    }
+
+    /**
      * Action of Fail
      * @param integer $id
      * @return mixed
@@ -85,6 +101,22 @@ class OaCheckController extends Controller
         return $this->redirect(['to-check']);
     }
 
+
+    /**
+     * Action of Fail Lots
+     * @return mixed
+     */
+    public function actionFailLots()
+    {
+        $ids = yii::$app->request->post()["id"];
+        foreach ($ids as $id)
+        {
+            $model = $this->findModel($id);
+            $model->checkStatus ='已作废';
+            $model->update(['checkStatus']);
+        }
+        return $this->redirect(['to-check']);
+    }
     /**
      * fail lots simultaneously
      */

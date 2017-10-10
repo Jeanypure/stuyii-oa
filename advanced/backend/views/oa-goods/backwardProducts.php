@@ -7,7 +7,7 @@ use kartik\grid\GridView;
 /* @var $searchModel backend\models\OaGoodsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '正向产品';
+$this->title = '逆向产品';
 $this->params['breadcrumbs'][] = $this->title;
 
 //单元格居中类
@@ -99,7 +99,7 @@ function centerFormat($name) {
             centerFormat('origin2'),
             centerFormat('origin3'),
             centerFormat('devNum'),
-            centerFormat('develpoer'),
+            centerFormat('developer'),
             centerFormat('introducer'),
             centerFormat('devStatus'),
             centerFormat('checkStatus'),
