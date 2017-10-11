@@ -31,8 +31,8 @@ class OaGoodsinfo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged'], 'integer'],
-            [['description','SupplierName','Season','StoreName','PackName','DictionaryName'], 'string'],
+            [['IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged','goodsid'], 'integer'],
+            [['description','SupplierName','Season','StoreName','PackName','DictionaryName','GoodsName'], 'string'],
             [['GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description',], 'required'],
         ];
     }
