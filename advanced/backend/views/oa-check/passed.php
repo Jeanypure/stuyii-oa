@@ -12,7 +12,28 @@ use yii\helpers\Url;
 
 $this->title = '已审批';
 $this->params['breadcrumbs'][] = $this->title;
+$viewUrl = Url::toRoute('view');
+use yii\bootstrap\Modal;
+Modal::begin([
+    'id' => 'view-modal',
+//    'header' => '<h4 class="modal-title">认领产品</h4>',
+    'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
+]);
+//echo
+Modal::end();
 
+$js = <<<JS
+
+// 查看框
+$('.data-view').on('click',  function () {
+        $.get('{$viewUrl}',  { id: $(this).closest('tr').data('key') },
+            function (data) {
+                $('.modal-body').html(data);
+            }
+        );
+    });
+JS;
+$this->registerJs($js);
 
 
 // Example 2
@@ -108,8 +129,19 @@ function centerFormat($name) {
             ['class' => 'kartik\grid\SerialColumn'],
 
             [ 'class' => 'kartik\grid\ActionColumn',
-                'template' =>'{fail} {trash}',
+                'template' =>'{view} {fail} {trash}',
                 'buttons' => [
+                    'view' => function ($url, $model, $key) {
+                        $options = [
+                            'title' => '查看',
+                            'aria-label' => '查看',
+                            'data-toggle' => 'modal',
+                            'data-target' => '#view-modal',
+                            'data-id' => $key,
+                            'class' => 'data-view',
+                        ];
+                        return Html::a('<span  class="glyphicon glyphicon-eye-open"></span>', '#', $options);
+                    },
 
                     'fail' => function ($url, $model, $key) {
                         $options = [
@@ -139,15 +171,15 @@ function centerFormat($name) {
             centerFormat('cate'),
             centerFormat('subCate'),
             centerFormat('vendor1'),
-            centerFormat('vendor2'),
-            centerFormat('vendor3'),
+//            centerFormat('vendor2'),
+//            centerFormat('vendor3'),
             centerFormat('origin1'),
-            centerFormat('origin2'),
-            centerFormat('origin3'),
+//            centerFormat('origin2'),
+//            centerFormat('origin3'),
             centerFormat('devNum'),
             centerFormat('developer'),
             centerFormat('introducer'),
-            centerFormat('devStatus'),
+//            centerFormat('devStatus'),
             centerFormat('checkStatus'),
             centerFormat('createDate'),
             centerFormat('updateDate'),
@@ -164,15 +196,6 @@ function centerFormat($name) {
 
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script>
-//    function heart(id) {
-//        krajeeDialog.prompt({label:'认领到：', dropdown:'正向/逆向'}, function (result) {
-//            if(result){
-//                $.get('/oa-goods/heart?id=' + id);
-//            }
-//
-//        });
-//        return false;
-//    }
     $(function () {
 
         $('.glyphicon-eye-open').addClass('icon-cell');
