@@ -10,9 +10,10 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\builder\FormGrid;
-use yii\grid\GridView;
-//use kartik\select2\Select2;
+use kartik\grid\GridView;
 use kartik\widgets\Select2;
+
+use kartik\builder\TabularForm;
 
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
@@ -155,11 +156,34 @@ ActiveForm::end(); ?>
 <?php
     echo "<br>";
 
-        echo GridView::widget([
+        echo TabularForm::widget([
 
         'dataProvider' => $dataProvider,
+            'form'=>$form,
+            'attributes'=>[
+                'sku'=>['label'=>'sku', 'type'=>TabularForm::INPUT_TEXT],
+                'property1'=>['label'=>'property1','type'=>TabularForm::INPUT_TEXT],
+                'property2'=>['label'=>'property1', 'type'=>TabularForm::INPUT_TEXT],
+                'property3'=>['label'=>'property1', 'type'=>TabularForm::INPUT_TEXT],
+                'CostPrice'=>['label'=>'CostPrice', 'type'=>TabularForm::INPUT_TEXT],
+                'Weight'=>['label'=>'Weight', 'type'=>TabularForm::INPUT_TEXT],
+                'RetailPrice'=>['label'=>'RetailPrice', 'type'=>TabularForm::INPUT_TEXT],
+//                'property2'=>['label'=>'property1', 'type'=>TabularForm::INPUT_TEXT],
+            ],
 
-        'columns' => [
+            // configure other gridview settings
+            'gridSettings'=>[
+                'panel'=>[
+                    'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i> 管理SKU</h3>',
+                    'type'=>GridView::TYPE_PRIMARY,
+                    'before'=>false,
+                    'footer'=>true,
+                    'after'=>Html::button('<i class="glyphicon glyphicon-plus"></i> Add New', ['type'=>'button', 'class'=>'btn btn-success kv-batch-create']) . ' ' .
+                        Html::button('<i class="glyphicon glyphicon-remove"></i> Delete', ['type'=>'button', 'class'=>'btn btn-danger kv-batch-delete']) . ' ' .
+                        Html::button('<i class="glyphicon glyphicon-floppy-disk"></i> Save', ['type'=>'button', 'class'=>'btn btn-primary kv-batch-save'])
+                ]
+            ]
+       /* 'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             [
@@ -223,7 +247,7 @@ ActiveForm::end(); ?>
 
                 ],
             ],
-        ],
+        ],*/
     ]);
 
      ?>
