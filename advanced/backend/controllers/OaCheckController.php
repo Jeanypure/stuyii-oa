@@ -93,6 +93,39 @@ class OaCheckController extends Controller
     {
         $model = $this->findModel($id);
         $user = yii::$app->user->identity->username;
+        $model ->checkStatus = '未通过';
+        $model ->developer = $user;
+        $model ->updateDate = strftime('%F %T');
+        $model->update(array('checkStatus','developer','updateDate'));
+        return $this->redirect(['to-check']);
+    }
+
+
+    /**
+     * Action of Fail Lots
+     * @return mixed
+     */
+    public function actionFailLots()
+    {
+        $ids = yii::$app->request->post()["id"];
+        foreach ($ids as $id)
+        {
+            $model = $this->findModel($id);
+            $model->checkStatus ='未通过';
+            $model->update(['checkStatus']);
+        }
+        return $this->redirect(['to-check']);
+    }
+
+    /**
+     * Action of Fail
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionTrash($id)
+    {
+        $model = $this->findModel($id);
+        $user = yii::$app->user->identity->username;
         $model ->checkStatus = '已作废';
 //        $model ->devStatus = '已认领';
         $model ->developer = $user;
@@ -106,7 +139,7 @@ class OaCheckController extends Controller
      * Action of Fail Lots
      * @return mixed
      */
-    public function actionFailLots()
+    public function actionTrashLots()
     {
         $ids = yii::$app->request->post()["id"];
         foreach ($ids as $id)
@@ -145,7 +178,7 @@ class OaCheckController extends Controller
     {
         $searchModel = new OaGoodsSearch();
         $dataProvider = new ActiveDataProvider([
-            'query' => OaGoods::find()->where(['checkStatus'=>'已作废']),
+            'query' => OaGoods::find()->where(['checkStatus'=>'未通过']),
             'pagination' => [
                 'pageSize' => 25,
             ],

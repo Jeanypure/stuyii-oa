@@ -10,7 +10,7 @@ use yii\helpers\Url;
 /* @var $searchModel backend\models\OaGoodsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '产品审批';
+$this->title = '已审批';
 $this->params['breadcrumbs'][] = $this->title;
 
 
@@ -108,21 +108,21 @@ function centerFormat($name) {
             ['class' => 'kartik\grid\SerialColumn'],
 
             [ 'class' => 'kartik\grid\ActionColumn',
-                'template' =>'{pass} {fail}',
+                'template' =>'{fail} {trash}',
                 'buttons' => [
 
-                    'pass' => function ($url, $model, $key) {
-                        $options = [
-                            'title' => '通过',
-                            'aria-label' => '通过',
-                            'data-toggle' => 'modal',
-                            'data-target' => '#pass-dialog',
-                            'data-id' => $key,
-                            'class' => 'data-pass',
-                        ];
-                        return Html::a('<span  class="glyphicon glyphicon-thumbs-up"></span>', '#', $options);
-                    },
                     'fail' => function ($url, $model, $key) {
+                        $options = [
+                            'title' => '不通过',
+                            'aria-label' => '不通过',
+                            'data-toggle' => 'modal',
+                            'data-target' => '#fail-dialog',
+                            'data-id' => $key,
+                            'class' => 'data-fail',
+                        ];
+                        return Html::a('<span  class="glyphicon glyphicon-thumbs-down"></span>', '#', $options);
+                    },
+                    'trash' => function ($url, $model, $key) {
                         $options = [
                             'title' => '作废',
                             'aria-label' => '作废',
@@ -179,11 +179,11 @@ function centerFormat($name) {
         $('.wrapper').addClass('body-color');
 
         //通过对话框
-        $('.data-pass').on('click', function () {
+        $('.data-fail').on('click', function () {
             var id = $(this).closest('tr').data('key');
-            krajeeDialog.confirm("确定通过审核？", function(result) {
+            krajeeDialog.confirm("确定不通过？", function(result) {
                 if(result){
-                    $.get('/oa-check/pass?id=' + id );
+                    $.get('/oa-check/fail?id=' + id );
                 }
             });
 
@@ -194,7 +194,7 @@ function centerFormat($name) {
             var id = $(this).closest('tr').data('key');
             krajeeDialog.confirm("确定作废？", function(result) {
                 if(result){
-                    $.get('/oa-check/pass?id=' + id );
+                    $.get('/oa-check/fail?id=' + id );
                 }
             });
 

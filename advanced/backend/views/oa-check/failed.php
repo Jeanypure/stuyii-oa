@@ -10,7 +10,7 @@ use yii\helpers\Url;
 /* @var $searchModel backend\models\OaGoodsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '产品审批';
+$this->title = '未通过';
 $this->params['breadcrumbs'][] = $this->title;
 
 

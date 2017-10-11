@@ -10,12 +10,12 @@ use yii\helpers\Url;
 /* @var $searchModel backend\models\OaGoodsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '产品审批';
+$this->title = '待审批';
 $this->params['breadcrumbs'][] = $this->title;
 
 $requestUrl = Url::toRoute('heart');
 $js = <<<JS
-    // 批量作废
+    // 批量未通过
     $('.fail-lots').on('click',function() {
     var ids = $("#oa-check").yiiGridView("getSelectedRows");
     var self = $(this);
@@ -41,6 +41,22 @@ $js = <<<JS
            data:{id:ids},
            success:function(res){
                 console.log("oh yeah lots passed!");
+           }
+        });
+    });
+    
+    
+    //批量作废
+   $('.trash-lots').on('click',function() {
+    var ids = $("#oa-check").yiiGridView("getSelectedRows");
+    var self = $(this);
+    if(ids.length == 0) return false;
+     $.ajax({
+           url:"/oa-check/trash-lots",
+           type:"post",
+           data:{id:ids},
+           success:function(res){
+                console.log("oh yeah lots of trash!");
            }
         });
     });
@@ -138,7 +154,9 @@ function centerFormat($name) {
     <p>
         <?= Html::a('批量通过',"javascript:void(0);",  ['title'=>'passLots','class' => 'pass-lots btn btn-info']) ?>
 
-        <?= Html::a('批量作废',"javascript:void(0);",  ['title'=>'failLots','class' => 'fail-lots btn btn-danger']) ?>
+        <?= Html::a('批量未通过',"javascript:void(0);",  ['title'=>'failLots','class' => 'fail-lots btn btn-warning']) ?>
+
+        <?= Html::a('批量作废',"javascript:void(0);",  ['title'=>'trashLots','class' => 'trash-lots btn btn-danger']) ?>
 
     </p>
     <?= GridView::widget([
@@ -156,7 +174,7 @@ function centerFormat($name) {
             ['class' => 'kartik\grid\SerialColumn'],
 
             [ 'class' => 'kartik\grid\ActionColumn',
-                'template' =>'{pass} {fail}',
+                'template' =>'{pass} {fail} {trash}',
                 'buttons' => [
 
                     'pass' => function ($url, $model, $key) {
@@ -172,15 +190,27 @@ function centerFormat($name) {
                     },
                     'fail' => function ($url, $model, $key) {
                         $options = [
-                            'title' => '作废',
-                            'aria-label' => '作废',
+                            'title' => '未通过',
+                            'aria-label' => '未通过',
                             'data-toggle' => 'modal',
                             'data-target' => '#fail-dialog',
                             'data-id' => $key,
                             'class' => 'data-fail',
                         ];
+                        return Html::a('<span  class="glyphicon glyphicon-thumbs-down"></span>', '#', $options);
+                    },
+                    'trash' => function ($url, $model, $key) {
+                        $options = [
+                            'title' => '作废',
+                            'aria-label' => '作废',
+                            'data-toggle' => 'modal',
+                            'data-target' => '#trash-dialog',
+                            'data-id' => $key,
+                            'class' => 'data-trash',
+                        ];
                         return Html::a('<span  class="glyphicon glyphicon-trash"></span>', '#', $options);
-                    }
+                    },
+
                 ],
             ],
             centerFormat('img'),
@@ -223,21 +253,29 @@ function centerFormat($name) {
             var id = $(this).closest('tr').data('key');
             krajeeDialog.confirm("确定通过审核？", function(result) {
                 if(result){
-                    $.get('/oa-check/fail?id=' + id );
-                }
-            });
-
-        })
-
-        //失败对话框
-        $('.data-fail').on('click', function () {
-            var id = $(this).closest('tr').data('key');
-            krajeeDialog.confirm("确定作废？", function(result) {
-                if(result){
                     $.get('/oa-check/pass?id=' + id );
                 }
             });
 
-        })
+        });
+
+        //失败对话框
+        $('.data-fail').on('click', function () {
+            var id = $(this).closest('tr').data('key');
+            krajeeDialog.confirm("确定不通过？", function(result) {
+                if(result){
+                    $.get('/oa-check/fail?id=' + id );
+                }
+            });
+        });
+        //作废对话框
+        $('.data-trash').on('click', function () {
+            var id = $(this).closest('tr').data('key');
+            krajeeDialog.confirm("确定作废？", function(result) {
+                if(result){
+                    $.get('/oa-check/trash?id=' + id );
+                }
+            });
+        });
         });
 </script>
