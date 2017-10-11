@@ -37,8 +37,8 @@ class OaGoods extends \yii\db\ActiveRecord
     {
         return [
       
-            [['img','cate', 'subCate','origin1','salePrice','hopeWeight', 'hopeRate','hopeSale'],'required'],
-            [['origin2','origin3','vendor1','vendor2','vendor3'],'string']
+            [['img','cate', 'subCate'],'required'],
+            [['origin1','vendor1'],'string']
         ];
     }
 
@@ -62,7 +62,7 @@ class OaGoods extends \yii\db\ActiveRecord
             'developer' => '开发员',
             'introducer' => '推荐人',
             'devStatus' => '认领',
-            'checkStatus' => '审核',
+            'checkStatus' => '产品状态',
             'salePrice' => '售价($)',
             'hopeWeight' => '预估重量(克)',
             'hopeRate' => '预估利润率(%)',

@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use backend\models\OaGoods;
 use backend\models\OaGoodsSearch;
+use backend\models\OaGoodsinfo;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -59,13 +60,27 @@ class OaCheckController extends Controller
     public function actionPass($id)
     {
         $model = $this->findModel($id);
+        $_model = new OaGoodsinfo();
         $user = yii::$app->user->identity->username;
         $model ->checkStatus = '已审核';
-//        $model ->devStatus = '已认领';
         $model ->developer = $user;
         $model ->updateDate = strftime('%F %T');
         $model->update(array('checkStatus','developer','updateDate'));
-        return $this->redirect(['to-check']);
+        //审核状态改变之后就插入数据到OaGoodsInfo
+        $nid = $model->nid;
+        $img = $model->img;
+        $_model->isNewRecord = true;
+        $_model->goodsid =$nid;
+        $_model->picUrl = $img;
+        $_model->GoodsName='';
+        //不验证model的rules
+        if($_model->save(false)){
+            return $this->redirect(['to-check']);
+        }
+        else {
+            echo 'somthin wrong!';
+        }
+
     }
 
 
@@ -75,12 +90,23 @@ class OaCheckController extends Controller
      */
     public function actionPassLots()
     {
+        $_model = new OaGoodsinfo();
         $ids = yii::$app->request->post()["id"];
         foreach ($ids as $id)
         {
+
             $model = $this->findModel($id);
             $model->checkStatus ='已审核';
             $model->update(['checkStatus']);
+            //插入到OagoodsInfo里面
+            $_model = clone $_model;
+            $nid = $model->nid;
+            $img = $model->img;
+            $_model->isNewRecord = true;
+            $_model->goodsid =$nid;
+            $_model->picUrl = $img;
+            $_model->GoodsName='';
+            $_model->save(false);
         }
         return $this->redirect(['to-check']);
     }
@@ -91,6 +117,39 @@ class OaCheckController extends Controller
      * @return mixed
      */
     public function actionFail($id)
+    {
+        $model = $this->findModel($id);
+        $user = yii::$app->user->identity->username;
+        $model ->checkStatus = '未通过';
+        $model ->developer = $user;
+        $model ->updateDate = strftime('%F %T');
+        $model->update(array('checkStatus','developer','updateDate'));
+        return $this->redirect(['to-check']);
+    }
+
+
+    /**
+     * Action of Fail Lots
+     * @return mixed
+     */
+    public function actionFailLots()
+    {
+        $ids = yii::$app->request->post()["id"];
+        foreach ($ids as $id)
+        {
+            $model = $this->findModel($id);
+            $model->checkStatus ='未通过';
+            $model->update(['checkStatus']);
+        }
+        return $this->redirect(['to-check']);
+    }
+
+    /**
+     * Action of Fail
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionTrash($id)
     {
         $model = $this->findModel($id);
         $user = yii::$app->user->identity->username;
@@ -106,7 +165,7 @@ class OaCheckController extends Controller
      * Action of Fail Lots
      * @return mixed
      */
-    public function actionFailLots()
+    public function actionTrashLots()
     {
         $ids = yii::$app->request->post()["id"];
         foreach ($ids as $id)
@@ -129,7 +188,7 @@ class OaCheckController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => OaGoods::find()->where(['checkStatus'=>'已审核']),
             'pagination' => [
-                'pageSize' => 25,
+                'pageSize' => 5,
             ],
         ]);
         return $this->render('passed', [
@@ -148,9 +207,9 @@ class OaCheckController extends Controller
     {
         $searchModel = new OaGoodsSearch();
         $dataProvider = new ActiveDataProvider([
-            'query' => OaGoods::find()->where(['checkStatus'=>'已作废']),
+            'query' => OaGoods::find()->where(['checkStatus'=>'未通过']),
             'pagination' => [
-                'pageSize' => 25,
+                'pageSize' => 5,
             ],
         ]);
         return $this->render('failed', [
@@ -165,7 +224,7 @@ class OaCheckController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
+        return $this->renderAjax('view', [
             'model' => $this->findModel($id),
         ]);
     }
@@ -220,21 +279,6 @@ class OaCheckController extends Controller
         return $this->redirect(['index']);
     }
 
-    // Heart for heart button
-    /*
-    public function actionHeart($id)
-    {
-        $model = $this->findModel($id);
-        $user = yii::$app->user->identity->username;
-        $model ->devStatus = '已认领';
-        $model ->developer = $user;
-        $model ->updateDate = strftime('%F %T');
-        $model->update(array('devStatus','developer','updateDate'));
-        return $this->redirect(['index']);
-    }
-    */
-
-    // Heart for heart modal
 
     public function actionHeart($id)
     {

@@ -62,7 +62,7 @@ class OaGoodsController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
+        return $this->renderAjax('view', [
             'model' => $this->findModel($id),
         ]);
     }
@@ -97,7 +97,7 @@ class OaGoodsController extends Controller
             }
 
         } else {
-            return $this->render('create', [
+            return $this->renderAjax('create', [
                 'model' => $model,
             ]);
         }
@@ -116,7 +116,7 @@ class OaGoodsController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->nid]);
         } else {
-            return $this->render('update', [
+            return $this->renderAjax('update', [
                 'model' => $model,
             ]);
         }
@@ -142,14 +142,12 @@ class OaGoodsController extends Controller
      * @param null
      * @return mixed
      */
-    public  function  actionFailLots()
+    public  function  actionDeleteLots()
     {
         $ids = yii::$app->request->post()["id"];
         foreach ($ids as $id)
         {
-            $model = $this->findModel($id);
-            $model->checkStatus ='已作废';
-            $model->update(['checkStatus']);
+            $this->findModel($id)->delete();
         }
         return $this->redirect(['index']);
     }
@@ -250,21 +248,7 @@ class OaGoodsController extends Controller
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
     }
-    // Heart for heart button
-    /*
-    public function actionHeart($id)
-    {
-        $model = $this->findModel($id);
-        $user = yii::$app->user->identity->username;
-        $model ->devStatus = '已认领';
-        $model ->developer = $user;
-        $model ->updateDate = strftime('%F %T');
-        $model->update(array('devStatus','developer','updateDate'));
-        return $this->redirect(['index']);
-    }
-    */
 
-    // Heart for heart modal
 
     public function actionHeart($id)
     {

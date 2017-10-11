@@ -10,12 +10,34 @@ use yii\helpers\Url;
 /* @var $searchModel backend\models\OaGoodsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '产品审批';
+$this->title = '待审批';
 $this->params['breadcrumbs'][] = $this->title;
 
-$requestUrl = Url::toRoute('heart');
+use yii\bootstrap\Modal;
+Modal::begin([
+    'id' => 'view-modal',
+//    'header' => '<h4 class="modal-title">认领产品</h4>',
+    'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
+]);
+//echo
+Modal::end();
+
+
+$viewUrl = Url::toRoute('view');
 $js = <<<JS
-    // 批量作废
+
+
+// 查看框
+$('.data-view').on('click',  function () {
+        $.get('{$viewUrl}',  { id: $(this).closest('tr').data('key') },
+            function (data) {
+                $('.modal-body').html(data);
+            }
+        );
+    });
+    
+    
+    // 批量未通过
     $('.fail-lots').on('click',function() {
     var ids = $("#oa-check").yiiGridView("getSelectedRows");
     var self = $(this);
@@ -45,6 +67,22 @@ $js = <<<JS
         });
     });
     
+    
+    //批量作废
+   $('.trash-lots').on('click',function() {
+    var ids = $("#oa-check").yiiGridView("getSelectedRows");
+    var self = $(this);
+    if(ids.length == 0) return false;
+     $.ajax({
+           url:"/oa-check/trash-lots",
+           type:"post",
+           data:{id:ids},
+           success:function(res){
+                console.log("oh yeah lots of trash!");
+           }
+        });
+    });
+    
     //图标剧中
         $('.glyphicon-eye-open').addClass('icon-cell');
         $('.wrapper').addClass('body-color');
@@ -64,22 +102,31 @@ class CenterFormatter {
     }
     public  function format() {
         // 超链接显示为超链接
-        if ($this->name === 'origin') {
+        if ($this->name === 'origin'||$this->name === 'origin1'||$this->name === 'origin1'
+            ||$this->name === 'origin2'||$this->name === 'origin3'||$this->name === 'vendor1'||$this->name === 'vendor2'
+            ||$this->name === 'vendor3') {
             return  [
                 'attribute' => $this->name,
                 'value' => function($data) {
-                    return "<a class='cell' href='{$data['origin']}' target='_blank'>=></a>";
-        },
+                    if(!empty($data[$this->name]))
+                    {
+                        return "<a class='cell' href='{$data[$this->name]}' target='_blank'>=></a>";
+                    }
+                    else
+                    {
+                        return '';
+                    }
+                },
                 'format' => 'raw',
 
-        ];
-        // 图片显示为图片
+            ];
+            // 图片显示为图片
         }
         if ($this->name === 'img') {
             return [
                 'attribute' => 'img',
                 'value' => function($data) {
-                    return "<img src='{$data['img']}' width='100' height='100'>";
+                    return "<img src='".$data[$this->name]."' width='100' height='100'>";
                 },
                 'format' => 'raw',
 
@@ -89,6 +136,7 @@ class CenterFormatter {
             'attribute' => $this->name,
             'value' => function($data) {
                 return "<span class='cell'>".$data[$this->name]."</span>";
+//                    return $data['cate'];
             },
             'format' => 'raw',
 
@@ -128,7 +176,9 @@ function centerFormat($name) {
     <p>
         <?= Html::a('批量通过',"javascript:void(0);",  ['title'=>'passLots','class' => 'pass-lots btn btn-info']) ?>
 
-        <?= Html::a('批量作废',"javascript:void(0);",  ['title'=>'failLots','class' => 'fail-lots btn btn-danger']) ?>
+        <?= Html::a('批量未通过',"javascript:void(0);",  ['title'=>'failLots','class' => 'fail-lots btn btn-warning']) ?>
+
+        <?= Html::a('批量作废',"javascript:void(0);",  ['title'=>'trashLots','class' => 'trash-lots btn btn-danger']) ?>
 
     </p>
     <?= GridView::widget([
@@ -145,32 +195,20 @@ function centerFormat($name) {
 
             ['class' => 'kartik\grid\SerialColumn'],
 
-            centerFormat('img'),
-            centerFormat('cate'),
-            centerFormat('subCate'),
-            centerFormat('vendor1'),
-            centerFormat('vendor2'),
-            centerFormat('vendor3'),
-            centerFormat('origin1'),
-            centerFormat('origin2'),
-            centerFormat('origin3'),
-            centerFormat('devNum'),
-            centerFormat('developer'),
-            centerFormat('introducer'),
-            centerFormat('devStatus'),
-            centerFormat('checkStatus'),
-            centerFormat('createDate'),
-            centerFormat('updateDate'),
-            centerFormat('salePrice'),
-            centerFormat('hopeWeight'),
-            centerFormat('hopeRate'),
-            centerFormat('hopeSale'),
-            centerFormat('hopeMonthProfit'),
-
             [ 'class' => 'kartik\grid\ActionColumn',
-                'template' =>'{pass} {fail}',
+                'template' =>'{view} {pass} {fail} {trash}',
                 'buttons' => [
-
+                    'view' => function ($url, $model, $key) {
+                        $options = [
+                            'title' => '查看',
+                            'aria-label' => '查看',
+                            'data-toggle' => 'modal',
+                            'data-target' => '#view-modal',
+                            'data-id' => $key,
+                            'class' => 'data-view',
+                        ];
+                        return Html::a('<span  class="glyphicon glyphicon-eye-open"></span>', '#', $options);
+                    },
                     'pass' => function ($url, $model, $key) {
                         $options = [
                             'title' => '通过',
@@ -184,32 +222,59 @@ function centerFormat($name) {
                     },
                     'fail' => function ($url, $model, $key) {
                         $options = [
-                            'title' => '作废',
-                            'aria-label' => '作废',
+                            'title' => '未通过',
+                            'aria-label' => '未通过',
                             'data-toggle' => 'modal',
                             'data-target' => '#fail-dialog',
                             'data-id' => $key,
                             'class' => 'data-fail',
                         ];
+                        return Html::a('<span  class="glyphicon glyphicon-thumbs-down"></span>', '#', $options);
+                    },
+                    'trash' => function ($url, $model, $key) {
+                        $options = [
+                            'title' => '作废',
+                            'aria-label' => '作废',
+                            'data-toggle' => 'modal',
+                            'data-target' => '#trash-dialog',
+                            'data-id' => $key,
+                            'class' => 'data-trash',
+                        ];
                         return Html::a('<span  class="glyphicon glyphicon-trash"></span>', '#', $options);
-                    }
+                    },
+
                 ],
             ],
+            centerFormat('img'),
+            centerFormat('cate'),
+            centerFormat('subCate'),
+            centerFormat('vendor1'),
+//            centerFormat('vendor2'),
+//            centerFormat('vendor3'),
+            centerFormat('origin1'),
+//            centerFormat('origin2'),
+//            centerFormat('origin3'),
+            centerFormat('devNum'),
+            centerFormat('developer'),
+            centerFormat('introducer'),
+//            centerFormat('devStatus'),
+            centerFormat('checkStatus'),
+            centerFormat('createDate'),
+            centerFormat('updateDate'),
+            centerFormat('salePrice'),
+            centerFormat('hopeWeight'),
+            centerFormat('hopeRate'),
+            centerFormat('hopeSale'),
+            centerFormat('hopeMonthProfit'),
+
+
         ],
     ]); ?>
 </div>
 
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script>
-//    function heart(id) {
-//        krajeeDialog.prompt({label:'认领到：', dropdown:'正向/逆向'}, function (result) {
-//            if(result){
-//                $.get('/oa-goods/heart?id=' + id);
-//            }
-//
-//        });
-//        return false;
-//    }
+
     $(function () {
 
         $('.glyphicon-eye-open').addClass('icon-cell');
@@ -220,21 +285,29 @@ function centerFormat($name) {
             var id = $(this).closest('tr').data('key');
             krajeeDialog.confirm("确定通过审核？", function(result) {
                 if(result){
-                    $.get('/oa-check/fail?id=' + id );
-                }
-            });
-
-        })
-
-        //失败对话框
-        $('.data-fail').on('click', function () {
-            var id = $(this).closest('tr').data('key');
-            krajeeDialog.confirm("确定作废？", function(result) {
-                if(result){
                     $.get('/oa-check/pass?id=' + id );
                 }
             });
 
-        })
+        });
+
+        //失败对话框
+        $('.data-fail').on('click', function () {
+            var id = $(this).closest('tr').data('key');
+            krajeeDialog.confirm("确定不通过？", function(result) {
+                if(result){
+                    $.get('/oa-check/fail?id=' + id );
+                }
+            });
+        });
+        //作废对话框
+        $('.data-trash').on('click', function () {
+            var id = $(this).closest('tr').data('key');
+            krajeeDialog.confirm("确定作废？", function(result) {
+                if(result){
+                    $.get('/oa-check/trash?id=' + id );
+                }
+            });
+        });
         });
 </script>

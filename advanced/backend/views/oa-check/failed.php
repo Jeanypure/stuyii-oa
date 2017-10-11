@@ -10,9 +10,35 @@ use yii\helpers\Url;
 /* @var $searchModel backend\models\OaGoodsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '产品审批';
+$this->title = '未通过';
 $this->params['breadcrumbs'][] = $this->title;
 
+//创建模态框
+use yii\bootstrap\Modal;
+Modal::begin([
+    'id' => 'view-modal',
+//    'header' => '<h4 class="modal-title">认领产品</h4>',
+    'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
+]);
+//echo
+Modal::end();
+
+
+$viewUrl = Url::toRoute('view');
+$js = <<<JS
+
+
+// 查看框
+$('.data-view').on('click',  function () {
+        $.get('{$viewUrl}',  { id: $(this).closest('tr').data('key') },
+            function (data) {
+                $('.modal-body').html(data);
+            }
+        );
+    });
+
+JS;
+$this->registerJs($js);
 
 
 // Example 2
@@ -23,22 +49,31 @@ class CenterFormatter {
     }
     public  function format() {
         // 超链接显示为超链接
-        if ($this->name === 'origin') {
+        if ($this->name === 'origin'||$this->name === 'origin1'||$this->name === 'origin1'
+            ||$this->name === 'origin2'||$this->name === 'origin3'||$this->name === 'vendor1'||$this->name === 'vendor2'
+            ||$this->name === 'vendor3') {
             return  [
                 'attribute' => $this->name,
                 'value' => function($data) {
-                    return "<a class='cell' href='{$data['origin']}' target='_blank'>=></a>";
-        },
+                    if(!empty($data[$this->name]))
+                    {
+                        return "<a class='cell' href='{$data[$this->name]}' target='_blank'>=></a>";
+                    }
+                    else
+                        {
+                            return '';
+                        }
+                },
                 'format' => 'raw',
 
-        ];
-        // 图片显示为图片
+            ];
+            // 图片显示为图片
         }
         if ($this->name === 'img') {
             return [
                 'attribute' => 'img',
                 'value' => function($data) {
-                    return "<img src='{$data['img']}' width='100' height='100'>";
+                    return "<img src='".$data[$this->name]."' width='100' height='100'>";
                 },
                 'format' => 'raw',
 
@@ -48,6 +83,7 @@ class CenterFormatter {
             'attribute' => $this->name,
             'value' => function($data) {
                 return "<span class='cell'>".$data[$this->name]."</span>";
+//                    return $data['cate'];
             },
             'format' => 'raw',
 
@@ -97,32 +133,20 @@ function centerFormat($name) {
 
             ['class' => 'kartik\grid\SerialColumn'],
 
-            centerFormat('img'),
-            centerFormat('cate'),
-            centerFormat('subCate'),
-            centerFormat('vendor1'),
-            centerFormat('vendor2'),
-            centerFormat('vendor3'),
-            centerFormat('origin1'),
-            centerFormat('origin2'),
-            centerFormat('origin3'),
-            centerFormat('devNum'),
-            centerFormat('developer'),
-            centerFormat('introducer'),
-            centerFormat('devStatus'),
-            centerFormat('checkStatus'),
-            centerFormat('createDate'),
-            centerFormat('updateDate'),
-            centerFormat('salePrice'),
-            centerFormat('hopeWeight'),
-            centerFormat('hopeRate'),
-            centerFormat('hopeSale'),
-            centerFormat('hopeMonthProfit'),
-
             [ 'class' => 'kartik\grid\ActionColumn',
-                'template' =>'{pass} {fail}',
+                'template' =>'{view} {pass} {fail}',
                 'buttons' => [
-
+                    'view' => function ($url, $model, $key) {
+                        $options = [
+                            'title' => '查看',
+                            'aria-label' => '查看',
+                            'data-toggle' => 'modal',
+                            'data-target' => '#view-modal',
+                            'data-id' => $key,
+                            'class' => 'data-view',
+                        ];
+                        return Html::a('<span  class="glyphicon glyphicon-eye-open"></span>', '#', $options);
+                    },
                     'pass' => function ($url, $model, $key) {
                         $options = [
                             'title' => '通过',
@@ -147,6 +171,29 @@ function centerFormat($name) {
                     }
                 ],
             ],
+            centerFormat('img'),
+            centerFormat('cate'),
+            centerFormat('subCate'),
+            centerFormat('vendor1'),
+//            centerFormat('vendor2'),
+//            centerFormat('vendor3'),
+            centerFormat('origin1'),
+//            centerFormat('origin2'),
+//            centerFormat('origin3'),
+            centerFormat('devNum'),
+            centerFormat('developer'),
+            centerFormat('introducer'),
+//            centerFormat('devStatus'),
+            centerFormat('checkStatus'),
+            centerFormat('createDate'),
+            centerFormat('updateDate'),
+            centerFormat('salePrice'),
+            centerFormat('hopeWeight'),
+            centerFormat('hopeRate'),
+            centerFormat('hopeSale'),
+            centerFormat('hopeMonthProfit'),
+
+
         ],
     ]); ?>
 </div>
