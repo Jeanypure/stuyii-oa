@@ -11,6 +11,8 @@ use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\builder\FormGrid;
 use yii\grid\GridView;
+//use kartik\select2\Select2;
+use kartik\widgets\Select2;
 
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
@@ -115,11 +117,7 @@ $this->params['breadcrumbs'][] = 'Update';
                             'type'=>Form::INPUT_DROPDOWN_LIST,
                         ],
 
-                        'DictionaryName' =>[
-                            'label'=>'禁售平台',
-                            'items'=>$lock,
-                            'type'=>Form::INPUT_DROPDOWN_LIST,
-                        ],
+
 
                     ],
                 ],
@@ -129,6 +127,22 @@ $this->params['breadcrumbs'][] = 'Update';
             ],
 
         ]);?>
+<?php
+// Tagging support Multiple (maintain the order of selection)
+echo '<label class="control-label">禁售平台</label>';
+echo Select2::widget([
+    'name' => 'DictionaryName',
+    //'value' => ['red', 'green'], // initial value
+    'data' => $lock,
+    'maintainOrder' => true,
+    'options' => ['placeholder' => '--可多选--', 'multiple' => true],
+    'pluginOptions' => [
+        'tags' => true,
+        'maximumInputLength' => 5
+    ],
+]);
+
+?>
 
 <?php
 echo Html::submitButton($info->isNewRecord ? 'Create' : 'Update', ['class' => $info->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);

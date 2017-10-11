@@ -107,9 +107,13 @@ class OaGoodsinfoController extends Controller
             throw new NotFoundHttpException("The product was not found.");
         }
 
-        if($info->load(Yii::$app->request->post())&&$info->save()){
-//            var_dump($_POST);die;
+        if($info->load(Yii::$app->request->post())){
+            if (!empty($_POST['DictionaryName'])){
+                $info->DictionaryName = implode(',',$_POST['DictionaryName']);
+            }
+            $info->save();
           return $this->redirect(['view', 'id' =>$info->pid ]);
+//          return $this->render('view', ['id' =>$info->pid ]);
         }else{
 
             $data = $this->actionSelectParam();

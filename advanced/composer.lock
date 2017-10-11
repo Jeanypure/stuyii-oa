@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7474842de5ce0f4842ba30df9d36883b",
+    "content-hash": "7b1285c7870627d7531693eb1453baf1",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -61,7 +61,7 @@
                 "shasum": ""
             },
             "require": {
-                "bower-asset/jquery": ">=1.9.1,<=3"
+                "bower-asset/jquery": ">=1.9.1,<4.0"
             },
             "type": "bower-asset-library",
             "extra": {
@@ -93,7 +93,8 @@
                 "mobile-first",
                 "responsive",
                 "web"
-            ]
+            ],
+            "time": "2016-07-25T15:51:55+00:00"
         },
         {
             "name": "bower-asset/bootstrap3-dialog",
@@ -146,7 +147,8 @@
                 "mobile-first",
                 "responsive",
                 "web"
-            ]
+            ],
+            "time": "2017-03-24T01:21:30+00:00"
         },
         {
             "name": "bower-asset/jquery",
@@ -177,7 +179,8 @@
                 "javascript",
                 "jquery",
                 "library"
-            ]
+            ],
+            "time": "2016-05-20T17:24:43+00:00"
         },
         {
             "name": "bower-asset/jquery.inputmask",
@@ -236,7 +239,8 @@
                 "jquery",
                 "mask",
                 "plugins"
-            ]
+            ],
+            "time": "2017-08-24T08:08:54+00:00"
         },
         {
             "name": "bower-asset/punycode",
@@ -264,7 +268,8 @@
                     "node_modules",
                     "package.json"
                 ]
-            }
+            },
+            "time": "2014-10-22T12:02:42+00:00"
         },
         {
             "name": "bower-asset/yii2-pjax",
@@ -612,6 +617,55 @@
             "time": "2017-10-01T12:55:30+00:00"
         },
         {
+            "name": "kartik-v/bootstrap-popover-x",
+            "version": "v1.4.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/bootstrap-popover-x.git",
+                "reference": "16704c0a6a7d2960b9a35dfc03b54211d642e43c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/kartik-v/bootstrap-popover-x/16704c0a6a7d2960b9a35dfc03b54211d642e43c.zip",
+                "reference": "16704c0a6a7d2960b9a35dfc03b54211d642e43c",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "kartik\\plugins\\popover\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD 3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "Bootstrap Popover Extended - Popover with modal behavior, styling enhancements and more.",
+            "homepage": "https://github.com/kartik-v/bootstrap-popover-x",
+            "keywords": [
+                "bootstrap",
+                "extended",
+                "jquery",
+                "modal",
+                "modal-popover",
+                "popover",
+                "popover-x"
+            ],
+            "time": "2017-09-07T13:05:26+00:00"
+        },
+        {
             "name": "kartik-v/bootstrap-star-rating",
             "version": "v4.0.2",
             "source": {
@@ -808,6 +862,59 @@
             "time": "2016-09-13T18:15:26+00:00"
         },
         {
+            "name": "kartik-v/yii2-editable",
+            "version": "v1.7.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-editable.git",
+                "reference": "e07d78660e1d74cf831824855c46742d7ff784da"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/kartik-v/yii2-editable/e07d78660e1d74cf831824855c46742d7ff784da.zip",
+                "reference": "e07d78660e1d74cf831824855c46742d7ff784da",
+                "shasum": ""
+            },
+            "require": {
+                "kartik-v/yii2-krajee-base": "~1.7",
+                "kartik-v/yii2-popover-x": "~1.3"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.7.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "kartik\\editable\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "An enhanced editable widget for Yii 2.0 that allows easy editing of displayed data with numerous configuration possibilities.",
+            "homepage": "https://github.com/kartik-v/yii2-editable",
+            "keywords": [
+                "bootstrap",
+                "editable",
+                "input",
+                "jquery",
+                "popover",
+                "popover-x",
+                "widget"
+            ],
+            "time": "2017-06-28T05:11:45+00:00"
+        },
+        {
             "name": "kartik-v/yii2-grid",
             "version": "dev-master",
             "source": {
@@ -858,7 +965,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2017-10-03T13:33:32+00:00"
+            "time": "2017-10-03 13:33:32"
         },
         {
             "name": "kartik-v/yii2-helpers",
@@ -961,6 +1068,54 @@
                 "yii2"
             ],
             "time": "2017-02-22T05:58:53+00:00"
+        },
+        {
+            "name": "kartik-v/yii2-popover-x",
+            "version": "v1.3.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-popover-x.git",
+                "reference": "58837d63e65caa41f0c13e671d1e2abeec17887d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/kartik-v/yii2-popover-x/58837d63e65caa41f0c13e671d1e2abeec17887d.zip",
+                "reference": "58837d63e65caa41f0c13e671d1e2abeec17887d",
+                "shasum": ""
+            },
+            "require": {
+                "kartik-v/bootstrap-popover-x": "~1.4",
+                "kartik-v/yii2-krajee-base": "~1.7"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "kartik\\popover\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "An extended bootstrap 3.0 popover widget which combines both the bootstrap popover and modal features and includes various new styling enhancements.",
+            "homepage": "https://github.com/kartik-v/yii2-popover-x",
+            "keywords": [
+                "bootstrap",
+                "extended",
+                "jquery",
+                "modal",
+                "modal-popover",
+                "popover",
+                "popover-x"
+            ],
+            "time": "2017-09-08T04:30:42+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-activeform",
@@ -1535,16 +1690,16 @@
         },
         {
             "name": "kartik-v/yii2-widget-select2",
-            "version": "2.1.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-select2.git",
-                "reference": "a129c6663078fe0ad14cde2a5d0afd071c7608e9"
+                "reference": "2c3f47527c783d5d03e778b40d0f1a0f28f6e541"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/kartik-v/yii2-widget-select2/a129c6663078fe0ad14cde2a5d0afd071c7608e9.zip",
-                "reference": "a129c6663078fe0ad14cde2a5d0afd071c7608e9",
+                "url": "https://files.phpcomposer.com/files/kartik-v/yii2-widget-select2/2c3f47527c783d5d03e778b40d0f1a0f28f6e541.zip",
+                "reference": "2c3f47527c783d5d03e778b40d0f1a0f28f6e541",
                 "shasum": ""
             },
             "require": {
@@ -1584,7 +1739,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2017-08-07T18:12:36+00:00"
+            "time": "2017-09-04 15:30:52"
         },
         {
             "name": "kartik-v/yii2-widget-sidenav",
@@ -1945,7 +2100,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2015-12-05T10:37:16+00:00"
+            "time": "2015-12-05 10:37:16"
         },
         {
             "name": "mdmsoft/yii2-admin",
@@ -2065,7 +2220,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2016-09-29T20:13:14+00:00"
+            "time": "2016-09-29 20:13:14"
         },
         {
             "name": "rmrevin/yii2-fontawesome",
@@ -2509,7 +2664,8 @@
             "type": "bower-asset-library",
             "extra": {
                 "bower-asset-main": "dist/typeahead.bundle.js"
-            }
+            },
+            "time": "2015-04-27T04:02:14+00:00"
         },
         {
             "name": "codeception/base",
@@ -5052,7 +5208,8 @@
     "stability-flags": {
         "kartik-v/yii2-grid": 20,
         "kartik-v/yii2-widgets": 20,
-        "phpoffice/phpexcel": 20
+        "phpoffice/phpexcel": 20,
+        "kartik-v/yii2-widget-select2": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

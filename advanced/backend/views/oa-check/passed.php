@@ -44,6 +44,7 @@ class CenterFormatter {
     }
     public  function format() {
         // 超链接显示为超链接
+
         if ($this->name === 'origin'||$this->name === 'origin1'||$this->name === 'origin1'
             ||$this->name === 'origin2'||$this->name === 'origin3'||$this->name === 'vendor1'||$this->name === 'vendor2'
             ||$this->name === 'vendor3') {

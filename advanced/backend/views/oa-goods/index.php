@@ -122,6 +122,7 @@ class CenterFormatter {
                 'attribute' => 'img',
                 'value' => function($data) {
                     return "<img src='".$data[$this->name]."' width='100' height='100'>";
+
                 },
                 'format' => 'raw',
 
