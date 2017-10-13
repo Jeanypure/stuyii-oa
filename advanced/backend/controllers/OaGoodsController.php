@@ -5,14 +5,14 @@ namespace backend\controllers;
 use Yii;
 use backend\models\OaGoods;
 use backend\models\OaGoodsSearch;
-use backend\models\OaGoodsForm;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\data\ActiveDataProvider;
-use \PHPExcel;
+    use \PHPExcel;
 use app\models\UploadForm;
 use yii\web\UploadedFile;
+use yii\web\Response;
+
 /**
  * OaGoodsController implements the CRUD actions for OaGoods model.
  */
@@ -41,13 +41,8 @@ class OaGoodsController extends Controller
     {
         $searchModel = new OaGoodsSearch();
         $model = new OaGoods();
-//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider = new ActiveDataProvider([
-            'query' => OaGoods::find()->where(['devStatus'=>'']),
-            'pagination' => [
-                'pageSize' => 25,
-            ],
-        ]);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'');
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -72,12 +67,14 @@ class OaGoodsController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($pid=0,$typeid=1)
     {
         $model = new OaGoods();
 
-        if ($model->load(Yii::$app->request->post())  ) {
-            if($model->save()) {
+        $request =Yii::$app->request;
+        if ($request->isPost)
+        {
+            if($model->load(Yii::$app->request->post()) && $model->save()) {
                 //默认值更新到当前行中
                 $id = $model->nid;
                 $current_model = $this->findModel($id);
@@ -96,12 +93,25 @@ class OaGoodsController extends Controller
                 echo "something Wrong!";
             }
 
-        } else {
-            return $this->renderAjax('create', [
-                'model' => $model,
-            ]);
         }
+
+        if ($request->isGet){
+        $pid = (int)Yii::$app->request->get('pid');
+        $typeid = (int)Yii::$app->request->get('typeid');
+        $model->getCityList($pid);
+        if($typeid == 1){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return $model->getCityList($pid);
+        }
+
+        return $this->renderAjax('create', [
+            'model' => $model,
+        ]);
+        }
+
     }
+
+
 
     /**
      * Updates an existing OaGoods model.
@@ -269,7 +279,6 @@ class OaGoodsController extends Controller
         $model ->devStatus = '正向认领';
         $model ->developer = $user;
         $model ->updateDate = strftime('%F %T');
-//        var_dump($model);die;
         $model->update(array('devStatus','developer','updateDate'));
         return $this->redirect(['index']);
     }
@@ -292,12 +301,8 @@ class OaGoodsController extends Controller
     public function actionForwardProducts()
     {
         $searchModel = new OaGoodsSearch();
-        $dataProvider = new ActiveDataProvider([
-            'query' => OaGoods::find()->where(['devStatus'=>'正向认领']),
-            'pagination' => [
-                'pageSize' => 25,
-            ],
-        ]);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'正向认领');
+
         return $this->render('forwardProducts', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -308,12 +313,8 @@ class OaGoodsController extends Controller
     public function actionBackwardProducts()
     {
         $searchModel = new OaGoodsSearch();
-        $dataProvider = new ActiveDataProvider([
-            'query' => OaGoods::find()->where(['devStatus'=>'逆向认领']),
-            'pagination' => [
-                'pageSize' => 25,
-            ],
-        ]);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'逆向认领');
+
         return $this->render('backwardProducts', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -334,5 +335,10 @@ class OaGoodsController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+
+
+
+
 
 }

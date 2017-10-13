@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'pid',
-            'picUrl',
+            'picUrl:url',
             ['label'=>'picUrl','value'=>$model->picUrl,],
             'GoodsName',
             'SupplierName',

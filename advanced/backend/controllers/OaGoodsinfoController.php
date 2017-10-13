@@ -113,7 +113,6 @@ class OaGoodsinfoController extends Controller
             }
             $info->save();
           return $this->redirect(['view', 'id' =>$info->pid ]);
-//          return $this->render('view', ['id' =>$info->pid ]);
         }else{
 
             $data = $this->actionSelectParam();
