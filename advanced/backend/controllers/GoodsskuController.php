@@ -9,6 +9,7 @@ use backend\models\GoodsskuSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\ActiveDataProvider;
 //actionSave中对应的命名空间要加上
 use yii\web\Response;
 
@@ -20,6 +21,7 @@ class GoodsskuController extends Controller
 {
     /**
      * @inheritdoc
+     *
      */
     public function behaviors()
     {
@@ -27,7 +29,7 @@ class GoodsskuController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'delete' => ['POST','GET'],
                 ],
             ],
         ];
@@ -50,7 +52,39 @@ class GoodsskuController extends Controller
 
 
 
+    /**
+     *  SKU info
+     */
 
+    public function actionInfo($id)
+    {
+
+        $model = Goodssku::find()->where(['pid'=>1])->one();
+        $dataProvider = new ActiveDataProvider([
+            'query' => Goodssku::find()->where(['pid'=>$id]),
+            'pagination' => [
+                'pageSize' => 25,
+            ],
+        ]);
+        return $this->renderAjax('info',[
+            'info'=> $model,
+            'dataProvider'=>$dataProvider
+        ]);
+    }
+
+
+    /**
+     *  SKU modefiy
+     */
+
+    public function actionModify()
+    {
+        $request = Yii::$app->request;
+        if($request->isPost)
+        {
+            var_dump($request->post());die;
+        }
+    }
 
     /**
      * Displays a single Goodssku model.
@@ -115,14 +149,22 @@ class GoodsskuController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionDelete($id=null)
     {
-        //User::find()->where(['name' => 'ttt'])->one()
-        $sku = Goodssku::find()->where(['sid'=>$id])->one();
-        $pid = $sku['pid'];
+        $request = Yii::$app->request;
+        if ($request->isGet)
+        {
+            $sku = Goodssku::find()->where(['sid'=>$id])->one();
+            $pid = $sku['pid'];
+            $this->findModel($id)->delete();
+            return $this->redirect(['oa-goodsinfo/update','id'=>$pid]);}
+        if ($request->isPost)
+        {
+            $id =  $_POST['id'];
+            $this->findModel($id)->delete();
+            echo "{'msg':'Deleted'}";
+        }
 
-        $this->findModel($id)->delete();
-        return $this->redirect(['oa-goodsinfo/update','id'=>$pid]);
     }
 
     /**
