@@ -4,8 +4,9 @@ namespace backend\controllers;
 
 use Yii;
 use backend\models\OaGoods;
+use backend\models\GoodsCats;
+
 use backend\models\OaGoodsSearch;
-use backend\models\OaGoodsForm;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -13,6 +14,9 @@ use yii\data\ActiveDataProvider;
 use \PHPExcel;
 use app\models\UploadForm;
 use yii\web\UploadedFile;
+
+use yii\web\Response;
+
 /**
  * OaGoodsController implements the CRUD actions for OaGoods model.
  */
@@ -72,12 +76,14 @@ class OaGoodsController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($pid=0,$typeid=1)
     {
         $model = new OaGoods();
 
-        if ($model->load(Yii::$app->request->post())  ) {
-            if($model->save()) {
+        $request =Yii::$app->request;
+        if ($request->isPost)
+        {
+            if($model->load(Yii::$app->request->post()) && $model->save()) {
                 //默认值更新到当前行中
                 $id = $model->nid;
                 $current_model = $this->findModel($id);
@@ -96,12 +102,34 @@ class OaGoodsController extends Controller
                 echo "something Wrong!";
             }
 
-        } else {
-            return $this->renderAjax('create', [
-                'model' => $model,
-            ]);
         }
+
+        if ($request->isGet){
+        $pid = (int)Yii::$app->request->get('pid');
+        $typeid = (int)Yii::$app->request->get('typeid');
+        $model->getCityList($pid);
+        if($typeid == 1){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return $model->getCityList($pid);
+        }
+
+        return $this->renderAjax('create', [
+            'model' => $model,
+        ]);
+        }
+
     }
+
+
+//    public function getCityList($pid)
+//    {
+//        $model = GoodsCats::find()->where('CategoryParentID =:pid',[':pid'=>$pid])->all();
+//        return ArrayHelper::map($model,'CategoryName','CategoryName');
+//    }
+
+
+
+
 
     /**
      * Updates an existing OaGoods model.
@@ -334,5 +362,10 @@ class OaGoodsController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+
+
+
+
 
 }

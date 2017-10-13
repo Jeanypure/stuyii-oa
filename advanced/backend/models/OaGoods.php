@@ -4,6 +4,10 @@ namespace backend\models;
 
 use Yii;
 
+//use yii\helpers\ArrayHelper;
+//use backend\models\GoodsCats;
+
+
 /**
  * This is the model class for table "oa_goods".
  *
@@ -20,7 +24,7 @@ use Yii;
  * @property string $createDate
  * @property string $updateDate
  */
-class OaGoods extends \yii\db\ActiveRecord
+class OaGoods extends GoodsCats
 {
     /**
      * @inheritdoc
@@ -72,4 +76,13 @@ class OaGoods extends \yii\db\ActiveRecord
             'updateDate' => '更新时间',
         ];
     }
+
+
+
+
+
+
+
+
+
 }

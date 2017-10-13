@@ -158,17 +158,26 @@ ActiveForm::end(); ?>
 
         echo TabularForm::widget([
 
-        'dataProvider' => $dataProvider,
+            'dataProvider' => $dataProvider,
             'form'=>$form,
+            'id'=>'sku-table',
+            'actionColumn'=>[
+            'updateOptions' => ['style' => 'display:none'],
+            'width' => '60px',
+            ],
+
+            'attributeDefaults' => [
+                'type' => Form::INPUT_TEXT,
+//                'prepend' => 'My custom content',
+            ],
             'attributes'=>[
-                'sku'=>['label'=>'sku', 'type'=>TabularForm::INPUT_TEXT],
-                'property1'=>['label'=>'property1','type'=>TabularForm::INPUT_TEXT],
-                'property2'=>['label'=>'property1', 'type'=>TabularForm::INPUT_TEXT],
-                'property3'=>['label'=>'property1', 'type'=>TabularForm::INPUT_TEXT],
-                'CostPrice'=>['label'=>'CostPrice', 'type'=>TabularForm::INPUT_TEXT],
-                'Weight'=>['label'=>'Weight', 'type'=>TabularForm::INPUT_TEXT],
-                'RetailPrice'=>['label'=>'RetailPrice', 'type'=>TabularForm::INPUT_TEXT],
-//                'property2'=>['label'=>'property1', 'type'=>TabularForm::INPUT_TEXT],
+                'sku'=>['label'=>'sku',],
+                'property1'=>['label'=>'property1',],
+                'property2'=>['label'=>'property1',],
+                'property3'=>['label'=>'property1', ],
+                'CostPrice'=>['label'=>'CostPrice', ],
+                'Weight'=>['label'=>'Weight',],
+                'RetailPrice'=>['label'=>'RetailPrice',],
             ],
 
             // configure other gridview settings
@@ -178,10 +187,13 @@ ActiveForm::end(); ?>
                     'type'=>GridView::TYPE_PRIMARY,
                     'before'=>false,
                     'footer'=>true,
-                    'after'=>Html::button('<i class="glyphicon glyphicon-plus"></i> Add New', ['type'=>'button', 'class'=>'btn btn-success kv-batch-create']) . ' ' .
-                        Html::button('<i class="glyphicon glyphicon-remove"></i> Delete', ['type'=>'button', 'class'=>'btn btn-danger kv-batch-delete']) . ' ' .
-                        Html::button('<i class="glyphicon glyphicon-floppy-disk"></i> Save', ['type'=>'button', 'class'=>'btn btn-primary kv-batch-save'])
-                ]
+                    'after'=>Html::button('<i class="glyphicon glyphicon-plus"></i> 增一行', ['type'=>'button', 'class'=>'btn btn-success kv-batch-create']) . ' ' .
+                        Html::button('<i class="glyphicon glyphicon-remove"></i> 删除', ['type'=>'button', 'class'=>'btn btn-danger kv-batch-delete']) . ' ' .
+                        Html::button('<i class="glyphicon glyphicon-floppy-disk"></i> 保存', ['type'=>'button', 'class'=>'btn btn-primary kv-batch-save'])
+                ],
+
+
+
             ]
        /* 'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
@@ -324,6 +336,40 @@ $('#create').on('click', function () {
 
 JS;
 $this->registerJs($js2);
+
+$addRow = <<<JS
+
+//增加行
+ 
+     var row_count = 0;
+    $('.kv-batch-create').on('click',function(){       
+      var skuTable = $('#sku-table').find('table'); 
+        var firstTr = skuTable.find('tbody>tr:first'); 
+        var row = $("<tr></tr>"); 
+        var seriralTd = $('<td class="kv-align-center kv-align-middle" style="width:50px;" data-col-seq="0">新'+ row_count+'</td>'); 
+        row.append(seriralTd);
+        var actionTd = $('<td class="skip-export kv-align-center kv-align-middle" style="width:80px;" data-col-seq="1"><a class="data-view" href="goodssku/delete" title="查看" aria-label="查看" data-toggle="modal" data-target="#view-modal" ><span  class="glyphicon glyphicon-eye-open"></span></a><a> <span  class="glyphicon glyphicon-trash"></span></a></td>');
+        row.append(actionTd);
+        var checkBoxTd =$('<td class="skip-export kv-align-center kv-align-middle kv-row-select" style="width:50px;" data-col-seq="2"><input type="checkbox" class="kv-row-checkbox" name="selection[]"></td>');
+        row.append(checkBoxTd);
+        var skuTd = $('<td class="kv-align-top" data-col-seq="3" ><div class="form-group"><input type="text"  class="form-control"><div class="help-block"></div></div></td>');
+        row.append(skuTd);
+        
+        //循环添加循环框
+        for (var i=3; i<9;i++){
+            var td = $('<td class="kv-align-top" data-col-seq="'+ i +'" ><div class="form-group"><input type="text"  class="form-control"><div class="help-block"></div></div></td>');
+            row.append(td);
+        }
+        
+        //添加行内容到行元素
+        skuTable.append(row); 
+        row_count++; 
+        
+          
+    });
+JS;
+$this->registerJs($addRow);
+
 Modal::end();
 ?>
 
