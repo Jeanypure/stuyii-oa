@@ -4,10 +4,6 @@ namespace backend\models;
 
 use Yii;
 
-//use yii\helpers\ArrayHelper;
-//use backend\models\GoodsCats;
-
-
 /**
  * This is the model class for table "oa_goods".
  *

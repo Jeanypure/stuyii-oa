@@ -18,7 +18,7 @@ class OaGoodsSearch extends OaGoods
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+           // [['id'], 'integer'],
             [['img','cate', 'devNum', 'origin1', 'developer', 'introducer',
                 'devStatus', 'checkStatus','subCate','vendor1','vendor2','vendor3',
                 'origin2','origin3',
@@ -44,14 +44,17 @@ class OaGoodsSearch extends OaGoods
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params,$status)
     {
-        $query = OaGoods::find();
+        $query = OaGoods::find()->where(['devStatus'=>$status]);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
         ]);
 
         $this->load($params);
@@ -65,12 +68,18 @@ class OaGoodsSearch extends OaGoods
         // grid filtering conditions
         $query->andFilterWhere([
             'nid' => $this->nid,
-            'hopeRate' => $this->hopeRate,
+//            'hopeRate' => $this->hopeRate,
             'createDate' => $this->createDate,
             'updateDate' => $this->updateDate,
+            'cate' => $this->cate,
+            'subCate' => $this->subCate,
+            'developer' => $this->developer,
+            'introducer' => $this->introducer,
+            'checkStatus' => $this->checkStatus,
         ]);
 
         $query->andFilterWhere(['like', 'cate', $this->cate])
+            ->andFilterWhere(['like', 'subCate', $this->subCate])
             ->andFilterWhere(['like', 'devNum', $this->devNum])
             ->andFilterWhere(['like', 'origin1', $this->origin1])
             ->andFilterWhere(['like', 'developer', $this->developer])

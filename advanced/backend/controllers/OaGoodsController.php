@@ -4,17 +4,13 @@ namespace backend\controllers;
 
 use Yii;
 use backend\models\OaGoods;
-use backend\models\GoodsCats;
-
 use backend\models\OaGoodsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\data\ActiveDataProvider;
-use \PHPExcel;
+    use \PHPExcel;
 use app\models\UploadForm;
 use yii\web\UploadedFile;
-
 use yii\web\Response;
 
 /**
@@ -45,13 +41,8 @@ class OaGoodsController extends Controller
     {
         $searchModel = new OaGoodsSearch();
         $model = new OaGoods();
-//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider = new ActiveDataProvider([
-            'query' => OaGoods::find()->where(['devStatus'=>'']),
-            'pagination' => [
-                'pageSize' => 25,
-            ],
-        ]);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'');
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -119,15 +110,6 @@ class OaGoodsController extends Controller
         }
 
     }
-
-
-//    public function getCityList($pid)
-//    {
-//        $model = GoodsCats::find()->where('CategoryParentID =:pid',[':pid'=>$pid])->all();
-//        return ArrayHelper::map($model,'CategoryName','CategoryName');
-//    }
-
-
 
 
 
@@ -297,7 +279,6 @@ class OaGoodsController extends Controller
         $model ->devStatus = '正向认领';
         $model ->developer = $user;
         $model ->updateDate = strftime('%F %T');
-//        var_dump($model);die;
         $model->update(array('devStatus','developer','updateDate'));
         return $this->redirect(['index']);
     }
@@ -320,12 +301,8 @@ class OaGoodsController extends Controller
     public function actionForwardProducts()
     {
         $searchModel = new OaGoodsSearch();
-        $dataProvider = new ActiveDataProvider([
-            'query' => OaGoods::find()->where(['devStatus'=>'正向认领']),
-            'pagination' => [
-                'pageSize' => 25,
-            ],
-        ]);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'正向认领');
+
         return $this->render('forwardProducts', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -336,12 +313,8 @@ class OaGoodsController extends Controller
     public function actionBackwardProducts()
     {
         $searchModel = new OaGoodsSearch();
-        $dataProvider = new ActiveDataProvider([
-            'query' => OaGoods::find()->where(['devStatus'=>'逆向认领']),
-            'pagination' => [
-                'pageSize' => 25,
-            ],
-        ]);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'逆向认领');
+
         return $this->render('backwardProducts', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
