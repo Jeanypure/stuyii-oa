@@ -74,10 +74,73 @@ class GoodsskuController extends Controller
 
 
     /**
-     *  SKU modefiy
+     *  save sku data only
      */
 
-    public function actionModify()
+    public function actionSaveOnly($pid)
+    {
+        $request = Yii::$app->request;
+        $model = new Goodssku();
+        if($request->isPost)
+        {
+            //提交过来的表单数据
+            try
+            {
+                $skuRows = $request->post()['Goodssku'];
+//                var_dump($skuRows);die;
+                foreach ($skuRows as $row_key=>$row_value)
+                {
+                    $row_value['pid'] = intval($pid); //pid传进来
+                    //新增行
+                    if(strstr($row_key,'New'))
+                    {
+                        $_model = clone $model;
+                        //配合rules 进行安全检查;需要改变的数据都要声明下类型。
+                        $_model ->setAttributes($row_value,true); //逐行入库
+                        if($_model->save()){
+//                            echo "{'msg':'Done'}";
+                        }
+
+                        else {
+//                            echo "{'msg:'Fail'}";
+                        }
+                    }
+                    //更新行
+                    else
+                    {   $sku = $row_value['sku'];
+
+                        $update_moadel = Goodssku::find()->where(['sku' => $sku])->one();
+                        $update_moadel->property1 = $row_value['property1'];
+                        $update_moadel->property2 = $row_value['property2'];
+                        $update_moadel->property3 = $row_value['property3'];
+                        $update_moadel->CostPrice = $row_value['CostPrice'];
+                        $update_moadel->Weight = $row_value['Weight'];
+                        $update_moadel->RetailPrice = $row_value['RetailPrice'];
+                        $update_moadel->update(['property1','property2','property3',
+                            'CostPrice','Weight','RetailPrice']);
+
+//                        echo "{'msg':'update successfully'}";
+
+                    }
+                    $this->redirect(['oa-goodsinfo/update','id'=>$pid]);
+                }
+
+            }
+            catch (Exception  $e)
+            {
+                echo $e;
+            }
+
+        }
+    }
+
+
+
+    /**
+     *  save and complete sku data
+     */
+
+    public function actionSaveComplete()
     {
         $request = Yii::$app->request;
         if($request->isPost)

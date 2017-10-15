@@ -18,9 +18,9 @@ class GoodsskuSearch extends Goodssku
     public function rules()
     {
         return [
-            [['sid', 'pid'], 'integer'],
-            [['sku', 'property1', 'property2', 'property3', 'memo1', 'memo2', 'memo3', 'memo4'], 'safe'],
-            [['CostPrice', 'Weight', 'RetailPrice'], 'number'],
+//            [['sid', 'pid'], 'integer'],
+            [['pid','sku', 'property1', 'property2', 'property3', 'memo1', 'memo2', 'memo3', 'memo4','CostPrice', 'Weight', 'RetailPrice'], 'safe'],
+//            [['CostPrice', 'Weight', 'RetailPrice'], 'number'],
         ];
     }
 
