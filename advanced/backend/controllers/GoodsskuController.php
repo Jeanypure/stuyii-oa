@@ -87,7 +87,6 @@ class GoodsskuController extends Controller
             try
             {
                 $skuRows = $request->post()['Goodssku'];
-//                var_dump($skuRows);die;
                 foreach ($skuRows as $row_key=>$row_value)
                 {
                     $row_value['pid'] = intval($pid); //pid传进来
@@ -98,11 +97,11 @@ class GoodsskuController extends Controller
                         //配合rules 进行安全检查;需要改变的数据都要声明下类型。
                         $_model ->setAttributes($row_value,true); //逐行入库
                         if($_model->save()){
-//                            echo "{'msg':'Done'}";
+                            echo "{'msg':'Done'}";
                         }
 
                         else {
-//                            echo "{'msg:'Fail'}";
+                            echo "{'msg:'Fail'}";
                         }
                     }
                     //更新行

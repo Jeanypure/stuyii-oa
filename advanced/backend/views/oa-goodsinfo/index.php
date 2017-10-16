@@ -1,9 +1,9 @@
 <?php
-
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
-//use yii\helpers\Helper;
+use yii\helpers\Url;
+
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\OaGoodsinfoSearch */
@@ -38,19 +38,22 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class'=>'kartik\grid\SerialColumn'],
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'template' =>'{view} {update} {delete} {active}',
+                'template' =>'{view} {update} {delete}',
                 'buttons' => [
-                    'active' => function ($url, $model, $key) {
+                    'view' => function ($url, $model, $key) {
                         $options = [
-                            'title' => '审核',
-                            'aria-label' => '审核',
-                            'data-confirm' => '你确定通过这条审核吗?',
-                            'data-method' => 'post',
-                            'data-pjax' => '0',
+                            'title' => '查看',
+                            'aria-label' => '查看',
+                            'data-toggle' => 'modal',
+                            'data-target' => '#index-modal',
+                            'data-id' => $key,
+                            'class' => 'index-view',
                         ];
-                        return Html::a('<span class="glyphicon glyphicon-check"></span>', $url, $options);
-                    }
+                        return Html::a('<span  class="glyphicon glyphicon-eye-open"></span>', '#', $options);
+                    },
+
                 ],
+
             ],
             [
                 'attribute' => 'picUrl',
@@ -60,6 +63,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'width' => '100px',
             ],
+
+            'GoodsCode',
             'GoodsName',
             'AliasCnName',
             'AliasEnName',
@@ -81,9 +86,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             [
-                    'attribute' => 'IsPowder',
-                    'width' => '100px',
-            ],
+                'attribute' => 'IsPowder',
+                'width' => '100px',
+             ],
 
             [
                 'attribute' => 'isMagnetism',
@@ -93,20 +98,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'IsCharged',
                 'width' => '100px',
             ],
-//            'PackName',
-//            'Season',
-//            'StoreID',
-//            'SupplierName',
-
-//            [
-//             'attribute'=> 'description',
-//             'value'=> function($data){
-//                return "<a href=\"$data[description]\" >$data[description]</a>";
-//             },
-//
-//             'format' => 'raw',
-//             ],
-//            'DictionaryName',
 
 
         ],
@@ -115,6 +106,31 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
     ]); ?>
+
+<?php
+//创建模态框
+use yii\bootstrap\Modal;
+Modal::begin([
+    'id' => 'index-modal',
+    'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
+]);
+//echo
+Modal::end();
+$viewUrl = Url::toRoute('view');
+$js = <<<JS
+// alert(123);
+// 查看框
+$('.index-view').on('click',  function () {
+    $.get('{$viewUrl}',{ id: $(this).closest('tr').data('key') },
+            function (data) {
+                $('.modal-body').html(data);
+            }
+        );
+    });
+JS;
+$this->registerJs($js);
+
+?>
 </div>
 
 

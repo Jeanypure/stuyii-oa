@@ -1,11 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-//use yii\grid\GridView;
 use kartik\grid\GridView;
-use kartik\dialog\Dialog;
 use yii\helpers\Url;
-use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\OaGoodsSearch */
@@ -188,14 +185,11 @@ function centerFormat($name) {
         'filterModel' => $searchModel,
         'id' => 'oa-goods',
         'columns' => [
-            [
-                'class' => 'yii\grid\CheckboxColumn',
-            ],
+            ['class' => 'yii\grid\CheckboxColumn',],
             ['class' => 'kartik\grid\SerialColumn'],
-
-
             // action
-            [ 'class' => 'kartik\grid\ActionColumn',
+            [
+                'class' => 'kartik\grid\ActionColumn',
                 'template' =>'{view} {update} {delete} {heart}',
                 'buttons' => [
                     'view' => function ($url, $model, $key) {

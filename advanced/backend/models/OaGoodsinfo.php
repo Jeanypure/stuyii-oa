@@ -32,7 +32,7 @@ class OaGoodsinfo extends \yii\db\ActiveRecord
     {
         return [
             [['IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged','goodsid'], 'integer'],
-            [['description','SupplierName','Season','StoreName','PackName','DictionaryName','GoodsName'], 'string'],
+            [['GoodsCode','description','SupplierName','Season','StoreName','PackName','DictionaryName','GoodsName'], 'string'],
 
             [['GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description',], 'required'],
             [['DictionaryName'],'safe'],
@@ -46,6 +46,7 @@ class OaGoodsinfo extends \yii\db\ActiveRecord
     {
         return [
             'picUrl' => '商品图片',
+            'GoodsCode' => '商品编码',
             'GoodsName' => '商品名称',
             'SupplierName' => '供应商名称',
             'AliasCnName' => '中文申报名',

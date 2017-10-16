@@ -22,7 +22,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
     {
         return [
             [['pid','IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged'], 'integer'],
-            [['GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName'],'safe'],
+            [['GoodsCode','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName'],'safe'],
 
         ];
     }
@@ -64,6 +64,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
         // grid filtering conditions
         $query->andFilterWhere([
             'pid' => $this->pid,
+            'GoodsCode' => $this->GoodsCode,
             'GoodsName'=>$this->GoodsName,
             'SupplierName' => $this->SupplierName,
             'AliasCnName'=>$this->AliasCnName,

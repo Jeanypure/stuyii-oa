@@ -32,15 +32,19 @@ echo FormGrid::widget([ // continuation fields to row above without labels
         [
             'contentBefore'=>'<legend class="text-info"><small>基本信息</small></legend>',
             'attributes' =>[
+                'GoodsCode' =>[
+                    'label'=>'商品编码',
+                    'items'=>[ 1=>'Group 2'],
+                    'type'=>Form::INPUT_STATIC,
+                    'readonly'=>true,
+                ],
                 'GoodsName' =>[
                     'label'=>'商品名称',
                     'items'=>[ 1=>'Group 2'],
                     'type'=>Form::INPUT_TEXT,
                 ],
-                'SupplierName' =>[
-                    'label'=>'供应商名称',
-                    'type'=>Form::INPUT_TEXT,
-                ],
+
+
             ],
         ],
 
@@ -61,6 +65,10 @@ echo FormGrid::widget([ // continuation fields to row above without labels
         ],
         [
             'attributes' =>[
+                'SupplierName' =>[
+                    'label'=>'供应商名称',
+                    'type'=>Form::INPUT_TEXT,
+                ],
                 'PackName' =>[
                     'label'=>'规格',
                     'items'=>[''=>NUll,'A01'=>'A01','A02'=>'A02','A03'=>'A03','A04'=>'A04','B01'=>'B01','B02'=>'B02','stamp'=>'stamp',],
@@ -197,9 +205,7 @@ echo TabularForm::widget([
             'footer'=>true,
             'after'=>Html::button('新增行', ['id'=>'add-row','type'=>'button', 'class'=>'btn btn-success kv-batch-create']) . ' ' .
                 Html::button('删除行', ['id'=>'delete-row','type'=>'button', 'class'=>'btn btn-danger kv-batch-delete']) . ' ' .
-//                        Html::button('保存当前数据', ['type'=>'button', 'class'=>'btn btn-primary kv-batch-save']).
                 Html::button('保存当前数据', ['id'=>'save-only','type'=>'button','class'=>'btn btn-info']).
-//                        Html::button('保存并完善', ['type'=>'button', 'class'=>'btn btn-info kv-batch-save'])
                 Html::button('保存并完善', ['id'=>'save-complete','type'=>'button','class'=>'btn btn-primary'])
         ]
     ]
