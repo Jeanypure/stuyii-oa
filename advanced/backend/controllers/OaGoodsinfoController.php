@@ -125,6 +125,7 @@ class OaGoodsinfoController extends Controller
             ]);
             return $this->render('updetail',[
                 'info'=>$info,
+                'pid' =>$id,
                 'dataProvider' => $dataProvider,
                 'result' => $data['res'],
                 'lock' => $data['platFrom'],

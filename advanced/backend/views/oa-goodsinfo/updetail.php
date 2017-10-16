@@ -128,20 +128,17 @@ echo Select2::widget([
 ]);
 
 ?>
-
 <?php
 echo Html::submitButton($info->isNewRecord ? '创建基本信息' : '更新基本信息', ['class' => $info->isNewRecord ? 'btn btn-success' : 'btn btn-info']);
 ActiveForm::end();
-//echo Html::button('产品SKU信息', ['type'=>'button', 'class'=>'btn btn-warning']);
 echo "<br>";
 ?>
-
 
 <?php
 echo Html::label("<legend><small>SKU信息</small></legend>");
 ?>
 
-<?php $skuForm = ActiveForm::begin(['action' => ['goodssku/modify'],'method'=>'post',]);
+<?php $skuForm = ActiveForm::begin(['id'=>'sku-info','method'=>'post',]);
 
 ?>
 
@@ -183,11 +180,12 @@ echo TabularForm::widget([
 
         'sku'=>['label'=>'sku', 'type'=>TabularForm::INPUT_TEXT],
         'property1'=>['label'=>'property1','type'=>TabularForm::INPUT_TEXT],
-        'property2'=>['label'=>'property2', 'type'=>TabularForm::INPUT_TEXT],
-        'property3'=>['label'=>'property3', 'type'=>TabularForm::INPUT_TEXT],
+        'property2'=>['label'=>'property1', 'type'=>TabularForm::INPUT_TEXT],
+        'property3'=>['label'=>'property1', 'type'=>TabularForm::INPUT_TEXT],
         'CostPrice'=>['label'=>'CostPrice', 'type'=>TabularForm::INPUT_TEXT],
         'Weight'=>['label'=>'Weight', 'type'=>TabularForm::INPUT_TEXT],
         'RetailPrice'=>['label'=>'RetailPrice', 'type'=>TabularForm::INPUT_TEXT],
+
     ],
 
     // configure other gridview settings
@@ -199,8 +197,10 @@ echo TabularForm::widget([
             'footer'=>true,
             'after'=>Html::button('新增行', ['id'=>'add-row','type'=>'button', 'class'=>'btn btn-success kv-batch-create']) . ' ' .
                 Html::button('删除行', ['id'=>'delete-row','type'=>'button', 'class'=>'btn btn-danger kv-batch-delete']) . ' ' .
-                Html::submitButton('保存当前数据', ['class'=>'btn btn-info']).
-                Html::submitButton('保存并完善', ['class'=>'btn btn-primary'])
+//                        Html::button('保存当前数据', ['type'=>'button', 'class'=>'btn btn-primary kv-batch-save']).
+                Html::button('保存当前数据', ['id'=>'save-only','type'=>'button','class'=>'btn btn-info']).
+//                        Html::button('保存并完善', ['type'=>'button', 'class'=>'btn btn-info kv-batch-save'])
+                Html::button('保存并完善', ['id'=>'save-complete','type'=>'button','class'=>'btn btn-primary'])
         ]
     ]
 
@@ -219,8 +219,6 @@ echo Html::a('+新增SKU', '#', [
 ]);
 ActiveForm::end();
 ?>
-
-
 
 <?php
 Modal::begin([
@@ -241,8 +239,6 @@ Modal::end();
 
 ?>
 
-
-
 <?php
 Modal::begin([
     'id' => 'edit-sku',
@@ -259,17 +255,9 @@ Modal::begin([
 
 $requestUrl = Url::toRoute(['/goodssku/create','id'=>$info->pid]);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
 $requestUrl2 = Url::toRoute(['/goodssku/update']);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
+
 $js2 = <<<JS
 
-
-//删除行
-//     $('#delete-row').on('click',function(){
-//         var ids = $("#sku-table").yiiGridView("getSelectedRows");
-//         var key = "data-key='"+ids + "'";
-//         $("["+ key + "]").remove();
-//         alert(ids);  
-//     });
- 
 
 //能删除新增空行的删除行
     $('#delete-row').on('click', function() {
@@ -287,9 +275,6 @@ $js2 = <<<JS
                     type:'post',
                     data: {id:pid},
                     success:function(res) {
-                    
-                 
-                      
                     }
                 });
             }
@@ -308,12 +293,14 @@ $js2 = <<<JS
         row.append(actionTd);
         var checkBoxTd =$('<td class="skip-export kv-align-center kv-align-middle kv-row-select" style="width:50px;" data-col-seq="2"><input type="checkbox" class="kv-row-checkbox" name="selection[]" ></td>');
         row.append(checkBoxTd);
-        var skuTd = $('<td class="kv-align-top" data-col-seq="3" ><div class="form-group"><input type="text" name="" class="form-control"><div class="help-block"></div></div></td>');
-        row.append(skuTd);
+        // var skuTd = $('<td class="kv-align-top" data-col-seq="3" ><div class="form-group"><input type="text" name="Goodssku[][]" class="form-control"><div class="help-block"></div></div></td>');
+        // row.append(skuTd);
         
         //循环添加循环框
-        for (var i=4; i<10;i++){
-            var td = $('<td class="kv-align-top" data-col-seq="'+ i +'" ><div class="form-group"><input type="text"  class="form-control"><div class="help-block"></div></div></td>');
+        var inputNames= ['sku','property1','property2',
+        'property3','CostPrice','Weight','RetailPrice']
+        for (var i=3; i<inputNames.length + 3;i++){
+            var td = $('<td class="kv-align-top" data-col-seq="'+ i +'" ><div class="form-group"><input type="text"  name="Goodssku[New-'+ row_count +']['+ inputNames[i-3] +']" class="form-control"><div class="help-block"></div></div></td>');
             row.append(td);
         }
         
@@ -324,11 +311,24 @@ $js2 = <<<JS
  
     $('.data-edit').on('click', function() {
        $.get('{$requestUrl2}', { id:$(this).closest('tr').data('key')},
-
         function (data) {
          $('#edit-sku').find('.modal-body').html(data);
         });
 
+    }); 
+// 保存数据的提交按钮
+    $('#save-only').on('click',function() {
+        var form = $('#sku-info');
+        form.attr('action', '/goodssku/save-only?pid={$pid}');
+        form.submit();
+    }); 
+ 
+// 保存并完善的提交按钮
+    $('#save-complete').on('click',function() {
+        var form = $('#sku-info');
+        // form.attr('action', '/goodssku/save-complete');
+        form.attr('action', '/goodssku/save-only?pid={$pid}');
+        form.submit();
     }); 
 
 $('#create').on('click', function () {
@@ -345,25 +345,3 @@ JS;
 $this->registerJs($js2);
 Modal::end();
 ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -37,10 +37,10 @@ class Goodssku extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pid'], 'required'],
+//            [['pid'], 'required'],
             [['pid'], 'integer'],
-            [['sku', 'property1', 'property2', 'property3', 'memo1', 'memo2', 'memo3', 'memo4'], 'string'],
-            [['CostPrice', 'Weight', 'RetailPrice'], 'number'],
+            [['sku', 'property1', 'property2', 'property3', 'memo1', 'memo2', 'memo3', 'memo4','CostPrice', 'Weight', 'RetailPrice'], 'string'],
+//            [['pid'],'safe'],
         ];
     }
 
