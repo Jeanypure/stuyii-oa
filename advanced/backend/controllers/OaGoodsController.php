@@ -8,7 +8,7 @@ use backend\models\OaGoodsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-    use \PHPExcel;
+use \PHPExcel;
 use app\models\UploadForm;
 use yii\web\UploadedFile;
 use yii\web\Response;
@@ -41,7 +41,13 @@ class OaGoodsController extends Controller
     {
         $searchModel = new OaGoodsSearch();
         $model = new OaGoods();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'');
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'','');
+//        $dataProvider = new ActiveDataProvider([
+//            'query' => OaGoods::find()->where(['checkStatus'=>'已审核']),
+//            'pagination' => [
+//                'pageSize' => 5,
+//            ],
+//        ]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -301,7 +307,7 @@ class OaGoodsController extends Controller
     public function actionForwardProducts()
     {
         $searchModel = new OaGoodsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'正向认领');
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'正向认领','');
 
         return $this->render('forwardProducts', [
             'searchModel' => $searchModel,
@@ -313,7 +319,7 @@ class OaGoodsController extends Controller
     public function actionBackwardProducts()
     {
         $searchModel = new OaGoodsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'逆向认领');
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'逆向认领','');
 
         return $this->render('backwardProducts', [
             'searchModel' => $searchModel,

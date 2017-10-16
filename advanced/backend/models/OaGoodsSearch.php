@@ -44,9 +44,17 @@ class OaGoodsSearch extends OaGoods
      *
      * @return ActiveDataProvider
      */
-    public function search($params,$status)
+    public function search($params,$devstatus,$checkStatus)
     {
-        $query = OaGoods::find()->where(['devStatus'=>$status]);
+        $query = OaGoods::find()->where(['devStatus'=>$devstatus]);
+
+        if(!empty($checkStatus)){
+            $query = OaGoods::find()->where(['checkStatus'=>$checkStatus]);
+        }
+
+        if($devstatus=='devedUnchecked'){
+            $query = OaGoods::find()->where(['checkStatus'=>''])->andWhere(['<>','devStatus','']);
+        }
 
         // add conditions that should always apply here
 

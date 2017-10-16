@@ -39,13 +39,7 @@ class OaCheckController extends Controller
     public function actionToCheck()
     {
         $searchModel = new OaGoodsSearch();
-        $dataProvider = new ActiveDataProvider([
-            //认领未审核的产品
-            'query' => OaGoods::find()->where(['checkStatus'=>''])->andWhere(['not in','devStatus',['']]),
-            'pagination' => [
-                'pageSize' => 25,
-            ],
-        ]);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'devedUnchecked','');
         return $this->render('toCheck', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -185,12 +179,8 @@ class OaCheckController extends Controller
     public function actionPassed()
     {
         $searchModel = new OaGoodsSearch();
-        $dataProvider = new ActiveDataProvider([
-            'query' => OaGoods::find()->where(['checkStatus'=>'已审核']),
-            'pagination' => [
-                'pageSize' => 5,
-            ],
-        ]);
+
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'','已审核');
         return $this->render('passed', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -206,12 +196,7 @@ class OaCheckController extends Controller
     public function actionFailed()
     {
         $searchModel = new OaGoodsSearch();
-        $dataProvider = new ActiveDataProvider([
-            'query' => OaGoods::find()->where(['checkStatus'=>'未通过']),
-            'pagination' => [
-                'pageSize' => 5,
-            ],
-        ]);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'','未通过');
         return $this->render('failed', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
