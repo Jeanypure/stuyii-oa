@@ -326,7 +326,8 @@ $js2 = <<<JS
 // 保存并完善的提交按钮
     $('#save-complete').on('click',function() {
         var form = $('#sku-info');
-        form.attr('action', '/goodssku/save-complete');
+        // form.attr('action', '/goodssku/save-complete');
+        form.attr('action', '/goodssku/save-only?pid={$pid}');
         form.submit();
     }); 
 
