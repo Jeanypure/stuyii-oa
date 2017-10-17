@@ -16,12 +16,13 @@ Modal::begin([
     'id' => 'backward-modal',
 //    'header' => '<h4 class="modal-title">保存</h4>',
     'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
+    'size' => "modal-lg"
 ]);
 //echo
 Modal::end();
 
 //模态框的方式查看和更改数据
-$viewUrl = Url::toRoute('view');
+$viewUrl = Url::toRoute('forward-view');
 $updateUrl = Url::toRoute('update');
 $createUrl = Url::toRoute('backward-create');
 $js = <<<JS

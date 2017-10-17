@@ -42,9 +42,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'buttons' => [
                     'active' => function ($url, $model, $key) {
                         $options = [
-                            'title' => '审核',
-                            'aria-label' => '审核',
-                            'data-confirm' => '你确定通过这条审核吗?',
+                            'title' => '审批',
+                            'aria-label' => '审批',
+                            'data-confirm' => '你确定通过这条审批吗?',
                             'data-method' => 'post',
                             'data-pjax' => '0',
                         ];

@@ -283,7 +283,7 @@ function centerFormat($name) {
         //通过对话框
         $('.data-pass').on('click', function () {
             var id = $(this).closest('tr').data('key');
-            krajeeDialog.confirm("确定通过审核？", function(result) {
+            krajeeDialog.confirm("确定通过审批？", function(result) {
                 if(result){
                     $.get('/oa-check/pass?id=' + id );
                 }
