@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\GoodsCats;
 use Yii;
 use backend\models\OaGoods;
 use backend\models\OaGoodsSearch;
@@ -83,8 +84,12 @@ class OaGoodsController extends Controller
             if($model->load(Yii::$app->request->post()) && $model->save()) {
                 //默认值更新到当前行中
                 $id = $model->nid;
+                $cate = $model->cate;
+                $cateModel = GoodsCats::find()->where(['nid'=>$cate])->one();
                 $current_model = $this->findModel($id);
                 $user = yii::$app->user->identity->username;
+                //根据类目ID更新类目名称
+                $current_model->cate = $cateModel->CategoryName;
                 $current_model->devNum = '20'.date('ymd',time()).strval($id);
                 $current_model->devStatus = '';
                 $current_model->checkStatus = '';
