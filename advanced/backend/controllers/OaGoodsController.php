@@ -70,6 +70,18 @@ class OaGoodsController extends Controller
         ]);
     }
 
+
+    /**
+     * Displays a single OaGoods model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionForwardView($id)
+    {
+        return $this->renderAjax('forward-view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
     /**
      * Creates a new OaGoods model.
      * If creation is successful, the browser will be redirected to the 'view' page.
