@@ -48,6 +48,7 @@ $js = <<<JS
     
     //认领对话
     $('.data-heart').on('click',  function () {
+       $('.modal-body').children('div').remove();
         $.get('{$requestUrl}',  { id: $(this).closest('tr').data('key') },
             function (data) {
                 $('.modal-body').html(data);
@@ -62,6 +63,7 @@ $js = <<<JS
     
 // 查看框
 $('.index-view').on('click',  function () {
+        $('.modal-body').children('div').remove();
         $.get('{$viewUrl}',  { id: $(this).closest('tr').data('key') },
             function (data) {
                 $('.modal-body').html(data);
@@ -71,6 +73,7 @@ $('.index-view').on('click',  function () {
 
 //更新框
 $('.index-update').on('click',  function () {
+       $('.modal-body').children('div').remove();
         $.get('{$updateUrl}',  { id: $(this).closest('tr').data('key') },
             function (data) {
                 $('.modal-body').html(data);
@@ -80,6 +83,7 @@ $('.index-update').on('click',  function () {
     
 //创建框
 $('.index-create').on('click',  function () {
+        $('.modal-body').children('div').remove();
         $.get('{$createUrl}',
             function (data) {
                 $('.modal-body').html(data);

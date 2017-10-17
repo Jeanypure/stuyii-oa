@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = '更新';
    <?= Html::img($model->img,['width'=>100,'height'=>100])?>
 </div>
 <div class="oa-goods-update">
-    <?= $this->render('_form', [
+    <?= $this->render('_formUpdate', [
         'model' => $model,
     ]) ?>
 
