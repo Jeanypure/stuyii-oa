@@ -17,6 +17,7 @@ Modal::begin([
     'id' => 'forward-modal',
 //    'header' => '<h4 class="modal-title">保存</h4>',
     'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
+    'size' => "modal-lg"
 ]);
 //echo
 Modal::end();
@@ -28,6 +29,7 @@ $createUrl = Url::toRoute('create');
 $js = <<<JS
 // 查看框
 $('.forward-view').on('click',  function () {
+        $('.modal-body').children('div').remove();
         $.get('{$viewUrl}',  { id: $(this).closest('tr').data('key') },
             function (data) {
                 $('.modal-body').html(data);
@@ -37,6 +39,7 @@ $('.forward-view').on('click',  function () {
 
 //更新框
 $('.forward-update').on('click',  function () {
+        $('.modal-body').children('div').remove();
         $.get('{$updateUrl}',  { id: $(this).closest('tr').data('key') },
             function (data) {
                 $('.modal-body').html(data);
@@ -47,6 +50,7 @@ $('.forward-update').on('click',  function () {
 
 //创建框
 $('.forward-create').on('click',  function () {
+        $('.modal-body').children('div').remove();
         $.get('{$createUrl}',
             function (data) {
                 $('.modal-body').html(data);
