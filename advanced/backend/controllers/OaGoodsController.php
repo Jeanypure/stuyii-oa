@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\GoodsCats;
+use backend\models\OaForwardGoods;
 use Yii;
 use backend\models\OaGoods;
 use backend\models\OaGoodsSearch;
@@ -122,6 +123,58 @@ class OaGoodsController extends Controller
 
     }
 
+    /**
+     * Creates a new OaGoods model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionForwardCreate($pid=0,$typeid=1)
+    {
+        $model = new OaForwardGoods();
+
+        $request =Yii::$app->request;
+        if ($request->isPost)
+        {
+            if($model->load(Yii::$app->request->post()) && $model->save()) {
+                //默认值更新到当前行中
+                $id = $model->nid;
+                $cate = $model->cate;
+                $cateModel = GoodsCats::find()->where(['nid'=>$cate])->one();
+                $current_model = $this->findModel($id);
+                $user = yii::$app->user->identity->username;
+                //根据类目ID更新类目名称
+                $current_model->cate = $cateModel->CategoryName;
+                $current_model->devNum = '20'.date('ymd',time()).strval($id);
+                $current_model->devStatus = '';
+                $current_model->checkStatus = '';
+                $current_model ->introducer = $user;
+                $current_model ->updateDate = strftime('%F %T');
+                $current_model ->createDate = strftime('%F %T');
+                $current_model->update(array('devStatus','developer','updateDate'));
+                return $this->redirect(['index']);
+            }
+            else {
+
+                echo "something Wrong!";
+            }
+
+        }
+
+        if ($request->isGet){
+            $pid = (int)Yii::$app->request->get('pid');
+            $typeid = (int)Yii::$app->request->get('typeid');
+            $model->getCityList($pid);
+            if($typeid == 1){
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return $model->getCityList($pid);
+            }
+
+            return $this->renderAjax('create', [
+                'model' => $model,
+            ]);
+        }
+
+    }
 
 
     /**

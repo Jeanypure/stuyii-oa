@@ -25,7 +25,7 @@ Modal::end();
 //模态框的方式查看和更改数据
 $viewUrl = Url::toRoute('view');
 $updateUrl = Url::toRoute('update');
-$createUrl = Url::toRoute('create');
+$createUrl = Url::toRoute('forward-create');
 $js = <<<JS
 // 查看框
 $('.forward-view').on('click',  function () {
