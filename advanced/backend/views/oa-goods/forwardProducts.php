@@ -72,7 +72,13 @@ class CenterFormatter {
                 'value' => function($data) {
                     if(!empty($data[$this->name]))
                     {
-                        return "<a class='cell' href='{$data[$this->name]}' target='_blank'>=></a>";
+                        try {
+                            $hostName = parse_url($data[$this->name])['host'];
+                        }
+                        catch (Exception $e){
+                            $hostName = "www.unknown.com";
+                        }
+                        return "<a class='cell' href='{$data[$this->name]}' target='_blank'>{$hostName}</a>";
                     }
                     else
                     {

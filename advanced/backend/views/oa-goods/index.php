@@ -112,7 +112,6 @@ class CenterFormatter {
                             $hostName = parse_url($data[$this->name])['host'];
                         }
                         catch (Exception $e){
-                            echo $e;
                             $hostName = "www.unknown.com";
                         }
                         return "<a class='cell' href='{$data[$this->name]}' target='_blank'>{$hostName}</a>";
