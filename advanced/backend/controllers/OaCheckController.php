@@ -40,6 +40,7 @@ class OaCheckController extends Controller
     {
         $searchModel = new OaGoodsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'devedUnchecked','');
+
         return $this->render('toCheck', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

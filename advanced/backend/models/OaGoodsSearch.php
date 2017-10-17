@@ -53,7 +53,8 @@ class OaGoodsSearch extends OaGoods
         }
 
         if($devstatus=='devedUnchecked'){
-            $query = OaGoods::find()->where(['checkStatus'=>''])->andWhere(['<>','devStatus','']);
+//            $query = OaGoods::find()->where(['checkStatus'=>'已审批'])->andWhere(['<>','devStatus','']);
+            $query = OaGoods::find()->where(['checkStatus'=>'待审批']);
         }
 
         // add conditions that should always apply here

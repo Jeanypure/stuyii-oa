@@ -159,7 +159,7 @@ class OaGoodsController extends Controller
                 $current_model->cate = $cateModel->CategoryName;
                 $current_model->devNum = '20'.date('ymd',time()).strval($id);
                 $current_model->devStatus = '';
-                $current_model->checkStatus = '';
+                $current_model->checkStatus = '待审批';
                 $current_model ->introducer = $user;
                 $current_model ->updateDate = strftime('%F %T');
                 $current_model ->createDate = strftime('%F %T');
@@ -213,7 +213,7 @@ class OaGoodsController extends Controller
                 $current_model->cate = $cateModel->CategoryName;
                 $current_model->devNum = '20'.date('ymd',time()).strval($id);
                 $current_model->devStatus = '';
-                $current_model->checkStatus = '';
+                $current_model->checkStatus = '待审批';
                 $current_model ->introducer = $user;
                 $current_model ->updateDate = strftime('%F %T');
                 $current_model ->createDate = strftime('%F %T');

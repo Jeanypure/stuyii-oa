@@ -30,7 +30,7 @@ use yii\helpers\ArrayHelper;
               $.each(data,function(k,v){
                     str+="<option value="+v+">"+v+"</option>";
                     });
-                $("select#oaforwardgoods-subcate").html(str);
+                $("select#oagoods-subcate").html(str);
             });',
         ]) ?>
 
