@@ -158,9 +158,9 @@ class OaGoodsController extends Controller
                 //根据类目ID更新类目名称
                 $current_model->cate = $cateModel->CategoryName;
                 $current_model->devNum = '20'.date('ymd',time()).strval($id);
-                $current_model->devStatus = '';
+                $current_model->devStatus = '正向认领';
                 $current_model->checkStatus = '待审批';
-                $current_model ->introducer = $user;
+                $current_model ->developer = $user;
                 $current_model ->updateDate = strftime('%F %T');
                 $current_model ->createDate = strftime('%F %T');
                 $current_model->update(array('devStatus','developer','updateDate'));
@@ -212,9 +212,9 @@ class OaGoodsController extends Controller
                 //根据类目ID更新类目名称
                 $current_model->cate = $cateModel->CategoryName;
                 $current_model->devNum = '20'.date('ymd',time()).strval($id);
-                $current_model->devStatus = '';
+                $current_model->devStatus = '逆向认领';
                 $current_model->checkStatus = '待审批';
-                $current_model ->introducer = $user;
+                $current_model ->developer = $user;
                 $current_model ->updateDate = strftime('%F %T');
                 $current_model ->createDate = strftime('%F %T');
                 $current_model->update(array('devStatus','developer','updateDate'));
