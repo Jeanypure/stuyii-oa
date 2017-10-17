@@ -40,9 +40,9 @@ use yii\helpers\ArrayHelper;
 
         ]) ?>
 
+    <?php echo  $form->field($model, 'origin1',['template' => "<font color='red'>*{label}</font>\n<div >{input}</div>\n<div >{error}</div>",])->textInput(['placeholder' => '--必填--']) ?>
+
     <?php echo  $form->field($model, 'vendor1')->textInput(['placeholder' => '--选填--']) ?>
-    
-    <?php echo  $form->field($model, 'origin1')->textInput(['placeholder' => '--选填--']) ?>
     <div class="form-group">
         <?= Html::submitButton('创建', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>

@@ -23,10 +23,11 @@ Modal::end();
 //模态框的方式查看和更改数据
 $viewUrl = Url::toRoute('view');
 $updateUrl = Url::toRoute('update');
-$createUrl = Url::toRoute('create');
+$createUrl = Url::toRoute('backward-create');
 $js = <<<JS
 // 查看框
 $('.backward-view').on('click',  function () {
+        $('.modal-body').children('div').remove();
         $.get('{$viewUrl}',  { id: $(this).closest('tr').data('key') },
             function (data) {
                 $('.modal-body').html(data);
@@ -36,6 +37,7 @@ $('.backward-view').on('click',  function () {
 
 //更新框
 $('.backward-update').on('click',  function () {
+        $('.modal-body').children('div').remove();
         $.get('{$updateUrl}',  { id: $(this).closest('tr').data('key') },
             function (data) {
                 $('.modal-body').html(data);
@@ -45,6 +47,7 @@ $('.backward-update').on('click',  function () {
 
 //创建框
 $('.backward-create').on('click',  function () {
+        $('.modal-body').children('div').remove();
         $.get('{$createUrl}',
             function (data) {
                 $('.modal-body').html(data);
