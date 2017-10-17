@@ -46,14 +46,14 @@ class OaGoodsSearch extends OaGoods
      */
     public function search($params,$devstatus,$checkStatus)
     {
-        $query = OaGoods::find()->where(['devStatus'=>$devstatus]);
+//        $query = OaGoods::find()->where(['devStatus'=>$devstatus]);
+        $query = OaGoods::find()->where(['<>','devStatus','']);
 
         if(!empty($checkStatus)){
             $query = OaGoods::find()->where(['checkStatus'=>$checkStatus]);
         }
 
         if($devstatus=='devedUnchecked'){
-//            $query = OaGoods::find()->where(['checkStatus'=>'已审批'])->andWhere(['<>','devStatus','']);
             $query = OaGoods::find()->where(['checkStatus'=>'待审批']);
         }
 
