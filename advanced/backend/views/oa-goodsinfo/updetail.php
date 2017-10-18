@@ -196,13 +196,15 @@ echo TabularForm::widget([
         'sku'=>['label'=>'SKU', 'type'=>TabularForm::INPUT_TEXT,
                 'options'=>['class'=>'sku'],
                ],
-        'property1'=>['label'=>'颜色','type'=>TabularForm::INPUT_TEXT,
+        'property1'=>['label'=>'款式1','type'=>TabularForm::INPUT_TEXT,
             'options'=>['class'=>'property1'],
         ],
-        'property2'=>['label'=>'尺寸', 'type'=>TabularForm::INPUT_TEXT,
+        'property2'=>['label'=>'款式2', 'type'=>TabularForm::INPUT_TEXT,
         'options'=>['class'=>'property2']
         ],
-        'property3'=>['label'=>'款式3', 'type'=>TabularForm::INPUT_TEXT],
+        'property3'=>['label'=>'款式3', 'type'=>TabularForm::INPUT_TEXT,
+            'options'=>['class'=>'property3']
+        ],
         'CostPrice'=>['label'=>'成本价', 'type'=>TabularForm::INPUT_TEXT,
             'options'=>['class'=>'CostPrice'],
         ],
@@ -364,26 +366,61 @@ $js2 = <<<JS
     
     
     //SKU自动生成 = 商品编码+颜色+尺寸
-    $('#sku-set').on('click',function(){ 
-          // var newSKU = $('.sku-replace').val(); 
-          var GoodsCode = $('.GoodsCode').text();         
-          var color = ['red','white','pink'];
-          var size = ['XL','2X','3X'];
-          var key1,key2;
-          var sku_sets =new Array();
-           for(key1 in color){
-               for( key2 in size )
-                  var sku_sets= sku_sets.concat(GoodsCode+'_'+color[key1]+'_'+size[key2])
-               // alert(GoodsCode+'_'+color[index]+'_'+size[key]);
-           }
-           
-           // alert(sku_sets[0]);
-         
-          
-          $(".sku").each(function(index,ele){
+    $('#sku-set').on('click',function(){
+        var properties = [];
+        var properties2 = [];
+        var properties3 = [];
+        var GoodsCode = $('.GoodsCode').text();  
+        $('.property1').each(function(index,ele) {
+            var property =$(this).val(); 
+            if($.inArray(property,properties)<0){
+                properties.push(property);  
+            }
+        });
+        
+        $('.property2').each(function(index,ele) {
+            var property =$(this).val();
+            properties2.push(property);  
             
-              $(this).val(sku_sets[index]);            
-          });  
+        });
+        
+        $('.property3').each(function(index,ele) {
+            var property =$(this).val();
+            properties3.push(property);
+        });
+        console.log(properties3);
+        $('.sku').each(function(index,ele) {
+            var that = this;
+            console.log($(that).closest("input").val());
+            $('.property1').each(function(key,element) {
+                if (key == index) {
+                    var property = $(this).val();
+                    var property_index = $.inArray(property,properties);
+                    if(property_index>=0){
+                        properties.push(property);  
+                        if(property_index + 1 <10) {
+                            $(that).val(GoodsCode + '0' + 
+                                        property_index + 1 + '_' +
+                                        properties2[key] + '_' +
+                                        properties3[key]
+                                         );
+                        }
+                        else {
+                            $(that).val(GoodsCode + 
+                                        property_index + 1 + '_' +
+                                        properties2[key] + '_' +
+                                        properties3[key]
+                                         );
+                        }
+                    }
+                }
+                
+            })
+            
+        })    
+           
+           
+           
     }); 
     
     //写入颜色 大小
