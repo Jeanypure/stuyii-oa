@@ -30,7 +30,7 @@ use yii\helpers\ArrayHelper;
               $.each(data,function(k,v){
                     str+="<option value="+v+">"+v+"</option>";
                     });
-                $("select#oagoods-subcate").html(str);
+                $("select#oaforwardgoods-subcate").html(str);
             });',
         ]) ?>
 
@@ -40,7 +40,7 @@ use yii\helpers\ArrayHelper;
 
         ]) ?>
 
-    <?php echo  $form->field($model, 'vendor1')->textInput(['placeholder' => '--选填--']) ?>
+    <?php echo  $form->field($model, 'vendor1',['template' => "<font color='red'>*{label}</font>\n<div >{input}</div>\n<div >{error}</div>",])->textInput(['placeholder' => '--必填--']) ?>
 
     <?php echo  $form->field($model, 'origin1')->textInput(['placeholder' => '--选填--']) ?>
     <div class="form-group">

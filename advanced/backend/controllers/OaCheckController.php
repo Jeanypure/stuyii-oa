@@ -40,6 +40,7 @@ class OaCheckController extends Controller
     {
         $searchModel = new OaGoodsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'devedUnchecked','');
+
         return $this->render('toCheck', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -56,11 +57,11 @@ class OaCheckController extends Controller
         $model = $this->findModel($id);
         $_model = new OaGoodsinfo();
         $user = yii::$app->user->identity->username;
-        $model ->checkStatus = '已审核';
+        $model ->checkStatus = '已审批';
         $model ->developer = $user;
         $model ->updateDate = strftime('%F %T');
         $model->update(array('checkStatus','developer','updateDate'));
-        //审核状态改变之后就插入数据到OaGoodsInfo
+        //审批状态改变之后就插入数据到OaGoodsInfo
         $nid = $model->nid;
         $img = $model->img;
         $_model->isNewRecord = true;
@@ -90,7 +91,7 @@ class OaCheckController extends Controller
         {
 
             $model = $this->findModel($id);
-            $model->checkStatus ='已审核';
+            $model->checkStatus ='已审批';
             $model->update(['checkStatus']);
             //插入到OagoodsInfo里面
             $_model = clone $_model;
@@ -180,7 +181,7 @@ class OaCheckController extends Controller
     {
         $searchModel = new OaGoodsSearch();
 
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'','已审核');
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'','已审批');
         return $this->render('passed', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

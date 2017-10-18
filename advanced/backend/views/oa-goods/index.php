@@ -14,8 +14,8 @@ $this->params['breadcrumbs'][] = $this->title;
 use yii\bootstrap\Modal;
 Modal::begin([
     'id' => 'index-modal',
-//    'header' => '<h4 class="modal-title">认领产品</h4>',
     'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
+    'size' => "modal-lg"
 ]);
 //echo
 Modal::end();
@@ -45,6 +45,7 @@ $js = <<<JS
     
     //认领对话
     $('.data-heart').on('click',  function () {
+       $('.modal-body').children('div').remove();
         $.get('{$requestUrl}',  { id: $(this).closest('tr').data('key') },
             function (data) {
                 $('.modal-body').html(data);
@@ -59,6 +60,7 @@ $js = <<<JS
     
 // 查看框
 $('.index-view').on('click',  function () {
+        $('.modal-body').children('div').remove();
         $.get('{$viewUrl}',  { id: $(this).closest('tr').data('key') },
             function (data) {
                 $('.modal-body').html(data);
@@ -68,6 +70,7 @@ $('.index-view').on('click',  function () {
 
 //更新框
 $('.index-update').on('click',  function () {
+       $('.modal-body').children('div').remove();
         $.get('{$updateUrl}',  { id: $(this).closest('tr').data('key') },
             function (data) {
                 $('.modal-body').html(data);
@@ -77,6 +80,7 @@ $('.index-update').on('click',  function () {
     
 //创建框
 $('.index-create').on('click',  function () {
+        $('.modal-body').children('div').remove();
         $.get('{$createUrl}',
             function (data) {
                 $('.modal-body').html(data);
@@ -101,7 +105,13 @@ class CenterFormatter {
                 'value' => function($data) {
                     if(!empty($data[$this->name]))
                     {
-                        return "<a class='cell' href='{$data[$this->name]}' target='_blank'>=></a>";
+                        try {
+                            $hostName = parse_url($data[$this->name])['host'];
+                        }
+                        catch (Exception $e){
+                            $hostName = "www.unknown.com";
+                        }
+                        return "<a class='cell' href='{$data[$this->name]}' target='_blank'>{$hostName}</a>";
                     }
                     else
                     {

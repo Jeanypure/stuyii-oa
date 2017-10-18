@@ -48,6 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-target' => '#index-modal',
                             'data-id' => $key,
                             'class' => 'index-view',
+
                         ];
                         return Html::a('<span  class="glyphicon glyphicon-eye-open"></span>', '#', $options);
                     },

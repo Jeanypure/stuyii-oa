@@ -17,17 +17,19 @@ Modal::begin([
     'id' => 'forward-modal',
 //    'header' => '<h4 class="modal-title">保存</h4>',
     'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
+    'size' => "modal-lg"
 ]);
 //echo
 Modal::end();
 
 //模态框的方式查看和更改数据
-$viewUrl = Url::toRoute('view');
-$updateUrl = Url::toRoute('update');
-$createUrl = Url::toRoute('create');
+$viewUrl = Url::toRoute('forward-view');
+$updateUrl = Url::toRoute('forward-update');
+$createUrl = Url::toRoute('forward-create');
 $js = <<<JS
 // 查看框
 $('.forward-view').on('click',  function () {
+        $('.modal-body').children('div').remove();
         $.get('{$viewUrl}',  { id: $(this).closest('tr').data('key') },
             function (data) {
                 $('.modal-body').html(data);
@@ -37,6 +39,7 @@ $('.forward-view').on('click',  function () {
 
 //更新框
 $('.forward-update').on('click',  function () {
+        $('.modal-body').children('div').remove();
         $.get('{$updateUrl}',  { id: $(this).closest('tr').data('key') },
             function (data) {
                 $('.modal-body').html(data);
@@ -47,6 +50,7 @@ $('.forward-update').on('click',  function () {
 
 //创建框
 $('.forward-create').on('click',  function () {
+        $('.modal-body').children('div').remove();
         $.get('{$createUrl}',
             function (data) {
                 $('.modal-body').html(data);
@@ -72,7 +76,13 @@ class CenterFormatter {
                 'value' => function($data) {
                     if(!empty($data[$this->name]))
                     {
-                        return "<a class='cell' href='{$data[$this->name]}' target='_blank'>=></a>";
+                        try {
+                            $hostName = parse_url($data[$this->name])['host'];
+                        }
+                        catch (Exception $e){
+                            $hostName = "www.unknown.com";
+                        }
+                        return "<a class='cell' href='{$data[$this->name]}' target='_blank'>{$hostName}</a>";
                     }
                     else
                     {

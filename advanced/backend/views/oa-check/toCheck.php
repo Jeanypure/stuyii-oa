@@ -110,7 +110,13 @@ class CenterFormatter {
                 'value' => function($data) {
                     if(!empty($data[$this->name]))
                     {
-                        return "<a class='cell' href='{$data[$this->name]}' target='_blank'>=></a>";
+                        try {
+                            $hostName = parse_url($data[$this->name])['host'];
+                        }
+                        catch (Exception $e){
+                            $hostName = "www.unknown.com";
+                        }
+                        return "<a class='cell' href='{$data[$this->name]}' target='_blank'>{$hostName}</a>";
                     }
                     else
                     {
@@ -283,7 +289,7 @@ function centerFormat($name) {
         //通过对话框
         $('.data-pass').on('click', function () {
             var id = $(this).closest('tr').data('key');
-            krajeeDialog.confirm("确定通过审核？", function(result) {
+            krajeeDialog.confirm("确定通过审批？", function(result) {
                 if(result){
                     $.get('/oa-check/pass?id=' + id );
                 }
