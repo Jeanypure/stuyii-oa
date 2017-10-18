@@ -45,13 +45,6 @@ class OaGoodsController extends Controller
         $searchModel = new OaGoodsSearch();
         $model = new OaGoods();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'','');
-//        $dataProvider = new ActiveDataProvider([
-//            'query' => OaGoods::find()->where(['checkStatus'=>'已审批']),
-//            'pagination' => [
-//                'pageSize' => 5,
-//            ],
-//        ]);
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

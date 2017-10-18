@@ -60,9 +60,9 @@ class OaGoodsinfoController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
+    public function actionView($id = null)
     {
-        return $this->render('view', [
+        return $this->renderAjax('view', [
             'model' => $this->findModel($id),
         ]);
     }
@@ -112,11 +112,11 @@ class OaGoodsinfoController extends Controller
                 $info->DictionaryName = implode(',',$_POST['DictionaryName']);
             }
             $info->save();
-          return $this->redirect(['view', 'id' =>$info->pid ]);
+            $this->redirect(['oa-goodsinfo/update','id'=>$id]);
+
         }else{
 
             $data = $this->actionSelectParam();
-
             $dataProvider = new ActiveDataProvider([
                 'query' => Goodssku::find()->where(['pid'=>$id]),
                 'pagination' => [
