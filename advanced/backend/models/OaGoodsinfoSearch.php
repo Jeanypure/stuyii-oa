@@ -45,7 +45,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
      */
     public function search($params)
     {
-        $query = OaGoodsinfo::find();
+        $query = OaGoodsinfo::find()->where(['<>','achieveStatus','已完善']);
 
         // add conditions that should always apply here
 

@@ -32,7 +32,7 @@ class OaGoodsinfo extends \yii\db\ActiveRecord
     {
         return [
             [['IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged','goodsid'], 'integer'],
-            [['GoodsCode','description','SupplierName','Season','StoreName','PackName','DictionaryName','GoodsName'], 'string'],
+            [['GoodsCode','achieveStatus','description','SupplierName','Season','StoreName','PackName','DictionaryName','GoodsName'], 'string'],
 
             [['GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description',], 'required'],
             [['DictionaryName'],'safe'],
