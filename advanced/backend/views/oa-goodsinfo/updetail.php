@@ -22,26 +22,28 @@ $this->params['breadcrumbs'][] = ['label' => '更新产品', 'url' => ['index']]
 $this->params['breadcrumbs'][] = ['label' => $info->GoodsName, 'url' => ['view', 'id' => $info->pid]];
 $this->params['breadcrumbs'][] = '更新数据';
 ?>
-<?php $form = ActiveForm::begin();?>
 <?php
-$form = ActiveForm::begin(['type'=>ActiveForm::TYPE_VERTICAL]);
-echo FormGrid::widget([ // continuation fields to row above without labels
+    $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_VERTICAL]);
+    echo Html::label("<legend class='text-info'><small>基本信息</small></legend>");
+    echo FormGrid::widget([ // continuation fields to row above without labels
     'model'=> $info,
     'form'=>$form,
     'rows' =>[
         [
-            'contentBefore'=>'<legend class="text-info"><small>基本信息</small></legend>',
+            //'contentBefore'=>'<legend class="text-info"><small>基本信息</small></legend>',
             'attributes' =>[
                 'GoodsCode' =>[
                     'label'=>'商品编码',
                     'items'=>[ 1=>'Group 2'],
                     'type'=>Form::INPUT_STATIC,
                     'readonly'=>true,
+                   'options'=> ['class'=>'GoodsCode'],
                 ],
                 'GoodsName' =>[
                     'label'=>'商品名称',
                     'items'=>[ 1=>'Group 2'],
                     'type'=>Form::INPUT_TEXT,
+                    'options'=> ['class'=>'GoodsName'],
                 ],
 
 
@@ -122,10 +124,8 @@ echo FormGrid::widget([ // continuation fields to row above without labels
 //Tagging support Multiple (maintain the order of selection)
 echo '<label class="control-label">禁售平台</label>';
 
-
 echo Select2::widget([
     'name' => 'DictionaryName',
-    //'value' => ['red', 'green'], // initial value
     'data' => $lock,
     'maintainOrder' => true,
     'options' => ['placeholder' => '--可多选--', 'multiple' => true],
@@ -137,18 +137,18 @@ echo Select2::widget([
 
 ?>
 <?php
-echo Html::submitButton($info->isNewRecord ? '创建基本信息' : '更新基本信息', ['class' => $info->isNewRecord ? 'btn btn-success' : 'btn btn-info']);
+    echo Html::submitButton($info->isNewRecord ? '创建基本信息' : '更新基本信息', ['class' => $info->isNewRecord ? 'btn btn-success' : 'btn btn-info']);
 ActiveForm::end();
-echo "<br>";
 ?>
 
-<?php
-echo Html::label("<legend><small>SKU信息</small></legend>");
-?>
 
 <?php $skuForm = ActiveForm::begin(['id'=>'sku-info','method'=>'post',]);
 
 ?>
+<?php
+echo Html::label("<legend class='text-info'><small>SKU信息</small></legend>");
+?>
+
 
 <?php
 echo "<br>";
@@ -186,13 +186,24 @@ echo TabularForm::widget([
     ],
     'attributes'=>[
 
-        'sku'=>['label'=>'sku', 'type'=>TabularForm::INPUT_TEXT],
-        'property1'=>['label'=>'property1','type'=>TabularForm::INPUT_TEXT],
-        'property2'=>['label'=>'property1', 'type'=>TabularForm::INPUT_TEXT],
-        'property3'=>['label'=>'property1', 'type'=>TabularForm::INPUT_TEXT],
-        'CostPrice'=>['label'=>'CostPrice', 'type'=>TabularForm::INPUT_TEXT],
-        'Weight'=>['label'=>'Weight', 'type'=>TabularForm::INPUT_TEXT],
-        'RetailPrice'=>['label'=>'RetailPrice', 'type'=>TabularForm::INPUT_TEXT],
+        'sku'=>['label'=>'SKU', 'type'=>TabularForm::INPUT_TEXT,
+                'options'=>['class'=>'sku'],
+               ],
+        'property1'=>['label'=>'颜色','type'=>TabularForm::INPUT_TEXT,
+            'options'=>['class'=>'property1'],
+        ],
+        'property2'=>['label'=>'尺寸', 'type'=>TabularForm::INPUT_TEXT,
+        'options'=>['class'=>'property2']
+        ],
+        'property3'=>['label'=>'款式3', 'type'=>TabularForm::INPUT_TEXT],
+        'CostPrice'=>['label'=>'成本价', 'type'=>TabularForm::INPUT_TEXT,
+            'options'=>['class'=>'CostPrice'],
+        ],
+        'Weight'=>['label'=>'重量', 'type'=>TabularForm::INPUT_TEXT,
+        'options'=>['class'=>'Weight']],
+        'RetailPrice'=>['label'=>'零售价', 'type'=>TabularForm::INPUT_TEXT,
+            'options'=>['class'=>'RetailPrice'],
+        ],
 
     ],
 
@@ -203,33 +214,40 @@ echo TabularForm::widget([
             'type'=>GridView::TYPE_PRIMARY,
             'before'=>false,
             'footer'=>true,
-            'after'=>Html::button('新增行', ['id'=>'add-row','type'=>'button', 'class'=>'btn btn-success kv-batch-create']) . ' ' .
+            'after'=>
+                '批量加'.
+                Html::input('text','rowNum','',['class' => 'x-row','placeholder'=>'Rows']).' '.
+                Html::button('新增行', ['id'=>'add-row','type'=>'button', 'class'=>'btn btn-success kv-batch-create']) . ' ' .
+
                 Html::button('删除行', ['id'=>'delete-row','type'=>'button', 'class'=>'btn btn-danger kv-batch-delete']) . ' ' .
-                Html::button('保存当前数据', ['id'=>'save-only','type'=>'button','class'=>'btn btn-info']).
-                Html::button('保存并完善', ['id'=>'save-complete','type'=>'button','class'=>'btn btn-primary'])
+                'sku批量'.
+                Html::input('text','sku','',['class' => 'sku-replace','placeholder'=>'SKU']).' '.
+                Html::button('设置SKU', ['id'=>'sku-set','type'=>'button','class'=>'btn']).' '.
+                '成本批量'.
+                Html::input('text','CostPrice','',['class' => 'CostPrice-replace','placeholder'=>'CostPrice']).' '.
+                Html::button('成本确定', ['id'=>'CostPrice-set','type'=>'button','class'=>'btn']).' '.
+                '重量'.
+                Html::input('text','Weight','',['class' => 'Weight-replace','placeholder'=>'Weight']).' '.
+                Html::button('重量确定', ['id'=>'Weight-set','type'=>'button','class'=>'btn']).' '.
+                '价格'.
+                Html::input('text','RetailPrice','',['class' => 'RetailPrice-replace','placeholder'=>'RetailPrice']).' '.
+                Html::button('价格确定', ['id'=>'RetailPrice-set','type'=>'button','class'=>'btn']).' '.
+                Html::button('保存当前数据', ['id'=>'save-only','type'=>'button','class'=>'btn btn-info']).' '.
+                Html::button('保存并完善', ['id'=>'save-complete','type'=>'button','class'=>'btn btn-primary']).' '
         ]
     ]
 
 ]);
 
-
-?>
-
-
-<?php
-echo Html::a('+新增SKU', '#', [
-    'id' => 'create',
-    'data-toggle' => 'modal',
-    'data-target' => '#create-modal',//关联下面Model的id属性
-    'class' => 'btn btn-success',
-]);
 ActiveForm::end();
 ?>
+
+
+
 
 <?php
 Modal::begin([
     'id' => 'create-modal',
-
     'class' => 'add-sku',
     'header' => '<h4 class="modal-title">新增SKU</h4>',
     'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
@@ -239,8 +257,6 @@ Modal::begin([
         'data-keyboard'=>false,
     ],
 ]);
-
-
 Modal::end();
 
 ?>
@@ -283,45 +299,121 @@ $js2 = <<<JS
                     success:function(res) {
                     }
                 });
+            }           
+        })
+    });
+
+  
+    //增加行
+    var row_count = 0;
+    $('#add-row').on('click',function() {        
+        //加一行方法
+        function  addOneRow(){             
+            var skuTable = $('#sku-table').find('table'); 
+            var firstTr = skuTable.find('tbody>tr:first'); 
+            var row = $('<tr class="kv-tabform-row" ></tr>'); 
+            var seriralTd = $('<td class="kv-align-center kv-align-middle" style="width:50px;" data-col-seq="0">New-'+ row_count+'</td>'); 
+            row.append(seriralTd);
+            var actionTd = $('<td class="skip-export kv-align-center kv-align-middle" style="width:80px;" data-col-seq="1">' +
+             '<a class="data-view" href="goodssku/delete" title="查看" aria-label="查看" data-toggle="modal" data-target="#view-modal" ><span  class="glyphicon glyphicon-eye-open"></span></a><a> <span  class="glyphicon glyphicon-trash"></span></a></td>');
+            row.append(actionTd);
+            var checkBoxTd =$('<td class="skip-export kv-align-center kv-align-middle kv-row-select" style="width:50px;" data-col-seq="2">' +
+                                '<input type="checkbox" class="kv-row-checkbox" name="selection[]" >' +
+                              '</td>');
+            row.append(checkBoxTd);
+            // var skuTd = $('<td class="kv-align-top" data-col-seq="3" ><div class="form-group"><input type="text" name="Goodssku[][]" class="form-control"><div class="help-block"></div></div></td>');
+            // row.append(skuTd);
+            
+            //循环添加循环框
+            var inputNames= ['sku','property1','property2',
+            'property3','CostPrice','Weight','RetailPrice']
+            for (var i=3; i<inputNames.length + 3;i++){
+                var td = $('<td class="kv-align-top" data-col-seq="'+ i +'" >' +
+                             '<div class="form-group">' +
+                                '<input type="text"  name="Goodssku[New-'+ row_count +']['+ inputNames[i-3] +']" class="form-control  '+ inputNames[i-3] +'">' +
+                                 
+                             '</div>' +
+                           '</td>');
+                row.append(td);
             }
             
-})
-    });
-//增加行
-    var row_count = 0;
-    $('#add-row').on('click',function() {
-        var skuTable = $('#sku-table').find('table'); 
-        var firstTr = skuTable.find('tbody>tr:first'); 
-        var row = $('<tr class="kv-tabform-row" ></tr>'); 
-        var seriralTd = $('<td class="kv-align-center kv-align-middle" style="width:50px;" data-col-seq="0">New-'+ row_count+'</td>'); 
-        row.append(seriralTd);
-        var actionTd = $('<td class="skip-export kv-align-center kv-align-middle" style="width:80px;" data-col-seq="1"><a class="data-view" href="goodssku/delete" title="查看" aria-label="查看" data-toggle="modal" data-target="#view-modal" ><span  class="glyphicon glyphicon-eye-open"></span></a><a> <span  class="glyphicon glyphicon-trash"></span></a></td>');
-        row.append(actionTd);
-        var checkBoxTd =$('<td class="skip-export kv-align-center kv-align-middle kv-row-select" style="width:50px;" data-col-seq="2"><input type="checkbox" class="kv-row-checkbox" name="selection[]" ></td>');
-        row.append(checkBoxTd);
-        // var skuTd = $('<td class="kv-align-top" data-col-seq="3" ><div class="form-group"><input type="text" name="Goodssku[][]" class="form-control"><div class="help-block"></div></div></td>');
-        // row.append(skuTd);
-        
-        //循环添加循环框
-        var inputNames= ['sku','property1','property2',
-        'property3','CostPrice','Weight','RetailPrice']
-        for (var i=3; i<inputNames.length + 3;i++){
-            var td = $('<td class="kv-align-top" data-col-seq="'+ i +'" ><div class="form-group"><input type="text"  name="Goodssku[New-'+ row_count +']['+ inputNames[i-3] +']" class="form-control"><div class="help-block"></div></div></td>');
-            row.append(td);
+            //添加行内容到行元素
+            skuTable.append(row); 
+            row_count++; 
+        }        
+        var rowNum = $('.x-row').val();        
+        if (rowNum !== null || rowNum !== undefined ) { 
+            if( rowNum == ''){
+                  addOneRow();   
+            }           
+           for(var r=0;r<rowNum;r++){               
+              addOneRow();               
+           }
         }
-        
-        //添加行内容到行元素
-        skuTable.append(row); 
-        row_count++; 
     });
- 
-    $('.data-edit').on('click', function() {
+    
+    
+    //SKU自动生成 = 商品编码+颜色+尺寸
+    $('#sku-set').on('click',function(){ 
+          var newSKU = $('.sku-replace').val(); 
+          var GoodsCode = $('.GoodsCode').text();
+         
+          var color = ['red','white','pink'];
+          var size = ['XL','2X','3X'];
+           // alert(color.length);
+           for(index in color){
+               alert(color[index]);
+               
+               
+               
+           }
+         
+          
+          $(".sku").each(function(){
+              $(this).val(GoodsCode) ;           
+          });  
+    }); 
+    
+    //写入颜色 大小
+    
+    
+    
+    //批量设置成本价格 
+    $('#CostPrice-set').on('click',function(){
+       var newCost = $('.CostPrice-replace').val();
+        $('.CostPrice').each(function(){
+            $(this).val(newCost);
+        });
+        
+    });
+    //  重量
+    $('#Weight-set').on('click',function(){
+        var newWeight =$('.Weight-replace').val();
+            $('.Weight').each(function(){
+           $(this).val(newWeight);
+       });
+    });
+    //零售价
+    $('#RetailPrice-set').on('click',function(){
+       var newRetailprice = $('.RetailPrice-replace').val(); 
+       $('.RetailPrice').each(function(){
+           $(this).val(newRetailprice);
+           
+       });
+    });
+    
+    
+    
+    //批量编辑
+    $('.data-edit').on('click', function() {        
        $.get('{$requestUrl2}', { id:$(this).closest('tr').data('key')},
         function (data) {
          $('#edit-sku').find('.modal-body').html(data);
         });
-
-    }); 
+    });
+    
+    
+    
 // 保存数据的提交按钮
     $('#save-only').on('click',function() {
         var form = $('#sku-info');
@@ -337,14 +429,14 @@ $js2 = <<<JS
         form.submit();
     }); 
 
-$('#create').on('click', function () {
-    $.get('{$requestUrl}', {},
-        function (data) {
-            $('#create-modal').find('.modal-body').html(data);
-
-        }  
-    );
-});   
+    $('#create').on('click', function () {
+        $.get('{$requestUrl}', {},
+            function (data) {
+                $('#create-modal').find('.modal-body').html(data);
+    
+            }  
+        );
+    });   
    
 
 JS;

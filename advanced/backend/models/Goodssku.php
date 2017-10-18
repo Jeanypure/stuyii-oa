@@ -50,19 +50,19 @@ class Goodssku extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'sid' => 'Sid',
-            'pid' => 'Pid',
+            'sid' => 'skuID',
+            'pid' => '产品id',
             'sku' => 'Sku',
-            'property1' => 'Property1',
-            'property2' => 'Property2',
-            'property3' => 'Property3',
-            'CostPrice' => 'Cost Price',
-            'Weight' => 'Weight',
-            'RetailPrice' => 'Retail Price',
-            'memo1' => 'Memo1',
-            'memo2' => 'Memo2',
-            'memo3' => 'Memo3',
-            'memo4' => 'Memo4',
+            'property1' => '颜色',
+            'property2' => '大小',
+            'property3' => '款式3',
+            'CostPrice' => '成本价',
+            'Weight' => '重量',
+            'RetailPrice' => '零售价',
+            'memo1' => '备注1',
+            'memo2' => '备注2',
+            'memo3' => '备注3',
+            'memo4' => '备注4',
         ];
     }
 }
