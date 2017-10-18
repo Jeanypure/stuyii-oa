@@ -17,9 +17,9 @@ use kartik\builder\TabularForm;
 
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
-$this->title = '更新产品: ' . $info->GoodsName;
+$this->title = '编辑: ' . $info->GoodsCode;
 $this->params['breadcrumbs'][] = ['label' => '更新产品', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $info->GoodsName, 'url' => ['view', 'id' => $info->pid]];
+$this->params['breadcrumbs'][] = ['label' => $info->GoodsCode, 'url' => ['view', 'id' => $info->pid]];
 $this->params['breadcrumbs'][] = '更新数据';
 ?>
 <?php
@@ -114,9 +114,6 @@ $this->params['breadcrumbs'][] = '更新数据';
 
             ],
         ],
-
-
-
     ],
 
 ]);?>
@@ -137,21 +134,31 @@ echo Select2::widget([
 
 ?>
 <?php
-    echo Html::submitButton($info->isNewRecord ? '创建基本信息' : '更新基本信息', ['class' => $info->isNewRecord ? 'btn btn-success' : 'btn btn-info']);
+    echo Html::submitButton($info->isNewRecord ? '创建' : '更新', ['class' => $info->isNewRecord ? 'btn btn-success' : 'btn btn-info']);
 ActiveForm::end();
 ?>
 
 
-<?php $skuForm = ActiveForm::begin(['id'=>'sku-info','method'=>'post',]);
+<?php
+$colorInfo = ActiveForm::begin();
+echo Html::label("<legend class='text-info'><small>颜色尺寸信息</small></legend>");
+
+
 
 ?>
+<?php
+ActiveForm::end();
+?>
+
+<?php $skuForm = ActiveForm::begin(['id'=>'sku-info','method'=>'post',]);
+?>
+
 <?php
 echo Html::label("<legend class='text-info'><small>SKU信息</small></legend>");
 ?>
 
 
 <?php
-echo "<br>";
 
 echo TabularForm::widget([
     'dataProvider' => $dataProvider,
@@ -212,17 +219,19 @@ echo TabularForm::widget([
         'panel'=>[
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i> 管理SKU</h3>',
             'type'=>GridView::TYPE_PRIMARY,
-            'before'=>false,
-            'footer'=>true,
+            'before'=>'颜色'.
+                Html::input('text','','',['class' => 'x-row','placeholder'=>'color']).' '.
+                '尺寸'.
+                Html::input('text','rowNum','',['class' => 'x-row','placeholder'=>'size']),
+            'footer'=>false,
             'after'=>
                 '批量加'.
                 Html::input('text','rowNum','',['class' => 'x-row','placeholder'=>'Rows']).' '.
                 Html::button('新增行', ['id'=>'add-row','type'=>'button', 'class'=>'btn btn-success kv-batch-create']) . ' ' .
 
                 Html::button('删除行', ['id'=>'delete-row','type'=>'button', 'class'=>'btn btn-danger kv-batch-delete']) . ' ' .
-                'sku批量'.
-                Html::input('text','sku','',['class' => 'sku-replace','placeholder'=>'SKU']).' '.
-                Html::button('设置SKU', ['id'=>'sku-set','type'=>'button','class'=>'btn']).' '.
+
+                Html::button('一键生成SKU', ['id'=>'sku-set','type'=>'button','class'=>'btn']).' '.
                 '成本批量'.
                 Html::input('text','CostPrice','',['class' => 'CostPrice-replace','placeholder'=>'CostPrice']).' '.
                 Html::button('成本确定', ['id'=>'CostPrice-set','type'=>'button','class'=>'btn']).' '.
@@ -314,13 +323,14 @@ $js2 = <<<JS
             var row = $('<tr class="kv-tabform-row" ></tr>'); 
             var seriralTd = $('<td class="kv-align-center kv-align-middle" style="width:50px;" data-col-seq="0">New-'+ row_count+'</td>'); 
             row.append(seriralTd);
-            var actionTd = $('<td class="skip-export kv-align-center kv-align-middle" style="width:80px;" data-col-seq="1">' +
-             '<a class="data-view" href="goodssku/delete" title="查看" aria-label="查看" data-toggle="modal" data-target="#view-modal" ><span  class="glyphicon glyphicon-eye-open"></span></a><a> <span  class="glyphicon glyphicon-trash"></span></a></td>');
-            row.append(actionTd);
             var checkBoxTd =$('<td class="skip-export kv-align-center kv-align-middle kv-row-select" style="width:50px;" data-col-seq="2">' +
                                 '<input type="checkbox" class="kv-row-checkbox" name="selection[]" >' +
                               '</td>');
             row.append(checkBoxTd);
+            var actionTd = $('<td class="skip-export kv-align-center kv-align-middle" style="width:80px;" data-col-seq="1">' +
+             '<a class="data-view" href="goodssku/delete" title="查看" aria-label="查看" data-toggle="modal" data-target="#view-modal" ><span  class="glyphicon glyphicon-eye-open"></span></a><a> <span  class="glyphicon glyphicon-trash"></span></a></td>');
+            row.append(actionTd);
+            
             // var skuTd = $('<td class="kv-align-top" data-col-seq="3" ><div class="form-group"><input type="text" name="Goodssku[][]" class="form-control"><div class="help-block"></div></div></td>');
             // row.append(skuTd);
             
@@ -355,22 +365,24 @@ $js2 = <<<JS
     
     //SKU自动生成 = 商品编码+颜色+尺寸
     $('#sku-set').on('click',function(){ 
-          var newSKU = $('.sku-replace').val(); 
-          var GoodsCode = $('.GoodsCode').text();
-         
+          // var newSKU = $('.sku-replace').val(); 
+          var GoodsCode = $('.GoodsCode').text();         
           var color = ['red','white','pink'];
           var size = ['XL','2X','3X'];
-           // alert(color.length);
-           for(index in color){
-               alert(color[index]);
-               
-               
-               
+          var key1,key2;
+          var sku_sets =new Array();
+           for(key1 in color){
+               for( key2 in size )
+                  var sku_sets= sku_sets.concat(GoodsCode+'_'+color[key1]+'_'+size[key2])
+               // alert(GoodsCode+'_'+color[index]+'_'+size[key]);
            }
+           
+           // alert(sku_sets[0]);
          
           
-          $(".sku").each(function(){
-              $(this).val(GoodsCode) ;           
+          $(".sku").each(function(index,ele){
+            
+              $(this).val(sku_sets[index]);            
           });  
     }); 
     
