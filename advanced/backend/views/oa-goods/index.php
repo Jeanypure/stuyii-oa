@@ -90,6 +90,9 @@ $('.index-create').on('click',  function () {
             }
         );
     }); 
+    
+//todo 未通过审核的产品单独创建模态框，并增加提交审核和作废的按钮
+
 JS;
 $this->registerJs($js);
 

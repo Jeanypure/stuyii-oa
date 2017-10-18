@@ -2,10 +2,33 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\OaGoods */
 /* @var $form yii\widgets\ActiveForm */
+
+// 生成URL
+
+$reCheckUrl = Url::toRoute('recheck');
+$trashUrl = Url::toRoute('trash');
+$js = <<<JS
+//重新提交审核事件
+$('#recheck-btn').on('click',function() {
+    $.get('{$reCheckUrl}', {id: '{$model->nid}'});
+})
+
+//作废事件
+$('#trash-btn').on('click', function() {
+    $.get('{$trashUrl}',{id:'{$model->nid}'});
+})
+JS;
+$this->registerJs($js);
+
+
+
+
+
 ?>
 
 <div class="oa-goods-form">
@@ -29,6 +52,8 @@ use yii\widgets\ActiveForm;
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? '创建' : '更新', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-success']) ?>
+        <?= Html::button('重新提交审核', ['id'=>'recheck-btn','class' => 'btn btn-info']) ?>
+        <?= Html::button('作废', ['id'=>'trash-btn','class' => 'btn btn-danger']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
