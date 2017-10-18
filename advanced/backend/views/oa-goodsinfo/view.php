@@ -6,32 +6,34 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model backend\models\OaGoodsinfo */
 
-$this->title = $model->pid;
+$this->title = $model->GoodsCode.'基本信息';
 $this->params['breadcrumbs'][] = ['label' => '属性信息', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="oa-goodsinfo-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h4><?= Html::encode($this->title) ?></h4>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->pid], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->pid], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
+        <?php //echo  Html::a('Update', ['update', 'id' => $model->pid], ['class' => 'btn btn-primary']) ?>
+        <?php
+//        echo Html::a('Delete', ['delete', 'id' => $model->pid], [
+//            'class' => 'btn btn-danger',
+//            'data' => [
+//                'confirm' => 'Are you sure you want to delete this item?',
+//                'method' => 'post',
+//            ],
+//        ])
+        ?>
     </p>
 
         <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'pid',
-            'picUrl:url',
             ['label'=>'picUrl','value'=>$model->picUrl,],
             'GoodsName',
+            'GoodsCode',
             'SupplierName',
             'AliasCnName',
             'AliasEnName',
@@ -44,11 +46,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'isMagnetism',
             'IsCharged',
             'DictionaryName',
-
             ],
-//        'template' => '<tr><th>{label}</th><td><img src="{value}" width="50" height="50"/></td></tr>',
-//        'options' => ['class' => 'table table-striped table-bordered detail-view'],
-//            'formatter'=>'raw'
+
     ]) ?>
 
 </div>
