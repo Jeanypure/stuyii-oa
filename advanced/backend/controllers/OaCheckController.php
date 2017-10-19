@@ -64,10 +64,16 @@ class OaCheckController extends Controller
         //审批状态改变之后就插入数据到OaGoodsInfo
         $nid = $model->nid;
         $img = $model->img;
+        $developer = $model->developer;
         $_model->isNewRecord = true;
         $_model->goodsid =$nid;
         $_model->picUrl = $img;
+        $_model->developer =$developer;
+        $_model->devDatetime =strftime('%F %T');;
+        $_model->updateDatetime =strftime('%F %T');;
+        $_model->achieveStatus='待处理';
         $_model->GoodsName='';
+
         //不验证model的rules
         if($_model->save(false)){
             return $this->redirect(['to-check']);
@@ -94,12 +100,17 @@ class OaCheckController extends Controller
             $model->checkStatus ='已审批';
             $model->update(['checkStatus']);
             //插入到OagoodsInfo里面
+            $developer = $model->developer;
             $_model = clone $_model;
             $nid = $model->nid;
             $img = $model->img;
             $_model->isNewRecord = true;
             $_model->goodsid =$nid;
             $_model->picUrl = $img;
+            $_model->developer =$developer;
+            $_model->devDatetime =strftime('%F %T');;
+            $_model->updateDatetime =strftime('%F %T');;
+            $_model->achieveStatus='待处理';
             $_model->GoodsName='';
             $_model->save(false);
         }
