@@ -453,14 +453,14 @@ $js2 = <<<JS
 // 保存数据的提交按钮
     $('#save-only').on('click',function() {
         var form = $('#sku-info');
-        form.attr('action', '/goodssku/save-only?pid={$pid}');
+        form.attr('action', '/goodssku/save-only?pid={$pid}&type=goods-info');
         form.submit();
     }); 
  
 // 保存并完善的提交按钮
     $('#save-complete').on('click',function() {
         var form = $('#sku-info');
-        form.attr('action', '/goodssku/save-complete?pid={$pid}');
+        form.attr('action', '/goodssku/save-complete?pid={$pid}&type=goods-info');
         form.submit();
     }); 
 
