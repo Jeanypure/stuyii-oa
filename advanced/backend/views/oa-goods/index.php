@@ -150,10 +150,10 @@ class CenterFormatter {
         ];
     }
 };
-//封装到格式化函数中
-function centerFormat($name) {
-    return (new CenterFormatter($name))->format();
-};
+    //封装到格式化函数中
+    function centerFormat($name) {
+        return (new CenterFormatter($name))->format();
+    };
 ?>
 <style>
     .cell {
@@ -253,6 +253,7 @@ function centerFormat($name) {
 //             centerFormat('devNum'),
 //             centerFormat('developer'),
              centerFormat('introducer'),
+             centerFormat('introReason'),
              centerFormat('devStatus'),
              centerFormat('checkStatus'),
              centerFormat('createDate'),

@@ -61,6 +61,7 @@ class OaGoods extends GoodsCats
             'devNum' => '开发编号',
             'developer' => '开发员',
             'introducer' => '推荐人',
+            'introReason' => '推荐理由',
             'devStatus' => '认领',
             'checkStatus' => '产品状态',
             'salePrice' => '售价($)',

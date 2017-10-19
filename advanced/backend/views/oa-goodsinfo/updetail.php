@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = '更新数据';
                 'GoodsCode' =>[
                     'label'=>'商品编码',
                     'items'=>[ 1=>'Group 2'],
-                    'type'=>Form::INPUT_STATIC,
+                    'type'=>Form::INPUT_TEXT,
                     'readonly'=>true,
                    'options'=> ['class'=>'GoodsCode'],
                 ],
@@ -359,7 +359,7 @@ $js2 = <<<JS
         var properties = [];
         var properties2 = [];
         var properties3 = [];
-        var GoodsCode = $('.GoodsCode').text();  
+        var GoodsCode = $('.GoodsCode').val();  
         $('.property1').each(function(index,ele) {
             var property =$(this).val(); 
             if($.inArray(property,properties)<0){
@@ -377,10 +377,9 @@ $js2 = <<<JS
             var property =$(this).val();
             properties3.push(property);
         });
-        console.log(properties3);
         $('.sku').each(function(index,ele) {
             var that = this;
-            console.log($(that).closest("input").val());
+            // console.log($(that).closest("input").val());
             $('.property1').each(function(key,element) {
                 if (key == index) {
                     var property = $(this).val();
