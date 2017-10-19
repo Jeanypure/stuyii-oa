@@ -233,7 +233,8 @@ echo TabularForm::widget([
                 Html::input('text','RetailPrice','',['class' => 'RetailPrice-replace','placeholder'=>'RetailPrice']).' '.
                 Html::button('价格确定', ['id'=>'RetailPrice-set','type'=>'button','class'=>'btn']).' '.
                 Html::button('保存当前数据', ['id'=>'save-only','type'=>'button','class'=>'btn btn-info']).' '.
-                Html::button('保存并完善', ['id'=>'save-complete','type'=>'button','class'=>'btn btn-primary']).' '
+                Html::button('保存并完善', ['id'=>'save-complete','type'=>'button','class'=>'btn btn-primary']).' '.
+                Html::button('导入普源', ['id'=>'data-input','type'=>'button','class'=>'btn btn-warning']).' '
         ]
     ]
 
@@ -472,7 +473,13 @@ $js2 = <<<JS
             }  
         );
     });   
+
    
+// 导入普源事件
+    $('#data-input').on('click', function() {
+      alert('导入普源');
+    })
+
 
 JS;
 $this->registerJs($js2);

@@ -60,6 +60,7 @@ class OaGoodsinfo extends \yii\db\ActiveRecord
             'isMagnetism' => '是否带磁',
             'IsCharged' => '是否带电',
             'possessMan2' => '美工',
+            'achieveStatus' => '进度状态',
 
 
         ];
