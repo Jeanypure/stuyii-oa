@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use yii\base\Model;
 use backend\models\Goodssku;
+use backend\models\OaGoodsinfo;
 use backend\models\GoodsskuSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -90,6 +91,7 @@ class GoodsskuController extends Controller
                 foreach ($skuRows as $row_key=>$row_value)
                 {
                     $row_value['pid'] = intval($pid); //pid传进来
+                    $sid = $row_key;
                     //新增行
                     if(strstr($row_key,'New'))
                     {
@@ -106,23 +108,24 @@ class GoodsskuController extends Controller
                     }
                     //更新行
                     else
-                    {   $sku = $row_value['sku'];
-
-                        $update_moadel = Goodssku::find()->where(['sku' => $sku])->one();
-                        $update_moadel->property1 = $row_value['property1'];
-                        $update_moadel->property2 = $row_value['property2'];
-                        $update_moadel->property3 = $row_value['property3'];
-                        $update_moadel->CostPrice = $row_value['CostPrice'];
-                        $update_moadel->Weight = $row_value['Weight'];
-                        $update_moadel->RetailPrice = $row_value['RetailPrice'];
-                        $update_moadel->update(['property1','property2','property3',
+                    {
+                        $update_model = Goodssku::find()->where(['sid' => $sid])->one();
+                        $update_model->sku = $row_value['sku'];
+                        $update_model->property1 = $row_value['property1'];
+                        $update_model->property2 = $row_value['property2'];
+                        $update_model->property3 = $row_value['property3'];
+                        $update_model->CostPrice = $row_value['CostPrice'];
+                        $update_model->Weight = $row_value['Weight'];
+                        $update_model->RetailPrice = $row_value['RetailPrice'];
+                        $update_model->update(['property1','property2','property3',
                             'CostPrice','Weight','RetailPrice']);
 
 //                        echo "{'msg':'update successfully'}";
 
                     }
-                    $this->redirect(['oa-goodsinfo/update','id'=>$pid]);
+
                 }
+                $this->redirect(['oa-goodsinfo/update','id'=>$pid]);
 
             }
             catch (Exception  $e)
@@ -139,12 +142,58 @@ class GoodsskuController extends Controller
      *  save and complete sku data
      */
 
-    public function actionSaveComplete()
+    public function actionSaveComplete($pid)
     {
         $request = Yii::$app->request;
+        $model = new Goodssku();
         if($request->isPost)
         {
-            var_dump($request->post());die;
+            //提交过来的表单数据
+            try
+            {
+                $skuRows = $request->post()['Goodssku'];
+                foreach ($skuRows as $row_key=>$row_value)
+                {
+                    $row_value['pid'] = intval($pid); //pid传进来
+                    $sid = $row_key;
+                    //新增行
+                    if(strstr($row_key,'New'))
+                    {
+                        $_model = clone $model;
+                        //配合rules 进行安全检查;需要改变的数据都要声明下类型。
+                        $_model ->setAttributes($row_value,true); //逐行入库
+                        $_model->save();
+                    }
+                    //更新行
+                    else
+                    {
+                        $update_model = Goodssku::find()->where(['sid' => $sid])->one();
+                        $update_model->sku = $row_value['sku'];
+                        $update_model->property1 = $row_value['property1'];
+                        $update_model->property2 = $row_value['property2'];
+                        $update_model->property3 = $row_value['property3'];
+                        $update_model->CostPrice = $row_value['CostPrice'];
+                        $update_model->Weight = $row_value['Weight'];
+                        $update_model->RetailPrice = $row_value['RetailPrice'];
+                        $update_model->update(['property1','property2','property3',
+                            'CostPrice','Weight','RetailPrice']);
+
+                    }
+
+                }
+
+                //更新产品状态
+                $goods_model = OaGoodsinfo::find()->where(['pid' => $pid])->one();
+                $goods_model ->achieveStatus = '已完善';
+                $goods_model->update(['achieveStatus']);
+                $this->redirect(['oa-goodsinfo/index']);
+
+            }
+            catch (Exception  $e)
+            {
+                echo $e;
+            }
+
         }
     }
 

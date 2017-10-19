@@ -249,10 +249,24 @@ class OaGoodsController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
-        } else {
-            return $this->renderAjax('update', [
-                'model' => $model,
-            ]);
+        }
+        else {
+            //根据不同的状态返回不同的view
+            $checkStatus = $model->checkStatus;
+            if($checkStatus === '未通过')
+            {
+
+                return $this->renderAjax('updateReset', [
+                    'model' => $model,
+                ]);
+            }
+            else {
+                return $this->renderAjax('update', [
+                    'model' => $model,
+                ]);
+            }
+
+
         }
     }
 
@@ -307,6 +321,41 @@ class OaGoodsController extends Controller
 
         return $this->redirect(['index']);
     }
+
+
+    /**
+     * Recheck an existing OaGoods model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionRecheck($id)
+    {
+
+        $model = $this->findModel($id);
+
+        $model->checkStatus = '待审批';
+        $model->update(['checkStatus']);
+        return $this->redirect(['index']);
+    }
+
+
+    /**
+     * Trash an existing OaGoods model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionTrash($id)
+    {
+
+        $model = $this->findModel($id);
+
+        $model->checkStatus = '已作废';
+        $model->update(['checkStatus']);
+        return $this->redirect(['index']);
+    }
+
 
 
 
