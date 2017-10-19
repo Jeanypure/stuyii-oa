@@ -67,11 +67,14 @@ echo TabularForm::widget([
                ],
         'linkurl'=>['label'=>'图片地址', 'type'=>TabularForm::INPUT_TEXT,
         ],
-        'property1'=>['label'=>'款式1','type'=>TabularForm::INPUT_TEXT,
+        'property1'=>['label'=>'款式1','type'=>TabularForm::INPUT_TEXT, 'readonly'=>true,
+            'options'=>['readonly'=>true]
         ],
         'property2'=>['label'=>'款式2', 'type'=>TabularForm::INPUT_TEXT,
+            'options'=>['readonly'=>true]
         ],
         'property3'=>['label'=>'款式3', 'type'=>TabularForm::INPUT_TEXT,
+            'options'=>['readonly'=>true]
         ],
 
 
