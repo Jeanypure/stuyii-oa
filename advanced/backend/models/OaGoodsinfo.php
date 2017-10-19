@@ -59,6 +59,7 @@ class OaGoodsinfo extends \yii\db\ActiveRecord
             'IsPowder' => '是否粉末',
             'isMagnetism' => '是否带磁',
             'IsCharged' => '是否带电',
+            'possessMan2' => '美工',
 
 
         ];

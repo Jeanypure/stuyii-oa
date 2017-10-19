@@ -22,7 +22,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
     {
         return [
             [['pid','IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged'], 'integer'],
-            [['GoodsCode','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName'],'safe'],
+            [['GoodsCode','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName','possessMan2'],'safe'],
 
         ];
     }
@@ -40,12 +40,14 @@ class OaGoodsinfoSearch extends OaGoodsinfo
      * Creates data provider instance with search query applied
      *
      * @param array $params
+     * @param array $condition
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params,$condition = [])
     {
-        $query = OaGoodsinfo::find()->where(['<>','achieveStatus','已完善']);
+
+        $query = OaGoodsinfo::find()->where($condition);
 
         // add conditions that should always apply here
 
