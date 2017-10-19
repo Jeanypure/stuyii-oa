@@ -83,6 +83,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'width' => '100px',
             ],
             'GoodsName',
+            'developer',
+            'devDatetime',
             'AliasCnName',
             'AliasEnName',
 

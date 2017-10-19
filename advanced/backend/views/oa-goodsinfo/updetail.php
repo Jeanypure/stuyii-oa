@@ -477,7 +477,7 @@ $js2 = <<<JS
    
 // 导入普源事件
     $('#data-input').on('click', function() {
-      alert('导入普源');
+      alert('导入普源'); 
     })
 
 
