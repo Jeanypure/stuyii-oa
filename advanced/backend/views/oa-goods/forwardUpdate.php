@@ -40,12 +40,7 @@ $this->registerJs($JS);
             ]
         ]); ?>
 
-
         <?= $form->field($model, 'img')->textInput() ?>
-
-        <?php //echo  $form->field($model, 'cate')->textInput() ?>
-
-        <?php //echo $form->field($model, 'subCate')->textInput() ?>
 
         <?php
         echo $form->field($model,'cate')->dropDownList($model->getCatList(0),

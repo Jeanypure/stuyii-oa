@@ -340,7 +340,7 @@ class OaGoodsController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['backward-products']);
         } else {
-            return $this->renderAjax('update', [
+            return $this->renderAjax('forwardUpdate', [
                 'model' => $model,
             ]);
         }
