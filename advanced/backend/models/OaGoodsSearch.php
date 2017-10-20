@@ -24,7 +24,7 @@ class OaGoodsSearch extends OaGoods
                 'origin2','origin3','introReason',
             ], 'string'],
             [['hopeRate','salePrice', 'hopeWeight','hopeMonthProfit','hopeSale','nid'], 'number'],
-            [['createDate', 'updateDate',], 'safe'],
+            [['cate','subCate','createDate', 'updateDate',], 'safe'],
         ];
     }
 

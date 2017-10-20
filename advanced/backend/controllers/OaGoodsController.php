@@ -79,6 +79,8 @@ class OaGoodsController extends Controller
     /**
      * Creates a new OaGoods model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param integer $pid
+     * @param integer $typeid
      * @return mixed
      */
     public function actionCreate($pid=0,$typeid=1)
@@ -116,10 +118,10 @@ class OaGoodsController extends Controller
         if ($request->isGet){
         $pid = (int)Yii::$app->request->get('pid');
         $typeid = (int)Yii::$app->request->get('typeid');
-        $model->getCityList($pid);
+        $model->getCatList($pid);
         if($typeid == 1){
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return $model->getCityList($pid);
+            return $model->getCatList($pid);
         }
 
         return $this->renderAjax('create', [
@@ -128,6 +130,72 @@ class OaGoodsController extends Controller
         }
 
     }
+
+    /**
+     * Updates an existing OaGoods model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @param integer $pid
+     * @param integer $typeid
+     * @return mixed
+     */
+    public function actionUpdate($id=0,$pid=0,$typeid=1)
+    {
+        $model = $this->findModel($id);
+
+
+        if ($model->load(Yii::$app->request->post())&&$model->save(false)) {
+            //默认值更新到当前行中
+            $id = $model->nid;
+            $cate = $model->cate;
+            $cateModel = GoodsCats::find()->where(['nid'=>$cate])->one();
+//            $current_model = $this->findModel($id);
+            $current_model = clone $model;
+            //根据类目ID更新类目名称
+            $current_model->catNid =$cate;
+            $current_model->cate = $cateModel->CategoryName;
+            $current_model->update(false);
+            return $this->redirect(['index']);
+        }
+        else {
+            //根据不同的状态返回不同的view
+            $checkStatus = $model->checkStatus;
+            if($checkStatus === '未通过')
+            {
+
+                return $this->renderAjax('updateReset', [
+                    'model' => $model,
+                ]);
+            }
+            else {
+                $request =Yii::$app->request;
+                if ($request->isGet){
+                    $cid = (int)Yii::$app->request->get('pid');
+                    $typeid = (int)Yii::$app->request->get('typeid');
+//                    var_dump($_GET);die;
+                    $model->getCatList($cid);
+
+
+
+                    if($typeid == 1){
+//                        echo 123;die;
+                        Yii::$app->response->format = Response::FORMAT_JSON;
+                        return $model->getCatList($cid);
+                    }
+                    return $this->renderAjax('update', [
+                        'model' => $model,
+                    ]);
+                }
+
+
+            }
+
+
+
+
+        }
+    }
+
 
     /**
      * Creates a new OaGoods model.
@@ -169,10 +237,10 @@ class OaGoodsController extends Controller
         if ($request->isGet){
             $pid = (int)Yii::$app->request->get('pid');
             $typeid = (int)Yii::$app->request->get('typeid');
-            $model->getCityList($pid);
+            $model->getCatList($pid);
             if($typeid == 1){
                 Yii::$app->response->format = Response::FORMAT_JSON;
-                return $model->getCityList($pid);
+                return $model->getCatList($pid);
             }
 
             return $this->renderAjax('forwardCreate', [
@@ -223,10 +291,10 @@ class OaGoodsController extends Controller
         if ($request->isGet){
             $pid = (int)Yii::$app->request->get('pid');
             $typeid = (int)Yii::$app->request->get('typeid');
-            $model->getCityList($pid);
+            $model->getCatList($pid);
             if($typeid == 1){
                 Yii::$app->response->format = Response::FORMAT_JSON;
-                return $model->getCityList($pid);
+                return $model->getCatList($pid);
             }
 
             return $this->renderAjax('backwardCreate', [
@@ -237,38 +305,6 @@ class OaGoodsController extends Controller
     }
 
 
-    /**
-     * Updates an existing OaGoods model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        }
-        else {
-            //根据不同的状态返回不同的view
-            $checkStatus = $model->checkStatus;
-            if($checkStatus === '未通过')
-            {
-
-                return $this->renderAjax('updateReset', [
-                    'model' => $model,
-                ]);
-            }
-            else {
-                return $this->renderAjax('update', [
-                    'model' => $model,
-                ]);
-            }
-
-
-        }
-    }
 
 
     /**
@@ -284,7 +320,7 @@ class OaGoodsController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['forward-products']);
         } else {
-            return $this->renderAjax('update', [
+            return $this->renderAjax('forwardUpdate', [
                 'model' => $model,
             ]);
         }

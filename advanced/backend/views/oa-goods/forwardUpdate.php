@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->devNum, 'url' => ['view', '
 $this->params['breadcrumbs'][] = '更新';
 ?>
 <div>
-   <?= Html::img($model->img,['width'=>100,'height'=>100])?>
+    <?= Html::img($model->img,['width'=>100,'height'=>100])?>
 </div>
 <div class="oa-goods-update">
     <div class="oa-goods-form">
@@ -56,8 +56,19 @@ $this->params['breadcrumbs'][] = '更新';
         <?= $form->field($model, 'vendor1')->textInput() ?>
 
         <?= $form->field($model, 'origin1')->textInput() ?>
-        <?php echo  $form->field($model, 'introReason')->textInput(['placeholder' => '--选填--']) ?>
 
+        <?php echo  $form->field($model, 'vendor2')->textInput() ?>
+        <?php echo  $form->field($model, 'vendor3')->textInput() ?>
+
+        <?php echo  $form->field($model, 'origin1')->textInput(['placeholder' => '--选填--']) ?>
+        <?php echo  $form->field($model, 'origin2')->textInput(['placeholder' => '--选填--']) ?>
+        <?php echo  $form->field($model, 'origin3')->textInput(['placeholder' => '--选填--']) ?>
+
+        <?php echo  $form->field($model, 'salePrice')->textInput(['placeholder' => '--选填--']) ?>
+        <?php echo  $form->field($model, 'hopeSale')->textInput(['placeholder' => '--选填--']) ?>
+        <?php echo  $form->field($model, 'hopeMonthProfit')->textInput(['placeholder' => '--选填--']) ?>
+        <?php echo  $form->field($model, 'hopeRate')->textInput(['placeholder' => '--选填--']) ?>
+        <?php echo  $form->field($model, 'hopeWeight')->textInput(['placeholder' => '--选填--']) ?>
 
 
         <div class="form-group">

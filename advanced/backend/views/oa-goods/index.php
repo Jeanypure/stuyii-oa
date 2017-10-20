@@ -1210,7 +1210,7 @@ class CenterFormatter {
 
             });
         </script>
-    <script>
+        <script>
 
         //文件导入事件
         $(".upload").on('click', function() {

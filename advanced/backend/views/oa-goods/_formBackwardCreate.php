@@ -19,7 +19,7 @@ use yii\helpers\ArrayHelper;
 
     <?php //echo $form->field($model, 'cate',['template' => "<font color='red'>*{label}</font>\n<div >{input}</div>\n<div>{error}</div>",])->textInput(['placeholder' => '--必填--']) ?>
 
-    <?= $form->field($model,'cate',['template' => "<font color='red'>*{label}</font>\n<div >{input}</div>\n<div >{error}</div>",])->dropDownList($model->getCityList(0),
+    <?= $form->field($model,'cate',['template' => "<font color='red'>*{label}</font>\n<div >{input}</div>\n<div >{error}</div>",])->dropDownList($model->getCatList(0),
         [
             'prompt'=>'--请选择父类--',
             'onchange'=>'
@@ -34,7 +34,7 @@ use yii\helpers\ArrayHelper;
             });',
         ]) ?>
 
-    <?= $form->field($model,'subCate',['template' => "<font color='red'>*{label}</font>\n<div >{input}</div>\n<div >{error}</div>",])->dropDownList($model->getCityList($model->cate),
+    <?= $form->field($model,'subCate',['template' => "<font color='red'>*{label}</font>\n<div >{input}</div>\n<div >{error}</div>",])->dropDownList($model->getCatList($model->cate),
         [
             'prompt'=>'--请选择子类--',
 

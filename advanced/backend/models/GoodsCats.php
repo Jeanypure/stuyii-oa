@@ -56,7 +56,7 @@ class GoodsCats extends \yii\db\ActiveRecord
     }
 
 
-    public function getCityList($pid)
+    public function getCatList($pid)
     {
         $model = GoodsCats::find()->where('CategoryParentID =:pid',[':pid'=>$pid])->all();
         return ArrayHelper::map($model,'NID','CategoryName');
