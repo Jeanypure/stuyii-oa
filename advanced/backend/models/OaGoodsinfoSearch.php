@@ -47,7 +47,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
     public function search($params,$condition = [])
     {
 
-        $query = OaGoodsinfo::find()->where($condition);
+        $query = OaGoodsinfo::find()->orderBy(['pid' => SORT_DESC])->where($condition);
 
         // add conditions that should always apply here
 
