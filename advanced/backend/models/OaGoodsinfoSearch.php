@@ -22,7 +22,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
     {
         return [
             [['pid','IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged'], 'integer'],
-            [['GoodsCode','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName','possessMan2'],'safe'],
+            [['developer','devDatetime','achieveStatus','GoodsCode','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName','possessMan2'],'safe'],
 
         ];
     }
@@ -47,7 +47,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
     public function search($params,$condition = [])
     {
 
-        $query = OaGoodsinfo::find()->where($condition);
+        $query = OaGoodsinfo::find()->orderBy(['pid' => SORT_DESC])->where($condition);
 
         // add conditions that should always apply here
 
@@ -66,6 +66,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
         // grid filtering conditions
         $query->andFilterWhere([
             'pid' => $this->pid,
+            'achieveStatus' => $this->achieveStatus,
             'GoodsCode' => $this->GoodsCode,
             'GoodsName'=>$this->GoodsName,
             'SupplierName' => $this->SupplierName,
@@ -80,6 +81,9 @@ class OaGoodsinfoSearch extends OaGoodsinfo
             'isMagnetism' => $this->isMagnetism,
             'IsCharged' => $this->IsCharged,
             'DictionaryName'=>$this->DictionaryName,
+            'developer'=> $this->developer,
+            'devDatetime'=>$this->devDatetime,
+
 
 
         ]);

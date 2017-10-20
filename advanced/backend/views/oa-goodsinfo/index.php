@@ -21,13 +21,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
     <p>
-        <?= Html::a('添加产品信息', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::button('批量导入普源', ['id'=>'input-lots','class' => 'btn btn-info']) ?>
     </p>
     <?= GridView::widget([
 
         'dataProvider'=> $dataProvider,
         'filterModel' => $searchModel,
         'showPageSummary'=>true,
+        'id' => 'oa-goodsinfo',
         'pjax'=>true,
         'striped'=>true,
         'responsive'=>true,
@@ -35,10 +36,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel'=>['type'=>'primary', 'heading'=>'基本信息'],
 
         'columns' => [
+            ['class' => 'kartik\grid\CheckboxColumn'],
             ['class'=>'kartik\grid\SerialColumn'],
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'template' =>'{view} {update} {delete}',
+                'template' =>'{view} {update} {input} {delete}',
                 'buttons' => [
                     'view' => function ($url, $model, $key) {
                         $options = [
@@ -51,6 +53,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         ];
                         return Html::a('<span  class="glyphicon glyphicon-eye-open"></span>', '#', $options);
+                    },
+                    'input' => function ($url, $model, $key) {
+                        $options = [
+                            'title' => '导入普源',
+                            'aria-label' => '导入普源',
+                            'data-id' => $key,
+                            'class' => 'index-input',
+
+                        ];
+                        return Html::a('<span  class="glyphicon glyphicon-send"></span>', '#', $options);
                     },
 
                 ],
@@ -66,7 +78,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             'GoodsCode',
+            [
+            'attribute' => 'achieveStatus',
+            'width' => '100px',
+            ],
             'GoodsName',
+            'developer',
+            'devDatetime',
             'AliasCnName',
             'AliasEnName',
 
@@ -119,7 +137,9 @@ Modal::begin([
 Modal::end();
 $viewUrl = Url::toRoute('view');
 $js = <<<JS
-// alert(123);
+
+
+
 // 查看框
 $('.index-view').on('click',  function () {
     $.get('{$viewUrl}',{ id: $(this).closest('tr').data('key') },
@@ -128,6 +148,20 @@ $('.index-view').on('click',  function () {
             }
         );
     });
+
+//单个导入普源
+$('.index-input').on('click', function() {
+    alert("I am here!");
+});
+
+
+//批量导入普源
+$('#input-lots').on('click', function() {
+    ids = $('#oa-goodsinfo').yiiGridView('getSelectedRows');
+    console.log(ids);
+});
+
+
 JS;
 $this->registerJs($js);
 

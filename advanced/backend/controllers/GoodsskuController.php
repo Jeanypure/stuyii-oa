@@ -78,54 +78,74 @@ class GoodsskuController extends Controller
      *  save sku data only
      */
 
-    public function actionSaveOnly($pid)
+    public function actionSaveOnly($pid,$type)
     {
+
         $request = Yii::$app->request;
         $model = new Goodssku();
         if($request->isPost)
         {
             //提交过来的表单数据
             try
-            {
-                $skuRows = $request->post()['Goodssku'];
-                foreach ($skuRows as $row_key=>$row_value)
-                {
-                    $row_value['pid'] = intval($pid); //pid传进来
-                    $sid = $row_key;
-                    //新增行
-                    if(strstr($row_key,'New'))
-                    {
-                        $_model = clone $model;
-                        //配合rules 进行安全检查;需要改变的数据都要声明下类型。
-                        $_model ->setAttributes($row_value,true); //逐行入库
-                        if($_model->save()){
-                            echo "{'msg':'Done'}";
-                        }
 
-                        else {
-                            echo "{'msg:'Fail'}";
-                        }
-                    }
-                    //更新行
-                    else
+            {
+                if($type == 'goods-info')
+                {
+                    $skuRows = $request->post()['Goodssku'];
+                    foreach ($skuRows as $row_key=>$row_value)
                     {
-                        $update_model = Goodssku::find()->where(['sid' => $sid])->one();
-                        $update_model->sku = $row_value['sku'];
-                        $update_model->property1 = $row_value['property1'];
-                        $update_model->property2 = $row_value['property2'];
-                        $update_model->property3 = $row_value['property3'];
-                        $update_model->CostPrice = $row_value['CostPrice'];
-                        $update_model->Weight = $row_value['Weight'];
-                        $update_model->RetailPrice = $row_value['RetailPrice'];
-                        $update_model->update(['property1','property2','property3',
-                            'CostPrice','Weight','RetailPrice']);
+                        $row_value['pid'] = intval($pid); //pid传进来
+                        $sid = $row_key;
+                        //新增行
+                        if(strstr($row_key,'New'))
+                        {
+                            $_model = clone $model;
+                            //配合rules 进行安全检查;需要改变的数据都要声明下类型。
+                            $_model ->setAttributes($row_value,true); //逐行入库
+                            if($_model->save()){
+                                echo "{'msg':'Done'}";
+                            }
+
+                            else {
+                                echo "{'msg:'Fail'}";
+                            }
+                        }
+                        //更新行
+                        else
+                        {
+                            $update_model = Goodssku::find()->where(['sid' => $sid])->one();
+                            $update_model->sku = $row_value['sku'];
+                            $update_model->property1 = $row_value['property1'];
+                            $update_model->property2 = $row_value['property2'];
+                            $update_model->property3 = $row_value['property3'];
+                            $update_model->CostPrice = $row_value['CostPrice'];
+                            $update_model->Weight = $row_value['Weight'];
+                            $update_model->RetailPrice = $row_value['RetailPrice'];
+                            $update_model->update(['sku','property1','property2','property3',
+                                'CostPrice','Weight','RetailPrice']);
 
 //                        echo "{'msg':'update successfully'}";
 
-                    }
+                        }
 
+                    }
+                    $this->redirect(['oa-goodsinfo/update','id'=>$pid]);
                 }
-                $this->redirect(['oa-goodsinfo/update','id'=>$pid]);
+
+                if($type == 'pic-info')
+                {
+                    $Rows = $request->post()['Goodssku'];
+                    foreach ($Rows as $row_key=>$row_value)
+                    {
+                        $sid = $row_key;
+                        $update_model = Goodssku::find()->where(['sid' => $sid])->one();
+                        $update_model->linkurl = $row_value['linkurl'];
+                        $update_model->save(false);
+
+                    }
+                    $this->redirect(['oa-picinfo/update','id'=>$pid]);
+                }
+
 
             }
             catch (Exception  $e)
@@ -142,7 +162,7 @@ class GoodsskuController extends Controller
      *  save and complete sku data
      */
 
-    public function actionSaveComplete($pid)
+    public function actionSaveComplete($pid,$type)
     {
         $request = Yii::$app->request;
         $model = new Goodssku();
@@ -151,42 +171,68 @@ class GoodsskuController extends Controller
             //提交过来的表单数据
             try
             {
-                $skuRows = $request->post()['Goodssku'];
-                foreach ($skuRows as $row_key=>$row_value)
+                if($type=='goods-info')
                 {
-                    $row_value['pid'] = intval($pid); //pid传进来
-                    $sid = $row_key;
-                    //新增行
-                    if(strstr($row_key,'New'))
+                    $skuRows = $request->post()['Goodssku'];
+                    foreach ($skuRows as $row_key=>$row_value)
                     {
-                        $_model = clone $model;
-                        //配合rules 进行安全检查;需要改变的数据都要声明下类型。
-                        $_model ->setAttributes($row_value,true); //逐行入库
-                        $_model->save();
-                    }
-                    //更新行
-                    else
-                    {
-                        $update_model = Goodssku::find()->where(['sid' => $sid])->one();
-                        $update_model->sku = $row_value['sku'];
-                        $update_model->property1 = $row_value['property1'];
-                        $update_model->property2 = $row_value['property2'];
-                        $update_model->property3 = $row_value['property3'];
-                        $update_model->CostPrice = $row_value['CostPrice'];
-                        $update_model->Weight = $row_value['Weight'];
-                        $update_model->RetailPrice = $row_value['RetailPrice'];
-                        $update_model->update(['property1','property2','property3',
-                            'CostPrice','Weight','RetailPrice']);
+                        $row_value['pid'] = intval($pid); //pid传进来
+                        $sid = $row_key;
+                        //新增行
+                        if(strstr($row_key,'New'))
+                        {
+                            $_model = clone $model;
+                            //配合rules 进行安全检查;需要改变的数据都要声明下类型。
+                            $_model ->setAttributes($row_value,true); //逐行入库
+                            $_model->save();
+                        }
+                        //更新行
+                        else
+                        {
+                            $update_model = Goodssku::find()->where(['sid' => $sid])->one();
+                            $update_model->sku = $row_value['sku'];
+                            $update_model->property1 = $row_value['property1'];
+                            $update_model->property2 = $row_value['property2'];
+                            $update_model->property3 = $row_value['property3'];
+                            $update_model->CostPrice = $row_value['CostPrice'];
+                            $update_model->Weight = $row_value['Weight'];
+                            $update_model->RetailPrice = $row_value['RetailPrice'];
+                            $update_model->update(['sku','property1','property2','property3',
+                                'CostPrice','Weight','RetailPrice']);
+
+                        }
 
                     }
+
+                    //更新产品状态
+                    $goods_model = OaGoodsinfo::find()->where(['pid' => $pid])->one();
+                    $goods_model ->achieveStatus = '已完善';
+                    $goods_model->update(['achieveStatus']);
+                    $goods_model->updateDatetime =strftime('%F %T');
+                    $this->redirect(['oa-goodsinfo/index']);
+                }
+
+                if ($type=='pic-info')
+                {
+                    $Rows = $request->post()['Goodssku'];
+                    foreach ($Rows as $row_key=>$row_value)
+                    {
+                        $sid = $row_key;
+                        $update_model = Goodssku::find()->where(['sid' => $sid])->one();
+                        $update_model->linkurl = $row_value['linkurl'];
+                        $update_model->save(false);
+
+                    }
+                    //更新商品状态
+                    $goods_model = OaGoodsinfo::find()->where(['pid' => $pid])->one();
+                    $goods_model ->achieveStatus = '有图';
+                    $goods_model->update(['achieveStatus']);
+                    $goods_model->updateDatetime =strftime('%F %T');
+                    $this->redirect(['oa-goodsinfo/index']);
+                    $this->redirect(['oa-picinfo/update','id'=>$pid]);
 
                 }
 
-                //更新产品状态
-                $goods_model = OaGoodsinfo::find()->where(['pid' => $pid])->one();
-                $goods_model ->achieveStatus = '已完善';
-                $goods_model->update(['achieveStatus']);
-                $this->redirect(['oa-goodsinfo/index']);
 
             }
             catch (Exception  $e)

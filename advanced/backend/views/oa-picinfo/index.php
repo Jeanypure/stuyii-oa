@@ -60,6 +60,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'GoodsCode',
             'GoodsName',
+            'developer',
+            'devDatetime',
             'possessMan2',
         ],
 

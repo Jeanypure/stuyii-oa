@@ -19,7 +19,7 @@ class GoodsskuSearch extends Goodssku
     {
         return [
 //            [['sid', 'pid'], 'integer'],
-            [['pid','sku', 'property1', 'property2', 'property3', 'memo1', 'memo2', 'memo3', 'memo4','CostPrice', 'Weight', 'RetailPrice'], 'safe'],
+            [['pid','sku', 'property1', 'property2', 'property3', 'memo1', 'memo2', 'memo3', 'memo4','CostPrice', 'Weight', 'RetailPrice','linkurl'], 'safe'],
 //            [['CostPrice', 'Weight', 'RetailPrice'], 'number'],
         ];
     }

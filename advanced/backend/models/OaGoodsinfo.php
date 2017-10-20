@@ -32,7 +32,7 @@ class OaGoodsinfo extends \yii\db\ActiveRecord
     {
         return [
             [['IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged','goodsid'], 'integer'],
-            [['GoodsCode','achieveStatus','description','SupplierName','Season','StoreName','PackName','DictionaryName','GoodsName'], 'string'],
+            [['upDatetime','developer','devDatetime','GoodsCode','achieveStatus','description','SupplierName','Season','StoreName','PackName','DictionaryName','GoodsName'], 'string'],
 
             [['GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description',], 'required'],
             [['DictionaryName'],'safe'],
@@ -60,6 +60,10 @@ class OaGoodsinfo extends \yii\db\ActiveRecord
             'isMagnetism' => '是否带磁',
             'IsCharged' => '是否带电',
             'possessMan2' => '美工',
+            'achieveStatus' => '进度状态',
+            'devDatetime' => '开发时间',
+            'achieveStatus' => '开发进度',
+            'developer' => '开发员'
 
 
         ];
