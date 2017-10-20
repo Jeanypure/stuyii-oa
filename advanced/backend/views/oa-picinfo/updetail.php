@@ -63,7 +63,7 @@ echo TabularForm::widget([
     'attributes'=>[
 
         'sku'=>['label'=>'SKU', 'type'=>TabularForm::INPUT_TEXT,
-                'options'=>['class'=>'sku'],
+            'options'=>['readonly'=>true]
                ],
         'linkurl'=>['label'=>'图片地址', 'type'=>TabularForm::INPUT_TEXT,
         ],
