@@ -98,6 +98,7 @@ class OaGoodsController extends Controller
                 $current_model = $this->findModel($id);
                 $user = yii::$app->user->identity->username;
                 //根据类目ID更新类目名称
+                $current_model->catNid =$cate;
                 $current_model->cate = $cateModel->CategoryName;
                 $current_model->devNum = '20'.date('ymd',time()).strval($id);
                 $current_model->devStatus = '';
@@ -217,6 +218,7 @@ class OaGoodsController extends Controller
                 $current_model = $this->findModel($id);
                 $user = yii::$app->user->identity->username;
                 //根据类目ID更新类目名称
+                $current_model->catNid =$cate;
                 $current_model->cate = $cateModel->CategoryName;
                 $current_model->devNum = '20'.date('ymd',time()).strval($id);
                 $current_model->devStatus = '正向认领';
@@ -263,14 +265,16 @@ class OaGoodsController extends Controller
         $request =Yii::$app->request;
         if ($request->isPost)
         {
-            if($model->load(Yii::$app->request->post()) && $model->save()) {
+            if($model->load(Yii::$app->request->post()) && $model->save(false)) {
                 //默认值更新到当前行中
                 $id = $model->nid;
                 $cate = $model->cate;
                 $cateModel = GoodsCats::find()->where(['nid'=>$cate])->one();
                 $current_model = $this->findModel($id);
+//                var_dump($current_model);die;
                 $user = yii::$app->user->identity->username;
                 //根据类目ID更新类目名称
+                $current_model->catNid =$cate;
                 $current_model->cate = $cateModel->CategoryName;
                 $current_model->devNum = '20'.date('ymd',time()).strval($id);
                 $current_model->devStatus = '逆向认领';
@@ -317,9 +321,22 @@ class OaGoodsController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save(false)) {
+
+            //默认值更新到当前行中
+            $id = $model->nid;
+            $cate = $model->cate;
+            $cateModel = GoodsCats::find()->where(['nid'=>$cate])->one();
+//            $current_model = $this->findModel($id);
+            $current_model = clone $model;
+            //根据类目ID更新类目名称
+            $current_model->catNid =$cate;
+            $current_model->cate = $cateModel->CategoryName;
+            $current_model->update(false);
             return $this->redirect(['forward-products']);
         } else {
+
+
             return $this->renderAjax('forwardUpdate', [
                 'model' => $model,
             ]);
@@ -338,9 +355,20 @@ class OaGoodsController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            //默认值更新到当前行中
+            $id = $model->nid;
+            $cate = $model->cate;
+            $cateModel = GoodsCats::find()->where(['nid'=>$cate])->one();
+//            $current_model = $this->findModel($id);
+            $current_model = clone $model;
+            //根据类目ID更新类目名称
+            $current_model->catNid =$cate;
+            $current_model->cate = $cateModel->CategoryName;
+            $current_model->update(false);
+
             return $this->redirect(['backward-products']);
         } else {
-            return $this->renderAjax('update', [
+            return $this->renderAjax('backwardupdate', [
                 'model' => $model,
             ]);
         }
