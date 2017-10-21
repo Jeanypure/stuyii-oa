@@ -59,15 +59,14 @@ $('.backward-create').on('click',  function () {
 //提交审核
 $('.approve').on('click',function(){
      var id = $(this).closest('tr').data('key');
-  krajeeDialog.confirm("确定提交审核?", function (result) {
+        krajeeDialog.confirm("确定提交审核?", function (result) {
         if (result) {
-           $.get('/oa-goods/approve?id='+id,
+           $.get('/oa-goods/approve?id='+id,{'type':'backward-products'},
                function(msg){
                   alter(msg); 
                }               
            );
             
-            // alert('OK! 提交审核成功!');
         } else {
             alert('Oops!放弃提交');
         }
@@ -81,7 +80,8 @@ $('.approve-lots').on('click',function() {
      $.ajax({
            url:"/oa-goods/approve-lots",
            type:"post",
-           data:{id:ids},
+           data:{'id':ids,'type':'backward-products'},
+           dataType:"json",
            success:function(res){               
                 console.log("oh yeah lots passed!");
            }

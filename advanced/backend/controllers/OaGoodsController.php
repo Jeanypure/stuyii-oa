@@ -620,16 +620,16 @@ class OaGoodsController extends Controller
 /**
  * commit and approve
  * @param integer $id
- * @return {'msg':'OK'} or {'msg':'fail'}
+ * @return string {'msg':'OK'} or {'msg':'fail'}
  *
  */
 
-    public function actionApprove($id){
+    public function actionApprove($id,$type){
 
         $model = $this->findModel($id);
         $model->checkStatus = '待审批';
         if($model->save(false)){
-            return "{'msg':'OK'}";
+            return $this->redirect($type);
         }else{
             return "{'msg':'fail'}";
         }
@@ -638,17 +638,20 @@ class OaGoodsController extends Controller
 
     /**
      * approveLots the products
-     * return mixed approve-lots
+     * @param $module []
+     * @return mixed approve-lots
      */
     public function  actionApproveLots(){
        $ids = yii::$app->request->post()["id"];
+        $type = yii::$app->request->post()["type"];
+
        foreach ($ids as $id){
            $model = $this->findModel($id);
            $model->checkStatus ='待审批';
            $model->update(false);
 
        }
-        return $this->redirect(['forward-products']);
+        return $this->redirect($type);
     }
 
 
