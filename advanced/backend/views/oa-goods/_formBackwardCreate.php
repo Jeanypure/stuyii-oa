@@ -43,6 +43,23 @@ use yii\helpers\ArrayHelper;
     <?php echo  $form->field($model, 'origin1',['template' => "<font color='red'>*{label}</font>\n<div >{input}</div>\n<div >{error}</div>",])->textInput(['placeholder' => '--必填--']) ?>
 
     <?php echo  $form->field($model, 'vendor1')->textInput(['placeholder' => '--选填--']) ?>
+
+    <?php echo  $form->field($model, 'vendor2')->textInput() ?>
+    <?php echo  $form->field($model, 'vendor3')->textInput() ?>
+
+    <?php echo  $form->field($model, 'origin2')->textInput(['placeholder' => '--选填--']) ?>
+    <?php echo  $form->field($model, 'origin3')->textInput(['placeholder' => '--选填--']) ?>
+
+    <?php echo  $form->field($model, 'salePrice')->textInput(['placeholder' => '--选填--']) ?>
+    <?php echo  $form->field($model, 'hopeSale')->textInput(['placeholder' => '--选填--']) ?>
+    <?php echo  $form->field($model, 'hopeMonthProfit')->textInput(['placeholder' => '--选填--']) ?>
+    <?php echo  $form->field($model, 'hopeRate')->textInput(['placeholder' => '--选填--']) ?>
+    <?php echo  $form->field($model, 'hopeWeight')->textInput(['placeholder' => '--选填--']) ?>
+
+
+
+
+
     <div class="form-group">
         <?= Html::submitButton('创建', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
