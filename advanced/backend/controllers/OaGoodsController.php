@@ -368,7 +368,9 @@ class OaGoodsController extends Controller
 
             return $this->redirect(['backward-products']);
         } else {
+
             return $this->renderAjax('backwardupdate', [
+
                 'model' => $model,
             ]);
         }

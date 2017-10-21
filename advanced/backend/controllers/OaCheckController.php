@@ -39,7 +39,8 @@ class OaCheckController extends Controller
     public function actionToCheck()
     {
         $searchModel = new OaGoodsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'devedUnchecked','');
+        //待审批产品
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'','待审批');
 
         return $this->render('toCheck', [
             'searchModel' => $searchModel,
@@ -191,7 +192,7 @@ class OaCheckController extends Controller
     public function actionPassed()
     {
         $searchModel = new OaGoodsSearch();
-
+        // 已审批产品
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'','已审批');
         return $this->render('passed', [
             'searchModel' => $searchModel,
@@ -208,6 +209,7 @@ class OaCheckController extends Controller
     public function actionFailed()
     {
         $searchModel = new OaGoodsSearch();
+        //未通过产品
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'','未通过');
         return $this->render('failed', [
             'searchModel' => $searchModel,

@@ -44,19 +44,25 @@ class OaGoodsSearch extends OaGoods
      *
      * @return ActiveDataProvider
      */
-    public function search($params,$devstatus,$checkStatus)
+    public function search($params,$devStatus,$checkStatus)
     {
-//        $query = OaGoods::find()->where(['devStatus'=>$devstatus]);
-        $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])->where(['<>','introducer',''])->andWhere(['<>','checkStatus','已作废']);
 
+
+        //产品审批状态
         if(!empty($checkStatus)){
-            $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])->where(['checkStatus'=>$checkStatus]);
+            $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])->where(['checkStatus'=>$checkStatus])->andWhere(['<>','checkStatus','已作废']);
         }
 
-        if($devstatus=='devedUnchecked'){
-            $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])->where(['checkStatus'=>'待审批']);
+        //产品认领状态
+        if(!empty($devStatus)){
+            $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])->where(['devStatus'=>$devStatus])->andWhere(['<>','checkStatus','已作废']);
         }
 
+        //有推荐人，没作废的产品显示在产品推荐里面。
+        if(empty($devStatus) && empty($checkStatus)){
+
+            $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])->where(['<>','introducer',''])->andWhere(['<>','checkStatus','已作废']);
+        }
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([

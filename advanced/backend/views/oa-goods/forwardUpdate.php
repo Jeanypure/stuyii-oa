@@ -10,7 +10,24 @@ $this->title = '更新产品:' . $model->devNum;
 $this->params['breadcrumbs'][] = ['label' => '产品推荐', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->devNum, 'url' => ['view', 'id' => $model->nid]];
 $this->params['breadcrumbs'][] = '更新';
+
+$catNid = $model->catNid;
+$subCate = $model->subCate;
+
+$JS = <<<JS
+
+//选中默认主类目
+$("option[value={$catNid}]").attr("selected",true);
+
+//选中默认子类目
+
+$("option:contains({$subCate})").attr("selected",true);
+
+JS;
+
+$this->registerJs($JS);
 ?>
+
 <div>
     <?= Html::img($model->img,['width'=>100,'height'=>100])?>
 </div>
@@ -23,12 +40,7 @@ $this->params['breadcrumbs'][] = '更新';
             ]
         ]); ?>
 
-
         <?= $form->field($model, 'img')->textInput() ?>
-
-        <?php //echo  $form->field($model, 'cate')->textInput() ?>
-
-        <?php //echo $form->field($model, 'subCate')->textInput() ?>
 
         <?php
         echo $form->field($model,'cate')->dropDownList($model->getCatList(0),
