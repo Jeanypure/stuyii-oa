@@ -53,7 +53,7 @@ class OaCheckController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionPass($id)
+    public function actionPass($id=43)
     {
         $model = $this->findModel($id);
         $_model = new OaGoodsinfo();
@@ -71,12 +71,14 @@ class OaCheckController extends Controller
         $_model->picUrl = $img;
         $_model->developer =$developer;
         $_model->devDatetime =strftime('%F %T');;
-        $_model->updateDatetime =strftime('%F %T');;
+        $_model->updateTime =strftime('%F %T');;
         $_model->achieveStatus='待处理';
         $_model->GoodsName='';
 
+        $model->update(false);
         //不验证model的rules
         if($_model->save(false)){
+
             return $this->redirect(['to-check']);
         }
         else {
@@ -110,7 +112,7 @@ class OaCheckController extends Controller
             $_model->picUrl = $img;
             $_model->developer =$developer;
             $_model->devDatetime =strftime('%F %T');;
-            $_model->updateDatetime =strftime('%F %T');;
+            $_model->updateTime =strftime('%F %T');;
             $_model->achieveStatus='待处理';
             $_model->GoodsName='';
             $_model->save(false);
@@ -125,12 +127,15 @@ class OaCheckController extends Controller
      */
     public function actionFail($id)
     {
+//        echo $id;
+//        var_dump($_GET);die;
         $model = $this->findModel($id);
+
         $user = yii::$app->user->identity->username;
         $model ->checkStatus = '未通过';
         $model ->developer = $user;
         $model ->updateDate = strftime('%F %T');
-        $model->update(array('checkStatus','developer','updateDate'));
+        $model->update(false);
         return $this->redirect(['to-check']);
     }
 

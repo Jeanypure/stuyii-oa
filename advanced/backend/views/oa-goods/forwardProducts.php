@@ -26,6 +26,8 @@ Modal::end();
 $viewUrl = Url::toRoute('forward-view');
 $updateUrl = Url::toRoute('forward-update');
 $createUrl = Url::toRoute('forward-create');
+//$approve = Url::toRoute('approve');
+
 $js = <<<JS
 // 查看框
 $('.forward-view').on('click',  function () {
@@ -57,6 +59,41 @@ $('.forward-create').on('click',  function () {
             }
         );
     }); 
+
+//提交审核
+$('.approve').on('click',function(){
+     var id = $(this).closest('tr').data('key');
+  krajeeDialog.confirm("确定提交审核?", function (result) {
+        if (result) {
+           $.get('/oa-goods/approve?id='+id,
+               function(msg){
+                  alter(msg); 
+               }               
+           );
+            
+            // alert('OK! 提交审核成功!');
+        } else {
+            alert('Oops!放弃提交');
+        }
+    });
+});
+
+    //批量提交审批
+   $('.approve-lots').on('click',function() {
+    var ids = $("#oa-check").yiiGridView("getSelectedRows");    
+    if(ids.length == 0) return false;
+     $.ajax({
+           url:"/oa-goods/approve-lots",
+           type:"post",
+           data:{id:ids},
+           success:function(res){               
+                console.log("oh yeah lots passed!");
+           }
+        });
+    });
+    
+
+
 JS;
 $this->registerJs($js);
 
@@ -151,7 +188,9 @@ function centerFormat($name) {
         <?= Html::a('新增产品',"javascript:void(0);",  ['title'=>'create','data-toggle' => 'modal','data-target' => '#forward-modal','class' => 'forward-create btn btn-primary']) ?>
         <?= Html::a('批量导入', "javascript:void(0);", ['title' => 'upload', 'class' => 'upload btn btn-info']) ?>
         <?= Html::a('批量删除',"javascript:void(0);",  ['title'=>'deleteLots','class' => 'delete-lots btn btn-danger']) ?>
+
         <?= Html::a('下载模板', ['template'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('批量审批',"javascript:void(0);",  ['title'=>'approveLots','class' => 'approve-lots btn btn-warning']) ?>
         <input type="file" id="import" name="import" style="display: none" >
     </p>
 
@@ -160,6 +199,7 @@ function centerFormat($name) {
         'responsive'=>true,
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'id' => 'oa-check',
         'columns' => [
             [
                 'class' => 'yii\grid\CheckboxColumn',
@@ -167,7 +207,7 @@ function centerFormat($name) {
             ['class' => 'kartik\grid\SerialColumn'],
 
             [ 'class' => 'kartik\grid\ActionColumn',
-                'template' =>'{view} {update} {delete}',
+                'template' =>'{view} {update} {delete} {approve}',
                 'buttons' => [
 
                     'view' => function ($url, $model, $key) {
@@ -191,6 +231,15 @@ function centerFormat($name) {
                             'class' => 'forward-update',
                         ];
                         return Html::a('<span  class="glyphicon glyphicon-pencil"></span>', '#', $options);
+                    },
+                    'approve' => function ($url, $model, $key) {
+                        $options = [
+                            'title' => '提交审核',
+                            'aria-label' => '提交审核',
+                            'data-id' => $key,
+                            'class' => 'approve',
+                        ];
+                        return Html::a('<span  class="glyphicon  glyphicon-check"></span>', '#', $options);
                     }
                 ],
             ],

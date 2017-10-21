@@ -327,11 +327,13 @@ class OaGoodsController extends Controller
             $id = $model->nid;
             $cate = $model->cate;
             $cateModel = GoodsCats::find()->where(['nid'=>$cate])->one();
-//            $current_model = $this->findModel($id);
+            //$current_model = $this->findModel($id);
             $current_model = clone $model;
             //根据类目ID更新类目名称
             $current_model->catNid =$cate;
             $current_model->cate = $cateModel->CategoryName;
+
+
             $current_model->update(false);
             return $this->redirect(['forward-products']);
         } else {
@@ -613,6 +615,44 @@ class OaGoodsController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+
+/**
+ * commit and approve
+ * @param integer $id
+ * @return {'msg':'OK'} or {'msg':'fail'}
+ *
+ */
+
+    public function actionApprove($id){
+
+        $model = $this->findModel($id);
+        $model->checkStatus = '待审批';
+        if($model->save(false)){
+            return "{'msg':'OK'}";
+        }else{
+            return "{'msg':'fail'}";
+        }
+
+    }
+
+    /**
+     * approveLots the products
+     * return mixed approve-lots
+     */
+    public function  actionApproveLots(){
+       $ids = yii::$app->request->post()["id"];
+       foreach ($ids as $id){
+           $model = $this->findModel($id);
+           $model->checkStatus ='待审批';
+           $model->update(false);
+
+       }
+        return $this->redirect(['forward-products']);
+    }
+
+
+
 
 
 

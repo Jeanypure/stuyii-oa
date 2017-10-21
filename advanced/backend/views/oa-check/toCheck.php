@@ -299,9 +299,13 @@ function centerFormat($name) {
 
         //失败对话框
         $('.data-fail').on('click', function () {
+
             var id = $(this).closest('tr').data('key');
+
             krajeeDialog.confirm("确定不通过？", function(result) {
                 if(result){
+                   console.log(id);
+//                   alert(id);
                     $.get('/oa-check/fail?id=' + id );
                 }
             });
