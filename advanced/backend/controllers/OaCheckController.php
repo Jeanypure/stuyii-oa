@@ -53,15 +53,31 @@ class OaCheckController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionPass($id)
+    public function actionPassForm($id)
     {
+        $model = $this->findModel($id);
+        return $this->renderAjax('passForm',[
+            'model' => $model
+        ]);
+
+    }
+    /**
+     * Action of Pass
+     * @return mixed
+     */
+    public function actionPass()
+    {
+        $request = yii::$app->request->post()['OaGoods'];
+        $id = $request['nid'];
+        $approvalNote = $request['approvalNote'];
         $model = $this->findModel($id);
         $_model = new OaGoodsinfo();
         $user = yii::$app->user->identity->username;
         $model ->checkStatus = '已审批';
+        $model ->approvalNote = $approvalNote;
         $model ->developer = $user;
         $model ->updateDate = strftime('%F %T');
-        $model->update(array('checkStatus','developer','updateDate'));
+        $model->update(false);
         //审批状态改变之后就插入数据到OaGoodsInfo
         $nid = $model->nid;
         $img = $model->img;
@@ -71,17 +87,10 @@ class OaCheckController extends Controller
         $_model->picUrl = $img;
         $_model->developer =$developer;
         $_model->devDatetime =strftime('%F %T');;
-        $_model->updateDatetime =strftime('%F %T');;
+        $_model->updateTime =strftime('%F %T');;
         $_model->achieveStatus='待处理';
         $_model->GoodsName='';
-
-        //不验证model的rules
-        if($_model->save(false)){
-            return $this->redirect(['to-check']);
-        }
-        else {
-            echo 'somthin wrong!';
-        }
+        return $this->redirect(['to-check']);
 
     }
 
@@ -119,18 +128,34 @@ class OaCheckController extends Controller
     }
 
     /**
-     * Action of Fail
+     * Action of Pass
      * @param integer $id
      * @return mixed
      */
-    public function actionFail($id)
+    public function actionFailForm($id)
     {
+        $model = $this->findModel($id);
+        return $this->renderAjax('failForm',[
+            'model' => $model
+        ]);
+
+    }
+    /**
+     * Action of Fail
+     * @return mixed
+     */
+    public function actionFail()
+    {
+        $request = yii::$app->request->post()['OaGoods'];
+        $id = $request['nid'];
+        $approvalNote = $request['approvalNote'];
         $model = $this->findModel($id);
         $user = yii::$app->user->identity->username;
         $model ->checkStatus = '未通过';
+        $model ->approvalNote = $approvalNote;
         $model ->developer = $user;
         $model ->updateDate = strftime('%F %T');
-        $model->update(array('checkStatus','developer','updateDate'));
+        $model->update(false);
         return $this->redirect(['to-check']);
     }
 

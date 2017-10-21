@@ -15,17 +15,37 @@ $this->params['breadcrumbs'][] = $this->title;
 
 use yii\bootstrap\Modal;
 Modal::begin([
-    'id' => 'view-modal',
+    'id' => 'tocheck-modal',
 //    'header' => '<h4 class="modal-title">认领产品</h4>',
     'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
 ]);
-//echo
 Modal::end();
 
 
 $viewUrl = Url::toRoute('view');
+$failUrl = Url::toRoute('fail');
+$passUrl = Url::toRoute('pass-form');
+$failUrl = Url::toRoute('fail-form');
+
 $js = <<<JS
 
+//通过对话框
+$('.data-pass').on('click',function() {
+    $.get('{$passUrl}',  { id: $(this).closest('tr').data('key') },
+            function (data) {
+                $('.modal-body').html(data);
+            }
+        );
+});
+
+// 失败对话框
+$('.data-fail').on('click',function() {
+    $.get('{$failUrl}',  { id: $(this).closest('tr').data('key') },
+            function (data) {
+                $('.modal-body').html(data);
+            }
+        );
+});
 
 // 查看框
 $('.data-view').on('click',  function () {
@@ -209,7 +229,7 @@ function centerFormat($name) {
                             'title' => '查看',
                             'aria-label' => '查看',
                             'data-toggle' => 'modal',
-                            'data-target' => '#view-modal',
+                            'data-target' => '#tocheck-modal',
                             'data-id' => $key,
                             'class' => 'data-view',
                         ];
@@ -220,7 +240,7 @@ function centerFormat($name) {
                             'title' => '通过',
                             'aria-label' => '通过',
                             'data-toggle' => 'modal',
-                            'data-target' => '#pass-dialog',
+                            'data-target' => '#tocheck-modal',
                             'data-id' => $key,
                             'class' => 'data-pass',
                         ];
@@ -231,7 +251,7 @@ function centerFormat($name) {
                             'title' => '未通过',
                             'aria-label' => '未通过',
                             'data-toggle' => 'modal',
-                            'data-target' => '#fail-dialog',
+                            'data-target' => '#tocheck-modal',
                             'data-id' => $key,
                             'class' => 'data-fail',
                         ];
@@ -278,42 +298,3 @@ function centerFormat($name) {
     ]); ?>
 </div>
 
-<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-<script>
-
-    $(function () {
-
-        $('.glyphicon-eye-open').addClass('icon-cell');
-        $('.wrapper').addClass('body-color');
-
-        //通过对话框
-        $('.data-pass').on('click', function () {
-            var id = $(this).closest('tr').data('key');
-            krajeeDialog.confirm("确定通过审批？", function(result) {
-                if(result){
-                    $.get('/oa-check/pass?id=' + id );
-                }
-            });
-
-        });
-
-        //失败对话框
-        $('.data-fail').on('click', function () {
-            var id = $(this).closest('tr').data('key');
-            krajeeDialog.confirm("确定不通过？", function(result) {
-                if(result){
-                    $.get('/oa-check/fail?id=' + id );
-                }
-            });
-        });
-        //作废对话框
-        $('.data-trash').on('click', function () {
-            var id = $(this).closest('tr').data('key');
-            krajeeDialog.confirm("确定作废？", function(result) {
-                if(result){
-                    $.get('/oa-check/trash?id=' + id );
-                }
-            });
-        });
-        });
-</script>

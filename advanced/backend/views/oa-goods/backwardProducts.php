@@ -202,6 +202,7 @@ function centerFormat($name) {
             centerFormat('introducer'),
 //            centerFormat('devStatus'),
             centerFormat('checkStatus'),
+            centerFormat('approvalNote'),
             centerFormat('createDate'),
             centerFormat('updateDate'),
             centerFormat('salePrice'),
