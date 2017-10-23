@@ -330,7 +330,6 @@ class OaGoodsController extends Controller
 
             $subCateNameModel = GoodsCats::find()->where(['NID'=>$model->subCate])->one();
             $current_model->subCate = $subCateNameModel->CategoryName;
-//            var_dump($current_model->subCate);die;
 
             $current_model->update(false);
             return $this->redirect(['forward-products']);
@@ -373,6 +372,9 @@ class OaGoodsController extends Controller
             //根据类目ID更新类目名称
             $current_model->catNid =$cate;
             $current_model->cate = $cateModel->CategoryName;
+            $subCateNameModel = GoodsCats::find()->where(['NID'=>$model->subCate])->one();
+            $current_model->subCate = $subCateNameModel->CategoryName;
+
             $current_model->update(false);
 
             return $this->redirect(['backward-products']);

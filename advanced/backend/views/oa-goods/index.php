@@ -256,6 +256,7 @@ class CenterFormatter {
              centerFormat('introReason'),
              centerFormat('devStatus'),
              centerFormat('checkStatus'),
+             centerFormat('approvalNote'),
              centerFormat('createDate'),
              centerFormat('updateDate'),
 //            centerFormat('salePrice'),

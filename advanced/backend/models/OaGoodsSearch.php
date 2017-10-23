@@ -21,7 +21,7 @@ class OaGoodsSearch extends OaGoods
            // [['id'], 'integer'],
             [['img','cate', 'devNum', 'origin1', 'developer', 'introducer',
                 'devStatus', 'checkStatus','subCate','vendor1','vendor2','vendor3',
-                'origin2','origin3','introReason','approvalNote',
+                'origin2','origin3','introReason',
             ], 'string'],
             [['hopeRate','salePrice', 'hopeWeight','hopeMonthProfit','hopeSale','nid'], 'number'],
             [['cate','subCate','createDate', 'updateDate',], 'safe'],
@@ -44,25 +44,19 @@ class OaGoodsSearch extends OaGoods
      *
      * @return ActiveDataProvider
      */
-    public function search($params,$devStatus,$checkStatus)
+    public function search($params,$devstatus,$checkStatus)
     {
+//        $query = OaGoods::find()->where(['devStatus'=>$devstatus]);
+        $query = OaGoods::find()->where(['<>','introducer',''])->andWhere(['<>','checkStatus','已作废']);
 
-
-        //产品审批状态
         if(!empty($checkStatus)){
-            $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])->where(['checkStatus'=>$checkStatus])->andWhere(['<>','checkStatus','已作废']);
+            $query = OaGoods::find()->where(['checkStatus'=>$checkStatus]);
         }
 
-        //产品认领状态
-        if(!empty($devStatus)){
-            $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])->where(['devStatus'=>$devStatus])->andWhere(['<>','checkStatus','已作废']);
+        if($devstatus=='devedUnchecked'){
+            $query = OaGoods::find()->where(['checkStatus'=>'待审批']);
         }
 
-        //有推荐人，没作废的产品显示在产品推荐里面。
-        if(empty($devStatus) && empty($checkStatus)){
-
-            $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])->where(['<>','introducer',''])->andWhere(['<>','checkStatus','已作废']);
-        }
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -92,7 +86,6 @@ class OaGoodsSearch extends OaGoods
             'introducer' => $this->introducer,
             'introReason' => $this->introReason,
             'checkStatus' => $this->checkStatus,
-            'approvalNote' => $this->approvalNote,
         ]);
 
         $query->andFilterWhere(['like', 'cate', $this->cate])
@@ -103,7 +96,6 @@ class OaGoodsSearch extends OaGoods
             ->andFilterWhere(['like', 'introducer', $this->introducer])
             ->andFilterWhere(['like', 'introReason', $this->introReason])
             ->andFilterWhere(['like', 'devStatus', $this->devStatus])
-            ->andFilterWhere(['like', 'approvalNote', $this->approvalNote])
             ->andFilterWhere(['like', 'checkStatus', $this->checkStatus]);
 
         return $dataProvider;

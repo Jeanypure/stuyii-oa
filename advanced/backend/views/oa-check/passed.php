@@ -135,7 +135,7 @@ function centerFormat($name) {
 
             ['class' => 'kartik\grid\SerialColumn'],
 
-            [ 'class' => 'kartik\grid\ActionColumn',
+      /*      [ 'class' => 'kartik\grid\ActionColumn',
                 'template' =>'{view} {fail} {trash}',
                 'buttons' => [
                     'view' => function ($url, $model, $key) {
@@ -173,7 +173,7 @@ function centerFormat($name) {
                         return Html::a('<span  class="glyphicon glyphicon-trash"></span>', '#', $options);
                     }
                 ],
-            ],
+            ],*/
             centerFormat('img'),
             centerFormat('cate'),
             centerFormat('subCate'),
@@ -188,6 +188,8 @@ function centerFormat($name) {
             centerFormat('introducer'),
 //            centerFormat('devStatus'),
             centerFormat('checkStatus'),
+            centerFormat('approvalNote'),
+
             centerFormat('createDate'),
             centerFormat('updateDate'),
             centerFormat('salePrice'),

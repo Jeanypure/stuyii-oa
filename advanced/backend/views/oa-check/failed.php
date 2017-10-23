@@ -26,8 +26,6 @@ Modal::end();
 
 $viewUrl = Url::toRoute('view');
 $js = <<<JS
-
-
 // 查看框
 $('.data-view').on('click',  function () {
         $.get('{$viewUrl}',  { id: $(this).closest('tr').data('key') },
@@ -36,6 +34,18 @@ $('.data-view').on('click',  function () {
             }
         );
     });
+
+//删除1条
+   $('.data-fail').on('click', function () {
+            var id = $(this).closest('tr').data('key');
+            krajeeDialog.confirm("确定作废？", function(result) {
+                if(result){
+                    $.post('/oa-check/delete?id=' + id );
+                }
+            });
+
+        });
+
 
 JS;
 $this->registerJs($js);
@@ -191,6 +201,7 @@ function centerFormat($name) {
             centerFormat('introducer'),
 //            centerFormat('devStatus'),
             centerFormat('checkStatus'),
+            centerFormat('approvalNote'),
             centerFormat('createDate'),
             centerFormat('updateDate'),
             centerFormat('salePrice'),
@@ -231,15 +242,6 @@ function centerFormat($name) {
 
         })
 
-        //失败对话框
-        $('.data-fail').on('click', function () {
-            var id = $(this).closest('tr').data('key');
-            krajeeDialog.confirm("确定作废？", function(result) {
-                if(result){
-                    $.get('/oa-check/pass?id=' + id );
-                }
-            });
 
-        })
         });
 </script>

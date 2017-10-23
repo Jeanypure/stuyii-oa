@@ -90,6 +90,7 @@ class OaCheckController extends Controller
         $_model->updateTime =strftime('%F %T');;
         $_model->achieveStatus='待处理';
         $_model->GoodsName='';
+        $_model->save(false);
         return $this->redirect(['to-check']);
 
     }
@@ -241,6 +242,20 @@ class OaCheckController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+
+    /**
+     * Action of delete goods where status is '未通过'
+     * @params integer  $id
+     * @return mixed
+     */
+     public function actionDelete($id){
+
+         $this->findModel($id)->delete();
+
+         return $this->redirect(['failed']);
+     }
+
+
     /**
      * Displays a single OaGoods model.
      * @param integer $id
@@ -290,18 +305,7 @@ class OaCheckController extends Controller
         }
     }
 
-    /**
-     * Deletes an existing OaGoods model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
-    }
 
 
     public function actionHeart($id)
