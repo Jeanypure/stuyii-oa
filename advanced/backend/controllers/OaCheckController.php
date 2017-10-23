@@ -71,6 +71,7 @@ class OaCheckController extends Controller
         $id = $request['nid'];
         $approvalNote = $request['approvalNote'];
         $model = $this->findModel($id);
+        $subCate = $model->subCate;
         $_model = new OaGoodsinfo();
         $user = yii::$app->user->identity->username;
         $model ->checkStatus = '已审批';
@@ -80,9 +81,10 @@ class OaCheckController extends Controller
         $model->update(false);
         //审批状态改变之后就插入数据到OaGoodsInfo
         $previous_code = Yii::$app->db->createCommand(
-                            "select  isnull(goodscode,'UN0000') as maxCode
-                              from b_goods where nid in (select  max(nid) 
-                              from B_Goods where GoodsCategoryID=145 and len(goodscode)=6 )")
+            "select  isnull(goodscode,'UN0000') as maxCode from b_goods where nid in 
+            (select  max(bgs.nid) from B_Goods as bgs left join B_GoodsCats as bgc
+            on bgs.GoodsCategoryID= bgc.nid where bgc.CategoryName='$subCate' and len(goodscode)=6 )"
+        )
             ->queryOne();
         //按规则生成编码
         $max_code = $previous_code['maxCode'];
@@ -102,7 +104,7 @@ class OaCheckController extends Controller
         $_model->updateTime =strftime('%F %T');;
         $_model->achieveStatus='待处理';
         $_model->GoodsName='';
-        $_model->saver(false);
+        $_model->save(false);
         return $this->redirect(['to-check']);
 
     }
