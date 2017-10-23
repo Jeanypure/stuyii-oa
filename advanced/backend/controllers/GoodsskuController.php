@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use yii\base\Model;
 use backend\models\Goodssku;
+use backend\models\OaSysRules;
 use backend\models\OaGoodsinfo;
 use backend\models\GoodsskuSearch;
 use yii\web\Controller;
@@ -206,9 +207,14 @@ class GoodsskuController extends Controller
 
                     //更新产品状态
                     $goods_model = OaGoodsinfo::find()->where(['pid' => $pid])->one();
+                    $developer = $goods_model ->developer;
+                    $rules_model = OaSysRules::find()->where(['ruleKey' => $developer])->one();
+                    $arc = $rules_model->ruleValue;
                     $goods_model ->achieveStatus = '已完善';
-                    $goods_model->update(['achieveStatus']);
                     $goods_model->updateTime =strftime('%F %T');
+                    $goods_model->possessMan2 = $arc;
+                    $goods_model->update(['achieveStatus']);
+
                     $this->redirect(['oa-goodsinfo/index']);
                 }
 
