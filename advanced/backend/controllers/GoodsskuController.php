@@ -208,7 +208,7 @@ class GoodsskuController extends Controller
                     $goods_model = OaGoodsinfo::find()->where(['pid' => $pid])->one();
                     $goods_model ->achieveStatus = '已完善';
                     $goods_model->update(['achieveStatus']);
-                    $goods_model->updateDatetime =strftime('%F %T');
+                    $goods_model->updateTime =strftime('%F %T');
                     $this->redirect(['oa-goodsinfo/index']);
                 }
 

@@ -268,7 +268,6 @@ class OaGoodsController extends Controller
                 $cate = $model->cate;
                 $cateModel = GoodsCats::find()->where(['nid'=>$cate])->one();
                 $current_model = $this->findModel($id);
-//                var_dump($current_model);die;
                 $user = yii::$app->user->identity->username;
                 //根据类目ID更新类目名称
                 $current_model->catNid =$cate;
@@ -319,7 +318,6 @@ class OaGoodsController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save(false)) {
-
             //默认值更新到当前行中
             $id = $model->nid;
             $cate = $model->cate;
@@ -330,6 +328,9 @@ class OaGoodsController extends Controller
             $current_model->catNid =$cate;
             $current_model->cate = $cateModel->CategoryName;
 
+            $subCateNameModel = GoodsCats::find()->where(['NID'=>$model->subCate])->one();
+            $current_model->subCate = $subCateNameModel->CategoryName;
+//            var_dump($current_model->subCate);die;
 
             $current_model->update(false);
             return $this->redirect(['forward-products']);

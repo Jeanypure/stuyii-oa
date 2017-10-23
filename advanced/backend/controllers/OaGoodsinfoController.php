@@ -91,12 +91,7 @@ class OaGoodsinfoController extends Controller
     }
 
 
-    /**
-     * Updates an existing OaGoodsinfo model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
+
 
     public function actionUpdate($id)
     {
@@ -108,6 +103,7 @@ class OaGoodsinfoController extends Controller
         }
 
         if($info->load(Yii::$app->request->post())){
+//            var_dump($_POST);die;
             if (!empty($_POST['DictionaryName'])){
                 $info->DictionaryName = implode(',',$_POST['DictionaryName']);
             }
