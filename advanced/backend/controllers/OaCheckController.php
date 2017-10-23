@@ -79,17 +79,30 @@ class OaCheckController extends Controller
         $model ->updateDate = strftime('%F %T');
         $model->update(false);
         //审批状态改变之后就插入数据到OaGoodsInfo
+        $previous_code = Yii::$app->db->createCommand(
+                            "select  isnull(goodscode,'UN0000') as maxCode
+                              from b_goods where nid in (select  max(nid) 
+                              from B_Goods where GoodsCategoryID=145 and len(goodscode)=6 )")
+            ->queryOne();
+        //按规则生成编码
+        $max_code = $previous_code['maxCode'];
+        $head = substr($max_code,0,2);
+        $tail = intval(substr($max_code,2,4)) + 1;
+        $zero_bit = substr('0000',0,4-strlen($tail));
+        $code = $head.$zero_bit.$tail;
         $nid = $model->nid;
         $img = $model->img;
         $developer = $model->developer;
         $_model->isNewRecord = true;
         $_model->goodsid =$nid;
+        $_model->GoodsCode =$code;
         $_model->picUrl = $img;
         $_model->developer =$developer;
         $_model->devDatetime =strftime('%F %T');;
         $_model->updateTime =strftime('%F %T');;
         $_model->achieveStatus='待处理';
         $_model->GoodsName='';
+        $_model->saver(false);
         return $this->redirect(['to-check']);
 
     }
