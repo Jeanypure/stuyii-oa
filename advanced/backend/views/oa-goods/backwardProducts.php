@@ -26,6 +26,10 @@ $viewUrl = Url::toRoute('forward-view');
 $updateUrl = Url::toRoute('backward-update');
 $createUrl = Url::toRoute('backward-create');
 $js = <<<JS
+
+
+$('.glyphicon-eye-open').addClass('icon-cell');
+$('.wrapper').addClass('body-color');
 // 查看框
 $('.backward-view').on('click',  function () {
         $('.modal-body').children('div').remove();
@@ -242,6 +246,7 @@ function centerFormat($name) {
             centerFormat('introducer'),
 //            centerFormat('devStatus'),
             centerFormat('checkStatus'),
+            centerFormat('approvalNote'),
             centerFormat('createDate'),
             centerFormat('updateDate'),
             centerFormat('salePrice'),
@@ -255,10 +260,3 @@ function centerFormat($name) {
     ]); ?>
 </div>
 
-<!--<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>-->
-<script>
-    $(function () {
-        $('.glyphicon-eye-open').addClass('icon-cell');
-        $('.wrapper').addClass('body-color');
-        });
-</script>

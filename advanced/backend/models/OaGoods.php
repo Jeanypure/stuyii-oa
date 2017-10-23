@@ -41,7 +41,7 @@ class OaGoods extends GoodsCats
             [['origin2','origin3','vendor2','vendor3','devNum',
                 'developer','introducer','introReason','devStatus','checkStatus',
                 'salePrice','hopeWeight','hopeRate','hopeSale',
-                'hopeMonthProfit','createDate','updateDate'],'string'],
+                'hopeMonthProfit','createDate','updateDate','approvalNote'],'string'],
             [['cate', 'subCate',],'safe']
 
         ];
@@ -76,6 +76,7 @@ class OaGoods extends GoodsCats
             'hopeMonthProfit' => '预估月毛利($)',
             'createDate' => '创建时间',
             'updateDate' => '更新时间',
+            'approvalNote' => '审批备注',
         ];
     }
 

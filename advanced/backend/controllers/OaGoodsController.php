@@ -150,7 +150,6 @@ class OaGoodsController extends Controller
             $id = $model->nid;
             $cate = $model->cate;
             $cateModel = GoodsCats::find()->where(['nid'=>$cate])->one();
-//            $current_model = $this->findModel($id);
             $current_model = clone $model;
             //根据类目ID更新类目名称
             $current_model->catNid =$cate;
@@ -173,13 +172,11 @@ class OaGoodsController extends Controller
                 if ($request->isGet){
                     $cid = (int)Yii::$app->request->get('pid');
                     $typeid = (int)Yii::$app->request->get('typeid');
-//                    var_dump($_GET);die;
                     $model->getCatList($cid);
 
 
 
                     if($typeid == 1){
-//                        echo 123;die;
                         Yii::$app->response->format = Response::FORMAT_JSON;
                         return $model->getCatList($cid);
                     }
@@ -337,11 +334,20 @@ class OaGoodsController extends Controller
             $current_model->update(false);
             return $this->redirect(['forward-products']);
         } else {
+        // 根据不同的产品状态返回不同的view
+            $status = $model->checkStatus;
+            if($status == '未通过') {
+                return $this->renderAjax('forwardUpdateReset', [
+                    'model' => $model,
+                ]);
+            }
+            else {
+                return $this->renderAjax('forwardUpdate', [
+                    'model' => $model,
+                ]);
+            }
 
 
-            return $this->renderAjax('forwardUpdate', [
-                'model' => $model,
-            ]);
         }
     }
 
@@ -370,11 +376,20 @@ class OaGoodsController extends Controller
 
             return $this->redirect(['backward-products']);
         } else {
+            // 根据不同的产品状态返回不同的view
+            $status = $model->checkStatus;
+            if($status == '未通过') {
+                return $this->renderAjax('backwardUpdateReset', [
+                    'model' => $model,
+                ]);
+            }
+            else {
+                return $this->renderAjax('backwardUpdate', [
+                    'model' => $model,
+                ]);
+            }
 
-            return $this->renderAjax('backwardupdate', [
 
-                'model' => $model,
-            ]);
         }
     }
     /**
@@ -392,12 +407,46 @@ class OaGoodsController extends Controller
 
 
     /**
-     * Recheck an existing OaGoods model.
+ * Recheck an existing OaGoods model.
+ * If deletion is successful, the browser will be redirected to the 'index' page.
+ * @param integer $id
+ * @return mixed
+ */
+    public function actionRecheck($id)
+    {
+
+        $model = $this->findModel($id);
+
+        $model->checkStatus = '待审批';
+        $model->update(['checkStatus']);
+        return $this->redirect(['index']);
+    }
+
+    /**
+     * BackwardRecheck an existing OaGoods model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      */
-    public function actionRecheck($id)
+    public function actionBackwardRecheck($id)
+    {
+
+        $model = $this->findModel($id);
+
+        $model->checkStatus = '待审批';
+        $model->update(['checkStatus']);
+        return $this->redirect(['index']);
+    }
+
+
+
+    /**
+     * ForwardRecheck an existing OaGoods model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionForwardRecheck($id)
     {
 
         $model = $this->findModel($id);
@@ -425,7 +474,38 @@ class OaGoodsController extends Controller
     }
 
 
+    /**
+     * Trash an existing OaGoods model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionBackwardTrash($id)
+    {
 
+        $model = $this->findModel($id);
+
+        $model->checkStatus = '已作废';
+        $model->update(['checkStatus']);
+        return $this->redirect(['backward-products']);
+    }
+
+
+    /**
+     * Trash an existing OaGoods model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionForwardTrash($id)
+    {
+
+        $model = $this->findModel($id);
+
+        $model->checkStatus = '已作废';
+        $model->update(['checkStatus']);
+        return $this->redirect(['backward-products']);
+    }
 
     /**
      *  lots fail simultaneously

@@ -65,14 +65,14 @@ $this->registerJs($JS);
             ]);
         ?>
 
-
-
-
         <?= $form->field($model, 'vendor1')->textInput() ?>
-        <?php echo  $form->field($model, 'vendor2')->textInput() ?>
-        <?php echo  $form->field($model, 'vendor3')->textInput() ?>
+
         <?= $form->field($model, 'origin1')->textInput() ?>
 
+        <?php echo  $form->field($model, 'vendor2')->textInput() ?>
+        <?php echo  $form->field($model, 'vendor3')->textInput() ?>
+
+        <?php echo  $form->field($model, 'origin1')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'origin2')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'origin3')->textInput(['placeholder' => '--选填--']) ?>
 
