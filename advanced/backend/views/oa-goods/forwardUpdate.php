@@ -18,7 +18,6 @@ $JS = <<<JS
 
 //选中默认主类目
 $("option[value={$catNid}]").attr("selected",true);
-
 //选中默认子类目
 
 $("option:contains({$subCate})").attr("selected",true);
@@ -85,6 +84,9 @@ $this->registerJs($JS);
 
         <div class="form-group">
             <?= Html::submitButton($model->isNewRecord ? '创建' : '更新', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-success']) ?>
+        </div>
+        <div class="form-group">
+
         </div>
 
         <?php ActiveForm::end(); ?>

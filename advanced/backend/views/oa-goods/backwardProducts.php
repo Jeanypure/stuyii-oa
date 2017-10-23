@@ -59,6 +59,39 @@ $('.backward-create').on('click',  function () {
             }
         );
     }); 
+
+//提交审核
+$('.approve').on('click',function(){
+     var id = $(this).closest('tr').data('key');
+        krajeeDialog.confirm("确定提交审核?", function (result) {
+        if (result) {
+           $.get('/oa-goods/approve?id='+id,{'type':'backward-products'},
+               function(msg){
+                  alter(msg); 
+               }               
+           );
+            
+        } else {
+            alert('Oops!放弃提交');
+        }
+    });
+});
+
+//批量提交审批
+$('.approve-lots').on('click',function() {
+    var ids = $("#oa-check").yiiGridView("getSelectedRows");    
+    if(ids.length == 0) return false;
+     $.ajax({
+           url:"/oa-goods/approve-lots",
+           type:"post",
+           data:{'id':ids,'type':'backward-products'},
+           dataType:"json",
+           success:function(res){               
+                console.log("oh yeah lots passed!");
+           }
+        });
+    });
+
 JS;
 $this->registerJs($js);
 //单元格居中类
@@ -146,6 +179,7 @@ function centerFormat($name) {
         <?= Html::a('批量导入', "javascript:void(0);", ['title' => 'upload', 'class' => 'upload btn btn-info']) ?>
         <?= Html::a('批量删除',"javascript:void(0);",  ['title'=>'deleteLots','class' => 'delete-lots btn btn-danger']) ?>
         <?= Html::a('下载模板', ['template'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('批量审批',"javascript:void(0);",  ['title'=>'approveLots','class' => 'approve-lots btn btn-warning']) ?>
         <input type="file" id="import" name="import" style="display: none" >
     </p>
     <?= GridView::widget([
@@ -153,6 +187,7 @@ function centerFormat($name) {
         'responsive'=>true,
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'id' => 'oa-check',
         'columns' => [
             [
                 'class' => 'yii\grid\CheckboxColumn',
@@ -160,7 +195,7 @@ function centerFormat($name) {
             ['class' => 'kartik\grid\SerialColumn'],
 
             [ 'class' => 'kartik\grid\ActionColumn',
-                'template' =>'{view} {update} {delete}',
+                'template' =>'{view} {update} {delete} {approve}',
                 'buttons' => [
 
                     'view' => function ($url, $model, $key) {
@@ -184,7 +219,16 @@ function centerFormat($name) {
                             'class' => 'backward-update',
                         ];
                         return Html::a('<span  class="glyphicon glyphicon-pencil"></span>', '#', $options);
-                    }
+                    },
+                    'approve' => function ($url, $model, $key) {
+                        $options = [
+                            'title' => '提交审核',
+                            'aria-label' => '提交审核',
+                            'data-id' => $key,
+                            'class' => 'approve',
+                        ];
+                        return Html::a('<span  class="glyphicon  glyphicon-check"></span>', '#', $options);
+                    },
                 ],
             ],
 
