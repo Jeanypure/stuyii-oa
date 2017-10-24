@@ -26,7 +26,7 @@ $("option:contains({$subCate})").attr("selected",true);
 
 //重新提交审核事件
 $('#recheck-btn').on('click',function() {
-    $.get('{$reCheckUrl}', {id: '{$model->nid}'});
+    $.get('{$reCheckUrl}', {id: '{$model->nid}','type':'backward-products'});
 })
 
 //作废事件
@@ -57,8 +57,8 @@ $this->registerJs($JS);
             [
                 'prompt'=>'--父类--',
                 'onchange'=>'           
-            $.get("'.yii::$app->urlManager->createUrl('oa-goods/update').
-                    '?id=1&typeid=1&pid="+$(this).val(),function(data){
+            $.get("'.yii::$app->urlManager->createUrl('oa-goods/category').
+                    '?typeid=1&pid="+$(this).val(),function(data){
                 var str="";
               $("select#oagoods-subcate").children("option").remove();
               $.each(data,function(k,v){

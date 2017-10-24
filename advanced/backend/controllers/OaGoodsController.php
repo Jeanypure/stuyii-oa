@@ -320,6 +320,8 @@ class OaGoodsController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save(false)) {
+
+//            var_dump($_POST);die;
             //默认值更新到当前行中
             $id = $model->nid;
             $cate = $model->cate;
@@ -329,9 +331,6 @@ class OaGoodsController extends Controller
             //根据类目ID更新类目名称
             $current_model->catNid =$cate;
             $current_model->cate = $cateModel->CategoryName;
-
-            $subCateNameModel = GoodsCats::find()->where(['NID'=>$model->subCate])->one();
-            $current_model->subCate = $subCateNameModel->CategoryName;
 
             $current_model->update(false);
             return $this->redirect(['forward-products']);
@@ -392,8 +391,7 @@ class OaGoodsController extends Controller
             //根据类目ID更新类目名称
             $current_model->catNid =$cate;
             $current_model->cate = $cateModel->CategoryName;
-            $subCateNameModel = GoodsCats::find()->where(['NID'=>$model->subCate])->one();
-            $current_model->subCate = $subCateNameModel->CategoryName;
+
 
             $current_model->update(false);
 
@@ -457,8 +455,8 @@ class OaGoodsController extends Controller
         $model = $this->findModel($id);
 
         $model->checkStatus = '待审批';
-        $model->update(['checkStatus']);
-        return $this->redirect(['index']);
+        $model->update(false);
+        return $this->redirect(['backward-products']);
     }
 
 
@@ -475,8 +473,8 @@ class OaGoodsController extends Controller
         $model = $this->findModel($id);
 
         $model->checkStatus = '待审批';
-        $model->update(['checkStatus']);
-        return $this->redirect(['index']);
+        $model->update(false);
+        return $this->redirect(['forward-products']);
     }
 
 
@@ -734,11 +732,7 @@ class OaGoodsController extends Controller
         $model = $this->findModel($id);
         $model->checkStatus = '待审批';
         $model->update(false);
-        if($model->save(false)){
-            return $this->redirect($type);
-        }else{
-            return "{'msg':'fail'}";
-        }
+        return $this->redirect($type);
 
     }
 
