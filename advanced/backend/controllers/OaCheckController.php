@@ -92,9 +92,16 @@ class OaCheckController extends Controller
         $tail = intval(substr($max_code,2,4)) + 1;
         $zero_bit = substr('0000',0,4-strlen($tail));
         $code = $head.$zero_bit.$tail;
-        $check_oa = Yii::$app->db->createCommand(
-            "select * from b_goodsinfo where "
+        //检查SKU是否已经存在
+        $check_oa_goods = Yii::$app->db->createCommand(
+            "select * from oa_goodsinfo where goodscode= '$code'"
         );
+        $check_b_goods = Yii::$app->db->createCommand(
+            "select * from b_goods where goodscode= '$code'"
+        );
+        if(!(empty($check_oa_goods) && empty($check_b_goods))) {
+            $code = "REPEAT";
+        }
         $nid = $model->nid;
         $img = $model->img;
         $developer = $model->developer;
