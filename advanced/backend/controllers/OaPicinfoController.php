@@ -48,7 +48,7 @@ class OaPicinfoController extends Controller
     public function actionIndex()
     {
         $searchModel = new OaGoodsinfoSearch();
-        $condition = ['achieveStatus'=>'已完善'];
+        $condition = ['<>','picStatus',''];
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$condition);
         return $this->render('index', [
             'searchModel' => $searchModel,
