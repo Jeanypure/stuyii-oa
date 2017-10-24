@@ -47,8 +47,8 @@ $this->registerJs($JS);
             [
                 'prompt'=>'--父类--',
                 'onchange'=>'           
-            $.get("'.yii::$app->urlManager->createUrl('oa-goods/update').
-                    '?id=1&typeid=1&pid="+$(this).val(),function(data){
+            $.get("'.yii::$app->urlManager->createUrl('oa-goods/category').
+                    '?typeid=1&pid="+$(this).val(),function(data){
                 var str="";
               $("select#oagoods-subcate").children("option").remove();
               $.each(data,function(k,v){
@@ -65,14 +65,14 @@ $this->registerJs($JS);
             ]);
         ?>
 
+
+
+
         <?= $form->field($model, 'vendor1')->textInput() ?>
-
-        <?= $form->field($model, 'origin1')->textInput() ?>
-
         <?php echo  $form->field($model, 'vendor2')->textInput() ?>
         <?php echo  $form->field($model, 'vendor3')->textInput() ?>
+        <?= $form->field($model, 'origin1')->textInput() ?>
 
-        <?php echo  $form->field($model, 'origin1')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'origin2')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'origin3')->textInput(['placeholder' => '--选填--']) ?>
 
