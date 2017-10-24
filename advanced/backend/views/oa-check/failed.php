@@ -45,7 +45,7 @@ $('.data-view').on('click',  function () {
             });
 
         });
-
+       
 
 JS;
 $this->registerJs($js);
