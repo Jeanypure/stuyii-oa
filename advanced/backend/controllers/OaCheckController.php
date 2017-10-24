@@ -71,6 +71,7 @@ class OaCheckController extends Controller
         $id = $request['nid'];
         $approvalNote = $request['approvalNote'];
         $model = $this->findModel($id);
+        $cate = $model->cate;
         $_model = new OaGoodsinfo();
         $user = yii::$app->user->identity->username;
         $model ->checkStatus = '已审批';
@@ -79,11 +80,27 @@ class OaCheckController extends Controller
         $model ->updateDate = strftime('%F %T');
         $model->update(false);
         //审批状态改变之后就插入数据到OaGoodsInfo
+        $previous_code = Yii::$app->db->createCommand(
+            "select  isnull(goodscode,'UNKNOWN') as maxCode from b_goods where nid in 
+            (select  max(bgs.nid) from B_Goods as bgs left join B_GoodsCats as bgc
+            on bgs.GoodsCategoryID= bgc.nid where bgc.CategoryParentName='$cate' and len(goodscode)=6 )"
+        )
+            ->queryOne();
+        //按规则生成编码
+        $max_code = $previous_code['maxCode'];
+        $head = substr($max_code,0,2);
+        $tail = intval(substr($max_code,2,4)) + 1;
+        $zero_bit = substr('0000',0,4-strlen($tail));
+        $code = $head.$zero_bit.$tail;
+        $check_oa = Yii::$app->db->createCommand(
+            "select * from b_goodsinfo where "
+        );
         $nid = $model->nid;
         $img = $model->img;
         $developer = $model->developer;
         $_model->isNewRecord = true;
         $_model->goodsid =$nid;
+        $_model->GoodsCode =$code;
         $_model->picUrl = $img;
         $_model->developer =$developer;
         $_model->devDatetime =strftime('%F %T');;

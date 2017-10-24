@@ -385,19 +385,35 @@ $js2 = <<<JS
                 if (key == index) {
                     var property = $(this).val();
                     var property_index = $.inArray(property,properties);
+                    var property2 = properties2[key];
+                    var property3 = properties3[key];
+                    if(property2.replace(/(^s*)|(s*$)/g, "").length ==0){
+                        property2 = ''
+                    }
+                    else {
+                        property2 = '_' + property2; 
+                    }
+                    
+                    if(property3.replace(/(^s*)|(s*$)/g, "").length ==0){
+                        property3 = ''
+                    }
+                    else {
+                        property3 = '_' + property3; 
+                    }
+                    
                     if(property_index>=0){
                         if(property_index + 1 <10) {
                             $(that).val(GoodsCode + '0' + 
-                                        (property_index + 1) + '_' +
-                                        properties2[key] + '_' +
-                                        properties3[key]
+                                        (property_index + 1) +
+                                        property2 +  
+                                        property3 
                                          );
                         }
                         else {
                             $(that).val(GoodsCode + 
-                                        (property_index + 1) + '_' +
-                                        properties2[key] + '_' +
-                                        properties3[key]
+                                       (property_index + 1) +
+                                        property2 +  
+                                        property3 
                                          );
                         }
                     }
