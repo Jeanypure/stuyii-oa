@@ -266,7 +266,7 @@ class CenterFormatter {
 //             centerFormat('developer'),
              centerFormat('introducer'),
              centerFormat('introReason'),
-             centerFormat('devStatus'),
+//             centerFormat('devStatus'),
              centerFormat('checkStatus'),
              centerFormat('approvalNote'),
              centerFormat('createDate'),

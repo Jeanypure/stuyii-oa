@@ -11,14 +11,22 @@ $this->params['breadcrumbs'][] = ['label' => '产品推荐', 'url' => ['index']]
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="oa-goods-view">
-
+    <div>
+        <?= Html::img($model->img,['width'=>100,'height'=>100])?>
+    </div>
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'img',
             'cate',
             'subCate',
-            'vendor1',
+            [
+                'attribute' => 'vendor1',
+                'format' => 'raw',
+                'value' => Html::a("<a target='_blank' href=$model->vendor1>$model->vendor1</a>",$model->vendor1),
+
+            ],
+
 //            'vendor2',
 //            'vendor3',
             'origin1',
@@ -36,7 +44,10 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'hopeRate',
 //            'hopeSale',
 //            'hopeMonthProfit',
+
+
         ],
+
     ]) ?>
 
 </div>
