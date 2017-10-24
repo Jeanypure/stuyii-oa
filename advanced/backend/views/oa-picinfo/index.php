@@ -60,8 +60,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'GoodsCode',
             'GoodsName',
+            'picStatus',
             'developer',
-            'devDatetime',
+            [
+                'attribute' => 'devDatetime',
+                'label'=>'更新时间',
+                'value'=>
+                    function($model){
+                        return  substr($model->devDatetime,0,19);   //主要通过此种方式实现
+                    },
+            ],
             'possessMan2',
         ],
 
