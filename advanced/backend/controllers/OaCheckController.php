@@ -95,10 +95,10 @@ class OaCheckController extends Controller
         //检查SKU是否已经存在
         $check_oa_goods = Yii::$app->db->createCommand(
             "select * from oa_goodsinfo where goodscode= '$code'"
-        );
+        )->queryOne();
         $check_b_goods = Yii::$app->db->createCommand(
             "select * from b_goods where goodscode= '$code'"
-        );
+        )->queryOne();
         if(!(empty($check_oa_goods) && empty($check_b_goods))) {
             $code = "REPEAT";
         }
