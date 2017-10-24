@@ -47,14 +47,14 @@ class OaGoodsSearch extends OaGoods
     public function search($params,$devstatus,$checkStatus)
     {
 //        $query = OaGoods::find()->where(['devStatus'=>$devstatus]);
-        $query = OaGoods::find()->where(['<>','introducer',''])->andWhere(['<>','checkStatus','已作废']);
+        $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])->where(['<>','introducer',''])->andWhere(['<>','checkStatus','已作废']);
 
         if(!empty($checkStatus)){
-            $query = OaGoods::find()->where(['checkStatus'=>$checkStatus]);
+            $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])->where(['checkStatus'=>$checkStatus]);
         }
 
         if($devstatus=='devedUnchecked'){
-            $query = OaGoods::find()->where(['checkStatus'=>'待审批']);
+            $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])->where(['checkStatus'=>'待审批']);
         }
 
         // add conditions that should always apply here
