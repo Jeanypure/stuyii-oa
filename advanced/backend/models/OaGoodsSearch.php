@@ -41,6 +41,8 @@ class OaGoodsSearch extends OaGoods
      */
     public function search($params,$devStatus,$checkStatus)
     {
+
+
         //产品审批状态
         if(!empty($checkStatus)){
             $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])->where(['checkStatus'=>$checkStatus])->andWhere(['<>','checkStatus','已作废']);
@@ -49,9 +51,11 @@ class OaGoodsSearch extends OaGoods
         if(!empty($devStatus)){
             $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])->where(['devStatus'=>$devStatus])->andWhere(['<>','checkStatus','已作废']);
         }
+
+        //已认领产品从推荐消失
         //有推荐人，没作废的产品显示在产品推荐里面。
         if(empty($devStatus) && empty($checkStatus)){
-            $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])->where(['<>','introducer',''])->andWhere(['<>','checkStatus','已作废']);
+            $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])->where(['<>','introducer',''])->andWhere(['<>','checkStatus','已作废'])->andWhere(['=','checkStatus','未认领']);
         }
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
@@ -87,7 +91,6 @@ class OaGoodsSearch extends OaGoods
             ->andFilterWhere(['like', 'developer', $this->developer])
             ->andFilterWhere(['like', 'introducer', $this->introducer])
             ->andFilterWhere(['like', 'introReason', $this->introReason])
-            ->andFilterWhere(['like', 'devStatus', $this->devStatus])
             ->andFilterWhere(['like', 'approvalNote', $this->approvalNote])
             ->andFilterWhere(['like', 'checkStatus', $this->checkStatus]);
         return $dataProvider;

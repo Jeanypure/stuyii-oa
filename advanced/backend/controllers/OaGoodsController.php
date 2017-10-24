@@ -102,7 +102,7 @@ class OaGoodsController extends Controller
                 $current_model->cate = $cateModel->CategoryName;
                 $current_model->devNum = '20'.date('ymd',time()).strval($id);
                 $current_model->devStatus = '';
-                $current_model->checkStatus = '';
+                $current_model->checkStatus = '未认领';
                 $current_model ->introducer = $user;
                 $current_model ->updateDate = strftime('%F %T');
                 $current_model ->createDate = strftime('%F %T');
@@ -136,15 +136,12 @@ class OaGoodsController extends Controller
      * Updates an existing OaGoods model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
-     * @param integer $pid
-     * @param integer $typeid
+     *
      * @return mixed
      */
-    public function actionUpdate($id=0,$pid=0,$typeid=1)
+    public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-
         if ($model->load(Yii::$app->request->post())&&$model->save(false)) {
             //默认值更新到当前行中
             $id = $model->nid;
@@ -154,6 +151,10 @@ class OaGoodsController extends Controller
             //根据类目ID更新类目名称
             $current_model->catNid =$cate;
             $current_model->cate = $cateModel->CategoryName;
+
+            $subCateNameModel = GoodsCats::find()->where(['NID'=>$model->subCate])->one();
+            $current_model->subCate = $subCateNameModel->CategoryName;
+
             $current_model->update(false);
             return $this->redirect(['index']);
         }
@@ -162,20 +163,17 @@ class OaGoodsController extends Controller
             $checkStatus = $model->checkStatus;
             if($checkStatus === '未通过')
             {
-
                 return $this->renderAjax('updateReset', [
                     'model' => $model,
                 ]);
             }
             else {
+
                 $request =Yii::$app->request;
                 if ($request->isGet){
                     $cid = (int)Yii::$app->request->get('pid');
                     $typeid = (int)Yii::$app->request->get('typeid');
                     $model->getCatList($cid);
-
-
-
                     if($typeid == 1){
                         Yii::$app->response->format = Response::FORMAT_JSON;
                         return $model->getCatList($cid);
@@ -186,6 +184,7 @@ class OaGoodsController extends Controller
                 }
 
 
+
             }
 
 
@@ -193,6 +192,7 @@ class OaGoodsController extends Controller
 
         }
     }
+
 
 
     /**
@@ -272,6 +272,8 @@ class OaGoodsController extends Controller
                 //根据类目ID更新类目名称
                 $current_model->catNid =$cate;
                 $current_model->cate = $cateModel->CategoryName;
+                $subCateNameModel = GoodsCats::find()->where(['NID'=>$model->subCate])->one();
+                $current_model->subCate = $subCateNameModel->CategoryName;
                 $current_model->devNum = '20'.date('ymd',time()).strval($id);
                 $current_model->devStatus = '逆向认领';
                 $current_model->checkStatus = '待审批';
@@ -351,6 +353,25 @@ class OaGoodsController extends Controller
         }
     }
 
+    //2级分类
+    public function actionCategory($typeid,$pid){
+        $request =Yii::$app->request;
+        $model = new GoodsCats();
+        if ($request->isGet){
+            $cid = (int)Yii::$app->request->get('pid');
+            $typeid = (int)Yii::$app->request->get('typeid');
+            $model->getCatList($cid);
+            if($typeid == 1){
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return $model->getCatList($cid);
+            }
+            return $this->renderAjax('update', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+
 
     /**
      * Updates an existing OaGoods model.
@@ -367,7 +388,6 @@ class OaGoodsController extends Controller
             $id = $model->nid;
             $cate = $model->cate;
             $cateModel = GoodsCats::find()->where(['nid'=>$cate])->one();
-//            $current_model = $this->findModel($id);
             $current_model = clone $model;
             //根据类目ID更新类目名称
             $current_model->catNid =$cate;
@@ -640,9 +660,10 @@ class OaGoodsController extends Controller
         $model = $this->findModel($id);
         $user = yii::$app->user->identity->username;
         $model ->devStatus = '正向认领';
+        $model ->checkStatus = '已认领';
         $model ->developer = $user;
         $model ->updateDate = strftime('%F %T');
-        $model->update(array('devStatus','developer','updateDate'));
+        $model->update(false);
         return $this->redirect(['index']);
     }
 
@@ -653,9 +674,10 @@ class OaGoodsController extends Controller
         $model = $this->findModel($id);
         $user = yii::$app->user->identity->username;
         $model ->devStatus = '逆向认领';
+        $model ->checkStatus = '已认领';
         $model ->developer = $user;
         $model ->updateDate = strftime('%F %T');
-        $model->update(array('devStatus','developer','updateDate'));
+        $model->update(false);
         return $this->redirect(['index']);
     }
 
@@ -736,6 +758,9 @@ class OaGoodsController extends Controller
        }
         return $this->redirect($type);
     }
+
+
+
 
 
 
