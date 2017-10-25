@@ -238,14 +238,11 @@ class OaGoodsinfoController extends Controller
 
 public function actionInput($id)
 {
-    var_dump($id);die;
-    $input_goods = '';
-    $input_goods_sku = '';
+    $input_goods = "P_OaGoodsToBGoods '{$id}'";
     $connection = Yii::$app->db;
     $trans = $connection->beginTransaction();
     try {
         $connection->createCommand($input_goods)->execute();
-        $connection->createCommand($input_goods_sku)->execute();
         $trans->commit();
     }
     catch (Exception  $e) {
@@ -265,15 +262,12 @@ public function actionInput($id)
 
     public function actionInputLots($ids)
     {
-        var_dump($ids);die;
         foreach($ids as $goods_id){
-            $input_goods = '';
-            $input_goods_sku = '';
+            $input_goods = "P_OaGoodsToBGoods '{$goods_id}'";
             $connection = Yii::$app->db;
             $trans = $connection->beginTransaction();
             try {
                 $connection->createCommand($input_goods)->execute();
-                $connection->createCommand($input_goods_sku)->execute();
                 $trans->commit();
             }
             catch (Exception  $e) {
