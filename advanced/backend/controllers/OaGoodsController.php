@@ -44,7 +44,7 @@ class OaGoodsController extends Controller
     {
         $searchModel = new OaGoodsSearch();
         $model = new OaGoods();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'','');
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, '', '');
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -76,6 +76,7 @@ class OaGoodsController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
+
     /**
      * Creates a new OaGoods model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -83,51 +84,49 @@ class OaGoodsController extends Controller
      * @param integer $typeid
      * @return mixed
      */
-    public function actionCreate($pid=0,$typeid=1)
+    public function actionCreate($pid = 0, $typeid = 1)
     {
         $model = new OaGoods();
 
-        $request =Yii::$app->request;
-        if ($request->isPost)
-        {
-            if($model->load(Yii::$app->request->post()) && $model->save()) {
+        $request = Yii::$app->request;
+        if ($request->isPost) {
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 //默认值更新到当前行中
                 $id = $model->nid;
                 $cate = $model->cate;
-                $cateModel = GoodsCats::find()->where(['nid'=>$cate])->one();
+                $cateModel = GoodsCats::find()->where(['nid' => $cate])->one();
                 $current_model = $this->findModel($id);
                 $user = yii::$app->user->identity->username;
                 //根据类目ID更新类目名称
-                $current_model->catNid =$cate;
+                $current_model->catNid = $cate;
                 $current_model->cate = $cateModel->CategoryName;
-                $current_model->devNum = '20'.date('ymd',time()).strval($id);
+                $current_model->devNum = '20' . date('ymd', time()) . strval($id);
                 $current_model->devStatus = '';
                 $current_model->checkStatus = '未认领';
-                $current_model ->introducer = $user;
-                $current_model ->updateDate = strftime('%F %T');
-                $current_model ->createDate = strftime('%F %T');
-                $current_model->update(array('devStatus','developer','updateDate'));
+                $current_model->introducer = $user;
+                $current_model->updateDate = strftime('%F %T');
+                $current_model->createDate = strftime('%F %T');
+                $current_model->update(array('devStatus', 'developer', 'updateDate'));
                 return $this->redirect(['index']);
-            }
-            else {
+            } else {
 
                 echo "something Wrong!";
             }
 
         }
 
-        if ($request->isGet){
-        $pid = (int)Yii::$app->request->get('pid');
-        $typeid = (int)Yii::$app->request->get('typeid');
-        $model->getCatList($pid);
-        if($typeid == 1){
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return $model->getCatList($pid);
-        }
+        if ($request->isGet) {
+            $pid = (int)Yii::$app->request->get('pid');
+            $typeid = (int)Yii::$app->request->get('typeid');
+            $model->getCatList($pid);
+            if ($typeid == 1) {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return $model->getCatList($pid);
+            }
 
-        return $this->renderAjax('create', [
-            'model' => $model,
-        ]);
+            return $this->renderAjax('create', [
+                'model' => $model,
+            ]);
         }
 
     }
@@ -142,39 +141,36 @@ class OaGoodsController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post())&&$model->save(false)) {
+        if ($model->load(Yii::$app->request->post()) && $model->save(false)) {
             //默认值更新到当前行中
             $id = $model->nid;
             $cate = $model->cate;
-            $cateModel = GoodsCats::find()->where(['nid'=>$cate])->one();
+            $cateModel = GoodsCats::find()->where(['nid' => $cate])->one();
             $current_model = clone $model;
             //根据类目ID更新类目名称
-            $current_model->catNid =$cate;
+            $current_model->catNid = $cate;
             $current_model->cate = $cateModel->CategoryName;
 
-            $subCateNameModel = GoodsCats::find()->where(['NID'=>$model->subCate])->one();
+            $subCateNameModel = GoodsCats::find()->where(['NID' => $model->subCate])->one();
             $current_model->subCate = $subCateNameModel->CategoryName;
 
             $current_model->update(false);
             return $this->redirect(['index']);
-        }
-        else {
+        } else {
             //根据不同的状态返回不同的view
             $checkStatus = $model->checkStatus;
-            if($checkStatus === '未通过')
-            {
+            if ($checkStatus === '未通过') {
                 return $this->renderAjax('updateReset', [
                     'model' => $model,
                 ]);
-            }
-            else {
+            } else {
 
-                $request =Yii::$app->request;
-                if ($request->isGet){
+                $request = Yii::$app->request;
+                if ($request->isGet) {
                     $cid = (int)Yii::$app->request->get('pid');
                     $typeid = (int)Yii::$app->request->get('typeid');
                     $model->getCatList($cid);
-                    if($typeid == 1){
+                    if ($typeid == 1) {
                         Yii::$app->response->format = Response::FORMAT_JSON;
                         return $model->getCatList($cid);
                     }
@@ -184,60 +180,56 @@ class OaGoodsController extends Controller
                 }
 
 
-
             }
-
-
 
 
         }
     }
 
 
-
     /**
      * Creates a new OaGoods model.
+     * @param $type .
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionForwardCreate($pid=0,$typeid=1)
+    public function actionForwardCreate($type = 'create')
     {
         $model = new OaForwardGoods();
 
-        $request =Yii::$app->request;
-        if ($request->isPost)
-        {
-            if($model->load(Yii::$app->request->post()) && $model->save()) {
+        $status = ['create' => '待提交', 'check' => '待审批'];
+        $request = Yii::$app->request;
+        if ($request->isPost) {
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 //默认值更新到当前行中
                 $id = $model->nid;
                 $cate = $model->cate;
-                $cateModel = GoodsCats::find()->where(['nid'=>$cate])->one();
+                $cateModel = GoodsCats::find()->where(['nid' => $cate])->one();
                 $current_model = $this->findModel($id);
                 $user = yii::$app->user->identity->username;
                 //根据类目ID更新类目名称
-                $current_model->catNid =$cate;
+                $current_model->catNid = $cate;
                 $current_model->cate = $cateModel->CategoryName;
-                $current_model->devNum = '20'.date('ymd',time()).strval($id);
+                $current_model->devNum = '20' . date('ymd', time()) . strval($id);
                 $current_model->devStatus = '正向认领';
-                $current_model->checkStatus = '待审批';
-                $current_model ->developer = $user;
-                $current_model ->updateDate = strftime('%F %T');
-                $current_model ->createDate = strftime('%F %T');
-                $current_model->update(array('devStatus','developer','updateDate'));
-                return $this->redirect(['index']);
-            }
-            else {
+                $current_model->checkStatus = $status[$type];
+                $current_model->developer = $user;
+                $current_model->updateDate = strftime('%F %T');
+                $current_model->createDate = strftime('%F %T');
+                $current_model->update(false);
+                return $this->redirect(['forward-products']);
+            } else {
 
                 echo "something Wrong!";
             }
 
         }
 
-        if ($request->isGet){
+        if ($request->isGet) {
             $pid = (int)Yii::$app->request->get('pid');
             $typeid = (int)Yii::$app->request->get('typeid');
             $model->getCatList($pid);
-            if($typeid == 1){
+            if ($typeid == 1) {
                 Yii::$app->response->format = Response::FORMAT_JSON;
                 return $model->getCatList($pid);
             }
@@ -255,46 +247,45 @@ class OaGoodsController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionBackwardCreate($pid=0,$typeid=1)
+    public function actionBackwardCreate($type = 'create')
     {
+        $status = ['create' => '待提交', 'check' => '待审批'];
         $model = new OaBackwardGoods();
 
-        $request =Yii::$app->request;
-        if ($request->isPost)
-        {
-            if($model->load(Yii::$app->request->post()) && $model->save(false)) {
+        $request = Yii::$app->request;
+        if ($request->isPost) {
+            if ($model->load(Yii::$app->request->post()) && $model->save(false)) {
                 //默认值更新到当前行中
                 $id = $model->nid;
                 $cate = $model->cate;
-                $cateModel = GoodsCats::find()->where(['nid'=>$cate])->one();
+                $cateModel = GoodsCats::find()->where(['nid' => $cate])->one();
                 $current_model = $this->findModel($id);
                 $user = yii::$app->user->identity->username;
                 //根据类目ID更新类目名称
-                $current_model->catNid =$cate;
+                $current_model->catNid = $cate;
                 $current_model->cate = $cateModel->CategoryName;
-                $subCateNameModel = GoodsCats::find()->where(['NID'=>$model->subCate])->one();
-                $current_model->subCate = $subCateNameModel->CategoryName;
-                $current_model->devNum = '20'.date('ymd',time()).strval($id);
+//                $subCateNameModel = GoodsCats::find()->where(['NID' => $model->subCate])->one();
+//                $current_model->subCate = $subCateNameModel->CategoryName;
+                $current_model->devNum = '20' . date('ymd', time()) . strval($id);
                 $current_model->devStatus = '逆向认领';
-                $current_model->checkStatus = '待审批';
-                $current_model ->developer = $user;
-                $current_model ->updateDate = strftime('%F %T');
-                $current_model ->createDate = strftime('%F %T');
-                $current_model->update(array('devStatus','developer','updateDate'));
-                return $this->redirect(['index']);
-            }
-            else {
+                $current_model->checkStatus = $status[$type];;
+                $current_model->developer = $user;
+                $current_model->updateDate = strftime('%F %T');
+                $current_model->createDate = strftime('%F %T');
+                $current_model->update(false);
+                return $this->redirect(['backward-products']);
+            } else {
 
                 echo "something Wrong!";
             }
 
         }
 
-        if ($request->isGet){
+        if ($request->isGet) {
             $pid = (int)Yii::$app->request->get('pid');
             $typeid = (int)Yii::$app->request->get('typeid');
             $model->getCatList($pid);
-            if($typeid == 1){
+            if ($typeid == 1) {
                 Yii::$app->response->format = Response::FORMAT_JSON;
                 return $model->getCatList($pid);
             }
@@ -305,8 +296,6 @@ class OaGoodsController extends Controller
         }
 
     }
-
-
 
 
     /**
@@ -323,27 +312,26 @@ class OaGoodsController extends Controller
             //默认值更新到当前行中
             $id = $model->nid;
             $cate = $model->cate;
-            $cateModel = GoodsCats::find()->where(['nid'=>$cate])->one();
+            $cateModel = GoodsCats::find()->where(['nid' => $cate])->one();
             //$current_model = $this->findModel($id);
             $current_model = clone $model;
             //根据类目ID更新类目名称
-            $current_model->catNid =$cate;
+            $current_model->catNid = $cate;
             $current_model->cate = $cateModel->CategoryName;
 
-            $subCateNameModel = GoodsCats::find()->where(['NID'=>$model->subCate])->one();
+            $subCateNameModel = GoodsCats::find()->where(['NID' => $model->subCate])->one();
             $current_model->subCate = $subCateNameModel->CategoryName;
 
             $current_model->update(false);
             return $this->redirect(['forward-products']);
         } else {
-        // 根据不同的产品状态返回不同的view
+            // 根据不同的产品状态返回不同的view
             $status = $model->checkStatus;
-            if($status == '未通过') {
+            if ($status == '未通过') {
                 return $this->renderAjax('forwardUpdateReset', [
                     'model' => $model,
                 ]);
-            }
-            else {
+            } else {
                 return $this->renderAjax('forwardUpdate', [
                     'model' => $model,
                 ]);
@@ -354,14 +342,15 @@ class OaGoodsController extends Controller
     }
 
     //2级分类
-    public function actionCategory($typeid,$pid){
-        $request =Yii::$app->request;
+    public function actionCategory($typeid, $pid)
+    {
+        $request = Yii::$app->request;
         $model = new GoodsCats();
-        if ($request->isGet){
+        if ($request->isGet) {
             $cid = (int)Yii::$app->request->get('pid');
             $typeid = (int)Yii::$app->request->get('typeid');
             $model->getCatList($cid);
-            if($typeid == 1){
+            if ($typeid == 1) {
                 Yii::$app->response->format = Response::FORMAT_JSON;
                 return $model->getCatList($cid);
             }
@@ -370,7 +359,6 @@ class OaGoodsController extends Controller
             ]);
         }
     }
-
 
 
     /**
@@ -387,12 +375,12 @@ class OaGoodsController extends Controller
             //默认值更新到当前行中
             $id = $model->nid;
             $cate = $model->cate;
-            $cateModel = GoodsCats::find()->where(['nid'=>$cate])->one();
+            $cateModel = GoodsCats::find()->where(['nid' => $cate])->one();
             $current_model = clone $model;
             //根据类目ID更新类目名称
-            $current_model->catNid =$cate;
+            $current_model->catNid = $cate;
             $current_model->cate = $cateModel->CategoryName;
-            $subCateNameModel = GoodsCats::find()->where(['NID'=>$model->subCate])->one();
+            $subCateNameModel = GoodsCats::find()->where(['NID' => $model->subCate])->one();
             $current_model->subCate = $subCateNameModel->CategoryName;
 
             $current_model->update(false);
@@ -401,12 +389,11 @@ class OaGoodsController extends Controller
         } else {
             // 根据不同的产品状态返回不同的view
             $status = $model->checkStatus;
-            if($status == '未通过') {
+            if ($status == '未通过') {
                 return $this->renderAjax('backwardUpdateReset', [
                     'model' => $model,
                 ]);
-            }
-            else {
+            } else {
                 return $this->renderAjax('backwardUpdate', [
                     'model' => $model,
                 ]);
@@ -415,6 +402,7 @@ class OaGoodsController extends Controller
 
         }
     }
+
     /**
      * Deletes an existing OaGoods model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -430,11 +418,11 @@ class OaGoodsController extends Controller
 
 
     /**
- * Recheck an existing OaGoods model.
- * If deletion is successful, the browser will be redirected to the 'index' page.
- * @param integer $id
- * @return mixed
- */
+     * Recheck an existing OaGoods model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
     public function actionRecheck($id)
     {
 
@@ -460,7 +448,6 @@ class OaGoodsController extends Controller
         $model->update(['checkStatus']);
         return $this->redirect(['index']);
     }
-
 
 
     /**
@@ -535,11 +522,10 @@ class OaGoodsController extends Controller
      * @param null
      * @return mixed
      */
-    public  function  actionDeleteLots()
+    public function actionDeleteLots()
     {
         $ids = yii::$app->request->post()["id"];
-        foreach ($ids as $id)
-        {
+        foreach ($ids as $id) {
             $this->findModel($id)->delete();
         }
         return $this->redirect(['index']);
@@ -557,12 +543,12 @@ class OaGoodsController extends Controller
 //        $outfile='template.xlsx';
 //        header('Content-type: application/octet-stream; charset=utf8');
         $template = htmlspecialchars_decode(file_get_contents('template.csv'));
-        $outfile='template.csv';
+        $outfile = 'template.csv';
         $template = htmlspecialchars_decode(file_get_contents('template.csv'));
-        $outfile='template.csv';
+        $outfile = 'template.csv';
         header('Content-type: application/octet-stream; charset=GB2312');
         Header("Accept-Ranges: bytes");
-        header('Content-Disposition: attachment; filename='.$outfile);
+        header('Content-Disposition: attachment; filename=' . $outfile);
         echo $template;
         exit();
     }
@@ -597,31 +583,29 @@ class OaGoodsController extends Controller
         $user = yii::$app->user->identity->username;
         $data = Yii::$app->request->post('data');
         $data = str_replace("*", '', $data);// 把标题中的星号去掉
-        $rows = json_decode($data,true)['data'];
-        foreach ($rows as $row)
-        {
+        $rows = json_decode($data, true)['data'];
+        foreach ($rows as $row) {
             $_model = clone $model;
             $_model->setAttributes($row);
-            if($_model->save())
-            {
+            if ($_model->save()) {
                 $id = $_model->nid;
                 $current_model = $this->findModel($id);
-                $current_model->devNum = '20'.date('ymd',time()).strval($id);
+                $current_model->devNum = '20' . date('ymd', time()) . strval($id);
                 $current_model->devStatus = '';
                 $current_model->checkStatus = '';
-                $current_model ->introducer = $user;
-                $current_model ->updateDate = strftime('%F %T');
-                $current_model ->createDate = strftime('%F %T');
-                $current_model->update(array('devStatus','developer','updateDate'));
+                $current_model->introducer = $user;
+                $current_model->updateDate = strftime('%F %T');
+                $current_model->createDate = strftime('%F %T');
+                $current_model->update(array('devStatus', 'developer', 'updateDate'));
 
-            }
-            else {
+            } else {
 
             }
         }
         return $this->redirect(['index']);
 
     }
+
     /**
      *   generate uploading templates with PHPExcel
      * @param null
@@ -647,7 +631,7 @@ class OaGoodsController extends Controller
     {
         $model = $this->findModel($id);
 
-        return $this->renderAjax('heart',[
+        return $this->renderAjax('heart', [
             'model' => $model,
         ]);
     }
@@ -659,10 +643,10 @@ class OaGoodsController extends Controller
     {
         $model = $this->findModel($id);
         $user = yii::$app->user->identity->username;
-        $model ->devStatus = '正向认领';
-        $model ->checkStatus = '已认领';
-        $model ->developer = $user;
-        $model ->updateDate = strftime('%F %T');
+        $model->devStatus = '正向认领';
+        $model->checkStatus = '已认领';
+        $model->developer = $user;
+        $model->updateDate = strftime('%F %T');
         $model->update(false);
         return $this->redirect(['index']);
     }
@@ -673,10 +657,10 @@ class OaGoodsController extends Controller
     {
         $model = $this->findModel($id);
         $user = yii::$app->user->identity->username;
-        $model ->devStatus = '逆向认领';
-        $model ->checkStatus = '已认领';
-        $model ->developer = $user;
-        $model ->updateDate = strftime('%F %T');
+        $model->devStatus = '逆向认领';
+        $model->checkStatus = '已认领';
+        $model->developer = $user;
+        $model->updateDate = strftime('%F %T');
         $model->update(false);
         return $this->redirect(['index']);
     }
@@ -686,7 +670,7 @@ class OaGoodsController extends Controller
     public function actionForwardProducts()
     {
         $searchModel = new OaGoodsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'正向认领','');
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, '正向认领', '');
 
         return $this->render('forwardProducts', [
             'searchModel' => $searchModel,
@@ -698,13 +682,14 @@ class OaGoodsController extends Controller
     public function actionBackwardProducts()
     {
         $searchModel = new OaGoodsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'逆向认领','');
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, '逆向认领', '');
 
         return $this->render('backwardProducts', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
+
     /**
      * Finds the OaGoods model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -722,21 +707,22 @@ class OaGoodsController extends Controller
     }
 
 
-/**
- * commit and approve
- * @param integer $id
- * @return string {'msg':'OK'} or {'msg':'fail'}
- *
- */
+    /**
+     * commit and approve
+     * @param integer $id
+     * @return string {'msg':'OK'} or {'msg':'fail'}
+     *
+     */
 
-    public function actionApprove($id,$type){
+    public function actionApprove($id, $type)
+    {
 
         $model = $this->findModel($id);
         $model->checkStatus = '待审批';
         $model->update(false);
-        if($model->save(false)){
+        if ($model->save(false)) {
             return $this->redirect($type);
-        }else{
+        } else {
             return "{'msg':'fail'}";
         }
 
@@ -747,28 +733,21 @@ class OaGoodsController extends Controller
      * @param $module []
      * @return mixed approve-lots
      */
-    public function  actionApproveLots(){
-       $ids = yii::$app->request->post()["id"];
+    public function actionApproveLots()
+    {
+        $ids = yii::$app->request->post()["id"];
         $type = yii::$app->request->post()["type"];
 
-       foreach ($ids as $id){
-           $model = $this->findModel($id);
-           $model->checkStatus ='待审批';
-           $model->update(false);
+        foreach ($ids as $id) {
+            $model = $this->findModel($id);
+            $model->checkStatus = '待审批';
+            $model->update(false);
 
-       }
+        }
         return $this->redirect($type);
     }
-
-
-
-
-
-
-
-
-
-
-
-
 }
+
+
+
+

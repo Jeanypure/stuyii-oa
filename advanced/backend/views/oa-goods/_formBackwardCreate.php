@@ -8,11 +8,31 @@ use yii\helpers\ArrayHelper;
 /* @var $this yii\web\View */
 /* @var $model backend\models\OaGoods */
 /* @var $form yii\widgets\ActiveForm */
+
+$js = <<<JS
+
+//创建提交审核事件
+$('#create-to-check').on('click',function() {
+    var form = $('#create-form');
+        form.attr('action', '/oa-goods/backward-create?type=check');
+        form.submit();
+});
+
+
+
+
+JS;
+$this->registerJs($js);
 ?>
 
 <div class="oa-goods-form">
 
     <?php $form = ActiveForm::begin(
+        [
+            'id' => 'create-form',
+            'method' => 'post',
+//            'name' => 'oa-forward-create-form'
+        ]
     ); ?>
 
     <?php echo  $form->field($model, 'img',['template' => "<font color='red'>*{label}</font>\n<div >{input}</div>\n<div >{error}</div>",])->textInput(['placeholder' => '--必填--']) ?>
@@ -62,6 +82,7 @@ use yii\helpers\ArrayHelper;
 
     <div class="form-group">
         <?= Html::submitButton('创建', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::button('创建并提交审批', ['id' => 'create-to-check', 'class' => 'btn btn-info']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
