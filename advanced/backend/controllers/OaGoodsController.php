@@ -268,6 +268,7 @@ class OaGoodsController extends Controller
 //                $current_model->subCate = $subCateNameModel->CategoryName;
                 $current_model->devNum = '20' . date('ymd', time()) . strval($id);
                 $current_model->devStatus = '逆向认领';
+
                 $current_model->checkStatus = $status[$type];;
                 $current_model->developer = $user;
                 $current_model->updateDate = strftime('%F %T');
@@ -275,7 +276,6 @@ class OaGoodsController extends Controller
                 $current_model->update(false);
                 return $this->redirect(['backward-products']);
             } else {
-
                 echo "something Wrong!";
             }
 
@@ -309,6 +309,8 @@ class OaGoodsController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save(false)) {
+
+//            var_dump($_POST);die;
             //默认值更新到当前行中
             $id = $model->nid;
             $cate = $model->cate;
@@ -318,10 +320,6 @@ class OaGoodsController extends Controller
             //根据类目ID更新类目名称
             $current_model->catNid = $cate;
             $current_model->cate = $cateModel->CategoryName;
-
-            $subCateNameModel = GoodsCats::find()->where(['NID' => $model->subCate])->one();
-            $current_model->subCate = $subCateNameModel->CategoryName;
-
             $current_model->update(false);
             return $this->redirect(['forward-products']);
         } else {
@@ -380,8 +378,8 @@ class OaGoodsController extends Controller
             //根据类目ID更新类目名称
             $current_model->catNid = $cate;
             $current_model->cate = $cateModel->CategoryName;
-            $subCateNameModel = GoodsCats::find()->where(['NID' => $model->subCate])->one();
-            $current_model->subCate = $subCateNameModel->CategoryName;
+
+
 
             $current_model->update(false);
 
@@ -445,8 +443,8 @@ class OaGoodsController extends Controller
         $model = $this->findModel($id);
 
         $model->checkStatus = '待审批';
-        $model->update(['checkStatus']);
-        return $this->redirect(['index']);
+        $model->update(false);
+        return $this->redirect(['backward-products']);
     }
 
 
@@ -462,8 +460,8 @@ class OaGoodsController extends Controller
         $model = $this->findModel($id);
 
         $model->checkStatus = '待审批';
-        $model->update(['checkStatus']);
-        return $this->redirect(['index']);
+        $model->update(false);
+        return $this->redirect(['forward-products']);
     }
 
 
@@ -725,6 +723,7 @@ class OaGoodsController extends Controller
         } else {
             return "{'msg':'fail'}";
         }
+
 
     }
 

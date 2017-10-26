@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = '更新';
 
 $catNid = $model->catNid;
 $subCate = $model->subCate;
-$reCheckUrl = Url::toRoute('backward-recheck');
+$reCheckUrl = Url::toRoute('forward-recheck');
 $trashUrl = Url::toRoute('backward-trash');
 $JS = <<<JS
 
@@ -57,7 +57,7 @@ $this->registerJs($JS);
             [
                 'prompt'=>'--父类--',
                 'onchange'=>'           
-            $.get("'.yii::$app->urlManager->createUrl('oa-goods/update').
+            $.get("'.yii::$app->urlManager->createUrl('oa-goods/category').
                     '?id=1&typeid=1&pid="+$(this).val(),function(data){
                 var str="";
               $("select#oagoods-subcate").children("option").remove();
