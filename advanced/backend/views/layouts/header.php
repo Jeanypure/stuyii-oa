@@ -234,9 +234,9 @@ use yii\helpers\Html;
                         <img src="<?= $directoryAsset ?>/img/user4-128x128.jpg" class="user-image" alt="User Image"/>
                         <span class="hidden-xs"><?= Yii::$app->user->identity->username ?></span>
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu" >
                         <!-- User image -->
-                        <li class="user-header">
+                        <li class="user-header" >
                             <img src="<?= $directoryAsset ?>/img/user4-128x128.jpg" class="img-circle"
                                  alt="User Image"/>
 
