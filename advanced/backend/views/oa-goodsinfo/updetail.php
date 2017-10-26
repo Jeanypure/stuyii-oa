@@ -278,6 +278,8 @@ Modal::begin([
 
 $requestUrl = Url::toRoute(['/goodssku/create','id'=>$info->pid]);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
 $requestUrl2 = Url::toRoute(['/goodssku/update']);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
+$inputUrl = Url::toRoute(['input']);
+
 
 $js2 = <<<JS
 
@@ -492,7 +494,7 @@ $js2 = <<<JS
    
 // 导入普源事件
     $('#data-input').on('click', function() {
-      alert('导入普源'); 
+        $.get('{$inputUrl}',{id:'{$pid}');
     })
 
 

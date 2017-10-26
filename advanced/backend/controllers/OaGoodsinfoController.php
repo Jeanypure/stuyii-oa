@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use PHPUnit\Framework\Exception;
 use Yii;
 use yii\base\Model;
 use backend\models\OaGoodsinfo;
@@ -228,8 +229,53 @@ class OaGoodsinfoController extends Controller
         return $data;
     }
 
+/**
+ * input to py
+ * @para $id
+ * return mixed
+ *
+ */
+
+public function actionInput($id)
+{
+    $input_goods = "P_OaGoodsToBGoods '{$id}'";
+    $connection = Yii::$app->db;
+    $trans = $connection->beginTransaction();
+    try {
+        $connection->createCommand($input_goods)->execute();
+        $trans->commit();
+    }
+    catch (Exception  $e) {
+        $trans->rollBack();
+    }
+    echo '{"msg":"Inputing Done"}';
+}
 
 
+
+    /**
+     * input to py
+     * @para $ids
+     * return mixed
+     *
+     */
+
+    public function actionInputLots($ids)
+    {
+        foreach($ids as $goods_id){
+            $input_goods = "P_OaGoodsToBGoods '{$goods_id}'";
+            $connection = Yii::$app->db;
+            $trans = $connection->beginTransaction();
+            try {
+                $connection->createCommand($input_goods)->execute();
+                $trans->commit();
+            }
+            catch (Exception  $e) {
+                $trans->rollBack();
+            }
+        }
+        echo '{"msg":"Inputted Done!"}';
+    }
 
 
 }

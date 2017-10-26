@@ -84,7 +84,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'GoodsName',
             'developer',
-            'devDatetime',
+            [
+                'attribute' => 'devDatetime',
+                'label'=>'更新时间',
+                'value'=>
+                    function($model){
+                        return  substr($model->devDatetime,0,19);   //主要通过此种方式实现
+                    },
+            ],
             'AliasCnName',
             'AliasEnName',
 
@@ -135,7 +142,11 @@ Modal::begin([
 ]);
 //echo
 Modal::end();
+
 $viewUrl = Url::toRoute('view');
+$inputUrl = Url::toRoute('input');
+$inputLotsUrl = Url::toRoute('input-lots');
+
 $js = <<<JS
 
 
@@ -151,14 +162,26 @@ $('.index-view').on('click',  function () {
 
 //单个导入普源
 $('.index-input').on('click', function() {
-    alert("I am here!");
+    $.get('{$inputUrl}',  { id: $(this).closest('tr').data('key') },
+            function (data) {
+                // $('.modal-body').html(data);
+                alert.log("Nice");
+            }
+        );
 });
 
 
 //批量导入普源
 $('#input-lots').on('click', function() {
     ids = $('#oa-goodsinfo').yiiGridView('getSelectedRows');
-    console.log(ids);
+    $.ajax({
+           url: '{$inputLotsUrl}',
+           type:"post",
+           data:{id:ids},
+           success:function(res){
+                console.log("yeah lots inputted!");
+           }
+        });
 });
 
 

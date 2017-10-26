@@ -95,6 +95,18 @@ class CenterFormatter {
 
             ];
         }
+        if (strpos(strtolower($this->name), 'date') || strpos(strtolower($this->name), 'time')) {
+            return [
+                'attribute' => $this->name,
+                'value' => function($data) {
+                    return "<span class='cell'>".substr($data[$this->name],0,19)."</span>";
+
+                },
+                'format' => 'raw',
+
+            ];
+
+        }
         return  [
             'attribute' => $this->name,
             'value' => function($data) {
