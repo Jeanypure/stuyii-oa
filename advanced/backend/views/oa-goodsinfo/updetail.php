@@ -473,11 +473,27 @@ $js2 = <<<JS
     }); 
  
 // 保存并完善的提交按钮
-    $('#save-complete').on('click',function() {
-        var form = $('#sku-info');
-        form.attr('action', '/goodssku/save-complete?pid={$pid}&type=goods-info');
-        form.submit();
-    }); 
+//    $('#save-complete').on('click',function() {
+//        var form = $('#sku-info');
+//        form.attr('action', '/goodssku/save-complete?pid={$pid}&type=goods-info');
+//        form.submit();
+//    }); 
+
+// 保存并完善改为Ajax方式
+    $('#save-complete').on('click', function() {
+        $.ajax({
+                cache: true,
+                type: "POST",
+                url:'/goodssku/save-complete?pid={$pid}&type=goods-info',
+                data:$('#sku-info').serialize(),
+                // async: false,
+                
+                success: function(data) {
+                    alert(data);
+                }
+            });
+    });
+
 
     $('#create').on('click', function () {
         $.get('{$requestUrl}', {},
