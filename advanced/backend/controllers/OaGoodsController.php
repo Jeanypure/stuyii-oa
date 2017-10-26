@@ -276,7 +276,7 @@ class OaGoodsController extends Controller
                 $current_model->subCate = $subCateNameModel->CategoryName;
                 $current_model->devNum = '20'.date('ymd',time()).strval($id);
                 $current_model->devStatus = '逆向认领';
-                $current_model->checkStatus = '待审批';
+                $current_model->checkStatus = '待提交';
                 $current_model ->developer = $user;
                 $current_model ->updateDate = strftime('%F %T');
                 $current_model ->createDate = strftime('%F %T');
