@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\helpers\Url;
+use kartik\dialog\Dialog;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\OaGoodsSearch */
@@ -28,6 +29,18 @@ $viewUrl = Url::toRoute('view');
 $updateUrl = Url::toRoute('update');
 $createUrl = Url::toRoute('create');
 $js = <<<JS
+//删除按钮
+    $('.index-delete').on('click',  function () {
+     self = this;
+     krajeeDialog.confirm("确定删除此条记录?", function (result) {
+        
+        if (result) {
+            id = $(self).closest('tr').data('key');
+            $.post('delete',{id:id,type:'index-products'},function() {
+            });
+            }
+            });
+        });
     // 批量作废
     $('.delete-lots').on('click',function() {
     var ids = $("#oa-goods").yiiGridView("getSelectedRows");
@@ -217,6 +230,15 @@ class CenterFormatter {
                 'class' => 'kartik\grid\ActionColumn',
                 'template' =>'{view} {update} {delete} {heart}',
                 'buttons' => [
+                    'delete' => function ($url, $model, $key) {
+                        $options = [
+                            'title' => '删除',
+                            'aria-label' => '删除',
+                            'data-id' => $key,
+                            'class' => 'index-delete',
+                        ];
+                        return Html::a('<span  class="glyphicon glyphicon-trash"></span>', '#', $options);
+                    },
                     'view' => function ($url, $model, $key) {
                         $options = [
                             'title' => '查看',

@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\helpers\Url;
+use kartik\dialog\Dialog;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\OaGoodsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -39,7 +40,19 @@ $('.backward-view').on('click',  function () {
             }
         );
     });
-
+    
+//删除按钮
+$('.backward-delete').on('click',  function () {
+     self = this;
+     krajeeDialog.confirm("确定删除此条记录?", function (result) {
+        
+        if (result) {
+            id = $(self).closest('tr').data('key');
+            $.post('delete',{id:id,type:'backward-products'},function() {
+            });
+            }
+            });
+        });
 //更新框
 $('.backward-update').on('click',  function () {
         $('.modal-body').children('div').remove();
@@ -216,6 +229,15 @@ function centerFormat($name) {
                 'template' =>'{view} {update} {delete} {approve}',
                 'buttons' => [
 
+                    'delete' => function ($url, $model, $key) {
+                        $options = [
+                            'title' => '删除',
+                            'aria-label' => '删除',
+                            'data-id' => $key,
+                            'class' => 'backward-delete',
+                        ];
+                        return Html::a('<span  class="glyphicon glyphicon-trash"></span>', '#', $options);
+                    },
                     'view' => function ($url, $model, $key) {
                         $options = [
                             'title' => '查看',

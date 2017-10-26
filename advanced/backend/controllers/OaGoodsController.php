@@ -414,15 +414,21 @@ class OaGoodsController extends Controller
     /**
      * Deletes an existing OaGoods model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param integer $id, $type string
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionDelete()
     {
+        $id = $_POST['id'];
+        $type = $_POST['type'];
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect([$type]);
     }
+
+
+
+
 
 
     /**
