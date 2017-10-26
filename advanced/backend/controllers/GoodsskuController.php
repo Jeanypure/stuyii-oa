@@ -237,7 +237,7 @@ class GoodsskuController extends Controller
                     $this->redirect(['oa-goodsinfo/index']);
                     $this->redirect(['oa-picinfo/update','id'=>$pid]);
 
-                }   
+                }
 
 
             }
