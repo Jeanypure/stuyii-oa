@@ -239,16 +239,19 @@ class OaGoodsinfoController extends Controller
 public function actionInput($id)
 {
     $input_goods = "P_OaGoodsToBGoods '{$id}'";
+    $udpate_status = "update oa_goodsinfo set achieveStatus='已导入'";
     $connection = Yii::$app->db;
     $trans = $connection->beginTransaction();
     try {
         $connection->createCommand($input_goods)->execute();
+        $connection->createCommand($udpate_status)->execute();
         $trans->commit();
+        echo "导入成功";
     }
     catch (Exception  $e) {
         $trans->rollBack();
     }
-    echo '{"msg":"Inputing Done"}';
+    echo "导入失败";
 }
 
 
@@ -262,19 +265,24 @@ public function actionInput($id)
 
     public function actionInputLots($ids)
     {
+        $connection = Yii::$app->db;
+        $udpate_status = "update oa_goodsinfo set achieveStatus='已导入'";
+        $trans = $connection->beginTransaction();
         foreach($ids as $goods_id){
             $input_goods = "P_OaGoodsToBGoods '{$goods_id}'";
-            $connection = Yii::$app->db;
-            $trans = $connection->beginTransaction();
             try {
                 $connection->createCommand($input_goods)->execute();
+                $connection->createCommand($udpate_status)->execute();
                 $trans->commit();
             }
             catch (Exception  $e) {
                 $trans->rollBack();
+                echo "批量导入失败";
+                break;
             }
         }
-        echo '{"msg":"Inputted Done!"}';
+        echo "批量导入成功";
+
     }
 
 
