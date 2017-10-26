@@ -132,6 +132,7 @@ echo Select2::widget([
     ],
 ]);
 
+
 ?>
 <?php
     echo Html::submitButton($info->isNewRecord ? '创建' : '更新', ['class' => $info->isNewRecord ? 'btn btn-success' : 'btn btn-info']);
@@ -429,7 +430,6 @@ $js2 = <<<JS
            
     }); 
     
-    //写入颜色 大小
     
     
     
@@ -494,7 +494,7 @@ $js2 = <<<JS
    
 // 导入普源事件
     $('#data-input').on('click', function() {
-        $.get('{$inputUrl}',{id:'{$pid}');
+        $.get('{$inputUrl}',{id:'{$pid}'});
     })
 
 

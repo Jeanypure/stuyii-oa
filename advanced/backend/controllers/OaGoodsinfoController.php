@@ -104,7 +104,6 @@ class OaGoodsinfoController extends Controller
         }
 
         if($info->load(Yii::$app->request->post())){
-//            var_dump($_POST);die;
             if (!empty($_POST['DictionaryName'])){
                 $info->DictionaryName = implode(',',$_POST['DictionaryName']);
             }
@@ -114,6 +113,7 @@ class OaGoodsinfoController extends Controller
         }else{
 
             $data = $this->actionSelectParam();
+
             $dataProvider = new ActiveDataProvider([
                 'query' => Goodssku::find()->where(['pid'=>$id]),
                 'pagination' => [
