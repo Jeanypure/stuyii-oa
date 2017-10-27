@@ -42,7 +42,7 @@ class OaGoods extends GoodsCats
                 'developer','introducer','introReason','devStatus','checkStatus',
                 'salePrice','hopeWeight','hopeRate','hopeSale',
                 'hopeMonthProfit','createDate','updateDate','approvalNote'],'string'],
-            [['cate', 'subCate',],'safe']
+            [['cate', 'subCate','salePrice','hopeWeight','hopeRate','hopeSale',],'safe']
 
         ];
     }
