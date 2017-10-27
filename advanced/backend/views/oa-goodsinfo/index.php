@@ -160,16 +160,19 @@ $('.index-view').on('click',  function () {
         );
     });
 
+
 //单个导入普源
 $('.index-input').on('click', function() {
-    $.get('{$inputUrl}',  { id: $(this).closest('tr').data('key') },
-            function (data) {
-                // $('.modal-body').html(data);
-                alert.log("Nice");
-            }
-        );
+    id = $(this).closest('tr').data('key')
+    $.ajax({
+        url: '{$inputUrl}',
+        type: "get",
+        data: {id:id},
+        success:function(res) {
+            alert(res);
+        }
+    })
 });
-
 
 //批量导入普源
 $('#input-lots').on('click', function() {
@@ -179,7 +182,7 @@ $('#input-lots').on('click', function() {
            type:"post",
            data:{id:ids},
            success:function(res){
-                console.log("yeah lots inputted!");
+                alert(res);
            }
         });
 });

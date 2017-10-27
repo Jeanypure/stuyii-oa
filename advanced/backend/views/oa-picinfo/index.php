@@ -12,7 +12,7 @@ use yii\helpers\Url;
 $this->title = '图片信息';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
+<?php echo '<br>'?>
 <div class="oa-goodsinfo-index">
 
 

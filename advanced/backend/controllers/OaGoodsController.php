@@ -5,6 +5,7 @@ namespace backend\controllers;
 use backend\models\GoodsCats;
 use backend\models\OaForwardGoods;
 use backend\models\OaBackwardGoods;
+use PHPUnit\Framework\Exception;
 use Yii;
 use backend\models\OaGoods;
 use backend\models\OaGoodsSearch;
@@ -308,19 +309,24 @@ class OaGoodsController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save(false)) {
+        if ($model->load(Yii::$app->request->post()) ) {
 
 //            var_dump($_POST);die;
             //默认值更新到当前行中
-            $id = $model->nid;
-            $cate = $model->cate;
-            $cateModel = GoodsCats::find()->where(['nid' => $cate])->one();
-            //$current_model = $this->findModel($id);
-            $current_model = clone $model;
+            $sub_cate = $model->subCate;
+            try {
+
+                $cateModel = GoodsCats::find()->where(['nid' => $sub_cate])->one();
+            }
+            catch (\Exception $e) {
+                $cateModel = GoodsCats::find()->where(['CategoryName' => $sub_cate])->one();
+            }
+
             //根据类目ID更新类目名称
-            $current_model->catNid = $cate;
-            $current_model->cate = $cateModel->CategoryName;
-            $current_model->update(false);
+            $model->catNid = $cateModel->CategoryParentID;
+            $model->cate = $cateModel->CategoryParentName;
+            $model->subCate = $cateModel->CategoryName;
+            $model->save(false);
             return $this->redirect(['forward-products']);
         } else {
             // 根据不同的产品状态返回不同的view
@@ -369,20 +375,24 @@ class OaGoodsController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) ) {
             //默认值更新到当前行中
-            $id = $model->nid;
             $cate = $model->cate;
             $cateModel = GoodsCats::find()->where(['nid' => $cate])->one();
-            $current_model = clone $model;
             //根据类目ID更新类目名称
-            $current_model->catNid = $cate;
-            $current_model->cate = $cateModel->CategoryName;
+        $sub_cate = $model->subCate;
+        try {
+            $cateModel = GoodsCats::find()->where(['nid' => $sub_cate])->one();
+        }
+        catch (\Exception $e) {
+            $cateModel = GoodsCats::find()->where(['CategoryName' => $sub_cate])->one();
+        }
 
-
-
-            $current_model->update(false);
-
+        //根据类目ID更新类目名称
+        $model->catNid = $cateModel->CategoryParentID;
+        $model->cate = $cateModel->CategoryParentName;
+        $model->subCate = $cateModel->CategoryName;
+        $model->save(false);
             return $this->redirect(['backward-products']);
         } else {
             // 根据不同的产品状态返回不同的view
@@ -404,15 +414,21 @@ class OaGoodsController extends Controller
     /**
      * Deletes an existing OaGoods model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param integer $id, $type string
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionDelete()
     {
+        $id = $_POST['id'];
+        $type = $_POST['type'];
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect([$type]);
     }
+
+
+
+
 
 
     /**

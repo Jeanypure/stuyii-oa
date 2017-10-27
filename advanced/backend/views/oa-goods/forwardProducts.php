@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\helpers\Url;
+use kartik\dialog\Dialog;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\OaGoodsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -29,6 +30,8 @@ $createUrl = Url::toRoute('forward-create');
 //$approve = Url::toRoute('approve');
 
 $js = <<<JS
+$('.glyphicon-eye-open').addClass('icon-cell');
+$('.wrapper').addClass('body-color');
 // 查看框
 $('.forward-view').on('click',  function () {
         $('.modal-body').children('div').remove();
@@ -39,6 +42,19 @@ $('.forward-view').on('click',  function () {
         );
     });
 
+//删除按钮
+$('.forward-delete').on('click',  function () {
+     self = this;
+     krajeeDialog.confirm("确定删除此条记录?", function (result) {
+        
+        if (result) {
+            id = $(self).closest('tr').data('key');
+            $.post('delete',{id:id,type:'forward-products'},function() {
+            });
+            }
+            });
+        });
+    
 //更新框
 $('.forward-update').on('click',  function () {
         $('.modal-body').children('div').remove();
@@ -221,7 +237,15 @@ function centerFormat($name) {
             [ 'class' => 'kartik\grid\ActionColumn',
                 'template' =>'{view} {update} {delete} {approve}',
                 'buttons' => [
-
+                    'delete' => function ($url, $model, $key) {
+                        $options = [
+                            'title' => '删除',
+                            'aria-label' => '删除',
+                            'data-id' => $key,
+                            'class' => 'forward-delete',
+                        ];
+                        return Html::a('<span  class="glyphicon glyphicon-trash"></span>', '#', $options);
+                    },
                     'view' => function ($url, $model, $key) {
                         $options = [
                             'title' => '查看',
@@ -284,13 +308,3 @@ function centerFormat($name) {
     ]); ?>
 </div>
 
-<!--<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>-->
-
-<script src="https://cdn.bootcss.com/jquery/3.2.0/jquery.min.js"></script>
-
-<script>
-    $(function () {
-        $('.glyphicon-eye-open').addClass('icon-cell');
-        $('.wrapper').addClass('body-color');
-        });
-</script>

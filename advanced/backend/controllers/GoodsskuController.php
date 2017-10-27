@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use PHPUnit\Framework\Exception;
 use Yii;
 use yii\base\Model;
 use backend\models\Goodssku;
@@ -207,15 +208,26 @@ class GoodsskuController extends Controller
                     //更新产品状态
                     $goods_model = OaGoodsinfo::find()->where(['pid' => $pid])->one();
                     $developer = $goods_model ->developer;
-                    $rules_model = OaSysRules::find()->where(['ruleKey' => $developer])->one();
-                    $arc = $rules_model->ruleValue;
-                    $goods_model ->achieveStatus = '已完善';
-                    $goods_model ->picStatus = '待处理';
-                    $goods_model->updateTime =strftime('%F %T');
-                    $goods_model->possessMan2 = $arc;
-                    $goods_model->update(['achieveStatus']);
+                    try {
+                        $arc_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-arc-map'])->one();
+                        $pur_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-pur-map'])->one();
+                        $arc = $arc_model->ruleValue;
+                        $pur = $pur_model->ruleValue;
+                        $goods_model ->achieveStatus = '已完善';
+                        $goods_model ->picStatus = '待处理';
+                        $goods_model->updateTime =strftime('%F %T');
+                        $goods_model->possessMan2 = $arc;
+                        $goods_model->Purchaser = $pur;
+                        $goods_model->update(['achieveStatus']);
+                        echo "保存完成";
+//                        $this->redirect(['oa-goodsinfo/index']);
+                    }
+                    catch (Exception $e) {
+                        echo "美工或采购填写不对,请仔细检查数据";
+                    }
 
-                    $this->redirect(['oa-goodsinfo/index']);
+
+
                 }
 
                 if ($type=='pic-info')

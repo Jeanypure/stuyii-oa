@@ -217,25 +217,22 @@ echo TabularForm::widget([
 
             'footer'=>false,
             'after'=>
-                '批量加'.
-                Html::input('text','rowNum','',['class' => 'x-row','placeholder'=>'Rows']).' '.
-                Html::button('新增行', ['id'=>'add-row','type'=>'button', 'class'=>'btn btn-success kv-batch-create']) . ' ' .
+                Html::input('text','rowNum','',['class' => 'x-row','placeholder'=>'行数']).' '.
+                Html::button('新增行', ['id'=>'add-row','type'=>'button', 'class'=>'btn kv-batch-create']) . ' ' .
 
-                Html::button('删除行', ['id'=>'delete-row','type'=>'button', 'class'=>'btn btn-danger kv-batch-delete']) . ' ' .
-
-                Html::button('一键生成SKU', ['id'=>'sku-set','type'=>'button','class'=>'btn']).' '.
-                '成本批量'.
-                Html::input('text','CostPrice','',['class' => 'CostPrice-replace','placeholder'=>'CostPrice']).' '.
+                Html::input('text','CostPrice','',['class' => 'CostPrice-replace','placeholder'=>'成本价￥']).' '.
                 Html::button('成本确定', ['id'=>'CostPrice-set','type'=>'button','class'=>'btn']).' '.
-                '重量'.
-                Html::input('text','Weight','',['class' => 'Weight-replace','placeholder'=>'Weight']).' '.
+                Html::input('text','Weight','',['class' => 'Weight-replace','placeholder'=>'重量g']).' '.
                 Html::button('重量确定', ['id'=>'Weight-set','type'=>'button','class'=>'btn']).' '.
-                '价格'.
-                Html::input('text','RetailPrice','',['class' => 'RetailPrice-replace','placeholder'=>'RetailPrice']).' '.
+                Html::input('text','RetailPrice','',['class' => 'RetailPrice-replace','placeholder'=>'零售价$']).' '.
                 Html::button('价格确定', ['id'=>'RetailPrice-set','type'=>'button','class'=>'btn']).' '.
+//                '<div class="row">'.
+                Html::button('一键生成SKU', ['id'=>'sku-set','type'=>'button','class'=>'btn btn-success']).' '.
                 Html::button('保存当前数据', ['id'=>'save-only','type'=>'button','class'=>'btn btn-info']).' '.
                 Html::button('保存并完善', ['id'=>'save-complete','type'=>'button','class'=>'btn btn-primary']).' '.
-                Html::button('导入普源', ['id'=>'data-input','type'=>'button','class'=>'btn btn-warning']).' '
+                Html::button('导入普源', ['id'=>'data-input','type'=>'button','class'=>'btn btn-warning']).' '.
+                Html::button('删除行', ['id'=>'delete-row','type'=>'button', 'class'=>'btn btn-danger kv-batch-delete'])
+//                '</div>'
         ]
     ]
 
@@ -476,11 +473,27 @@ $js2 = <<<JS
     }); 
  
 // 保存并完善的提交按钮
-    $('#save-complete').on('click',function() {
-        var form = $('#sku-info');
-        form.attr('action', '/goodssku/save-complete?pid={$pid}&type=goods-info');
-        form.submit();
-    }); 
+//    $('#save-complete').on('click',function() {
+//        var form = $('#sku-info');
+//        form.attr('action', '/goodssku/save-complete?pid={$pid}&type=goods-info');
+//        form.submit();
+//    }); 
+
+// 保存并完善改为Ajax方式
+    $('#save-complete').on('click', function() {
+        $.ajax({
+                cache: true,
+                type: "POST",
+                url:'/goodssku/save-complete?pid={$pid}&type=goods-info',
+                data:$('#sku-info').serialize(),
+                // async: false,
+                
+                success: function(data) {
+                    alert(data);
+                }
+            });
+    });
+
 
     $('#create').on('click', function () {
         $.get('{$requestUrl}', {},
@@ -495,7 +508,10 @@ $js2 = <<<JS
 // 导入普源事件
     $('#data-input').on('click', function() {
         $.get('{$inputUrl}',{id:'{$pid}'});
-    })
+
+        
+    });
+
 
 
 JS;
