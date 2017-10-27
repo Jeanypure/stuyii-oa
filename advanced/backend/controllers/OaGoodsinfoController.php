@@ -103,8 +103,27 @@ class OaGoodsinfoController extends Controller
             throw new NotFoundHttpException("The product was not found.");
         }
 
+
+
         if($info->load(Yii::$app->request->post())){
-//            var_dump($_POST);die;
+
+            $SupplerName = $_POST['OaGoodsinfo']['SupplierName'];
+            // 如果该查询没有结果则返回 false
+            $Suppler = Yii::$app->db->createCommand("SELECT * from  B_Supplier WHERE SupplierName='$SupplerName'")
+                ->queryOne();
+            if(empty($Suppler)){
+                $Recorder = yii::$app->user->identity->username;
+                $InputDate = strftime('%F %T');
+                Yii::$app->db->createCommand("insert into  B_Supplier (SupplierName,Recorder,InputDate) 
+                  VALUES ('$SupplerName','$Recorder','$InputDate')")->execute();
+            }
+
+            $SupplerID = Yii::$app->db->createCommand("SELECT NID from  B_Supplier WHERE SupplierName='$SupplerName'")
+                ->queryOne();
+
+            $info->SupplierID = $SupplerID['NID'];
+
+
             if (!empty($_POST['DictionaryName'])){
                 $info->DictionaryName = implode(',',$_POST['DictionaryName']);
             }
@@ -114,6 +133,7 @@ class OaGoodsinfoController extends Controller
         }else{
 
             $data = $this->actionSelectParam();
+
             $dataProvider = new ActiveDataProvider([
                 'query' => Goodssku::find()->where(['pid'=>$id]),
                 'pagination' => [

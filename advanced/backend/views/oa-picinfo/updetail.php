@@ -65,7 +65,7 @@ echo TabularForm::widget([
         'sku'=>['label'=>'SKU', 'type'=>TabularForm::INPUT_TEXT,
             'options'=>['readonly'=>true]
                ],
-        'linkurl'=>['label'=>'图片地址', 'type'=>TabularForm::INPUT_TEXT,
+        'linkurl'=>['label'=>'图片库地址', 'type'=>TabularForm::INPUT_TEXT,
         ],
         'property1'=>['label'=>'款式1','type'=>TabularForm::INPUT_TEXT, 'readonly'=>true,
             'options'=>['readonly'=>true]

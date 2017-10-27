@@ -199,8 +199,7 @@ class GoodsskuController extends Controller
                             $update_model->CostPrice = $row_value['CostPrice'];
                             $update_model->Weight = $row_value['Weight'];
                             $update_model->RetailPrice = $row_value['RetailPrice'];
-                            $update_model->update(['sku','property1','property2','property3',
-                                'CostPrice','Weight','RetailPrice']);
+                            $update_model->update(false);
 
                         }
 
@@ -246,7 +245,7 @@ class GoodsskuController extends Controller
                     $goods_model = OaGoodsinfo::find()->where(['pid' => $pid])->one();
                     $goods_model ->picStatus = '已完善';
                     $goods_model->update(['achieveStatus']);
-                    $goods_model->updateDatetime =strftime('%F %T');
+                    $goods_model->updateTime =strftime('%F %T');
                     $this->redirect(['oa-goodsinfo/index']);
                     $this->redirect(['oa-picinfo/update','id'=>$pid]);
 
