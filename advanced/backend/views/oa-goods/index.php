@@ -36,7 +36,7 @@ $js = <<<JS
         
         if (result) {
             id = $(self).closest('tr').data('key');
-            $.post('delete',{id:id,type:'index-products'},function() {
+            $.post('delete',{id:id,type:'index'},function() {
             });
             }
             });
