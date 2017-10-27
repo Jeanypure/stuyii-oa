@@ -77,9 +77,9 @@ $this->registerJs($JS);
 
         <?php echo  $form->field($model, 'salePrice')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'hopeSale')->textInput(['placeholder' => '--选填--']) ?>
-        <?php echo  $form->field($model, 'hopeMonthProfit')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'hopeRate')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'hopeWeight')->textInput(['placeholder' => '--选填--']) ?>
+        <?php echo  $form->field($model, 'hopeMonthProfit')->textInput(['readonly'=> true,'placeholder' => '--自动计算--']) ?>
 
 
         <div class="form-group">

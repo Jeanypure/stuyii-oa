@@ -107,7 +107,7 @@ class OaGoodsController extends Controller
                 $current_model->introducer = $user;
                 $current_model->updateDate = strftime('%F %T');
                 $current_model->createDate = strftime('%F %T');
-                $current_model->update(array('devStatus', 'developer', 'updateDate'));
+                $current_model->update(false);
                 return $this->redirect(['index']);
             } else {
 
@@ -201,7 +201,7 @@ class OaGoodsController extends Controller
         $status = ['create' => '待提交', 'check' => '待审批'];
         $request = Yii::$app->request;
         if ($request->isPost) {
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($model->load($request->post()) && $model->save()) {
                 //默认值更新到当前行中
                 $id = $model->nid;
                 $cate = $model->cate;
@@ -211,6 +211,12 @@ class OaGoodsController extends Controller
                 //根据类目ID更新类目名称
                 $current_model->catNid = $cate;
                 $current_model->cate = $cateModel->CategoryName;
+                //自动计算预估月毛利
+                $price = $current_model->salePrice;
+                $rate = $current_model->hopeRate;
+                $sale = $current_model->hopeSale;
+                $moth_profit = $price*$rate*$sale*0.01;
+                $current_model->hopeMonthProfit = $moth_profit;
                 $current_model->devNum = '20' . date('ymd', time()) . strval($id);
                 $current_model->devStatus = '正向认领';
                 $current_model->checkStatus = $status[$type];
@@ -265,6 +271,11 @@ class OaGoodsController extends Controller
                 //根据类目ID更新类目名称
                 $current_model->catNid = $cate;
                 $current_model->cate = $cateModel->CategoryName;
+                $price = $current_model->salePrice;
+                $rate = $current_model->hopeRate;
+                $sale = $current_model->hopeSale;
+                $moth_profit = $price*$rate*$sale*0.01;
+                $current_model->hopeMonthProfit = $moth_profit;
 //                $subCateNameModel = GoodsCats::find()->where(['NID' => $model->subCate])->one();
 //                $current_model->subCate = $subCateNameModel->CategoryName;
                 $current_model->devNum = '20' . date('ymd', time()) . strval($id);
@@ -307,11 +318,11 @@ class OaGoodsController extends Controller
      */
     public function actionForwardUpdate($id)
     {
-        $model = $this->findModel($id);
+//        $model = $this->findModel($id);
+        $model = OaForwardGoods::find()->where(['nid' => $id]) ->one();
 
-        if ($model->load(Yii::$app->request->post()) ) {
+        if ($model->load(Yii::$app->request->post()) && $model->save(false) ) {
 
-//            var_dump($_POST);die;
             //默认值更新到当前行中
             $sub_cate = $model->subCate;
             try {
@@ -323,10 +334,16 @@ class OaGoodsController extends Controller
             }
 
             //根据类目ID更新类目名称
-            $model->catNid = $cateModel->CategoryParentID;
-            $model->cate = $cateModel->CategoryParentName;
-            $model->subCate = $cateModel->CategoryName;
-            $model->save(false);
+            $current_model = $this->findModel($id);
+            $price = $current_model->salePrice;
+            $rate = $current_model->hopeRate;
+            $sale = $current_model->hopeSale;
+            $moth_profit = $price*$rate*$sale*0.01;
+            $current_model->hopeMonthProfit = $moth_profit;
+            $current_model->catNid = $cateModel->CategoryParentID;
+            $current_model->cate = $cateModel->CategoryParentName;
+            $current_model->subCate = $cateModel->CategoryName;
+            $current_model->update(false);
             return $this->redirect(['forward-products']);
         } else {
             // 根据不同的产品状态返回不同的view
@@ -373,9 +390,9 @@ class OaGoodsController extends Controller
      */
     public function actionBackwardUpdate($id)
     {
-        $model = $this->findModel($id);
+        $model = OaForwardGoods::find()->where(['nid' => $id]) ->one();
 
-        if ($model->load(Yii::$app->request->post()) ) {
+        if ($model->load(Yii::$app->request->post()) && $model->save(false)) {
             //默认值更新到当前行中
             $cate = $model->cate;
             $cateModel = GoodsCats::find()->where(['nid' => $cate])->one();
@@ -389,10 +406,16 @@ class OaGoodsController extends Controller
         }
 
         //根据类目ID更新类目名称
-        $model->catNid = $cateModel->CategoryParentID;
-        $model->cate = $cateModel->CategoryParentName;
-        $model->subCate = $cateModel->CategoryName;
-        $model->save(false);
+            $current_model = $this->findModel($id);
+            $price = $current_model->salePrice;
+            $rate = $current_model->hopeRate;
+            $sale = $current_model->hopeSale;
+            $moth_profit = $price*$rate*$sale*0.01;
+            $current_model->hopeMonthProfit = $moth_profit;
+            $current_model->catNid = $cateModel->CategoryParentID;
+            $current_model->cate = $cateModel->CategoryParentName;
+            $current_model->subCate = $cateModel->CategoryName;
+            $current_model->update(false);
             return $this->redirect(['backward-products']);
         } else {
             // 根据不同的产品状态返回不同的view
