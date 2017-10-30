@@ -286,6 +286,7 @@ public function actionInput($id)
     public function actionInputLots($ids)
     {
         $connection = Yii::$app->db;
+        var_dump();
         $udpate_status = "update oa_goodsinfo set achieveStatus='已导入'";
         $trans = $connection->beginTransaction();
         foreach($ids as $goods_id){

@@ -177,14 +177,15 @@ $('.index-input').on('click', function() {
 //批量导入普源
 $('#input-lots').on('click', function() {
     ids = $('#oa-goodsinfo').yiiGridView('getSelectedRows');
-    $.ajax({
-           url: '{$inputLotsUrl}',
-           type:"post",
-           data:{id:ids},
-           success:function(res){
-                alert(res);
-           }
-        });
+    // alert(ids);
+   $.ajax({
+          url: '{$inputLotsUrl}',
+          type:"post",
+          data:{id:ids},
+          success:function(res){
+               alert(res);
+          }
+       });
 });
 
 

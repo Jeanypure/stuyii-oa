@@ -49,11 +49,11 @@ $this->registerJs($JS);
             $.get("'.yii::$app->urlManager->createUrl('oa-goods/category').
                     '?typeid=1&pid="+$(this).val(),function(data){
                 var str="";
-              $("select#oagoods-subcate").children("option").remove();
+              $("select#oaforwardgoods-subcate").children("option").remove();
               $.each(data,function(k,v){
                     str+="<option value="+v+">"+v+"</option>";
                     });
-                $("select#oagoods-subcate").html(str);
+                $("select#oaforwardgoods-subcate").html(str);
             });',
             ]);?>
 
