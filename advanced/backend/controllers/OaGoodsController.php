@@ -465,9 +465,10 @@ class OaGoodsController extends Controller
 
         $model = $this->findModel($id);
 
+
         $model->checkStatus = '待审批';
         $model->update(['checkStatus']);
-        return $this->redirect(['index']);
+//        return $this->redirect(['index']);
     }
 
     /**
@@ -479,11 +480,37 @@ class OaGoodsController extends Controller
     public function actionBackwardRecheck($id)
     {
 
-        $model = $this->findModel($id);
+        $model = OaForwardGoods::find()->where(['nid' => $id]) ->one();
 
-        $model->checkStatus = '待审批';
-        $model->update(false);
-        return $this->redirect(['backward-products']);
+        if ($model->load(Yii::$app->request->post()) && $model->save(false)) {
+            //默认值更新到当前行中
+            var_dump("I am here");die;
+            $cate = $model->cate;
+            $cateModel = GoodsCats::find()->where(['nid' => $cate])->one();
+            //根据类目ID更新类目名称
+            $sub_cate = $model->subCate;
+            try {
+                $cateModel = GoodsCats::find()->where(['nid' => $sub_cate])->one();
+            }
+            catch (\Exception $e) {
+                $cateModel = GoodsCats::find()->where(['CategoryName' => $sub_cate])->one();
+            }
+
+            //根据类目ID更新类目名称
+            $current_model = $this->findModel($id);
+            $price = $current_model->salePrice;
+            $rate = $current_model->hopeRate;
+            $sale = $current_model->hopeSale;
+            $moth_profit = $price*$rate*$sale*0.01;
+            $current_model->hopeMonthProfit = $moth_profit;
+            $current_model->catNid = $cateModel->CategoryParentID;
+            $current_model->cate = $cateModel->CategoryParentName;
+            $current_model->subCate = $cateModel->CategoryName;
+            $current_model->checkStatus = '待审批';
+            $current_model->update(false);
+            return $this->redirect(['backward-products']);
+        }
+        echo  "something wrong";
     }
 
 
@@ -496,11 +523,34 @@ class OaGoodsController extends Controller
     public function actionForwardRecheck($id)
     {
 
-        $model = $this->findModel($id);
+        $model = OaForwardGoods::find()->where(['nid' => $id]) ->one();
+        //先更新数据
+        if ($model->load(Yii::$app->request->post())  ) {
+            //默认值更新到当前行中
+            $sub_cate = $model->subCate;
+            try {
 
-        $model->checkStatus = '待审批';
-        $model->update(false);
-        return $this->redirect(['forward-products']);
+                $cateModel = GoodsCats::find()->where(['nid' => $sub_cate])->one();
+            }
+            catch (\Exception $e) {
+                $cateModel = GoodsCats::find()->where(['CategoryName' => $sub_cate])->one();
+            }
+
+            //根据类目ID更新类目名称
+            $current_model = $this->findModel($id);
+            $price = $current_model->salePrice;
+            $rate = $current_model->hopeRate;
+            $sale = $current_model->hopeSale;
+            $moth_profit = $price*$rate*$sale*0.01;
+            $current_model->hopeMonthProfit = $moth_profit;
+            $current_model->catNid = $cateModel->CategoryParentID;
+            $current_model->cate = $cateModel->CategoryParentName;
+            $current_model->subCate = $cateModel->CategoryName;
+            $current_model->checkStatus = '待审批';
+            $current_model->update(false);
+            return $this->redirect(['forward-products']);
+        }
+        echo  "something wrong";
     }
 
 

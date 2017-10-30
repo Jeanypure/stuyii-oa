@@ -26,7 +26,10 @@ $("option:contains({$subCate})").attr("selected",true);
 
 //重新提交审核事件
 $('#recheck-btn').on('click',function() {
-    $.get('{$reCheckUrl}', {id: '{$model->nid}','type':'backward-products'});
+    // $.get('{$reCheckUrl}', {id: '{$model->nid}','type':'backward-products'});
+    var form = $("#update-form");
+    form.attr('action','{$reCheckUrl}?id={$model->nid}');
+    form.submit();
 })
 
 //作废事件
@@ -45,6 +48,8 @@ $this->registerJs($JS);
     <div class="oa-goods-form">
 
         <?php $form = ActiveForm::begin([
+            'id'=> 'update-form',
+            'method' => 'post',
             'fieldConfig'=>[
                 'template'=> "{label}\n<div >{input}</div>\n{error}",
             ]
@@ -88,9 +93,9 @@ $this->registerJs($JS);
 
         <?php echo  $form->field($model, 'salePrice')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'hopeSale')->textInput(['placeholder' => '--选填--']) ?>
-        <?php echo  $form->field($model, 'hopeMonthProfit')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'hopeRate')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'hopeWeight')->textInput(['placeholder' => '--选填--']) ?>
+        <?php echo  $form->field($model, 'hopeMonthProfit')->textInput(['readonly'=>true,'placeholder' => '--选填--']) ?>
 
 
         <div class="form-group">
