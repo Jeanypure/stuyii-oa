@@ -484,7 +484,6 @@ class OaGoodsController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save(false)) {
             //默认值更新到当前行中
-            var_dump("I am here");die;
             $cate = $model->cate;
             $cateModel = GoodsCats::find()->where(['nid' => $cate])->one();
             //根据类目ID更新类目名称
