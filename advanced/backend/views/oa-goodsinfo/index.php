@@ -181,9 +181,10 @@ $('#input-lots').on('click', function() {
    $.ajax({
           url: '{$inputLotsUrl}',
           type:"post",
-          data:{id:ids},
+          data:{ids:ids},
           success:function(res){
                alert(res);
+               //可以前端更改状态，也可以异步刷新   
           }
        });
 });

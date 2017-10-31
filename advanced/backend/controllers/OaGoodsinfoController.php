@@ -284,9 +284,10 @@ public function actionInput($id)
      *
      */
 
-    public function actionInputLots($ids)
+    public function actionInputLots()
     {
         $connection = Yii::$app->db;
+        $ids = $_POST['ids'];
         $trans = $connection->beginTransaction();//状态更新和数据插入做成事务
         foreach($ids as $goods_id){
             $update_status = "update oa_goodsinfo set achieveStatus='已导入' where pid ='{$goods_id}'";
