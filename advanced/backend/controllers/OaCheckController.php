@@ -80,38 +80,7 @@ class OaCheckController extends Controller
         $model ->updateDate = strftime('%F %T');
         $model->update(false);
         //审批状态改变之后就插入数据到OaGoodsInfo
-        $b_previous_code = Yii::$app->db->createCommand(
-            "select  isnull(goodscode,'UNKNOWN') as maxCode from b_goods where nid in 
-            (select  max(bgs.nid) from B_Goods as bgs left join B_GoodsCats as bgc
-            on bgs.GoodsCategoryID= bgc.nid where bgc.CategoryParentName='$cate' and len(goodscode)=6 )"
-        )->queryOne();
-        $oa_previous_code = Yii::$app->db->createCommand(
-            "select isnull(goodscode,'UN0000') as maxCode from oa_goodsinfo
-            where pid in (select max(pid) from oa_goodsinfo as info LEFT join 
-            oa_goods as og on info.goodsid=og.nid where cate = '$cate')")->queryOne();
-        //按规则生成编码
-        $b_max_code = $b_previous_code['maxCode'];
-        $oa_max_code = $oa_previous_code['maxCode'];
-        if(intval(substr($b_max_code,2,4))>=intval(substr($oa_max_code,2,4))) {
-            $max_code = $b_max_code;
-        }
-        else {
-            $max_code = $oa_max_code;
-        }
-        $head = substr($max_code,0,2);
-        $tail = intval(substr($max_code,2,4)) + 1;
-        $zero_bit = substr('0000',0,4-strlen($tail));
-        $code = $head.$zero_bit.$tail;
-        //检查SKU是否已经存在
-        $check_oa_goods = Yii::$app->db->createCommand(
-            "select * from oa_goodsinfo where goodscode= '$code'"
-        )->queryOne();
-        $check_b_goods = Yii::$app->db->createCommand(
-            "select * from b_goods where goodscode= '$code'"
-        )->queryOne();
-        if(!(empty($check_oa_goods) && empty($check_b_goods))) {
-            $code = "REPEAT";
-        }
+        $code = $this->generateCode($cate);
         $nid = $model->nid;
         $img = $model->img;
         $developer = $model->developer;
@@ -426,4 +395,55 @@ class OaCheckController extends Controller
         }
     }
 
+    /**
+     * @param $cate
+     * @return string $code
+     */
+    private function generateCode($cate)
+    {
+        $connection = Yii::$app->db;
+        $b_previous_code = $connection->createCommand(
+            "select  isnull(goodscode,'UN0000') as maxCode from b_goods where nid in 
+            (select  max(bgs.nid) from B_Goods as bgs left join B_GoodsCats as bgc
+            on bgs.GoodsCategoryID= bgc.nid where bgc.CategoryParentName='$cate' and len(goodscode)=6 )"
+        )->queryOne();
+
+        $oa_previous_code = $connection->createCommand(
+            "select isnull(goodscode,'UN0000') as maxCode from oa_goodsinfo
+            where pid in (select max(pid) from oa_goodsinfo as info LEFT join 
+            oa_goods as og on info.goodsid=og.nid where cate = '$cate')")->queryOne();
+        //按规则生成编码
+
+        $b_max_code = $b_previous_code['maxCode'];
+        $oa_max_code = $oa_previous_code['maxCode'];
+
+        if(intval(substr($b_max_code,2,4))>=intval(substr($oa_max_code,2,4))) {
+            $max_code = $b_max_code;
+        }
+        else {
+            $max_code = $oa_max_code;
+        }
+        $head = substr($max_code,0,2);
+        $tail = intval(substr($max_code,2,4));
+        while($tail<=9999)
+        {
+            $tail = $tail + 1;
+            $zero_bit = substr('0000',0,4-strlen($tail));
+            $code = $head.$zero_bit.$tail;
+            //检查SKU是否已经存在
+            $check_oa_goods = $connection->createCommand(
+                "select * from oa_goodsinfo where goodscode= '$code'"
+            )->queryOne();
+            $check_b_goods = $connection->createCommand(
+                "select * from b_goods where goodscode= '$code'"
+            )->queryOne();
+            if((empty($check_oa_goods) && empty($check_b_goods))) {
+                break;
+            }
+
+        }
+        return $code;
+
+
+    }
 }
