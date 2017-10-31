@@ -251,7 +251,7 @@ class OaGoodsinfoController extends Controller
 
 /**
  * input to py
- * @para $id
+ * @param $id
  * return mixed
  *
  */
@@ -259,7 +259,7 @@ class OaGoodsinfoController extends Controller
 public function actionInput($id)
 {
     $input_goods = "P_OaGoodsToBGoods '{$id}'";
-    $udpate_status = "update oa_goodsinfo set achieveStatus='已导入'";
+    $udpate_status = "update oa_goodsinfo set achieveStatus='已导入' where pid = '{$id}'";
     $connection = Yii::$app->db;
     $trans = $connection->beginTransaction();
     try {
@@ -268,10 +268,11 @@ public function actionInput($id)
         $trans->commit();
         echo "导入成功";
     }
-    catch (Exception  $e) {
+    catch (\Exception  $e) {
         $trans->rollBack();
+        echo "导入失败";
     }
-    echo "导入失败";
+
 }
 
 
@@ -286,23 +287,20 @@ public function actionInput($id)
     public function actionInputLots($ids)
     {
         $connection = Yii::$app->db;
-        var_dump();
-        $udpate_status = "update oa_goodsinfo set achieveStatus='已导入'";
-        $trans = $connection->beginTransaction();
+        $trans = $connection->beginTransaction();//状态更新和数据插入做成事务
         foreach($ids as $goods_id){
+            $update_status = "update oa_goodsinfo set achieveStatus='已导入' where pid ='{$goods_id}'";
             $input_goods = "P_OaGoodsToBGoods '{$goods_id}'";
             try {
                 $connection->createCommand($input_goods)->execute();
-                $connection->createCommand($udpate_status)->execute();
+                $connection->createCommand($update_status)->execute();
                 $trans->commit();
             }
-            catch (Exception  $e) {
+            catch (\Exception  $e) {
                 $trans->rollBack();
-                echo "批量导入失败";
-                break;
             }
         }
-        echo "批量导入成功";
+        echo "批量导入完成！";
 
     }
 
@@ -357,7 +355,7 @@ public function actionInput($id)
             }
             $info_model->GoodsCode = $code;
             $status = $info_model->achieveStatus;
-            if($status != '已导入')
+            if($status !== '已导入')
             {
                 $info_model->update(false);
             }
