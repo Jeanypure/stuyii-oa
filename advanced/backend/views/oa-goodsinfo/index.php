@@ -18,10 +18,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-
-
     <p>
-        <?= Html::button('批量导入普源', ['id'=>'input-lots','class' => 'btn btn-info']) ?>
+        <?= Html::button('批量导入普源', ['id'=>'input-lots','class' => 'btn btn-success']) ?>
+        <?= Html::button('重新生成商品编码', ['id'=>'generate-code','class' => 'btn btn-info']) ?>
     </p>
     <?= GridView::widget([
 
@@ -33,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'striped'=>true,
         'responsive'=>true,
         'hover'=>true,
-        'panel'=>['type'=>'primary', 'heading'=>'基本信息'],
+//        'panel'=>['type'=>'primary', 'heading'=>'基本信息'],
 
         'columns' => [
             ['class' => 'kartik\grid\CheckboxColumn'],
@@ -146,6 +145,7 @@ Modal::end();
 $viewUrl = Url::toRoute('view');
 $inputUrl = Url::toRoute('input');
 $inputLotsUrl = Url::toRoute('input-lots');
+//$generateUrl = Url::toRoute('generate-code');
 
 $js = <<<JS
 
@@ -177,16 +177,23 @@ $('.index-input').on('click', function() {
 //批量导入普源
 $('#input-lots').on('click', function() {
     ids = $('#oa-goodsinfo').yiiGridView('getSelectedRows');
-    $.ajax({
-           url: '{$inputLotsUrl}',
-           type:"post",
-           data:{id:ids},
-           success:function(res){
-                alert(res);
-           }
-        });
+    // alert(ids);
+   $.ajax({
+          url: '{$inputLotsUrl}',
+          type:"post",
+          data:{id:ids},
+          success:function(res){
+               alert(res);
+          }
+       });
 });
 
+//重新生成商品编码
+$('#generate-code').on('click',function() {
+    ids = $('#oa-goodsinfo').yiiGridView('getSelectedRows');
+    console.log(ids);
+    $.get('/oa-goodsinfo/generate-code',{ids:ids});
+});
 
 JS;
 $this->registerJs($js);

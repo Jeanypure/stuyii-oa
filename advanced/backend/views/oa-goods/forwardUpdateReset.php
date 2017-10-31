@@ -26,7 +26,11 @@ $("option:contains({$subCate})").attr("selected",true);
 
 //重新提交审核事件
 $('#recheck-btn').on('click',function() {
-    $.get('{$reCheckUrl}', {id: '{$model->nid}'});
+    // $.get('{$reCheckUrl}', {id: '{$model->nid}'});
+    var form = $("#update-form");
+    form.attr('action','{$reCheckUrl}?id={$model->nid}');
+    form.submit();
+    
 })
 
 //作废事件
@@ -45,6 +49,8 @@ $this->registerJs($JS);
     <div class="oa-goods-form">
 
         <?php $form = ActiveForm::begin([
+            'id'=> 'update-form',
+            'method' => 'post',
             'fieldConfig'=>[
                 'template'=> "{label}\n<div >{input}</div>\n{error}",
             ]
@@ -60,11 +66,11 @@ $this->registerJs($JS);
             $.get("'.yii::$app->urlManager->createUrl('oa-goods/category').
                     '?id=1&typeid=1&pid="+$(this).val(),function(data){
                 var str="";
-              $("select#oagoods-subcate").children("option").remove();
+              $("select#oaforwardgoods-subcate").children("option").remove();
               $.each(data,function(k,v){
                     str+="<option value="+v+">"+v+"</option>";
                     });
-                $("select#oagoods-subcate").html(str);
+                $("select#oaforwardgoods-subcate").html(str);
             });',
             ]);?>
 
@@ -88,9 +94,9 @@ $this->registerJs($JS);
 
         <?php echo  $form->field($model, 'salePrice')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'hopeSale')->textInput(['placeholder' => '--选填--']) ?>
-        <?php echo  $form->field($model, 'hopeMonthProfit')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'hopeRate')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'hopeWeight')->textInput(['placeholder' => '--选填--']) ?>
+        <?php echo  $form->field($model, 'hopeMonthProfit')->textInput(['readonly'=> 'true','placeholder' => '--选填--']) ?>
 
 
         <div class="form-group">

@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\OaGoods;
 use PHPUnit\Framework\Exception;
 use Yii;
 use yii\base\Model;
@@ -90,7 +91,6 @@ class OaGoodsinfoController extends Controller
             ]);
         }
     }
-
 
 
 
@@ -251,7 +251,7 @@ class OaGoodsinfoController extends Controller
 
 /**
  * input to py
- * @para $id
+ * @param $id
  * return mixed
  *
  */
@@ -259,7 +259,7 @@ class OaGoodsinfoController extends Controller
 public function actionInput($id)
 {
     $input_goods = "P_OaGoodsToBGoods '{$id}'";
-    $udpate_status = "update oa_goodsinfo set achieveStatus='已导入'";
+    $udpate_status = "update oa_goodsinfo set achieveStatus='已导入' where pid = '{$id}'";
     $connection = Yii::$app->db;
     $trans = $connection->beginTransaction();
     try {
@@ -268,10 +268,11 @@ public function actionInput($id)
         $trans->commit();
         echo "导入成功";
     }
-    catch (Exception  $e) {
+    catch (\Exception  $e) {
         $trans->rollBack();
+        echo "导入失败";
     }
-    echo "导入失败";
+
 }
 
 
@@ -286,24 +287,81 @@ public function actionInput($id)
     public function actionInputLots($ids)
     {
         $connection = Yii::$app->db;
-        $udpate_status = "update oa_goodsinfo set achieveStatus='已导入'";
-        $trans = $connection->beginTransaction();
+        $trans = $connection->beginTransaction();//状态更新和数据插入做成事务
         foreach($ids as $goods_id){
+            $update_status = "update oa_goodsinfo set achieveStatus='已导入' where pid ='{$goods_id}'";
             $input_goods = "P_OaGoodsToBGoods '{$goods_id}'";
             try {
                 $connection->createCommand($input_goods)->execute();
-                $connection->createCommand($udpate_status)->execute();
+                $connection->createCommand($update_status)->execute();
                 $trans->commit();
             }
-            catch (Exception  $e) {
+            catch (\Exception  $e) {
                 $trans->rollBack();
-                echo "批量导入失败";
-                break;
             }
         }
-        echo "批量导入成功";
+        echo "批量导入完成！";
 
     }
 
 
+    /**
+     * generate code
+     */
+    public function actionGenerateCode()
+    {
+        $ids = $_GET['ids'];
+        foreach ($ids as $info_id){
+            $info_model = OaGoodsinfo::find()->where(['pid'=>$info_id])->one();
+            $goods_id = $info_model->goodsid;
+
+            $current_code = $info_model->GoodsCode;
+            $goods_model = OaGoods::find()->where(['nid'=>$goods_id])->one();
+            $cate = $goods_model->cate;
+            $b_previous_code = Yii::$app->db->createCommand(
+                "select  isnull(goodscode,'UNKNOWN') as maxCode from b_goods where nid in 
+            (select  max(bgs.nid) from B_Goods as bgs left join B_GoodsCats as bgc
+            on bgs.GoodsCategoryID= bgc.nid where bgc.CategoryParentName='$cate' and len(goodscode)=6 )"
+            )->queryOne();
+            $oa_previous_code = Yii::$app->db->createCommand(
+                "select isnull(goodscode,'UN0000') as maxCode from oa_goodsinfo
+            where pid in (select max(pid) from oa_goodsinfo as info LEFT join 
+            oa_goods as og on info.goodsid=og.nid where goodscode != 'REPEAT' and cate = '$cate')")->queryOne();
+            //按规则生成编码
+            $b_max_code = $b_previous_code['maxCode'];
+            $oa_max_code = $oa_previous_code['maxCode'];
+            if(intval(substr($b_max_code,2,4))>=intval(substr($oa_max_code,2,4))) {
+                $max_code = $b_max_code;
+            }
+            else {
+                $max_code = $oa_max_code;
+            }
+            if(strpos($current_code, 'REPEAT-') !== false){
+                $max_code = substr($current_code,7,6);
+            }
+            $head = substr($max_code,0,2);
+            $tail = intval(substr($max_code,2,4)) + 1;
+            $zero_bit = substr('0000',0,4-strlen($tail));
+            $code = $head.$zero_bit.$tail;
+            //检查SKU是否已经存在
+            $check_oa_goods = Yii::$app->db->createCommand(
+                "select * from oa_goodsinfo where goodscode= '$code'"
+            )->queryOne();
+            $check_b_goods = Yii::$app->db->createCommand(
+                "select * from b_goods where goodscode= '$code'"
+            )->queryOne();
+            if(!(empty($check_oa_goods) && empty($check_b_goods))) {
+                $code = "REPEAT-".$code;
+            }
+            $info_model->GoodsCode = $code;
+            $status = $info_model->achieveStatus;
+            if($status !== '已导入')
+            {
+                $info_model->update(false);
+            }
+
+
+        }
+        return $this->redirect(['index']);
+    }
 }
