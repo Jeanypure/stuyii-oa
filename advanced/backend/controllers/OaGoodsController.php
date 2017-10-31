@@ -362,6 +362,39 @@ class OaGoodsController extends Controller
         }
     }
 
+    public function actionForwardUpdateCheck($id)
+    {
+        $model = OaForwardGoods::find()->where(['nid' => $id]) ->one();
+
+
+        if ($model->load(Yii::$app->request->post()) && $model->save(false) ) {
+
+            //默认值更新到当前行中
+            $sub_cate = $model->subCate;
+            try {
+                $cateModel = GoodsCats::find()->where(['nid' => $sub_cate])->one();
+            }
+            catch (\Exception $e) {
+                $cateModel = GoodsCats::find()->where(['CategoryName' => $sub_cate])->one();
+            }
+
+            //根据类目ID更新类目名称
+            $current_model = $this->findModel($id);
+            $price = $current_model->salePrice;
+            $rate = $current_model->hopeRate;
+            $sale = $current_model->hopeSale;
+            $moth_profit = $price*$rate*$sale*0.01;
+            $current_model->hopeMonthProfit = $moth_profit;
+            $current_model->catNid = $cateModel->CategoryParentID;
+            $current_model->cate = $cateModel->CategoryParentName;
+            $current_model->subCate = $cateModel->CategoryName;
+            $current_model->checkStatus = '待审批';
+            $current_model->update(false);
+            return $this->redirect(['forward-products']);
+        }
+
+    }
+
     //2级分类
     public function actionCategory($typeid, $pid)
     {
@@ -432,6 +465,39 @@ class OaGoodsController extends Controller
 
 
         }
+    }
+
+
+    public function actionBackwardUpdateCheck($id)
+    {
+        $model = OaForwardGoods::find()->where(['nid' => $id]) ->one();
+        var_dump($id);die;
+        if ($model->load(Yii::$app->request->post()) && $model->save(false) ) {
+
+            //默认值更新到当前行中
+            $sub_cate = $model->subCate;
+            try {
+                $cateModel = GoodsCats::find()->where(['nid' => $sub_cate])->one();
+            }
+            catch (\Exception $e) {
+                $cateModel = GoodsCats::find()->where(['CategoryName' => $sub_cate])->one();
+            }
+
+            //根据类目ID更新类目名称
+            $current_model = $this->findModel($id);
+            $price = $current_model->salePrice;
+            $rate = $current_model->hopeRate;
+            $sale = $current_model->hopeSale;
+            $moth_profit = $price*$rate*$sale*0.01;
+            $current_model->hopeMonthProfit = $moth_profit;
+            $current_model->catNid = $cateModel->CategoryParentID;
+            $current_model->cate = $cateModel->CategoryParentName;
+            $current_model->subCate = $cateModel->CategoryName;
+            $current_model->checkStatus = '待审批';
+            $current_model->update(false);
+            return $this->redirect(['backward-products']);
+        }
+
     }
 
     /**
