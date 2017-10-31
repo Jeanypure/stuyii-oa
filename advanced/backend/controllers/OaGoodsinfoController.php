@@ -317,6 +317,7 @@ public function actionInput($id)
             $info_model = OaGoodsinfo::find()->where(['pid'=>$info_id])->one();
             $goods_id = $info_model->goodsid;
 
+            $current_code = $info_model->GoodsCode;
             $goods_model = OaGoods::find()->where(['nid'=>$goods_id])->one();
             $cate = $goods_model->cate;
             $b_previous_code = Yii::$app->db->createCommand(
@@ -327,7 +328,7 @@ public function actionInput($id)
             $oa_previous_code = Yii::$app->db->createCommand(
                 "select isnull(goodscode,'UN0000') as maxCode from oa_goodsinfo
             where pid in (select max(pid) from oa_goodsinfo as info LEFT join 
-            oa_goods as og on info.goodsid=og.nid where cate = '$cate')")->queryOne();
+            oa_goods as og on info.goodsid=og.nid where goodscode != 'REPEAT' and cate = '$cate')")->queryOne();
             //按规则生成编码
             $b_max_code = $b_previous_code['maxCode'];
             $oa_max_code = $oa_previous_code['maxCode'];
@@ -336,6 +337,9 @@ public function actionInput($id)
             }
             else {
                 $max_code = $oa_max_code;
+            }
+            if(strpos($current_code, 'REPEAT-') !== false){
+                $max_code = substr($current_code,7,6);
             }
             $head = substr($max_code,0,2);
             $tail = intval(substr($max_code,2,4)) + 1;
@@ -349,7 +353,7 @@ public function actionInput($id)
                 "select * from b_goods where goodscode= '$code'"
             )->queryOne();
             if(!(empty($check_oa_goods) && empty($check_b_goods))) {
-                $code = "REPEAT";
+                $code = "REPEAT-".$code;
             }
             $info_model->GoodsCode = $code;
             $status = $info_model->achieveStatus;
