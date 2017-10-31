@@ -127,6 +127,7 @@ class OaGoodsinfoController extends Controller
             if (!empty($_POST['DictionaryName'])){
                 $info->DictionaryName = implode(',',$_POST['DictionaryName']);
             }
+            $info->updateTime = strftime('%F %T');
             $info->save();
             $this->redirect(['oa-goodsinfo/update','id'=>$id]);
 
@@ -284,10 +285,11 @@ public function actionInput($id)
      *
      */
 
-    public function actionInputLots($ids)
+    public function actionInputLots()
     {
         $connection = Yii::$app->db;
         $trans = $connection->beginTransaction();//状态更新和数据插入做成事务
+        $ids = $_POST['ids'];
         foreach($ids as $goods_id){
             $update_status = "update oa_goodsinfo set achieveStatus='已导入' where pid ='{$goods_id}'";
             $input_goods = "P_OaGoodsToBGoods '{$goods_id}'";

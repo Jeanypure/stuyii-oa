@@ -98,7 +98,13 @@ $this->params['breadcrumbs'][] = '更新数据';
         ],
 
         [
+
             'attributes' =>[
+                'AttributeName' =>[
+                    'label'=>'特殊属性必填',
+                    'items'=>[ ''=>'','液体商品'=>'液体商品','带电商品'=>'带电商品','带磁商品'=>'带磁商品','粉末商品'=>'粉末商品'],
+                    'type'=>Form::INPUT_DROPDOWN_LIST,
+                ],
                 'StoreName' =>[
                     'label'=>'仓库',
                     'items'=>$result,
@@ -106,7 +112,7 @@ $this->params['breadcrumbs'][] = '更新数据';
                 ],
                 'Season' =>[
                     'label'=>'季节',
-                    'items'=>[ ''=>'','春季'=>'春季','夏季'=>'夏季','秋季'=>'秋季','冬季'=>'冬季'],
+                    'items'=>[ ''=>'','春季'=>'春季','夏季'=>'夏季','春秋'=>'春秋','秋季'=>'秋季','秋冬'=>'秋冬','冬季'=>'冬季'],
                     'type'=>Form::INPUT_DROPDOWN_LIST,
                 ],
 
