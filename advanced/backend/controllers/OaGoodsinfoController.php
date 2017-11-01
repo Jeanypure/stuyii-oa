@@ -259,7 +259,7 @@ class OaGoodsinfoController extends Controller
 public function actionInput($id)
 {
     $input_goods = "P_OaGoodsToBGoods '{$id}'";
-    $udpate_status = "update oa_goodsinfo set achieveStatus='已导入' where pid = '{$id}'";
+    $udpate_status = "update oa_goodsinfo set picstatus= '待处理' ,achieveStatus='已导入' where pid = '{$id}'";
     $connection = Yii::$app->db;
     $trans = $connection->beginTransaction();
     try {
@@ -290,7 +290,7 @@ public function actionInput($id)
         $ids = $_POST['ids'];
         $trans = $connection->beginTransaction();//状态更新和数据插入做成事务
         foreach($ids as $goods_id){
-            $update_status = "update oa_goodsinfo set achieveStatus='已导入' where pid ='{$goods_id}'";
+            $update_status = "update oa_goodsinfo set picstatus='待处理',achieveStatus='已导入' where pid ='{$goods_id}'";
             $input_goods = "P_OaGoodsToBGoods '{$goods_id}'";
             try {
                 $connection->createCommand($input_goods)->execute();

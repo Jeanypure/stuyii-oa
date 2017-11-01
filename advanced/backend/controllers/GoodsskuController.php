@@ -186,7 +186,7 @@ class GoodsskuController extends Controller
                             $_model = clone $model;
                             //配合rules 进行安全检查;需要改变的数据都要声明下类型。
                             $_model ->setAttributes($row_value,true); //逐行入库
-                            $_model->save();
+                            $_model->save(false);
                         }
                         //更新行
                         else
@@ -222,7 +222,8 @@ class GoodsskuController extends Controller
                         echo "保存完成";
 //                        $this->redirect(['oa-goodsinfo/index']);
                     }
-                    catch (Exception $e) {
+                    catch (\Exception $e) {
+                        echo $e;
                         echo "美工或采购填写不对,请仔细检查数据";
                     }
 

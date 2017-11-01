@@ -138,6 +138,7 @@ use yii\bootstrap\Modal;
 Modal::begin([
     'id' => 'index-modal',
     'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
+    'size' => "modal-lg"
 ]);
 //echo
 Modal::end();
