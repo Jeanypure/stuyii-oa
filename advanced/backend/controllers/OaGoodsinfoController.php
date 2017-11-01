@@ -305,6 +305,53 @@ public function actionInput($id)
 
     }
 
+    /**
+     * mark as completed
+     * @param $id
+     */
+    public function actionComplete($id)
+    {
+        $model = $this->findModel($id);
+        try
+        {
+            $model->achieveStatus = '已完善';
+            $model->picStatus = '待处理';
+            $model->update(false);
+            echo "标记成功";
+        }
+        catch (\Exception $e)
+        {
+            echo "标记失败";
+        }
+
+
+    }
+
+    /**
+     * mark as completed in bulk
+     */
+    public function actionCompleteLots()
+    {
+        $ids = $_GET['ids'];
+        try
+        {
+            foreach ($ids as $id)
+            {
+                $model = $this->findModel($id);
+                $model->achieveStatus = '已完善';
+                $model->picStatus = '待处理';
+                $model->update(false);
+            }
+            echo "标记失败";
+        }
+        catch (\Exception $e)
+        {
+            echo "标记完成";
+        }
+
+
+
+    }
 
     /**
      * generate code

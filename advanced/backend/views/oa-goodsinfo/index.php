@@ -21,6 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::button('批量导入普源', ['id'=>'input-lots','class' => 'btn btn-success']) ?>
         <?= Html::button('重新生成商品编码', ['id'=>'generate-code','class' => 'btn btn-info']) ?>
+        <?= Html::button('标记已完善', ['id'=>'complete-lots','class' => 'btn btn-primary']) ?>
     </p>
     <?= GridView::widget([
 
@@ -39,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class'=>'kartik\grid\SerialColumn'],
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'template' =>'{view} {update} {input} {delete}',
+                'template' =>'{view} {update} {input} {complete} {delete}',
                 'buttons' => [
                     'view' => function ($url, $model, $key) {
                         $options = [
@@ -62,6 +63,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         ];
                         return Html::a('<span  class="glyphicon glyphicon-send"></span>', '#', $options);
+                    },
+                    'complete' => function ($url, $model, $key) {
+                        $options = [
+                            'title' => '标记已完善',
+                            'aria-label' => '标记已完善',
+                            'data-id' => $key,
+                            'class' => 'index-complete',
+
+                        ];
+                        return Html::a('<span  class="glyphicon glyphicon-check"></span>', '#', $options);
                     },
 
                 ],
@@ -147,7 +158,8 @@ $viewUrl = Url::toRoute('view');
 $inputUrl = Url::toRoute('input');
 $inputLotsUrl = Url::toRoute('input-lots');
 //$generateUrl = Url::toRoute('generate-code');
-
+$completeUrl = Url::toRoute('complete');
+$completeLotsUrl = Url::toRoute('complete-lots');
 $js = <<<JS
 
 
@@ -164,7 +176,8 @@ $('.index-view').on('click',  function () {
 
 //单个导入普源
 $('.index-input').on('click', function() {
-    id = $(this).closest('tr').data('key')
+    id = $(this).closest('tr').data('key');
+    
     $.ajax({
         url: '{$inputUrl}',
         type: "get",
@@ -172,7 +185,7 @@ $('.index-input').on('click', function() {
         success:function(res) {
             alert(res);
         }
-    })
+    });
 });
 
 //批量导入普源
@@ -193,10 +206,36 @@ $('#input-lots').on('click', function() {
 //重新生成商品编码
 $('#generate-code').on('click',function() {
     ids = $('#oa-goodsinfo').yiiGridView('getSelectedRows');
-    console.log(ids);
     $.get('/oa-goodsinfo/generate-code',{ids:ids});
 });
 
+
+//单个标记已完善
+$(".index-complete").on('click',function() {
+    id = $(this).closest('tr').data('key');
+    
+    $.ajax({
+        url:'{$completeUrl}',
+        type:'get',
+        data:{id:id},
+        success:function(res) {
+            alert(res);//传回结果信息
+        }
+    });
+});
+
+//批量标记完善
+$("#complete-lots").on('click',function() {
+    ids = $("#oa-goodsinfo").yiiGridView('getSelectedRows');
+    $.ajax({
+        url:'{$completeLotsUrl}',
+        type:'get',
+        data:{ids:ids},
+        success:function(res) {
+            alert(res);
+        }
+    });
+});
 JS;
 $this->registerJs($js);
 
