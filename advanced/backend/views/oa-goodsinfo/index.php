@@ -81,6 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'attribute' => 'achieveStatus',
             'width' => '100px',
             ],
+
             'GoodsName',
             'developer',
             [
