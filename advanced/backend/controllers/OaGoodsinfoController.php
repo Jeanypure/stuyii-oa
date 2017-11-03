@@ -270,7 +270,8 @@ public function actionInput($id)
     }
     catch (\Exception  $e) {
         $trans->rollBack();
-        echo "导入失败";
+        echo $e;
+//        echo "导入失败";
     }
 
 }
@@ -289,19 +290,26 @@ public function actionInput($id)
         $connection = Yii::$app->db;
         $ids = $_POST['ids'];
         $trans = $connection->beginTransaction();//状态更新和数据插入做成事务
-        foreach($ids as $goods_id){
-            $update_status = "update oa_goodsinfo set picstatus='待处理',achieveStatus='已导入' where pid ='{$goods_id}'";
-            $input_goods = "P_OaGoodsToBGoods '{$goods_id}'";
-            try {
-                $connection->createCommand($input_goods)->execute();
-                $connection->createCommand($update_status)->execute();
-                $trans->commit();
+        try {
+            foreach($ids as $goods_id){
+                $update_status = "update oa_goodsinfo set picstatus='待处理',achieveStatus='已导入' where pid ='{$goods_id}'";
+                $input_goods = "P_OaGoodsToBGoods '{$goods_id}'";
+                try {
+                    $connection->createCommand($input_goods)->execute();
+                    $connection->createCommand($update_status)->execute();
+                    $trans->commit();
+                }
+                catch (\Exception  $e) {
+                    $trans->rollBack();
+                    throw new \Exception("导入时发生错误");
+                }
             }
-            catch (\Exception  $e) {
-                $trans->rollBack();
-            }
+            echo "批量导入完成！";
         }
-        echo "批量导入完成！";
+        catch (\Exception $e) {
+            echo "批量导入失败";
+        }
+
 
     }
 
