@@ -1,5 +1,12 @@
 <?php
     use mdm\admin\components\MenuHelper;
+    $sql = 'oaP_statusCount';
+    $status_result = yii::$app->db->createCommand($sql)->queryAll();
+//    $status_result->execute();
+    $status_map = [];
+    foreach ($status_result as $res){
+        $status_map[$res['moduletype']] = $res['num'];
+    }
 
     $callback = function($menu){
     $data = json_decode($menu['data'], true);
@@ -22,17 +29,26 @@
     $items && $return['items'] = $items;
     return $return;
 };
+
+//注册JS 为每个模块加数量
+$JS = <<< JS
+ //找到产品推荐模块并追加<span>
+    $("a span:contains('产品推荐')").after('<sup class="label label-info">{$status_map["产品推荐"]}</sup>');
+    $("a span:contains('正向开发')").after('<sup class="label label-warning">{$status_map["正向开发"]}</sup>');
+    $("a span:contains('逆向开发')").after('<sup class="label label-success">{$status_map["逆向开发"]}</sup>');
+    $("a span:contains('待审批')").after('<sup class="label label-info">{$status_map["待审批"]}</sup>');
+    $("a span:contains('已审批')").after('<sup class="label label-warning">{$status_map["已审批"]}</sup>');
+    $("a span:contains('未通过')").after('<sup class="label label-success">{$status_map["未通过"]}</sup>');
+    $("a span:contains('属性信息')").after('<sup class="label label-info">{$status_map["属性信息"]}</sup>');
+    $("a span:contains('图片信息')").after('<sup class="label label-warning">{$status_map["图片信息"]}</sup>');
+
+JS;
+$this->registerJs($JS);
 ?>
 <aside class="main-sidebar">
 
     <section class="sidebar">
 
-        <!-- Sidebar user panel -->
-
-
-        <!-- search form -->
-
-        <!-- /.search form -->
 
         <?= dmstr\widgets\Menu::widget(
             [
