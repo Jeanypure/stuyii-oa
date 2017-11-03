@@ -15,7 +15,8 @@ use Yii;
  * @property integer $SupplierName
  * @property string $description
  */
-class OaGoodsinfo extends \yii\db\ActiveRecord
+//class OaGoodsinfo extends \yii\db\ActiveRecord
+class OaGoodsinfo extends GoodsCats
 {
     /**
      * @inheritdoc
@@ -64,17 +65,13 @@ class OaGoodsinfo extends \yii\db\ActiveRecord
             'devDatetime' => '开发时间',
             'achieveStatus' => '属性状态',
             'picStatus' => '图片状态',
-            'developer' => '开发员'
+            'developer' => '开发员',
+            'Purchaser' => '采购',
+            'possessMan1' => '责任人1',
 
 
         ];
     }
 
-// 关联2张表 oa_goodsinfo ,oa_goods
-    public function getOaGoods()
-    {
-        // 第一个参数为要关联的子表模型类名，
-        // 第二个参数指定 通过子表的customer_id，关联主表的id字段
-        return $this->hasOne(OaGoods::className(), ['nid'=>'pid']);
-    }
+
 }

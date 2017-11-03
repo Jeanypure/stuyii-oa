@@ -21,7 +21,19 @@ $this->params['breadcrumbs'][] = ['label' => $info->GoodsCode, 'url' => ['view',
 $this->params['breadcrumbs'][] = '更新数据';
 
 $bannedNames = explode(',',$info->DictionaryName);
+$catNid = $goodsItem->catNid;
+$subCate = $goodsItem->subCate;
+$JS = <<<JS
 
+//选中默认主类目
+$("option[value={$catNid}]").attr("selected",true);
+//选中默认子类目
+
+$("option:contains({$subCate})").attr("selected",true);
+
+JS;
+
+$this->registerJs($JS);
 ?>
 <?php
     $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_VERTICAL]);
@@ -68,7 +80,7 @@ $bannedNames = explode(',',$info->DictionaryName);
         ],
         [
             'attributes' =>[
-                'Purchaser' =>[
+                'Purchaser' =>[    //Purchaser   developer  possessMan1
                     'label'=>'采购',
                     'type'=>Form::INPUT_TEXT,
 
@@ -179,21 +191,38 @@ echo Select2::widget([
 
 ?>
 
+<div class="row">
+    <div class="col-sm-6">
+<?= $form->field($goodsItem,'cate')->dropDownList($goodsItem->getCatList(0),
+    [
+        'prompt'=>'--请选择父类--',
+        'onchange'=>'
+           
+            $.get("'.yii::$app->urlManager->createUrl('oa-goods/forward-create').'?typeid=1&pid="+$(this).val(),function(data){
+                var str="";
+              $("select#oaforwardgoods-subcate").children("option").remove();
+              $.each(data,function(k,v){
+                    str+="<option value="+v+">"+v+"</option>";
+                    });
+                $("select#oagoods-subcate").html(str);
+            });',
+    ]) ?>
+</div>
+    <div class="col-sm-6">
+<?= $form->field($goodsItem,'subCate')->dropDownList($goodsItem->getCatList($goodsItem->catNid),
+    [
+        'prompt'=>'--请选择子类--',
+
+    ]) ?>
+    </div>
+</div>
+
 <?php
 echo FormGrid::widget([
     'model'=> $goodsItem,
     'form'=>$form,
     'rows' =>[
-        [
-            'attributes' =>[
-                'cate'=>[
-                    'label'=>'主类目',
-                ],
-                'subCate'=>[
-                    'label'=>'子类目',
-                ],
-            ],
-        ],
+
         [
             'attributes' =>[
                 'vendor1' =>[
@@ -613,7 +642,9 @@ $js2 = <<<JS
    
 // 导入普源事件
     $('#data-input').on('click', function() {
-        $.get('{$inputUrl}',{id:'{$pid}'});
+        $.get('{$inputUrl}',{id:'{$pid}'},function(data){
+                alert("更改成功");
+                });
     });
 
 JS;

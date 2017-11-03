@@ -21,11 +21,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'picUrl',
                 'format' => 'raw',
                 'label'=>'参考图片',
-                'value' => Html::a("<a target='_blank' href=$model->picUrl>$model->picUrl</a>",$model->picUrl),
+                'value' => Html::a("<a target='_blank' href=$model->picUrl>点我查看</a>",$model->picUrl),
 
             ],
-            'GoodsName',
             'GoodsCode',
+            'GoodsName',
+            'Purchaser',
+            'developer',
+            'possessMan1',
             'SupplierName',
             'AliasCnName',
             'AliasEnName',
@@ -37,8 +40,58 @@ $this->params['breadcrumbs'][] = $this->title;
             'IsPowder',
             'isMagnetism',
             'IsCharged',
+
             ],
 
     ]) ?>
+
+    <?php
+        echo DetailView::widget([
+            'model'=>$goodsitems,
+            'attributes'=>[
+                'cate',
+                'subCate',
+                    [
+                        'attribute' => 'vendor1',
+                        'format' => 'raw',
+                        'label'=>'供应商链接1',
+                        'value' => Html::a("<a target='_blank' href=$goodsitems->vendor1>$goodsitems->vendor1</a>",$goodsitems->vendor1),
+
+                    ],[
+                        'attribute' => 'vendor2',
+                        'format' => 'raw',
+                        'label'=>'供应商链接2',
+                        'value' => Html::a("<a target='_blank' href=$goodsitems->vendor2>$goodsitems->vendor2</a>",$goodsitems->vendor2),
+
+                    ],[
+                        'attribute' => 'vendor3',
+                        'format' => 'raw',
+                        'label'=>'供应商链接3',
+                        'value' => Html::a("<a target='_blank' href=$goodsitems->vendor3>$goodsitems->vendor3</a>",$goodsitems->vendor3),
+
+                    ],
+                    [
+                        'attribute' => 'origin1',
+                        'format' => 'raw',
+                        'label'=>'平台链接1',
+                        'value' => Html::a("<a target='_blank' href=$goodsitems->origin1>$goodsitems->origin1</a>",$goodsitems->origin1),
+
+                    ],[
+                        'attribute' => 'origin2',
+                        'format' => 'raw',
+                        'label'=>'平台链接2',
+                        'value' => Html::a("<a target='_blank' href=$goodsitems->origin2>$goodsitems->origin2</a>",$goodsitems->origin1),
+
+                    ],[
+                        'attribute' => 'origin3',
+                        'format' => 'raw',
+                        'label'=>'平台链接3',
+                        'value' => Html::a("<a target='_blank' href=$goodsitems->origin3>$goodsitems->origin3</a>",$goodsitems->origin1),
+
+                    ],
+
+            ],
+        ])
+        ?>
 
 </div>

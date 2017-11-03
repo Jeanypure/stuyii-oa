@@ -471,7 +471,6 @@ class OaGoodsController extends Controller
     public function actionBackwardUpdateCheck($id)
     {
         $model = OaForwardGoods::find()->where(['nid' => $id]) ->one();
-        var_dump($id);die;
         if ($model->load(Yii::$app->request->post()) && $model->save(false) ) {
 
             //默认值更新到当前行中

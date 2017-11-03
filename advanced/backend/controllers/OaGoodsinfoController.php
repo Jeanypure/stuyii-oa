@@ -65,8 +65,16 @@ class OaGoodsinfoController extends Controller
      */
     public function actionView($id = null)
     {
+
+        $conid = Yii::$app->db->createCommand("SELECT goodsid from  oa_Goodsinfo WHERE pid=$id")
+            ->queryOne();
+        $goodsItem = OaGoods::find()->select('oa_goods.*')->where(['nid'=>$conid])->all();
+////        var_dump($this->findModel($id));
+//        var_dump($goodsItem);
+//        die;
         return $this->renderAjax('view', [
             'model' => $this->findModel($id),
+            'goodsitems' =>$goodsItem[0],
         ]);
     }
 
