@@ -25,7 +25,7 @@ use yii\helpers\Html;
                 <li class="dropdown messages-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-suitcase"></i>
-                        <span class="label label-success">5</span>
+                        <span class="label label-success">50</span>
                     </a>
                     <ul class="dropdown-menu">
                         <li class="header">你有几个新品待认领</li>

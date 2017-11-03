@@ -26,7 +26,7 @@ $("option:contains({$subCate})").attr("selected",true);
 
 //更新并提交审核
 $("#update-check-btn").on('click',function() {
-    alert('{$updateCheckUrl}');
+    // alert('{$updateCheckUrl}');
     var form = $("#update-form");
     form.attr('action','{$updateCheckUrl}?id={$model->nid}');
     form.submit();
