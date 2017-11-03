@@ -17,7 +17,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'img',
+            [
+                'attribute' => 'img',
+                'format' => 'raw',
+                'value' => Html::a("<a target='_blank' href=$model->img>$model->img</a>",$model->img),
+            ],
             'cate',
             'subCate',
             [
@@ -29,7 +33,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 //            'vendor2',
 //            'vendor3',
-            'origin1',
+            [
+                'attribute' => 'origin1',
+                'format' => 'raw',
+                'value' => Html::a("<a target='_blank' href=$model->origin1>$model->origin1</a>",$model->origin1),
+            ],
 //            'origin2',
 //            'origin3',
 //            'devNum',

@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'developer',
             [
                 'attribute' => 'devDatetime',
-                'label'=>'更新时间',
+                'label'=>'开发时间',
                 'value'=>
                     function($model){
                         return  substr($model->devDatetime,0,19);   //主要通过此种方式实现
@@ -84,6 +84,7 @@ use yii\bootstrap\Modal;
 Modal::begin([
     'id' => 'index-modal',
     'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
+    'size' => "modal-lg"
 ]);
 //echo
 Modal::end();

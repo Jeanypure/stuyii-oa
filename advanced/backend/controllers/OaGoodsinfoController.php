@@ -291,7 +291,7 @@ class OaGoodsinfoController extends Controller
     public function actionInput($id)
 {
     $input_goods = "P_OaGoodsToBGoods '{$id}'";
-    $udpate_status = "update oa_goodsinfo set achieveStatus='已导入' where pid = '{$id}'";
+    $udpate_status = "update oa_goodsinfo set picstatus= '待处理' ,achieveStatus='已导入' where pid = '{$id}'";
     $connection = Yii::$app->db;
     $trans = $connection->beginTransaction();
     try {
@@ -302,7 +302,8 @@ class OaGoodsinfoController extends Controller
     }
     catch (\Exception  $e) {
         $trans->rollBack();
-        echo "导入失败";
+        echo $e;
+//        echo "导入失败";
     }
 
 }
@@ -319,24 +320,79 @@ class OaGoodsinfoController extends Controller
     public function actionInputLots()
     {
         $connection = Yii::$app->db;
-        $trans = $connection->beginTransaction();//状态更新和数据插入做成事务
         $ids = $_POST['ids'];
-        foreach($ids as $goods_id){
-            $update_status = "update oa_goodsinfo set achieveStatus='已导入' where pid ='{$goods_id}'";
-            $input_goods = "P_OaGoodsToBGoods '{$goods_id}'";
-            try {
-                $connection->createCommand($input_goods)->execute();
-                $connection->createCommand($update_status)->execute();
-                $trans->commit();
+        $trans = $connection->beginTransaction();//状态更新和数据插入做成事务
+        try {
+            foreach($ids as $goods_id){
+                $update_status = "update oa_goodsinfo set picstatus='待处理',achieveStatus='已导入' where pid ='{$goods_id}'";
+                $input_goods = "P_OaGoodsToBGoods '{$goods_id}'";
+                try {
+                    $connection->createCommand($input_goods)->execute();
+                    $connection->createCommand($update_status)->execute();
+                    $trans->commit();
+                }
+                catch (\Exception  $e) {
+                    $trans->rollBack();
+                    throw new \Exception("导入时发生错误");
+                }
+
             }
-            catch (\Exception  $e) {
-                $trans->rollBack();
-            }
+            echo "批量导入完成！";
         }
-        echo "批量导入完成！";
+        catch (\Exception $e) {
+            echo "批量导入失败";
+        }
+
 
     }
 
+    /**
+     * mark as completed
+     * @param $id
+     */
+    public function actionComplete($id)
+    {
+        $model = $this->findModel($id);
+        try
+        {
+            $model->achieveStatus = '已完善';
+            $model->picStatus = '待处理';
+            $model->update(false);
+            echo "标记成功";
+        }
+        catch (\Exception $e)
+        {
+            echo "标记失败";
+        }
+
+
+    }
+
+    /**
+     * mark as completed in bulk
+     */
+    public function actionCompleteLots()
+    {
+        $ids = $_GET['ids'];
+        try
+        {
+            foreach ($ids as $id)
+            {
+                $model = $this->findModel($id);
+                $model->achieveStatus = '已完善';
+                $model->picStatus = '待处理';
+                $model->update(false);
+            }
+            echo "标记失败";
+        }
+        catch (\Exception $e)
+        {
+            echo "标记完成";
+        }
+
+
+
+    }
 
     /**
      * generate code

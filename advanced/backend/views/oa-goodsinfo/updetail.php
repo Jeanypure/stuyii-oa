@@ -19,7 +19,9 @@ $this->title = '编辑: ' . $info->GoodsCode;
 $this->params['breadcrumbs'][] = ['label' => '更新产品', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $info->GoodsCode, 'url' => ['view', 'id' => $info->pid]];
 $this->params['breadcrumbs'][] = '更新数据';
-//var_dump($info);die;
+
+$bannedNames = explode(',',$info->DictionaryName);
+
 ?>
 <?php
     $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_VERTICAL]);
@@ -145,12 +147,9 @@ $this->params['breadcrumbs'][] = '更新数据';
                 ],
                 'Season' =>[
                     'label'=>'季节',
-                    'items'=>[ ''=>'','春季'=>'春季','夏季'=>'夏季','春秋'=>'春秋','秋季'=>'秋季','秋冬'=>'秋冬','冬季'=>'冬季'],
+                    'items'=>[ ''=>'','春季'=>'春季','夏季'=>'夏季','秋季'=>'秋季','冬季'=>'冬季','春秋'=>'春秋','秋冬'=>'秋冬'],
                     'type'=>Form::INPUT_DROPDOWN_LIST,
                 ],
-
-
-
             ],
         ],
     ],
@@ -166,6 +165,8 @@ echo '<label class="control-label">禁售平台</label>';
 
 echo Select2::widget([
     'name' => 'DictionaryName',
+    'id' => 'dictionary-name',
+    'value' => $bannedNames,
     'data' => $lock,
     'maintainOrder' => true,
     'options' => ['placeholder' => '--可多选--', 'multiple' => true],
@@ -266,7 +267,7 @@ echo TabularForm::widget([
     'form'=>$skuForm,
     'actionColumn'=>[
         'class' => '\kartik\grid\ActionColumn',
-        'template' =>'{view} {delete}',
+        'template' =>'{delete}',
         'buttons' => [
             'view' => function ($url, $model, $key) {
                 $options = [
@@ -282,8 +283,8 @@ echo TabularForm::widget([
             'delete' => function ($url, $model, $key) {
                 $url ='/goodssku/delete?id='.$key;
                 $options = [
-                    'title' => '作废',
-                    'aria-label' => '作废',
+                    'title' => '删除',
+                    'aria-label' => '删除',
                     'data-id' => $key,
                 ];
                 return Html::a('<span  class="glyphicon glyphicon-trash"></span>',$url, $options);
@@ -386,9 +387,13 @@ $requestUrl2 = Url::toRoute(['/goodssku/update']);//弹窗的html内容，下面
 $inputUrl = Url::toRoute(['input']);
 
 
+
 $js2 = <<<JS
 
 
+
+    
+    
 //能删除新增空行的删除行
     $('#delete-row').on('click', function() {
         $("input[name='selection[]']:checkbox:checked").each(function(){
@@ -422,16 +427,16 @@ $js2 = <<<JS
             var row = $('<tr class="kv-tabform-row" ></tr>'); 
             var seriralTd = $('<td class="kv-align-center kv-align-middle" style="width:50px;" data-col-seq="0">New-'+ row_count+'</td>'); 
             row.append(seriralTd);
-            var checkBoxTd =$('<td class="skip-export kv-align-center kv-align-middle kv-row-select" style="width:50px;" data-col-seq="2">' +
+            var checkBoxTd =$('<td class="skip-export kv-align-center kv-align-middle kv-row-select" style="width:50px;" data-col-seq="1">' +
                                 '<input type="checkbox" class="kv-row-checkbox" name="selection[]" >' +
                               '</td>');
             row.append(checkBoxTd);
-            var actionTd = $('<td class="skip-export kv-align-center kv-align-middle" style="width:80px;" data-col-seq="1">' +
-             '<a class="data-view" href="goodssku/delete" title="查看" aria-label="查看" data-toggle="modal" data-target="#view-modal" ><span  class="glyphicon glyphicon-eye-open"></span></a><a> <span  class="glyphicon glyphicon-trash"></span></a></td>');
+            var actionTd = $(
+             '<td class="skip-export kv-align-center kv-align-middle" style="width:80px;" data-col-seq="2">' +
+              '<a href="javascript:void(0)" onclick="removeTd(this)"' +
+               'class="new-delete" title="删除" aria-label="删除" >' +
+               '<span class="glyphicon glyphicon-trash"></span></a></td>');
             row.append(actionTd);
-            
-            // var skuTd = $('<td class="kv-align-top" data-col-seq="3" ><div class="form-group"><input type="text" name="Goodssku[][]" class="form-control"><div class="help-block"></div></div></td>');
-            // row.append(skuTd);
             
             //循环添加循环框
             var inputNames= ['sku','property1','property2',
@@ -579,12 +584,6 @@ $js2 = <<<JS
         form.submit();
     }); 
  
-// 保存并完善的提交按钮
-//    $('#save-complete').on('click',function() {
-//        var form = $('#sku-info');
-//        form.attr('action', '/goodssku/save-complete?pid={$pid}&type=goods-info');
-//        form.submit();
-//    }); 
 
 // 保存并完善改为Ajax方式
     $('#save-complete').on('click', function() {
@@ -617,9 +616,13 @@ $js2 = <<<JS
         $.get('{$inputUrl}',{id:'{$pid}'});
     });
 
-
-
 JS;
 $this->registerJs($js2);
 Modal::end();
 ?>
+<script>
+    //新增行的删除事件
+    function removeTd(ele) {
+        ele.closest('tr').remove();
+    };
+</script>

@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model backend\models\OaGoods */
 
@@ -13,6 +13,7 @@ $this->params['breadcrumbs'][] = '更新';
 
 $catNid = $model->catNid;
 $subCate = $model->subCate;
+$updateCheckUrl = Url::toRoute('backward-update-check');
 
 $JS = <<<JS
 
@@ -23,6 +24,13 @@ $("option[value={$catNid}]").attr("selected",true);
 
 $("option:contains({$subCate})").attr("selected",true);
 
+//更新并提交审核
+$("#update-check-btn").on('click',function() {
+    alert('{$updateCheckUrl}');
+    var form = $("#update-form");
+    form.attr('action','{$updateCheckUrl}?id={$model->nid}');
+    form.submit();
+});
 JS;
 
 $this->registerJs($JS);
@@ -35,6 +43,8 @@ $this->registerJs($JS);
     <div class="oa-goods-form">
 
         <?php $form = ActiveForm::begin([
+            'id' => 'update-form',
+            'method' => 'post',
             'fieldConfig'=>[
                 'template'=> "{label}\n<div >{input}</div>\n{error}",
             ]
@@ -85,6 +95,7 @@ $this->registerJs($JS);
 
         <div class="form-group">
             <?= Html::submitButton($model->isNewRecord ? '创建' : '更新', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-success']) ?>
+            <?= Html::button('更新并提交审核', ['id'=>'update-check-btn','class' => 'btn btn-info']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>

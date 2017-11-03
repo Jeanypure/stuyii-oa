@@ -10,42 +10,32 @@ $this->title = $model->GoodsCode.'基本信息';
 $this->params['breadcrumbs'][] = ['label' => '属性信息', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<div>
+    <?= Html::img($model->picUrl,['width'=>100,'height'=>100])?>
+</div>
 <div class="oa-goodsinfo-view">
-
-    <h4><?= Html::encode($this->title) ?></h4>
-
-    <p>
-        <?php //echo  Html::a('Update', ['update', 'id' => $model->pid], ['class' => 'btn btn-primary']) ?>
-        <?php
-//        echo Html::a('Delete', ['delete', 'id' => $model->pid], [
-//            'class' => 'btn btn-danger',
-//            'data' => [
-//                'confirm' => 'Are you sure you want to delete this item?',
-//                'method' => 'post',
-//            ],
-//        ])
-        ?>
-    </p>
-
         <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'pid',
-            ['label'=>'picUrl','value'=>$model->picUrl,],
+                [
+                    'attribute' => 'picUrl',
+                    'format' => 'raw',
+                    'label'=>'参考图片',
+                    'value' => Html::a("<a target='_blank' href=$model->picUrl>$model->picUrl</a>",$model->picUrl),
+
+                ],
             'GoodsName',
             'GoodsCode',
             'SupplierName',
             'AliasCnName',
             'AliasEnName',
             'PackName',
-            'description',
             'Season',
             'StoreName',
             'IsLiquid',
             'IsPowder',
             'isMagnetism',
             'IsCharged',
-            'DictionaryName',
             ],
 
     ]) ?>
