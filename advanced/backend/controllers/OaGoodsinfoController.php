@@ -9,6 +9,7 @@ use yii\base\Model;
 use backend\models\OaGoodsinfo;
 use backend\models\OaGoodsinfoSearch;
 use backend\models\Goodssku;
+use backend\models\GoodsCats;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -92,21 +93,30 @@ class OaGoodsinfoController extends Controller
         }
     }
 
+/** $id =oa_goodsinfo.pid
+ * oa_goods.nid = oa_goodsinfo.goodsid
+ * @paramm inter $id
+ *
+*/
 
 
     public function actionUpdate($id)
     {
-
         $info = OaGoodsinfo::findOne($id);
+        $conid = Yii::$app->db->createCommand("SELECT goodsid from  oa_Goodsinfo WHERE pid=$id")
+            ->queryOne();
+
+        $goodsItem = OaGoods::find()->select('oa_goods.*')->where(['nid'=>$conid])->all();
+
+
+//        $info =  OaGoodsinfo::find()->joinWith(['oaGoods'])->select('oa_goodsinfo.*,oa_goods.*')->where(['oa_goodsinfo.pid'=>$id])->all();
+
 
         if (!$info) {
             throw new NotFoundHttpException("The product was not found.");
         }
 
-
-
         if($info->load(Yii::$app->request->post())){
-
             $SupplerName = $_POST['OaGoodsinfo']['SupplierName'];
             // 如果该查询没有结果则返回 false
             $Suppler = Yii::$app->db->createCommand("SELECT * from  B_Supplier WHERE SupplierName='$SupplerName'")
@@ -127,7 +137,30 @@ class OaGoodsinfoController extends Controller
             if (!empty($_POST['DictionaryName'])){
                 $info->DictionaryName = implode(',',$_POST['DictionaryName']);
             }
-            $info->save();
+            $info->updateTime = strftime('%F %T');
+
+            $info->developer = $_POST['OaGoodsinfo']['developer'];
+
+            $info->Purchaser = $_POST['OaGoodsinfo']['Purchaser'];
+            $info->possessMan1 = $_POST['OaGoodsinfo']['possessMan1'];
+            $info->AttributeName = $_POST['OaGoodsinfo']['AttributeName'];
+            $info->save(false);
+
+            $goodsItem[0]->cate = $_POST['OaGoods']['cate'];
+            $cate = $_POST['OaGoods']['cate'];
+            $catNid = Yii::$app->db->createCommand("SELECT NID  from  B_GoodsCats WHERE Categoryname= '$cate'")
+                ->queryOne();
+
+            $goodsItem[0]->catNid = $catNid['NID'];
+            $goodsItem[0]->subCate = $_POST['OaGoods']['subCate'];
+            
+            $goodsItem[0]->vendor1 = $_POST['OaGoods']['vendor2'];
+            $goodsItem[0]->vendor2 = $_POST['OaGoods']['vendor2'];
+            $goodsItem[0]->vendor3 = $_POST['OaGoods']['vendor3'];
+            $goodsItem[0]->origin1 = $_POST['OaGoods']['origin1'];
+            $goodsItem[0]->origin2 = $_POST['OaGoods']['origin2'];
+            $goodsItem[0]->origin3= $_POST['OaGoods']['origin3'];
+            $goodsItem[0]->update(false);
             $this->redirect(['oa-goodsinfo/update','id'=>$id]);
 
         }else{
@@ -146,6 +179,7 @@ class OaGoodsinfoController extends Controller
                 'dataProvider' => $dataProvider,
                 'result' => $data['res'],
                 'lock' => $data['platFrom'],
+                'goodsItem' => $goodsItem[0],
 
             ]);
 
@@ -156,20 +190,18 @@ class OaGoodsinfoController extends Controller
     }
 
 
-
-
-
-
     /**
      * Deletes an existing OaGoodsinfo model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
+     * this Delete have relation with OaGoodsinfo,OaGoods,OaGoodsSKU
      * @param integer $id
      * @return mixed
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $this->findModel($id)->delete();  //OaGoodsinfo
+        OaGoods::find()->where(['nid' => $id])->delete();
+        GoodsSKU::find()->where(['pid' => $id])->delete();
         return $this->redirect(['index']);
     }
 
@@ -249,14 +281,14 @@ class OaGoodsinfoController extends Controller
         return $data;
     }
 
-/**
- * input to py
- * @param $id
- * return mixed
- *
- */
+    /**
+     * input to py
+     * @param $id
+     * return mixed
+     *
+     */
 
-public function actionInput($id)
+    public function actionInput($id)
 {
     $input_goods = "P_OaGoodsToBGoods '{$id}'";
     $udpate_status = "update oa_goodsinfo set picstatus= '待处理' ,achieveStatus='已导入' where pid = '{$id}'";
@@ -303,6 +335,7 @@ public function actionInput($id)
                     $trans->rollBack();
                     throw new \Exception("导入时发生错误");
                 }
+
             }
             echo "批量导入完成！";
         }
@@ -419,5 +452,25 @@ public function actionInput($id)
 
         }
         return $this->redirect(['index']);
+    }
+
+
+    //2级分类
+    public function actionCategory($typeid, $pid)
+    {
+        $request = Yii::$app->request;
+        $model = new GoodsCats();
+        if ($request->isGet) {
+            $cid = (int)Yii::$app->request->get('pid');
+            $typeid = (int)Yii::$app->request->get('typeid');
+            $model->getCatList($cid);
+            if ($typeid == 1) {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return $model->getCatList($cid);
+            }
+            return $this->renderAjax('updetail', [
+                'model' => $model,
+            ]);
+        }
     }
 }

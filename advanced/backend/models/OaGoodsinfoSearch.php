@@ -22,7 +22,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
     {
         return [
             [['pid','IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged'], 'integer'],
-            [['developer','devDatetime','achieveStatus','GoodsCode','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName','possessMan2'],'safe'],
+            [['developer','devDatetime','updateTime','achieveStatus','GoodsCode','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName','possessMan2'],'safe'],
 
         ];
     }
@@ -83,6 +83,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
             'DictionaryName'=>$this->DictionaryName,
             'developer'=> $this->developer,
             'devDatetime'=>$this->devDatetime,
+            'updateTime'=>$this->updateTime,
 
 
 

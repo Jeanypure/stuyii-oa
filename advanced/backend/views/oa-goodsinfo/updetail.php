@@ -12,34 +12,48 @@ use kartik\builder\Form;
 use kartik\builder\FormGrid;
 use kartik\grid\GridView;
 use kartik\widgets\Select2;
-
 use kartik\builder\TabularForm;
-
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
 $this->title = '编辑: ' . $info->GoodsCode;
 $this->params['breadcrumbs'][] = ['label' => '更新产品', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $info->GoodsCode, 'url' => ['view', 'id' => $info->pid]];
 $this->params['breadcrumbs'][] = '更新数据';
+
 $bannedNames = explode(',',$info->DictionaryName);
 
 ?>
 <?php
     $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_VERTICAL]);
+
     echo Html::label("<legend class='text-info'><small>基本信息</small></legend>");
+    echo '</br>';
+
+    echo "<a href= '$info->picUrl'  target='_blank' ><img src='$info->picUrl' width='120px' height='120px'></a>";
+//<a href="另一个地址"><img src="图片"></a>
     echo FormGrid::widget([ // continuation fields to row above without labels
     'model'=> $info,
     'form'=>$form,
     'rows' =>[
         [
-            //'contentBefore'=>'<legend class="text-info"><small>基本信息</small></legend>',
+            'attributes' =>[
+                'picUrl' =>[
+                    'label'=>'商品图片链接',
+//                    'type'=>Form::INPUT_TEXT,
+                    'options'=> ['class'=>'picUrl'],
+                ],
+
+            ],
+
+        ],
+        [
             'attributes' =>[
                 'GoodsCode' =>[
                     'label'=>'商品编码',
                     'items'=>[ 1=>'Group 2'],
                     'type'=>Form::INPUT_TEXT,
                     'readonly'=>true,
-                   'options'=> ['class'=>'GoodsCode'],
+                    'options'=> ['class'=>'GoodsCode'],
                 ],
                 'GoodsName' =>[
                     'label'=>'商品名称',
@@ -49,10 +63,28 @@ $bannedNames = explode(',',$info->DictionaryName);
                 ],
 
 
+
             ],
         ],
+        [
+            'attributes' =>[
+                'Purchaser' =>[
+                    'label'=>'采购',
+                    'type'=>Form::INPUT_TEXT,
+
+                ],
+                'developer' =>[
+                    'label'=>'业绩归属人1',
+                    'type'=>Form::INPUT_TEXT,
+                ],
+                'possessMan1' =>[
+                    'label'=>'责任归属人1',
+                    'type'=>Form::INPUT_TEXT,
+                ],
 
 
+            ],
+        ],
         [
             'attributes' =>[
                 'AliasCnName' =>[
@@ -80,7 +112,8 @@ $bannedNames = explode(',',$info->DictionaryName);
 
                 ],
             ],
-        ],[
+        ],
+        [
             'attributes' =>[
                 'description' =>[
                     'label'=>'描述',
@@ -100,7 +133,13 @@ $bannedNames = explode(',',$info->DictionaryName);
         ],
 
         [
+
             'attributes' =>[
+                'AttributeName' =>[
+                    'label'=>'特殊属性必填',
+                    'items'=>[ ''=>'','液体商品'=>'液体商品','带电商品'=>'带电商品','带磁商品'=>'带磁商品','粉末商品'=>'粉末商品'],
+                    'type'=>Form::INPUT_DROPDOWN_LIST,
+                ],
                 'StoreName' =>[
                     'label'=>'仓库',
                     'items'=>$result,
@@ -115,7 +154,11 @@ $bannedNames = explode(',',$info->DictionaryName);
         ],
     ],
 
-]);?>
+]);
+
+
+?>
+
 <?php
 //Tagging support Multiple (maintain the order of selection)
 echo '<label class="control-label">禁售平台</label>';
@@ -135,6 +178,76 @@ echo Select2::widget([
 
 
 ?>
+
+<?php
+echo FormGrid::widget([
+    'model'=> $goodsItem,
+    'form'=>$form,
+    'rows' =>[
+        [
+            'attributes' =>[
+                'cate'=>[
+                    'label'=>'主类目',
+                ],
+                'subCate'=>[
+                    'label'=>'子类目',
+                ],
+            ],
+        ],
+        [
+            'attributes' =>[
+                'vendor1' =>[
+                    'label'=>'供应商链接1',
+
+
+                ],
+                'vendor2' =>[
+                    'label'=>'供应商链接2',
+                    'type'=>Form::INPUT_TEXT,
+
+
+                ],
+                'vendor3' =>[
+                    'label'=>'供应商链接3',
+                    'type'=>Form::INPUT_TEXT,
+
+                ],
+            ],
+
+        ],
+        [
+            'attributes' =>[
+                'origin1' =>[
+                    'label'=>'平台链接1',
+                    'type'=>Form::INPUT_TEXT,
+                    'inputTemplate'=> '<a>{input}</a>',
+                ],
+                'origin2' =>[
+                    'label'=>'平台链接2',
+                    'type'=>Form::INPUT_TEXT,
+
+
+                ],
+                'origin3' =>[
+                    'label'=>'平台链接3',
+                    'type'=>Form::INPUT_TEXT,
+                ],
+            ],
+        ],
+
+    ]
+
+]);
+
+echo  Html::a('供应商链接1  ', $goodsItem->vendor1, ['class' => 'profile-link','target'=>'_blank']);
+echo  Html::a('供应商链接2  ', $goodsItem->vendor2, ['class' => 'profile-link','target'=>'_blank']);
+echo  Html::a('供应商链接3  ', $goodsItem->vendor3, ['class' => 'profile-link','target'=>'_blank']);
+echo  Html::a('平台商链接1  ', $goodsItem->origin1, ['class' => 'profile-link','target'=>'_blank']);
+echo  Html::a('平台商链接2  ', $goodsItem->origin2, ['class' => 'profile-link','target'=>'_blank']);
+echo  Html::a('平台商链接3  ', $goodsItem->origin3, ['class' => 'profile-link','target'=>'_blank']);
+
+?>
+
 <?php
     echo Html::submitButton($info->isNewRecord ? '创建' : '更新', ['class' => $info->isNewRecord ? 'btn btn-success' : 'btn btn-info']);
 ActiveForm::end();

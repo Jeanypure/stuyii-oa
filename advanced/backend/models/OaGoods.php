@@ -81,6 +81,13 @@ class OaGoods extends GoodsCats
     }
 
 
+    // 获取订单所属用户
+    public function getGoodsinfo()
+    {
+        //同样第一个参数指定关联的子表模型类名
+        //
+        return $this->hasOne(Goodsinfo::className(), ['goodsid' => 'id']);
+    }
 
 
 

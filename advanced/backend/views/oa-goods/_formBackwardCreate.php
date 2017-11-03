@@ -31,7 +31,6 @@ $this->registerJs($js);
         [
             'id' => 'create-form',
             'method' => 'post',
-//            'name' => 'oa-forward-create-form'
         ]
     ); ?>
 

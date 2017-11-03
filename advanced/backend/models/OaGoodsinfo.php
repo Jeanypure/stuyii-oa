@@ -35,7 +35,7 @@ class OaGoodsinfo extends \yii\db\ActiveRecord
             [['picStatus','updateTime','developer','devDatetime','GoodsCode','achieveStatus','description','SupplierName','Season','StoreName','PackName','DictionaryName','GoodsName'], 'string'],
 
             [['GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description',], 'required'],
-            [['DictionaryName'],'safe'],
+            [['DictionaryName','vendor1'],'safe'],
         ];
     }
 
@@ -68,5 +68,13 @@ class OaGoodsinfo extends \yii\db\ActiveRecord
 
 
         ];
+    }
+
+// 关联2张表 oa_goodsinfo ,oa_goods
+    public function getOaGoods()
+    {
+        // 第一个参数为要关联的子表模型类名，
+        // 第二个参数指定 通过子表的customer_id，关联主表的id字段
+        return $this->hasOne(OaGoods::className(), ['nid'=>'pid']);
     }
 }

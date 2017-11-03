@@ -92,6 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'attribute' => 'achieveStatus',
             'width' => '100px',
             ],
+
             'GoodsName',
             'developer',
             [
@@ -100,6 +101,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'=>
                     function($model){
                         return  substr($model->devDatetime,0,19);   //主要通过此种方式实现
+                    },
+            ],
+            [
+                'attribute' => 'updateTime',
+                'label'=>'更新时间',
+                'value'=>
+                    function($model){
+                        return  substr($model->updateTime,0,19);   //主要通过此种方式实现
                     },
             ],
             'AliasCnName',
