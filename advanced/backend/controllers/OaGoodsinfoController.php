@@ -153,7 +153,7 @@ class OaGoodsinfoController extends Controller
 
             $goodsItem[0]->catNid = $catNid['NID'];
             $goodsItem[0]->subCate = $_POST['OaGoods']['subCate'];
-            
+
             $goodsItem[0]->vendor1 = $_POST['OaGoods']['vendor2'];
             $goodsItem[0]->vendor2 = $_POST['OaGoods']['vendor2'];
             $goodsItem[0]->vendor3 = $_POST['OaGoods']['vendor3'];

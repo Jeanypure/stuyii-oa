@@ -238,12 +238,6 @@ echo FormGrid::widget([
 
 ]);
 
-echo  Html::a('供应商链接1  ', $goodsItem->vendor1, ['class' => 'profile-link','target'=>'_blank']);
-echo  Html::a('供应商链接2  ', $goodsItem->vendor2, ['class' => 'profile-link','target'=>'_blank']);
-echo  Html::a('供应商链接3  ', $goodsItem->vendor3, ['class' => 'profile-link','target'=>'_blank']);
-echo  Html::a('平台商链接1  ', $goodsItem->origin1, ['class' => 'profile-link','target'=>'_blank']);
-echo  Html::a('平台商链接2  ', $goodsItem->origin2, ['class' => 'profile-link','target'=>'_blank']);
-echo  Html::a('平台商链接3  ', $goodsItem->origin3, ['class' => 'profile-link','target'=>'_blank']);
 
 ?>
 
