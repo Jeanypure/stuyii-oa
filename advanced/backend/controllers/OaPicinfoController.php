@@ -80,7 +80,7 @@ class OaPicinfoController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->pid]);
         } else {
-         $data = $this->actionSelectParam();
+            $data = $this->actionSelectParam();
 
             return $this->render('create', [
                 'model' => $model,
@@ -96,11 +96,12 @@ class OaPicinfoController extends Controller
      * Updates an existing OaGoodsinfo model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
-     * @return mixed
+     *
      */
 
     public function actionUpdate($id)
     {
+
 
         $info = OaGoodsinfo::findOne($id);
 
@@ -185,7 +186,7 @@ class OaPicinfoController extends Controller
 
         if ($model->load(Yii::$app->request->post())&&$model->save()){
             $pid = $_POST['Goodssku']['pid'];
-              $this->redirect(['oa-goodsinfo/update','id'=>$pid]);
+            $this->redirect(['oa-goodsinfo/update','id'=>$pid]);
         } else {
             return $this->renderAjax('createsku', [
                 'model' => $model,
@@ -234,7 +235,52 @@ class OaPicinfoController extends Controller
     }
 
 
+    /**
+     * mark as completed
+     * @param $id
+     */
+    public function actionComplete($id)
+    {
+        $model = $this->findModel($id);
+        try
+        {
+            $model->picStatus = '已完善';
+            $model->update(false);
+            echo "标记成功";
+        }
+        catch (\Exception $e)
+        {
+            echo "标记失败";
+        }
 
+
+    }
+
+    /**
+     * mark as completed in bulk
+     */
+    public function actionCompleteLots()
+    {
+        $ids = $_GET['ids'];
+        try
+        {
+            foreach ($ids as $id)
+            {
+                $model = $this->findModel($id);
+
+                $model->picStatus = '已完善';
+                $model->update(false);
+            }
+            echo "标记完成";
+        }
+        catch (\Exception $e)
+        {
+            echo "标记失败";
+        }
+
+
+
+    }
 
 
 }

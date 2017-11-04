@@ -11,16 +11,23 @@ use yii\helpers\Url;
 
 $this->title = '图片信息';
 $this->params['breadcrumbs'][] = $this->title;
+
+
 ?>
 <?php echo '<br>'?>
 <div class="oa-goodsinfo-index">
 
+    <p>
+
+        <?= Html::button('标记已完善', ['id'=>'complete-lots','class' => 'btn btn-primary']) ?>
+    </p>
 
     <?= GridView::widget([
 
         'dataProvider'=> $dataProvider,
         'filterModel' => $searchModel,
         'showPageSummary'=>true,
+        'id' => 'picinfo',
         'pjax'=>true,
         'striped'=>true,
         'responsive'=>true,
@@ -29,9 +36,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
         'columns' => [
             ['class'=>'kartik\grid\SerialColumn'],
+            ['class' => 'kartik\grid\CheckboxColumn'],
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'template' =>'{view} {update} ',
+                'template' =>'{view} {update} {complete}',
                 'buttons' => [
                     'view' => function ($url, $model, $key) {
                         $options = [
@@ -44,6 +52,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         ];
                         return Html::a('<span  class="glyphicon glyphicon-eye-open"></span>', '#', $options);
+                    },
+                    'complete' => function ($url, $model, $key) {
+                        $options = [
+                            'title' => '标记图片已完善',
+                            'aria-label' => '标记图片已完善',
+                            'data-id' => $key,
+                            'class' => 'index-complete',
+
+                        ];
+                        return Html::a('<span  class="glyphicon glyphicon-check"></span>', '#', $options);
                     },
 
                 ],
@@ -78,19 +96,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
     ]); ?>
 
-<?php
-//创建模态框
-use yii\bootstrap\Modal;
-Modal::begin([
-    'id' => 'index-modal',
-    'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
-    'size' => "modal-lg"
-]);
-//echo
-Modal::end();
-$viewUrl = Url::toRoute('view');
-$js = <<<JS
-// alert(123);
+    <?php
+    //创建模态框
+    use yii\bootstrap\Modal;
+    Modal::begin([
+        'id' => 'index-modal',
+        'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
+        'size' => "modal-lg"
+    ]);
+    //echo
+    Modal::end();
+    $viewUrl = Url::toRoute('view');
+
+    $completeUrl = Url::toRoute('complete');           //标记图片单个已完善
+    $completeLotsUrl = Url::toRoute('complete-lots'); //标记图片批量已完善
+    $js = <<<JS
 // 查看框
 $('.index-view').on('click',  function () {
     $('.modal-body').children('div').remove();
@@ -100,10 +120,43 @@ $('.index-view').on('click',  function () {
             }
         );
     });
-JS;
-$this->registerJs($js);
 
-?>
+    //单个标记已完善
+    $(".index-complete").on('click',function() {
+        id = $(this).closest('tr').data('key');
+        
+        $.ajax({
+        url:'{$completeUrl}',
+        type:'get',
+        data:{id:id},
+        success:function(res) {
+        alert(res);//传回结果信息
+        }
+        });
+    });
+    
+    //批量标记完善
+    $("#complete-lots").on('click',function() {
+        ids = $("#picinfo").yiiGridView('getSelectedRows');
+        
+        $.ajax({
+        url:'{$completeLotsUrl}',
+        type:'get',
+        data:{ids:ids},
+        success:function(res) {
+        alert(res);
+        }
+        });
+    });
+JS;
+    $this->registerJs($js);
+
+    ?>
 </div>
+
+
+
+
+
 
 
