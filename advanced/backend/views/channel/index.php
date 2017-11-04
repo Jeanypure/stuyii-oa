@@ -7,22 +7,24 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\ChannelSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Channels');
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = Yii::t('app', '平台信息');
+$this->params['breadcrumbs'][] = '平台信息';
 ?>
 <div class="channel-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+<!--    <h1>--><?php //echo  Html::encode($this->title) ?><!--</h1>-->
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create Channel'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', '添加平台'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
+
             ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'yii\grid\ActionColumn'],
 
             'NID',
             'CategoryID',
@@ -31,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'Used',
             // 'Memo',
 
-            ['class' => 'yii\grid\ActionColumn'],
+
         ],
     ]); ?>
 </div>

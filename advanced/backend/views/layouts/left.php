@@ -2,12 +2,11 @@
     use mdm\admin\components\MenuHelper;
     $sql = 'oaP_statusCount';
     $status_result = yii::$app->db->createCommand($sql)->queryAll();
-//    $status_result->execute();
     $status_map = [];
     foreach ($status_result as $res){
         $status_map[$res['moduletype']] = $res['num'];
     }
-
+//    var_dump($status_map);die;
     $callback = function($menu){
     $data = json_decode($menu['data'], true);
     $items = $menu['children'];
