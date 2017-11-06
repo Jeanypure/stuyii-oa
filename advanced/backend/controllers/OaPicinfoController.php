@@ -91,12 +91,8 @@ class OaPicinfoController extends Controller
         }
     }
 
-
     /**
      * Updates an existing OaGoodsinfo model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     *
      */
 
     public function actionUpdate($id)

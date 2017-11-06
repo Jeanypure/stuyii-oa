@@ -644,7 +644,7 @@ $js2 = <<<JS
 // 导入普源事件
     $('#data-input').on('click', function() {
         $.get('{$inputUrl}',{id:'{$pid}'},function(data){
-                alert("更改成功");
+                alert(data);
                 });
     });
 
