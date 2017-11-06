@@ -23,6 +23,7 @@ $this->params['breadcrumbs'][] = '更新数据';
 $bannedNames = explode(',',$info->DictionaryName);
 $catNid = $goodsItem->catNid;
 $subCate = $goodsItem->subCate;
+
 $JS = <<<JS
 
 //选中默认主类目

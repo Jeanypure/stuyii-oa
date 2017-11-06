@@ -69,9 +69,7 @@ class OaGoodsinfoController extends Controller
         $conid = Yii::$app->db->createCommand("SELECT goodsid from  oa_Goodsinfo WHERE pid=$id")
             ->queryOne();
         $goodsItem = OaGoods::find()->select('oa_goods.*')->where(['nid'=>$conid])->all();
-////        var_dump($this->findModel($id));
-//        var_dump($goodsItem);
-//        die;
+
         return $this->renderAjax('view', [
             'model' => $this->findModel($id),
             'goodsitems' =>$goodsItem[0],
@@ -153,9 +151,6 @@ class OaGoodsinfoController extends Controller
             $info->possessMan1 = $_POST['OaGoodsinfo']['possessMan1'];
             $info->AttributeName = $_POST['OaGoodsinfo']['AttributeName'];
             $info->save(false);
-
-
-
             $cate= $_POST['OaGoods']['cate'];
             $cateName = Yii::$app->db->createCommand("SELECT CategoryName  from  B_GoodsCats WHERE NID= '$cate'")
                 ->queryOne();
@@ -164,7 +159,6 @@ class OaGoodsinfoController extends Controller
             $goodsItem[0]->cate =$cateName['CategoryName'];
             $goodsItem[0]->catNid = $cate;
             $goodsItem[0]->subCate = $_POST['OaGoods']['subCate'];
-
             $goodsItem[0]->vendor1 = $_POST['OaGoods']['vendor2'];
             $goodsItem[0]->vendor2 = $_POST['OaGoods']['vendor2'];
             $goodsItem[0]->vendor3 = $_POST['OaGoods']['vendor3'];
