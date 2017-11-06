@@ -8,8 +8,9 @@ use backend\models\ChannelSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
 use yii\data\ActiveDataProvider;
+//use backend\controllers\ActiveDataProvider;
+
 /**
  * ChannelController implements the CRUD actions for Channel model.
  */
@@ -37,17 +38,19 @@ class ChannelController extends Controller
     public function actionIndex()
     {
         $searchModel = new ChannelSearch();
+        $oaGoodsinfo = new Channel();
 //        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider = new ActiveDataProvider([
-            'query' => Channel::find()->where(['CategoryID'=>9]),
+            'query' => $oaGoodsinfo->find()->with('oa_goods'),
             'pagination' => [
                 'pageSize' => 10,
-            ],
+            ]
         ]);
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+
     }
 
     /**
@@ -72,7 +75,7 @@ class ChannelController extends Controller
         $model = new Channel();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->NID]);
+            return $this->redirect(['view', 'id' => $model->pid]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -91,7 +94,7 @@ class ChannelController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->NID]);
+            return $this->redirect(['view', 'id' => $model->pid]);
         } else {
             return $this->render('update', [
                 'model' => $model,

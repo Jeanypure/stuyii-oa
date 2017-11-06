@@ -5,14 +5,38 @@ namespace backend\models;
 use Yii;
 
 /**
- * This is the model class for table "{{%B_Dictionary}}".
+ * This is the model class for table "{{%oa_goodsinfo}}".
  *
- * @property integer $NID
- * @property integer $CategoryID
+ * @property integer $pid
+ * @property integer $IsLiquid
+ * @property integer $IsPowder
+ * @property integer $isMagnetism
+ * @property integer $IsCharged
+ * @property string $description
+ * @property string $GoodsName
+ * @property string $AliasCnName
+ * @property string $AliasEnName
+ * @property string $PackName
+ * @property string $Season
  * @property string $DictionaryName
- * @property string $FitCode
- * @property integer $Used
- * @property string $Memo
+ * @property string $SupplierName
+ * @property string $StoreName
+ * @property string $Purchaser
+ * @property string $possessMan1
+ * @property string $possessMan2
+ * @property string $DeclaredValue
+ * @property string $picUrl
+ * @property integer $goodsid
+ * @property string $GoodsCode
+ * @property string $achieveStatus
+ * @property string $devDatetime
+ * @property string $developer
+ * @property string $updateTime
+ * @property string $picStatus
+ * @property integer $SupplierID
+ * @property integer $StoreID
+ * @property string $AttributeName
+ * @property integer $bgoodsid
  */
 class Channel extends \yii\db\ActiveRecord
 {
@@ -21,7 +45,7 @@ class Channel extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%B_Dictionary}}';
+        return '{{%oa_goodsinfo}}';
     }
 
     /**
@@ -30,8 +54,10 @@ class Channel extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['CategoryID', 'Used'], 'integer'],
-            [['DictionaryName', 'FitCode', 'Memo'], 'string'],
+            [['IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged', 'goodsid', 'SupplierID', 'StoreID', 'bgoodsid'], 'integer'],
+            [['description', 'GoodsName', 'AliasCnName', 'AliasEnName', 'PackName', 'Season', 'DictionaryName', 'SupplierName', 'StoreName', 'Purchaser', 'possessMan1', 'possessMan2', 'picUrl', 'GoodsCode', 'achieveStatus', 'developer', 'picStatus', 'AttributeName','completeStatus'], 'string'],
+            [['DeclaredValue'], 'number'],
+            [['devDatetime', 'updateTime'], 'safe'],
         ];
     }
 
@@ -41,12 +67,44 @@ class Channel extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'NID' => 'Nid',
-            'CategoryID' => 'Category ID',
-            'DictionaryName' => '平台信息',
-            'FitCode' => 'Fit Code',
-            'Used' => 'Used',
-            'Memo' => 'Memo',
+            'pid' => Yii::t('app', 'Pid'),
+            'IsLiquid' => Yii::t('app', 'Is Liquid'),
+            'IsPowder' => Yii::t('app', 'Is Powder'),
+            'isMagnetism' => Yii::t('app', 'Is Magnetism'),
+            'IsCharged' => Yii::t('app', 'Is Charged'),
+            'description' => Yii::t('app', 'Description'),
+            'GoodsName' => Yii::t('app', '商品名称'),
+            'AliasCnName' => Yii::t('app', 'Alias Cn Name'),
+            'AliasEnName' => Yii::t('app', 'Alias En Name'),
+            'PackName' => Yii::t('app', 'Pack Name'),
+            'Season' => Yii::t('app', 'Season'),
+            'DictionaryName' => Yii::t('app', '禁售平台'),
+            'SupplierName' => Yii::t('app', '供应商名称'),
+            'StoreName' => Yii::t('app', '仓库'),
+            'Purchaser' => Yii::t('app', '采购'),
+            'possessMan1' => Yii::t('app', '美工'),
+            'possessMan2' => Yii::t('app', 'Possess Man2'),
+            'DeclaredValue' => Yii::t('app', 'Declared Value'),
+            'picUrl' => Yii::t('app', '图片'),
+            'goodsid' => Yii::t('app', 'Goodsid'),
+            'GoodsCode' => Yii::t('app', '商品编码'),
+            'achieveStatus' => Yii::t('app', 'Achieve Status'),
+            'devDatetime' => Yii::t('app', '开发时间'),
+            'developer' => Yii::t('app', '开发员'),
+            'updateTime' => Yii::t('app', 'Update Time'),
+            'picStatus' => Yii::t('app', 'Pic Status'),
+            'SupplierID' => Yii::t('app', 'Supplier ID'),
+            'StoreID' => Yii::t('app', 'Store ID'),
+            'AttributeName' => Yii::t('app', 'Attribute Name'),
+            'bgoodsid' => Yii::t('app', 'Bgoodsid'),
+            'completeStatus' => Yii::t('app', '完成状况'),
         ];
+    }
+
+    //oa_goodsinfo 关联oa_goods  获取 类别
+    public function getoa_goods()
+    {
+        //同样第一个参数指定关联的子表模型类名
+        return $this->hasOne(OaGoods::className(), ['nid' => 'goodsid']);
     }
 }

@@ -18,8 +18,9 @@ class ChannelSearch extends Channel
     public function rules()
     {
         return [
-            [['NID', 'CategoryID', 'Used'], 'integer'],
-            [['DictionaryName', 'FitCode', 'Memo'], 'safe'],
+            [['pid', 'IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged', 'goodsid', 'SupplierID', 'StoreID', 'bgoodsid'], 'integer'],
+            [['description', 'GoodsName', 'AliasCnName', 'AliasEnName', 'PackName', 'Season', 'DictionaryName', 'SupplierName', 'StoreName', 'Purchaser', 'possessMan1', 'possessMan2', 'picUrl', 'GoodsCode', 'achieveStatus', 'devDatetime', 'developer', 'updateTime', 'picStatus', 'AttributeName'], 'safe'],
+            [['DeclaredValue'], 'number'],
         ];
     }
 
@@ -42,12 +43,17 @@ class ChannelSearch extends Channel
     public function search($params)
     {
         $query = Channel::find();
+//        $query =  Yii::$app->db->createCommand('SELECT picUrl,GoodsCode,GoodsName,StoreName,o.developer,Purchaser,devDatetime,DictionaryName,cate,subCate
+//                      FROM oa_goodsinfo o
+//                        LEFT JOIN oa_goods s ON s.nid=o.goodsid');
+
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
 
         $this->load($params);
 
@@ -58,15 +64,41 @@ class ChannelSearch extends Channel
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
-            'NID' => $this->NID,
-            'CategoryID' => $this->CategoryID,
-            'Used' => $this->Used,
+      $query->andFilterWhere([
+            'pid' => $this->pid,
+            'IsLiquid' => $this->IsLiquid,
+            'IsPowder' => $this->IsPowder,
+            'isMagnetism' => $this->isMagnetism,
+            'IsCharged' => $this->IsCharged,
+            'DeclaredValue' => $this->DeclaredValue,
+            'goodsid' => $this->goodsid,
+            'devDatetime' => $this->devDatetime,
+            'updateTime' => $this->updateTime,
+            'SupplierID' => $this->SupplierID,
+            'StoreID' => $this->StoreID,
+            'bgoodsid' => $this->bgoodsid,
         ]);
 
-        $query->andFilterWhere(['like', 'DictionaryName', $this->DictionaryName])
-            ->andFilterWhere(['like', 'FitCode', $this->FitCode])
-            ->andFilterWhere(['like', 'Memo', $this->Memo]);
+        $query
+            ->andFilterWhere(['like', 'description', $this->description])
+            ->andFilterWhere(['like', 'GoodsName', $this->GoodsName])
+            ->andFilterWhere(['like', 'AliasCnName', $this->AliasCnName])
+            ->andFilterWhere(['like', 'AliasEnName', $this->AliasEnName])
+            ->andFilterWhere(['like', 'PackName', $this->PackName])
+            ->andFilterWhere(['like', 'Season', $this->Season])
+            ->andFilterWhere(['like', 'DictionaryName', $this->DictionaryName])
+            ->andFilterWhere(['like', 'SupplierName', $this->SupplierName])
+            ->andFilterWhere(['like', 'StoreName', $this->StoreName])
+            ->andFilterWhere(['like', 'Purchaser', $this->Purchaser])
+            ->andFilterWhere(['like', 'possessMan1', $this->possessMan1])
+            ->andFilterWhere(['like', 'possessMan2', $this->possessMan2])
+            ->andFilterWhere(['like', 'picUrl', $this->picUrl])
+            ->andFilterWhere(['like', 'GoodsCode', $this->GoodsCode])
+            ->andFilterWhere(['like', 'achieveStatus', $this->achieveStatus])
+            ->andFilterWhere(['like', 'developer', $this->developer])
+            ->andFilterWhere(['like', 'picStatus', $this->picStatus])
+            ->andFilterWhere(['like', 'AttributeName', $this->AttributeName])
+;
 
         return $dataProvider;
     }

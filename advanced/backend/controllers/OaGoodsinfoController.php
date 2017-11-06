@@ -154,8 +154,7 @@ class OaGoodsinfoController extends Controller
             $cate= $_POST['OaGoods']['cate'];
             $cateName = Yii::$app->db->createCommand("SELECT CategoryName  from  B_GoodsCats WHERE NID= '$cate'")
                 ->queryOne();
-            $catNid = Yii::$app->db->createCommand("SELECT NID  from  B_GoodsCats WHERE Categoryname= '$cate'")
-                ->queryOne();
+
             $goodsItem[0]->cate =$cateName['CategoryName'];
             $goodsItem[0]->catNid = $cate;
             $goodsItem[0]->subCate = $_POST['OaGoods']['subCate'];
@@ -478,4 +477,6 @@ class OaGoodsinfoController extends Controller
             ]);
         }
     }
+
+
 }
