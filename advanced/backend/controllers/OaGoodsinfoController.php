@@ -154,12 +154,15 @@ class OaGoodsinfoController extends Controller
             $info->AttributeName = $_POST['OaGoodsinfo']['AttributeName'];
             $info->save(false);
 
-            $goodsItem[0]->cate = $_POST['OaGoods']['cate'];
-            $cate = $_POST['OaGoods']['cate'];
+
+
+            $cate= $_POST['OaGoods']['cate'];
+            $cateName = Yii::$app->db->createCommand("SELECT CategoryName  from  B_GoodsCats WHERE NID= '$cate'")
+                ->queryOne();
             $catNid = Yii::$app->db->createCommand("SELECT NID  from  B_GoodsCats WHERE Categoryname= '$cate'")
                 ->queryOne();
-
-            $goodsItem[0]->catNid = $catNid['NID'];
+            $goodsItem[0]->cate =$cateName['CategoryName'];
+            $goodsItem[0]->catNid = $cate;
             $goodsItem[0]->subCate = $_POST['OaGoods']['subCate'];
 
             $goodsItem[0]->vendor1 = $_POST['OaGoods']['vendor2'];
