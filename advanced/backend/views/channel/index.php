@@ -8,30 +8,68 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', '平台信息');
-$this->params['breadcrumbs'][] = '平台信息';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="channel-index">
 
-<!--    <h1>--><?php //echo  Html::encode($this->title) ?><!--</h1>-->
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('app', '添加平台'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Create Channel'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-
             ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'yii\grid\CheckboxColumn'],
             ['class' => 'yii\grid\ActionColumn'],
 
-            'NID',
-            'CategoryID',
+//            'pid',
+//            'IsLiquid',
+//            'IsPowder',
+//            'isMagnetism',
+//            'IsCharged',
+            // 'description',
+            [
+                'attribute' => 'picUrl',
+                'value' =>function($model,$key, $index, $widget) {
+                    return "<img src='$model->picUrl' width='100' height='100'/>";
+                },
+                'format' => 'raw',
+            ],
+            'GoodsCode',
+             'GoodsName',
+            'oa_goods.cate',
+            'oa_goods.subCate',
+            // 'AliasCnName',
+            // 'AliasEnName',
+            // 'PackName',
+            // 'Season',
+
+             'SupplierName',
+             'StoreName',
+            'developer',
+             'Purchaser',
+             'possessMan1',
+
+            // 'possessMan2',
+            // 'DeclaredValue',
+            // 'picUrl:url',
+            // 'goodsid',
+
+            // 'achieveStatus',
+             'devDatetime',
+            'completeStatus',
             'DictionaryName',
-            'FitCode',
-            'Used',
-            // 'Memo',
+
+
+            // 'updateTime',
+            // 'picStatus',
+            // 'SupplierID',
+            // 'StoreID',
+            // 'AttributeName',
+            // 'bgoodsid',
 
 
         ],

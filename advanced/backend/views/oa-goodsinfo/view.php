@@ -33,7 +33,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'AliasCnName',
             'AliasEnName',
             'PackName',
-            'description',
+            [
+                'attribute' => 'description',
+                'format' => 'raw',
+            ],
             'Season',
             'StoreName',
             'IsLiquid',

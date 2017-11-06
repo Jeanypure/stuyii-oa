@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Channel */
 
-$this->title = $model->NID;
+$this->title = $model->pid;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Channels'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -15,8 +15,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->NID], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->NID], [
+        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->pid], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->pid], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
@@ -28,12 +28,36 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'NID',
-            'CategoryID',
+            'pid',
+            'IsLiquid',
+            'IsPowder',
+            'isMagnetism',
+            'IsCharged',
+            'description',
+            'GoodsName',
+            'AliasCnName',
+            'AliasEnName',
+            'PackName',
+            'Season',
             'DictionaryName',
-            'FitCode',
-            'Used',
-            'Memo',
+            'SupplierName',
+            'StoreName',
+            'Purchaser',
+            'possessMan1',
+            'possessMan2',
+            'DeclaredValue',
+            'picUrl:url',
+            'goodsid',
+            'GoodsCode',
+            'achieveStatus',
+            'devDatetime',
+            'developer',
+            'updateTime',
+            'picStatus',
+            'SupplierID',
+            'StoreID',
+            'AttributeName',
+            'bgoodsid',
         ],
     ]) ?>
 
