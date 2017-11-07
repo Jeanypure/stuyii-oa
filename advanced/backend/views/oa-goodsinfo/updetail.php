@@ -120,7 +120,8 @@ $this->registerJs($JS);
                 ],
                 'PackName' =>[
                     'label'=>'规格',
-                    'items'=>[''=>NUll,'A01'=>'A01','A02'=>'A02','A03'=>'A03','A04'=>'A04','B01'=>'B01','B02'=>'B02','stamp'=>'stamp',],
+//                    'items'=>[''=>NUll,'A01'=>'A01','A02'=>'A02','A03'=>'A03','A04'=>'A04','B01'=>'B01','B02'=>'B02','stamp'=>'stamp',],
+                    'items'=>$packname,
                     'type'=>Form::INPUT_DROPDOWN_LIST,
 
                 ],
