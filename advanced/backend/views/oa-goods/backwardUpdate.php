@@ -15,7 +15,7 @@ $catNid = $model->catNid;
 $subCate = $model->subCate;
 $updateCheckUrl = Url::toRoute('backward-update-check');
 $checkStatus = $model->checkStatus;
-
+$requireTemplates = ["template" => "<span style='color:red'>*{label}:</span>\n<div >{input}</div>\n{error}"];
 
 $JS = <<<JS
 
@@ -47,6 +47,7 @@ $this->registerJs($JS);
 <div>
     <?= Html::img($model->img,['width'=>100,'height'=>100])?>
 </div>
+</br>
 <div class="oa-goods-update">
     <div class="oa-goods-form">
 
@@ -58,10 +59,10 @@ $this->registerJs($JS);
             ]
         ]); ?>
 
-        <?= $form->field($model, 'img')->textInput() ?>
+        <?= $form->field($model, 'img',$requireTemplates)->textInput() ?>
 
         <?php
-        echo $form->field($model,'cate')->dropDownList($model->getCatList(0),
+        echo $form->field($model,'cate',$requireTemplates)->dropDownList($model->getCatList(0),
             [
                 'prompt'=>'--父类--',
                 'onchange'=>'           
@@ -76,7 +77,7 @@ $this->registerJs($JS);
             });',
             ]);?>
 
-        <?php echo $form->field($model,'subCate')->dropDownList($model->getCatList($model->catNid),
+        <?php echo $form->field($model,'subCate',$requireTemplates)->dropDownList($model->getCatList($model->catNid),
             [
                 'prompt'=>'--请选择子类--',
 
@@ -84,16 +85,12 @@ $this->registerJs($JS);
         ?>
 
 
-
-
+        <?= $form->field($model, 'origin1',$requireTemplates)->textInput() ?>
         <?= $form->field($model, 'vendor1')->textInput() ?>
         <?php echo  $form->field($model, 'vendor2')->textInput() ?>
         <?php echo  $form->field($model, 'vendor3')->textInput() ?>
-        <?= $form->field($model, 'origin1')->textInput() ?>
-
         <?php echo  $form->field($model, 'origin2')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'origin3')->textInput(['placeholder' => '--选填--']) ?>
-
         <?php echo  $form->field($model, 'salePrice')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'hopeSale')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'hopeRate')->textInput(['placeholder' => '--选填--']) ?>

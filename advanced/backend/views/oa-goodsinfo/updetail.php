@@ -35,15 +35,17 @@ $("option:contains({$subCate})").attr("selected",true);
 JS;
 
 $this->registerJs($JS);
+
+echo Html::label("<legend class='text-info'><small>基本信息</small></legend>");
+
+echo '</br>';
+
+echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' width='120px' height='120px'></a></div></br>";
+
 ?>
+
 <?php
     $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_VERTICAL]);
-
-    echo Html::label("<legend class='text-info'><small>基本信息</small></legend>");
-    echo '</br>';
-
-    echo "<a href= '$info->picUrl'  target='_blank' ><img src='$info->picUrl' width='120px' height='120px'></a>";
-//<a href="另一个地址"><img src="图片"></a>
     echo FormGrid::widget([ // continuation fields to row above without labels
     'model'=> $info,
     'form'=>$form,
@@ -51,8 +53,7 @@ $this->registerJs($JS);
         [
             'attributes' =>[
                 'picUrl' =>[
-                    'label'=>'商品图片链接',
-//                    'type'=>Form::INPUT_TEXT,
+                    'label'=>"商品图片链接",
                     'options'=> ['class'=>'picUrl'],
                 ],
 
@@ -69,7 +70,7 @@ $this->registerJs($JS);
                     'options'=> ['class'=>'GoodsCode'],
                 ],
                 'GoodsName' =>[
-                    'label'=>'商品名称',
+                    'label'=>"<span style = 'color:red'>*商品名称</span>",
                     'items'=>[ 1=>'Group 2'],
                     'type'=>Form::INPUT_TEXT,
                     'options'=> ['class'=>'GoodsName'],
@@ -101,12 +102,12 @@ $this->registerJs($JS);
         [
             'attributes' =>[
                 'AliasCnName' =>[
-                    'label'=>'中文申报名',
+                    'label'=>"<span style = 'color:red'>*中文申报名</span>",
                     'items'=>[ 1=>'Group 2'],
                     'type'=>Form::INPUT_TEXT,
                 ],
                 'AliasEnName' =>[
-                    'label'=>'英文申报名',
+                    'label'=>"<span style = 'color:red'>*英文申报名</span>",
                     'items'=>[ 1=>'Group 2'],
                     'type'=>Form::INPUT_TEXT,
                 ],
@@ -115,11 +116,11 @@ $this->registerJs($JS);
         [
             'attributes' =>[
                 'SupplierName' =>[
-                    'label'=>'供应商名称',
+                    'label'=>"<span style = 'color:red'>*供应商名称</span>",
                     'type'=>Form::INPUT_TEXT,
                 ],
                 'PackName' =>[
-                    'label'=>'规格',
+                    'label'=>"<span style = 'color:red'>*规格</span>",
                     'items'=>[''=>NUll,'A01'=>'A01','A02'=>'A02','A03'=>'A03','A04'=>'A04','B01'=>'B01','B02'=>'B02','stamp'=>'stamp',],
                     'type'=>Form::INPUT_DROPDOWN_LIST,
 
@@ -129,7 +130,7 @@ $this->registerJs($JS);
         [
             'attributes' =>[
                 'description' =>[
-                    'label'=>'描述',
+                    'label'=>"<span style = 'color:red'>*描述</span>",
                     'items'=>[ 1=>'Group 2'],
                     'type'=>Form::INPUT_TEXTAREA,
                     'options'=>['rows'=>'6']
@@ -658,3 +659,11 @@ Modal::end();
         ele.closest('tr').remove();
     };
 </script>
+
+<style>
+    .align-center {
+        clear: both;
+        display: block;
+        margin:auto;
+    }
+</style>
