@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use kartik\dialog\Dialog;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\OaGoodsSearch */
@@ -293,7 +294,20 @@ function centerFormat($name) {
             centerFormat('developer'),
             centerFormat('introducer'),
 //            centerFormat('devStatus'),
-            centerFormat('checkStatus'),
+//            centerFormat('checkStatus'),
+            [
+                'attribute'=>'checkStatus',
+                'width'=>'250px',
+                'value'=>function ($model, $key, $index, $widget) {
+                    return $model->checkStatus;
+                },
+                'filterType'=>GridView::FILTER_SELECT2,
+                'filter'=>ArrayHelper::map(\backend\models\OaGoods::find()->orderBy('checkStatus')->asArray()->all(), 'id', 'checkStatus'),
+                'filterWidgetOptions'=>[
+                    'pluginOptions'=>['allowClear'=>true],
+                ],
+                'filterInputOptions'=>['placeholder'=>'产品状态']
+            ],
             centerFormat('approvalNote'),
             centerFormat('createDate'),
             centerFormat('updateDate'),

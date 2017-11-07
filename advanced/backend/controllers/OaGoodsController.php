@@ -204,13 +204,17 @@ class OaGoodsController extends Controller
             if ($model->load($request->post()) && $model->save()) {
                 //默认值更新到当前行中
                 $id = $model->nid;
-                $cate = $model->cate;
-                $cateModel = GoodsCats::find()->where(['nid' => $cate])->one();
                 $current_model = $this->findModel($id);
                 $user = yii::$app->user->identity->username;
+
                 //根据类目ID更新类目名称
-                $current_model->catNid = $cate;
-                $current_model->cate = $cateModel->CategoryName;
+                $sub_cate = $model->subCate;
+                try {
+                    $cateModel = GoodsCats::find()->where(['nid' => $sub_cate])->one();
+                }
+                catch (\Exception $e) {
+                    $cateModel = GoodsCats::find()->where(['CategoryName' => $sub_cate])->one();
+                }
                 //自动计算预估月毛利
                 $price = $current_model->salePrice;
                 $rate = $current_model->hopeRate;
@@ -223,6 +227,9 @@ class OaGoodsController extends Controller
                 $current_model->developer = $user;
                 $current_model->updateDate = strftime('%F %T');
                 $current_model->createDate = strftime('%F %T');
+                $current_model->catNid = $cateModel->CategoryParentID;
+                $current_model->cate = $cateModel->CategoryParentName;
+                $current_model->subCate = $cateModel->CategoryName;
                 $current_model->update(false);
                 return $this->redirect(['forward-products']);
             } else {
@@ -264,12 +271,17 @@ class OaGoodsController extends Controller
             if ($model->load(Yii::$app->request->post()) && $model->save(false)) {
                 //默认值更新到当前行中
                 $id = $model->nid;
-                $cate = $model->cate;
-                $cateModel = GoodsCats::find()->where(['nid' => $cate])->one();
                 $current_model = $this->findModel($id);
                 $user = yii::$app->user->identity->username;
                 //根据类目ID更新类目名称
-                $current_model->catNid = $cate;
+                $sub_cate = $model->subCate;
+                try {
+
+                    $cateModel = GoodsCats::find()->where(['nid' => $sub_cate])->one();
+                }
+                catch (\Exception $e) {
+                    $cateModel = GoodsCats::find()->where(['CategoryName' => $sub_cate])->one();
+                }
                 $current_model->cate = $cateModel->CategoryName;
                 $price = $current_model->salePrice;
                 $rate = $current_model->hopeRate;
@@ -285,6 +297,9 @@ class OaGoodsController extends Controller
                 $current_model->developer = $user;
                 $current_model->updateDate = strftime('%F %T');
                 $current_model->createDate = strftime('%F %T');
+                $current_model->catNid = $cateModel->CategoryParentID;
+                $current_model->cate = $cateModel->CategoryParentName;
+                $current_model->subCate = $cateModel->CategoryName;
                 $current_model->update(false);
                 return $this->redirect(['backward-products']);
             } else {
