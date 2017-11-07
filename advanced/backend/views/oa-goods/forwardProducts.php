@@ -302,7 +302,8 @@ function centerFormat($name) {
                     return $model->checkStatus;
                 },
                 'filterType'=>GridView::FILTER_SELECT2,
-                'filter'=>ArrayHelper::map(\backend\models\OaGoods::find()->orderBy('checkStatus')->asArray()->all(), 'id', 'checkStatus'),
+//                'filter'=>ArrayHelper::map(\backend\models\OaGoods::find()->orderBy('checkStatus') ->asArray()->all(), 'nid', 'checkStatus'),
+                'filter'=> ['1' => "待提交", 2 =>'已审批'],
                 'filterWidgetOptions'=>[
                     'pluginOptions'=>['allowClear'=>true],
                 ],
@@ -319,6 +320,9 @@ function centerFormat($name) {
 
 
         ],
-    ]); ?>
+    ]);
+//    $test = ArrayHelper::map(\backend\models\OaGoods::find()->orderBy('checkStatus')->asArray()->all(), 'nid', 'checkStatus');
+//    var_dump($test);die;
+    ?>
 </div>
 

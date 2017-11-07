@@ -14,6 +14,8 @@ $this->params['breadcrumbs'][] = '更新';
 $catNid = $model->catNid;
 $subCate = $model->subCate;
 $updateCheckUrl = Url::toRoute('backward-update-check');
+$checkStatus = $model->checkStatus;
+
 
 $JS = <<<JS
 
@@ -31,6 +33,12 @@ $("#update-check-btn").on('click',function() {
     form.attr('action','{$updateCheckUrl}?id={$model->nid}');
     form.submit();
 });
+
+
+// 如果产品状态是已审批就不要出现更新并提交审核按钮
+if('{$checkStatus}' == '已审批') {
+    $('#update-check-btn').hide();
+}
 JS;
 
 $this->registerJs($JS);
