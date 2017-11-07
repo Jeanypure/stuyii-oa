@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
 
-        <?= Html::button('标记已完善', ['id'=>'complete-lots','class' => 'btn btn-primary']) ?>
+        <?= Html::button('标记已完善', ['id'=>'complete-lots','class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'striped'=>true,
         'responsive'=>true,
         'hover'=>true,
-        'panel'=>['type'=>'primary', 'heading'=>'基本信息'],
+//        'panel'=>['type'=>'primary', 'heading'=>'基本信息'],
 
         'columns' => [
             ['class'=>'kartik\grid\SerialColumn'],
@@ -145,6 +145,7 @@ $('.index-view').on('click',  function () {
         data:{ids:ids},
         success:function(res) {
         alert(res);
+        location.reload();
         }
         });
     });
