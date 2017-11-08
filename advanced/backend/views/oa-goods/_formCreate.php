@@ -15,23 +15,23 @@ use yii\helpers\ArrayHelper;
     <?php $form = ActiveForm::begin(
     ); ?>
 
-    <?php echo  $form->field($model, 'img',['template' => "<font color='red'>*{label}</font>\n<div >{input}</div>\n<div >{error}</div>",])->textInput(['placeholder' => '--必填--']) ?>
+    <?php echo  $form->field($model, 'img',['template' => "<span style='color:red' >*{label}\n</span><div >{input}</div>\n<div >{error}</div>",])->textInput(['placeholder' => '--必填--']) ?>
 
 
-    <?= $form->field($model,'cate',['template' => "<font color='red'>*{label}</font>\n<div >{input}</div>\n<div >{error}</div>",])->dropDownList($model->getCatList(0),
+    <?= $form->field($model,'cate',['template' => "<span style='color:red' >*{label}\n</span><div >{input}</div>\n<div >{error}</div>",])->dropDownList($model->getCatList(0),
         [
             'prompt'=>'--请选择父类--',
-            'onchange'=>'
-           
-            $.get("'.yii::$app->urlManager->createUrl('oa-goods/forward-create').'?typeid=1&pid="+$(this).val(),function(data){
+            'onchange'=>'           
+            $.get("'.yii::$app->urlManager->createUrl('oa-goods/category').
+                '?typeid=1&pid="+$(this).val(),function(data){
                 var str="";
-              $("select#oaforwardgoods-subcate").children("option").remove();
+              $("select#oagoods-subcate").children("option").remove();
               $.each(data,function(k,v){
                     str+="<option value="+v+">"+v+"</option>";
                     });
                 $("select#oagoods-subcate").html(str);
             });',
-        ]) ?>
+        ]);?>
 
     <?= $form->field($model,'subCate',['template' => "<font color='red'>*{label}</font>\n<div >{input}</div>\n<div >{error}</div>",])->dropDownList($model->getCatList($model->cate),
         [

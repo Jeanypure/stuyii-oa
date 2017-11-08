@@ -40,14 +40,18 @@ $this->registerJs($JS);
         ]); ?>
 
 
-        <?= $form->field($model, 'img')->textInput() ?>
+        <?= $form->field($model, 'img',[
+            'template' => "<span style='color:red' >*{label}\n</span><div >{input}</div>\n<div >{error}</div>",])
+            ->textInput() ?>
 
         <?php //echo  $form->field($model, 'cate')->textInput() ?>
 
         <?php //echo $form->field($model, 'subCate')->textInput() ?>
 
         <?php
-        echo $form->field($model,'cate')->dropDownList($model->getCatList(0),
+        echo $form->field($model,'cate',[
+            'template' => "<span style='color:red' >*{label}\n</span><div >{input}</div>\n<div >{error}</div>",])
+            ->dropDownList($model->getCatList(0),
             [
                 'prompt'=>'--请选择父类--',
                 'onchange'=>'           
@@ -62,7 +66,9 @@ $this->registerJs($JS);
             });',
             ]);?>
 
-        <?php echo $form->field($model,'subCate')->dropDownList($model->getCatList($model->catNid),
+        <?php echo $form->field($model,'subCate',[
+            'template' => "<span style='color:red' >*{label}\n</span><div >{input}</div>\n<div >{error}</div>",])
+            ->dropDownList($model->getCatList($model->catNid),
             [
                 'prompt'=>'--请选择子类--',
 
