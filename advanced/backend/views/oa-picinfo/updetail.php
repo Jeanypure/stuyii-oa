@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = '更新数据';
 
 <?php $skuForm = ActiveForm::begin(['id'=>'sku-info','method'=>'post',]);
 ?>
+<h3><?php echo  Html::encode($this->title) ?></h3>
 <?php
 echo TabularForm::widget([
     'dataProvider' => $dataProvider,
