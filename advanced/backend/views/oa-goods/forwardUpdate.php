@@ -14,6 +14,9 @@ $this->params['breadcrumbs'][] = '更新';
 $catNid = $model->catNid;
 $subCate = $model->subCate;
 $updateCheckUrl = Url::toRoute('forward-update-check');
+$checkStatus = $model->checkStatus;
+$requireTemplates = ["template" => "<span style='color:red'>*{label}:</span>\n<div >{input}</div>\n{error}"];
+
 
 $JS = <<<JS
 
@@ -31,6 +34,10 @@ $("#update-check-btn").on('click',function() {
     form.submit();
 });
 
+// 如果产品状态是已审批就不要出现更新并提交审核按钮
+if('{$checkStatus}' == '已审批') {
+    $('#update-check-btn').hide();
+}
 JS;
 
 $this->registerJs($JS);
@@ -38,7 +45,9 @@ $this->registerJs($JS);
 
 <div>
     <?= Html::img($model->img,['width'=>100,'height'=>100])?>
+
 </div>
+</br>
 <div class="oa-goods-update">
     <div class="oa-goods-form">
 
@@ -46,14 +55,14 @@ $this->registerJs($JS);
             'id' => 'update-form',
             'method' => 'post',
             'fieldConfig'=>[
-                'template'=> "{label}\n<div >{input}</div>\n{error}",
+                'template'=> "<div>{label}:{input}</div>\n{error}",
             ]
         ]); ?>
 
-        <?= $form->field($model, 'img')->textInput() ?>
+        <?= $form->field($model, 'img',$requireTemplates)->textInput() ?>
 
         <?php
-        echo $form->field($model,'cate')->dropDownList($model->getCatList(0),
+        echo $form->field($model,'cate', $requireTemplates)->dropDownList($model->getCatList(0),
             [
                 'prompt'=>'--父类--',
                 'onchange'=>'           
@@ -68,24 +77,18 @@ $this->registerJs($JS);
             });',
             ]);?>
 
-        <?php echo $form->field($model,'subCate')->dropDownList($model->getCatList($model->catNid),
+        <?php echo $form->field($model,'subCate',$requireTemplates)->dropDownList($model->getCatList($model->catNid),
             [
                 'prompt'=>'--请选择子类--',
 
             ]);
         ?>
-
-        <?= $form->field($model, 'vendor1')->textInput() ?>
-
-        <?= $form->field($model, 'origin1')->textInput() ?>
-
+        <?= $form->field($model, 'vendor1',$requireTemplates)->textInput() ?>
         <?php echo  $form->field($model, 'vendor2')->textInput() ?>
         <?php echo  $form->field($model, 'vendor3')->textInput() ?>
-
         <?php echo  $form->field($model, 'origin1')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'origin2')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'origin3')->textInput(['placeholder' => '--选填--']) ?>
-
         <?php echo  $form->field($model, 'salePrice')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'hopeSale')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'hopeRate')->textInput(['placeholder' => '--选填--']) ?>

@@ -15,6 +15,7 @@ $catNid = $model->catNid;
 $subCate = $model->subCate;
 $reCheckUrl = Url::toRoute('backward-recheck');
 $trashUrl = Url::toRoute('backward-trash');
+$requireTemplates = ["template" => "<span style='color:red'>*{label}:</span>\n<div >{input}</div>\n{error}"];
 $JS = <<<JS
 
 //选中默认主类目
@@ -55,10 +56,10 @@ $this->registerJs($JS);
             ]
         ]); ?>
 
-        <?= $form->field($model, 'img')->textInput() ?>
+        <?= $form->field($model, 'img',$requireTemplates)->textInput() ?>
 
         <?php
-        echo $form->field($model,'cate')->dropDownList($model->getCatList(0),
+        echo $form->field($model,'cate',$requireTemplates)->dropDownList($model->getCatList(0),
             [
                 'prompt'=>'--父类--',
                 'onchange'=>'           
@@ -73,21 +74,18 @@ $this->registerJs($JS);
             });',
             ]);?>
 
-        <?php echo $form->field($model,'subCate')->dropDownList($model->getCatList($model->catNid),
+        <?php echo $form->field($model,'subCate',$requireTemplates)->dropDownList($model->getCatList($model->catNid),
             [
                 'prompt'=>'--请选择子类--',
 
             ]);
         ?>
 
+        <?= $form->field($model, 'origin1',$requireTemplates)->textInput() ?>
         <?= $form->field($model, 'vendor1')->textInput() ?>
-
-        <?= $form->field($model, 'origin1')->textInput() ?>
-
         <?php echo  $form->field($model, 'vendor2')->textInput() ?>
         <?php echo  $form->field($model, 'vendor3')->textInput() ?>
 
-        <?php echo  $form->field($model, 'origin1')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'origin2')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'origin3')->textInput(['placeholder' => '--选填--']) ?>
 

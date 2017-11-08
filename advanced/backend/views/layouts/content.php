@@ -3,7 +3,7 @@ use yii\widgets\Breadcrumbs;
 use dmstr\widgets\Alert;
 $js = <<< JS
 //设置背景色
-$('body').css('background','#FFF');
+$('.content-wrapper').css('background','#FFF');
 
 JS;
 $this->registerJs($js);

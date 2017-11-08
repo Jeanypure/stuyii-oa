@@ -1,6 +1,7 @@
 <?php
     use mdm\admin\components\MenuHelper;
-    $sql = 'oaP_statusCount';
+    $user = yii::$app->user->identity->username;
+    $sql = "oaP_statusCount '{$user}'";
     $status_result = yii::$app->db->createCommand($sql)->queryAll();
     $status_map = [];
     foreach ($status_result as $res){
@@ -40,6 +41,7 @@ $JS = <<< JS
     $("a span:contains('未通过')").after('<sup class="label label-success">{$status_map["未通过"]}</sup>');
     $("a span:contains('属性信息')").after('<sup class="label label-info">{$status_map["属性信息"]}</sup>');
     $("a span:contains('图片信息')").after('<sup class="label label-warning">{$status_map["图片信息"]}</sup>');
+    $("a span:contains('平台信息')").after('<sup class="label label-success">{$status_map["平台信息"]}</sup>');
 
 JS;
 $this->registerJs($JS);

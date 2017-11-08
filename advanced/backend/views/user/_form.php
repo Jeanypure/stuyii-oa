@@ -13,23 +13,13 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'username')->textInput() ?>
+    <?= $form->field($model, 'department')->textInput() ?>
+    <?= $form->field($model, 'isLeader')->textInput() ?>
+    <?= $form->field($model, 'leaderName')->textInput() ?>
 
-    <?= $form->field($model, 'auth_key')->textInput() ?>
-
-    <?= $form->field($model, 'password_hash')->textInput() ?>
-
-    <?= $form->field($model, 'password_reset_token')->textInput() ?>
-
-    <?= $form->field($model, 'email')->textInput() ?>
-
-    <?= $form->field($model, 'status')->textInput() ?>
-
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Create' : '更新', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
