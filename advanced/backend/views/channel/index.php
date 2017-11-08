@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\bootstrap\Tabs;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\ChannelSearch */
@@ -14,9 +15,33 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
+
     <p>
         <?= Html::a(Yii::t('app', 'Create Channel'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+    <span style="margin: 10px 0 10px 0">
+        <span style="margin: 0 10px 0 0">刊登平台: </span>
+        <?php
+        echo "<span>";
+        $items[] = [
+            'label' => 'eBay',
+            'active' => false,
+        ];
+        $items[] = [
+            'label' => 'Wish',
+            'active' => true,
+        ];
+
+
+        echo Tabs::widget([
+            'items' => $items,
+        ]);
+
+        echo "</span>";
+        ?>
+
+    </div>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,

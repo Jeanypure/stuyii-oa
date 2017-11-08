@@ -38,14 +38,14 @@ class ChannelController extends Controller
     public function actionIndex()
     {
         $searchModel = new ChannelSearch();
-        $oaGoodsinfo = new Channel();
-//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider = new ActiveDataProvider([
-            'query' => $oaGoodsinfo->find()->with('oa_goods'),
-            'pagination' => [
-                'pageSize' => 10,
-            ]
-        ]);
+//        $oaGoodsinfo = new Channel();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//        $dataProvider = new ActiveDataProvider([
+//            'query' => $oaGoodsinfo->find()->with('oa_goods'),
+//            'pagination' => [
+//                'pageSize' => 10,
+//            ]
+//        ]);
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -96,11 +96,31 @@ class ChannelController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->pid]);
         } else {
-            return $this->render('update', [
+            return $this->render('editwish', [
                 'model' => $model,
             ]);
         }
     }
+
+    /*
+     * UpdateWish
+     * url  http://localhost:8076/channel/update-wish?id=
+     *
+     */
+
+    public function actionUpdateWish($id){
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->pid]);
+        } else {
+            return $this->render('updateWish', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+
 
     /**
      * Deletes an existing Channel model.

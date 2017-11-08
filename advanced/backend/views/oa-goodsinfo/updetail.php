@@ -120,8 +120,10 @@ echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' 
                     'type'=>Form::INPUT_TEXT,
                 ],
                 'PackName' =>[
-                    'label'=>"<span style = 'color:red'>*规格</span>",
-                    'items'=>[''=>NUll,'A01'=>'A01','A02'=>'A02','A03'=>'A03','A04'=>'A04','B01'=>'B01','B02'=>'B02','stamp'=>'stamp',],
+
+                    'label'=>'规格',
+                    'items'=>$packname,
+
                     'type'=>Form::INPUT_DROPDOWN_LIST,
 
                 ],

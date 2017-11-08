@@ -5,7 +5,6 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Channel;
 
 /**
  * ChannelSearch represents the model behind the search form about `backend\models\Channel`.
@@ -19,7 +18,7 @@ class ChannelSearch extends Channel
     {
         return [
             [['pid', 'IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged', 'goodsid', 'SupplierID', 'StoreID', 'bgoodsid'], 'integer'],
-            [['description', 'GoodsName', 'AliasCnName', 'AliasEnName', 'PackName', 'Season', 'DictionaryName', 'SupplierName', 'StoreName', 'Purchaser', 'possessMan1', 'possessMan2', 'picUrl', 'GoodsCode', 'achieveStatus', 'devDatetime', 'developer', 'updateTime', 'picStatus', 'AttributeName'], 'safe'],
+            [['description', 'GoodsName', 'AliasCnName', 'AliasEnName', 'PackName', 'Season', 'DictionaryName', 'SupplierName', 'StoreName', 'Purchaser', 'possessMan1', 'possessMan2', 'picUrl', 'GoodsCode', 'achieveStatus', 'devDatetime', 'developer', 'updateTime', 'picStatus', 'AttributeName','cate','subCat'], 'safe'],
             [['DeclaredValue'], 'number'],
         ];
     }
@@ -43,16 +42,14 @@ class ChannelSearch extends Channel
     public function search($params)
     {
         $query = Channel::find();
-//        $query =  Yii::$app->db->createCommand('SELECT picUrl,GoodsCode,GoodsName,StoreName,o.developer,Purchaser,devDatetime,DictionaryName,cate,subCate
-//                      FROM oa_goodsinfo o
-//                        LEFT JOIN oa_goods s ON s.nid=o.goodsid');
-
 
         // add conditions that should always apply here
+
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
 
 
         $this->load($params);
@@ -98,6 +95,8 @@ class ChannelSearch extends Channel
             ->andFilterWhere(['like', 'developer', $this->developer])
             ->andFilterWhere(['like', 'picStatus', $this->picStatus])
             ->andFilterWhere(['like', 'AttributeName', $this->AttributeName])
+            ->andFilterWhere(['like', 'oa_goods.cate', $this->AttributeName])
+            ->andFilterWhere(['like', 'oa_goods.subCat', $this->AttributeName])
 ;
 
         return $dataProvider;

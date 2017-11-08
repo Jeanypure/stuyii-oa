@@ -183,6 +183,7 @@ class OaGoodsinfoController extends Controller
                 'dataProvider' => $dataProvider,
                 'result' => $data['res'],
                 'lock' => $data['platFrom'],
+                'packname' => $data['packname'],
                 'goodsItem' => $goodsItem[0],
 
             ]);
@@ -279,9 +280,20 @@ class OaGoodsinfoController extends Controller
         }
         array_multisort($DictionaryName,SORT_ASC,$plat);
         $platFrom = array_column($plat, 'DictionaryName', 'DictionaryName');
+
+        $commpack = $connection->createCommand('SELECT * from B_PackInfo');
+        $pack = $commpack->queryAll();
+        array_push($pack,['PackName'=>'']);
+        foreach ($pack as $key=>$value){
+            $PackName[$key] = $value['PackName'];
+        }
+        array_multisort($PackName,SORT_ASC,$pack);
+        $packname =  array_column($pack, 'PackName', 'PackName');
+
         $data =[];
         $data['res'] =$res;
         $data['platFrom'] =$platFrom;
+        $data['packname'] =$packname;
         return $data;
     }
 
@@ -293,24 +305,24 @@ class OaGoodsinfoController extends Controller
      */
 
     public function actionInput($id)
-{
-    $input_goods = "P_OaGoodsToBGoods '{$id}'";
-    $udpate_status = "update oa_goodsinfo set picstatus= '待处理' ,achieveStatus='已导入' where pid = '{$id}'";
-    $connection = Yii::$app->db;
-    $trans = $connection->beginTransaction();
-    try {
-        $connection->createCommand($input_goods)->execute();
-        $connection->createCommand($udpate_status)->execute();
-        $trans->commit();
-        echo "导入成功";
-    }
-    catch (\Exception  $e) {
-        $trans->rollBack();
-        echo $e;
-//        echo "导入失败";
-    }
+    {
+        $input_goods = "P_OaGoodsToBGoods '{$id}'";
+        $udpate_status = "update oa_goodsinfo set picstatus= '待处理' ,achieveStatus='已导入' where pid = '{$id}'";
+        $connection = Yii::$app->db;
+        $trans = $connection->beginTransaction();
+        try {
+            $connection->createCommand($input_goods)->execute();
+            $connection->createCommand($udpate_status)->execute();
+            $trans->commit();
+            echo "导入成功";
+        }
+        catch (\Exception  $e) {
+            $trans->rollBack();
+            echo $e;
+            echo "导入失败";
+        }
 
-}
+    }
 
 
 
