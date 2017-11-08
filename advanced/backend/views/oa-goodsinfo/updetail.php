@@ -200,11 +200,11 @@ echo Select2::widget([
 <?= $form->field($goodsItem,'cate')->dropDownList($goodsItem->getCatList(0),
     [
         'prompt'=>'--请选择父类--',
-        'onchange'=>'
-           
-            $.get("'.yii::$app->urlManager->createUrl('oa-goods/forward-create').'?typeid=1&pid="+$(this).val(),function(data){
-                var str="";
-              $("select#oaforwardgoods-subcate").children("option").remove();
+        'onchange'=>'           
+            $("select#oagoods-subcate").children("option").remove();
+            $.get("'.yii::$app->urlManager->createUrl('oa-goodsinfo/category').
+            '?typeid=1&pid="+$(this).val(),function(data){
+                var str=""; 
               $.each(data,function(k,v){
                     str+="<option value="+v+">"+v+"</option>";
                     });

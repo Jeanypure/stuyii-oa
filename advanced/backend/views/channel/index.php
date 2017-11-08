@@ -13,32 +13,11 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="channel-index">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create Channel'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', '标记已完善'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    <span style="margin: 10px 0 10px 0">
-        <span style="margin: 0 10px 0 0">刊登平台: </span>
-        <?php
-        echo "<span>";
-        $items[] = [
-            'label' => 'eBay',
-            'active' => false,
-        ];
-        $items[] = [
-            'label' => 'Wish',
-            'active' => true,
-        ];
-
-
-        echo Tabs::widget([
-            'items' => $items,
-        ]);
-
-        echo "</span>";
-        ?>
 
     </div>
 

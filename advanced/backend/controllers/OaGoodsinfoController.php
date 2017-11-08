@@ -151,20 +151,24 @@ class OaGoodsinfoController extends Controller
             $info->possessMan1 = $_POST['OaGoodsinfo']['possessMan1'];
             $info->AttributeName = $_POST['OaGoodsinfo']['AttributeName'];
             $info->save(false);
-            $cate= $_POST['OaGoods']['cate'];
-            $cateName = Yii::$app->db->createCommand("SELECT CategoryName  from  B_GoodsCats WHERE NID= '$cate'")
-                ->queryOne();
-
-            $goodsItem[0]->cate =$cateName['CategoryName'];
-            $goodsItem[0]->catNid = $cate;
-            $goodsItem[0]->subCate = $_POST['OaGoods']['subCate'];
-            $goodsItem[0]->vendor1 = $_POST['OaGoods']['vendor2'];
-            $goodsItem[0]->vendor2 = $_POST['OaGoods']['vendor2'];
-            $goodsItem[0]->vendor3 = $_POST['OaGoods']['vendor3'];
-            $goodsItem[0]->origin1 = $_POST['OaGoods']['origin1'];
-            $goodsItem[0]->origin2 = $_POST['OaGoods']['origin2'];
-            $goodsItem[0]->origin3= $_POST['OaGoods']['origin3'];
-            $goodsItem[0]->update(false);
+            $sub_cate = $_POST['OaGoods']['subCate'];
+            try {
+                $cateModel = GoodsCats::find()->where(['nid' => $sub_cate])->one();
+            }
+            catch (\Exception $e) {
+                $cateModel = GoodsCats::find()->where(['CategoryName' => $sub_cate])->one();
+            }
+            $current_model = $goodsItem[0];
+            $current_model->catNid = $cateModel->CategoryParentID;
+            $current_model->cate = $cateModel->CategoryParentName;
+            $current_model->subCate = $cateModel->CategoryName;
+            $current_model->vendor1 = $_POST['OaGoods']['vendor1'];
+            $current_model->vendor2 = $_POST['OaGoods']['vendor2'];
+            $current_model->vendor3 = $_POST['OaGoods']['vendor3'];
+            $current_model->origin1 = $_POST['OaGoods']['origin1'];
+            $current_model->origin2 = $_POST['OaGoods']['origin2'];
+            $current_model->origin3= $_POST['OaGoods']['origin3'];
+            $current_model->update(false);
             $this->redirect(['oa-goodsinfo/update','id'=>$id]);
 
         }else{
