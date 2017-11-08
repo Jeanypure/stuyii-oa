@@ -1,6 +1,7 @@
 <?php
     use mdm\admin\components\MenuHelper;
-    $sql = 'oaP_statusCount';
+    $user = yii::$app->user->identity->username;
+    $sql = "oaP_statusCount '{$user}'";
     $status_result = yii::$app->db->createCommand($sql)->queryAll();
     $status_map = [];
     foreach ($status_result as $res){

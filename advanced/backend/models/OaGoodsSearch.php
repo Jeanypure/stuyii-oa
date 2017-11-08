@@ -41,21 +41,43 @@ class OaGoodsSearch extends OaGoods
      */
     public function search($params,$devStatus,$checkStatus)
     {
+        //返回当前登录用户
+        $user = yii::$app->user->identity->username;
 
-
+        // 返回当前用户管辖下的用户
+        $sql = "oa_P_users '{$user}'";
+        $connection = Yii::$app->db;
+        $command = $connection->createCommand($sql);
+        $result = $command->queryAll();
+        $users = [];
+        foreach ($result as $user) {
+            array_push($users, $user['userName']);
+        }
         //产品审批状态
         if(!empty($checkStatus)){
-            $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])->where(['checkStatus'=>$checkStatus])->andWhere(['<>','checkStatus','已作废']);
+            $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])
+                ->where(['checkStatus'=>$checkStatus])
+                ->andWhere(['<>','checkStatus','已作废'])
+                ->andWhere(['in', 'developer', $users])
+            ;
         }
         //产品认领状态
         if(!empty($devStatus)){
-            $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])->where(['devStatus'=>$devStatus])->andWhere(['<>','checkStatus','已作废']);
+            $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])
+                ->where(['devStatus'=>$devStatus])
+                ->andWhere(['<>','checkStatus','已作废'])
+                ->andWhere(['in', 'developer', $users])
+            ;
         }
 
         //已认领产品从推荐消失
         //有推荐人，没作废的产品显示在产品推荐里面。
         if(empty($devStatus) && empty($checkStatus)){
-            $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])->where(['<>','introducer',''])->andWhere(['<>','checkStatus','已作废'])->andWhere(['=','checkStatus','未认领']);
+            $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])
+                ->where(['<>','introducer',''])
+                ->andWhere(['<>','checkStatus','已作废'])
+                ->andWhere(['=','checkStatus','未认领'])
+            ;
         }
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
