@@ -9,6 +9,7 @@ use yii\base\Model;
 use backend\models\OaGoodsinfo;
 use backend\models\OaGoodsinfoSearch;
 use backend\models\Goodssku;
+use backend\models\GoodsskuSearch;
 use backend\models\GoodsCats;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -108,6 +109,7 @@ class OaGoodsinfoController extends Controller
 
     public function actionUpdate($id)
     {
+        $updata = $_POST;
         $info = OaGoodsinfo::findOne($id);
         $conid = Yii::$app->db->createCommand("SELECT goodsid from  oa_Goodsinfo WHERE pid=$id")
             ->queryOne();
@@ -115,18 +117,20 @@ class OaGoodsinfoController extends Controller
         $goodsItem = OaGoods::find()->select('oa_goods.*')->where(['nid'=>$conid])->all();
 
 
+r
         if (!$info) {
             throw new NotFoundHttpException("The product was not found.");
         }
 
         if($info->load(Yii::$app->request->post())){
-            $SupplerName = $_POST['OaGoodsinfo']['SupplierName'];
+            $SupplerName = $updata['OaGoodsinfo']['SupplierName'];
             // 如果该查询没有结果则返回 false
             $Suppler = Yii::$app->db->createCommand("SELECT * from  B_Supplier WHERE SupplierName='$SupplerName'")
                 ->queryOne();
             if(empty($Suppler)){
                 $Recorder = yii::$app->user->identity->username;
                 $InputDate = strftime('%F %T');
+
                 Yii::$app->db->createCommand("insert into  B_Supplier (SupplierName,Recorder,InputDate,Used) 
                   VALUES ('$SupplerName','$Recorder','$InputDate',0)")->execute();
             }
@@ -137,18 +141,46 @@ class OaGoodsinfoController extends Controller
             $info->SupplierID = $SupplerID['NID'];
 
 
-            if (!empty($_POST['DictionaryName'])){
-                $info->DictionaryName = implode(',',$_POST['DictionaryName']);
+            if (!empty($updata['DictionaryName'])){
+                $info->DictionaryName = implode(',',$updata['DictionaryName']);
             }
             $info->updateTime = strftime('%F %T');
 
-            $info->developer = $_POST['OaGoodsinfo']['developer'];
+            $info->developer = $updata['OaGoodsinfo']['developer'];
 
-            $info->Purchaser = $_POST['OaGoodsinfo']['Purchaser'];
-            $info->possessMan1 = $_POST['OaGoodsinfo']['possessMan1'];
-            $info->AttributeName = $_POST['OaGoodsinfo']['AttributeName'];
+            $info->Purchaser = $updata['OaGoodsinfo']['Purchaser'];
+            $info->possessMan1 = $updata['OaGoodsinfo']['possessMan1'];
+            $info->AttributeName = $updata['OaGoodsinfo']['AttributeName'];
+            if(!empty($updata['OaGoodsinfo']['AttributeName'])){
+
+                    if($updata['OaGoodsinfo']['AttributeName']=='液体商品'){
+                        $info->IsLiquid = 1;
+                        $info->IsPowder = 0;
+                        $info->isMagnetism = 0;
+                        $info->IsCharged = 0;
+                    }
+                    if($updata['OaGoodsinfo']['AttributeName']=='带电商品'){
+                        $info->IsLiquid = 0;
+                        $info->IsPowder = 0;
+                        $info->isMagnetism = 0;
+                        $info->IsCharged = 1;
+                    }
+                    if($updata['OaGoodsinfo']['AttributeName']=='带磁商品'){
+                        $info->IsLiquid = 0;
+                        $info->IsPowder = 0;
+                        $info->isMagnetism = 1;
+                        $info->IsCharged = 0;
+                    }if($updata['OaGoodsinfo']['AttributeName']=='粉末商品'){
+                        $info->IsLiquid = 0;
+                        $info->IsPowder = 1;
+                        $info->isMagnetism = 0;
+                        $info->IsCharged = 0;
+                    }
+            }
             $info->save(false);
-            $sub_cate = $_POST['OaGoods']['subCate'];
+
+            $sub_cate = $updata['OaGoods']['subCate'];
+
             try {
                 $cateModel = GoodsCats::find()->where(['nid' => $sub_cate])->one();
             }
@@ -159,26 +191,29 @@ class OaGoodsinfoController extends Controller
             $current_model->catNid = $cateModel->CategoryParentID;
             $current_model->cate = $cateModel->CategoryParentName;
             $current_model->subCate = $cateModel->CategoryName;
-            $current_model->developer= $_POST['OaGoodsinfo']['developer'];
-            $current_model->vendor1 = $_POST['OaGoods']['vendor1'];
-            $current_model->vendor2 = $_POST['OaGoods']['vendor2'];
-            $current_model->vendor3 = $_POST['OaGoods']['vendor3'];
-            $current_model->origin1 = $_POST['OaGoods']['origin1'];
-            $current_model->origin2 = $_POST['OaGoods']['origin2'];
-            $current_model->origin3= $_POST['OaGoods']['origin3'];
+
+            $current_model->vendor1 = $updata['OaGoods']['vendor1'];
+            $current_model->vendor2 = $updata['OaGoods']['vendor2'];
+            $current_model->vendor3 = $updata['OaGoods']['vendor3'];
+            $current_model->origin1 = $updata['OaGoods']['origin1'];
+            $current_model->origin2 = $updata['OaGoods']['origin2'];
+            $current_model->origin3= $updata['OaGoods']['origin3'];
+
+            $current_model->developer= $updata['OaGoodsinfo']['developer'];
+
             $current_model->update(false);
             $this->redirect(['oa-goodsinfo/update','id'=>$id]);
 
         }else{
 
             $data = $this->actionSelectParam();
-
             $dataProvider = new ActiveDataProvider([
                 'query' => Goodssku::find()->where(['pid'=>$id]),
                 'pagination' => [
                     'pageSize' => 15,
                 ],
             ]);
+
             return $this->render('updetail',[
                 'info'=>$info,
                 'pid' =>$id,

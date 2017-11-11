@@ -78,4 +78,11 @@ class Picinfo extends \yii\db\ActiveRecord
             'goodsid' => Yii::t('app', 'Goodsid'),
         ];
     }
+
+    //oa_goodsinfo 关联oa_goods  获取 类别
+    public function getoa_goods()
+    {
+        //同样第一个参数指定关联的子表模型类名
+        return $this->hasOne(OaGoods::className(), ['nid' => 'goodsid']);
+    }
 }

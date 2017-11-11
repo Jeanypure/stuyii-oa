@@ -22,7 +22,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
 
-        <?= Html::button('标记已完善', ['id'=>'complete-lots','class' => 'btn btn-success']) ?>
+        <?= Html::button('标记已完善', ['id'=>'complete-lots','class' => 'btn btn-success']);
+
+        ?>
     </p>
 
     <?= GridView::widget([
@@ -81,6 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'GoodsCode',
             'GoodsName',
+
             [
                 'attribute' => 'vendor1',
                 'format'=>'raw',
@@ -204,6 +207,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ],
 
+
             'picStatus',
             'developer',
             [
@@ -211,6 +215,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label'=>'开发时间',
                 'value'=>
                     function($model){
+
                         return  substr($model->devDatetime,0,19);   //主要通过此种方式实现
                     },
             ],
@@ -221,6 +226,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
     ]); ?>
+
 
     <?php
     //创建模态框

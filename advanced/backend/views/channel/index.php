@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use yii\bootstrap\Tabs;
+
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\ChannelSearch */
@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a(Yii::t('app', '标记已完善'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+
 
     </div>
 
@@ -44,8 +45,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'GoodsCode',
              'GoodsName',
-            'oa_goods.cate',
-            'oa_goods.subCate',
+            [
+                'attribute'=> 'cate',
+                'value'=>'oa_goods.cate'
+            ],
+            [
+                'attribute'=> 'subCate',
+                'value'=>'oa_goods.subCate'
+            ],
+//            'oaGoods.cate',
+//            'oaGoods.subCate',
             // 'AliasCnName',
             // 'AliasEnName',
             // 'PackName',

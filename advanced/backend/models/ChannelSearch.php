@@ -11,6 +11,8 @@ use yii\data\ActiveDataProvider;
  */
 class ChannelSearch extends Channel
 {
+    public $cate;
+    public $subCate;
     /**
      * @inheritdoc
      */
@@ -18,7 +20,8 @@ class ChannelSearch extends Channel
     {
         return [
             [['pid', 'IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged', 'goodsid', 'SupplierID', 'StoreID', 'bgoodsid'], 'integer'],
-            [['description', 'GoodsName', 'AliasCnName', 'AliasEnName', 'PackName', 'Season', 'DictionaryName', 'SupplierName', 'StoreName', 'Purchaser', 'possessMan1', 'possessMan2', 'picUrl', 'GoodsCode', 'achieveStatus', 'devDatetime', 'developer', 'updateTime', 'picStatus', 'AttributeName','cate','subCat'], 'safe'],
+            [['cate','subCate','description', 'GoodsName', 'AliasCnName', 'AliasEnName', 'PackName', 'Season', 'DictionaryName', 'SupplierName', 'StoreName',
+                'Purchaser', 'possessMan1', 'possessMan2', 'picUrl', 'GoodsCode', 'achieveStatus', 'devDatetime', 'developer', 'updateTime', 'picStatus', 'AttributeName','cate','subCat'], 'safe'],
             [['DeclaredValue'], 'number'],
         ];
     }
@@ -42,6 +45,7 @@ class ChannelSearch extends Channel
     public function search($params)
     {
         $query = Channel::find();
+        $query->joinWith(['oa_goods']);
 
         // add conditions that should always apply here
 
@@ -50,7 +54,35 @@ class ChannelSearch extends Channel
             'query' => $query,
         ]);
 
-
+        $dataProvider->setSort([
+            'attributes' => [
+                /* 其它字段不要动 */
+                'GoodsCode',
+                'GoodsName',
+                'SupplierName',
+                'StoreName',
+                'developer',
+                'Purchaser',
+                'possessMan1',
+                'devDatetime',
+                'achieveStatus',
+                'DictionaryName',
+                'completeStatus',
+                /* 下面这段是加入的 */
+                /*=============*/
+                'cate' => [
+                    'asc' => ['oa_goods.cate' => SORT_ASC],
+                    'desc' => ['oa_goods.cate' => SORT_DESC],
+                    'label' => '主分类'
+                ],
+                'subCate'=> [
+                    'asc' => ['oa_goods.subCate' => SORT_ASC],
+                    'desc' => ['oa_goods.subCate' => SORT_DESC],
+                    'label' => '子分类'
+                ],
+                /*=============*/
+            ]
+        ]);
 
         $this->load($params);
 
@@ -95,8 +127,8 @@ class ChannelSearch extends Channel
             ->andFilterWhere(['like', 'developer', $this->developer])
             ->andFilterWhere(['like', 'picStatus', $this->picStatus])
             ->andFilterWhere(['like', 'AttributeName', $this->AttributeName])
-            ->andFilterWhere(['like', 'oa_goods.cate', $this->AttributeName])
-            ->andFilterWhere(['like', 'oa_goods.subCat', $this->AttributeName])
+            ->andFilterWhere(['like', 'cate', $this->cate])
+            ->andFilterWhere(['like', 'subCate', $this->subCate])
 ;
 
         return $dataProvider;

@@ -43,6 +43,7 @@ class PicinfoSearch extends Picinfo
     public function search($params)
     {
         $query = Picinfo::find();
+        $query->joinWith(['oa_goods']);
 
         // add conditions that should always apply here
 

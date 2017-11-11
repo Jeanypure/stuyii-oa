@@ -18,6 +18,7 @@ use Yii;
 //class OaGoodsinfo extends \yii\db\ActiveRecord
 class OaGoodsinfo extends GoodsCats
 {
+
     /**
      * @inheritdoc
      */
@@ -68,6 +69,7 @@ class OaGoodsinfo extends GoodsCats
             'developer' => '开发员',
             'Purchaser' => '采购',
             'possessMan1' => '责任人1',
+            'vendor1' => '供应商链接1',
 
 
         ];
@@ -79,6 +81,18 @@ class OaGoodsinfo extends GoodsCats
     {
         //同样第一个参数指定关联的子表模型类名
         return $this->hasOne(OaGoods::className(), ['nid' => 'goodsid']);
+    }
+
+    //oa_goodsinfo 关联oa_goods  获取 类别
+    public function getoa_goods()
+    {
+        //同样第一个参数指定关联的子表模型类名
+        return $this->hasOne(OaGoods::className(), ['nid' => 'goodsid']);
+    }
+
+    //关联oa_goodssku
+    public function getgoodssku(){
+        return $this->hasMany(Goodssku::className(),['pid' => 'pid']);
     }
 
 
