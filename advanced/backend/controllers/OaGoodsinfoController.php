@@ -116,8 +116,6 @@ class OaGoodsinfoController extends Controller
 
         $goodsItem = OaGoods::find()->select('oa_goods.*')->where(['nid'=>$conid])->all();
 
-
-r
         if (!$info) {
             throw new NotFoundHttpException("The product was not found.");
         }
