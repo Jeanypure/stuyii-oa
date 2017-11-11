@@ -22,6 +22,10 @@ return [
             'class' => 'mdm\admin\Module',
 //            'layout' => 'left-menu',//yii2-admin的导航菜单
         ],
+        'gii' => [
+            'class' => 'yii\gii\Module',
+            'allowedIPs' => ['127.0.0.1', '192.168.0.*'] // 按需调整这里
+        ],
 
     ],
     'aliases' => [
@@ -68,6 +72,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
         ],
+
 
 
     ],

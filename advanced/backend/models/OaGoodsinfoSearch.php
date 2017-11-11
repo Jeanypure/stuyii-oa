@@ -22,14 +22,18 @@ class OaGoodsinfoSearch extends OaGoodsinfo
     public $vendor1;
     public $vendor2;
     public $vendor3;
+
     public $origin1;
     public $origin2;
     public $origin3;
+
     public function rules()
     {
         return [
             [['pid','IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged'], 'integer'],
-            [['vendor1','vendor2','vendor3','origin1','origin2','origin3','developer','devDatetime','updateTime','achieveStatus','GoodsCode','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName','possessMan2'],'safe'],
+
+            [['vendor1','vendor2','vendor3','developer','devDatetime','updateTime','achieveStatus','GoodsCode','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName','possessMan2'],'safe'],
+
 
         ];
     }
@@ -54,15 +58,35 @@ class OaGoodsinfoSearch extends OaGoodsinfo
     public function search($params,$condition = [])
     {
 
-        $query = OaGoodsinfo::find()->joinWith(['oa_goods'])->orderBy(['pid' => SORT_DESC])->where($condition);
 
+        $query = OaGoodsinfo::find()->joinWith('oa_goods')->orderBy(['pid' => SORT_DESC])->where($condition);
+
+ 
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 6,
+            ],
         ]);
 
+        // 增加关联字段的排序
+
+//        $dataProvider->setSort([
+//            'attributes' => [
+//                /* 其它字段不要动 */
+//                /* 下面这段是加入的 */
+//                /*=============*/
+//                'vendor1' => [
+//                    'asc' => ['oa_goods.vendor1' => SORT_ASC],
+//                    'desc' => ['oa_goods.vendor1' => SORT_DESC],
+//                    'label' => '供应商连接1'
+//                ],
+//                /*=============*/
+//            ]
+//        ]);
         $this->load($params);
 
         if (!$this->validate()) {

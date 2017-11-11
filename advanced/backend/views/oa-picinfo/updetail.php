@@ -87,7 +87,7 @@ echo TabularForm::widget([
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i> 管理SKU</h3>',
             'type'=>GridView::TYPE_PRIMARY,
 
-            'footer'=>false,
+//            'footer'=>false,
             'after'=>
                 Html::button('保存当前数据', ['id'=>'save-only','type'=>'button','class'=>'btn btn-info']).' '.
                 Html::button('保存并完善', ['id'=>'save-complete','type'=>'button','class'=>'btn btn-primary']).' '

@@ -12,6 +12,9 @@ use yii\helpers\Url;
 $this->title = '图片信息';
 $this->params['breadcrumbs'][] = $this->title;
 
+//格式化超链接
+
+
 
 ?>
 <?php echo '<br>'?>
@@ -83,28 +86,128 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'attribute' => 'vendor1',
-                'label'=>'供应商链接1',
-                'value' => function ($model) {
-                    return Html::a("供应商链接1",$model->oa_goods['vendor1'], ['target' => '_blank']);
-                },
-                'format' => 'raw',
+                'format'=>'raw',
+                'label' => '供应商链接1',
+                'value' =>  function ($data) {
+                    $fields = $data->oa_goods['vendor1'];
+                if (!empty($fields)) {
+                    try {
+                        $hostName = parse_url($fields)['host'];
+                    } catch (Exception $e) {
+                        $hostName = "www.unknown.com";
+                    }
+                    return "<a class='cell' href='{$fields}' target='_blank'>{$hostName}</a>";
+                } else {
+                    return '';
+                }
+
+            },
+
+
             ],
             [
                 'attribute' => 'vendor2',
-                'label'=>'供应商链接2',
-                'value' => function ($model) {
-                    return Html::a("供应商链接2",$model->oa_goods['vendor2'], ['target' => '_blank']);
+                'format'=>'raw',
+                'label' => '供应商链接2',
+                'value' =>  function ($data) {
+                    $fields = $data->oa_goods['vendor2'];
+                    if (!empty($fields)) {
+                        try {
+                            $hostName = parse_url($fields)['host'];
+                        } catch (Exception $e) {
+                            $hostName = "www.unknown.com";
+                        }
+                        return "<a class='cell' href='{$fields}' target='_blank'>{$hostName}</a>";
+                    } else {
+                        return '';
+                    }
+
                 },
-                'format' => 'raw',
+
             ],
             [
                 'attribute' => 'vendor3',
-                'label'=>'供应商链接3',
-                'value' => function ($model) {
-                    return Html::a("供应商链接3",$model->oa_goods['vendor3'], ['target' => '_blank']);
+                'format'=>'raw',
+                'label' => '供应商链接3',
+                'value' =>  function ($data) {
+                    $fields = $data->oa_goods['vendor3'];
+                    if (!empty($fields)) {
+                        try {
+                            $hostName = parse_url($fields)['host'];
+                        } catch (Exception $e) {
+                            $hostName = "www.unknown.com";
+                        }
+                        return "<a class='cell' href='{$fields}' target='_blank'>{$hostName}</a>";
+                    } else {
+                        return '';
+                    }
+
                 },
-                'format' => 'raw',
+
             ],
+
+            [
+                'attribute' => 'origin1',
+                'format'=>'raw',
+                'label' => '平台链接1',
+                'value' =>  function ($data) {
+                    $fields = $data->oa_goods['origin1'];
+                    if (!empty($fields)) {
+                        try {
+                            $hostName = parse_url($fields)['host'];
+                        } catch (Exception $e) {
+                            $hostName = "www.unknown.com";
+                        }
+                        return "<a class='cell' href='{$fields}' target='_blank'>{$hostName}</a>";
+                    } else {
+                        return '';
+                    }
+
+                },
+
+            ],
+            [
+                'attribute' => 'origin2',
+                'format'=>'raw',
+                'label' => '平台链接2',
+                'value' =>  function ($data) {
+                    $fields = $data->oa_goods['origin2'];
+                    if (!empty($fields)) {
+                        try {
+                            $hostName = parse_url($fields)['host'];
+                        } catch (Exception $e) {
+                            $hostName = "www.unknown.com";
+                        }
+                        return "<a class='cell' href='{$fields}' target='_blank'>{$hostName}</a>";
+                    } else {
+                        return '';
+                    }
+
+                },
+
+            ],
+            [
+                'attribute' => 'originr3',
+                'format'=>'raw',
+                'label' => '平台链接3',
+                'value' =>  function ($data) {
+                    $fields = $data->oa_goods['origin3'];
+                    if (!empty($fields)) {
+                        try {
+                            $hostName = parse_url($fields)['host'];
+                        } catch (Exception $e) {
+                            $hostName = "www.unknown.com";
+                        }
+                        return "<a class='cell' href='{$fields}' target='_blank'>{$hostName}</a>";
+                    } else {
+                        return '';
+                    }
+
+                },
+
+            ],
+
+
             'picStatus',
             'developer',
             [
@@ -178,6 +281,29 @@ $('.index-view').on('click',  function () {
         }
         });
     });
+
+    
+    //关联表目前无法指定样式只能通过JS来实现
+    function linkFormatter() {
+        for(var i=6;i<=8;i++){
+        $("[data-col-seq='"+ i + "']").each(function(index,ele) {
+         var text  = $(ele).text();
+         if(text.length>0 && text.indexOf('链接')<0){
+         
+         var url = '<a  target="_blank" href="'+ text+'">' + '=></a>';
+         $(this).text('');
+         
+         $(this).append(url);
+         $(this).attr('style','width: 6;')
+         }
+        
+    });
+    
+    }
+      
+    }
+    // linkFormatter();
+    
 JS;
     $this->registerJs($js);
 

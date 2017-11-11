@@ -35,11 +35,15 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '平台信息'), 'url
         'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
         'labelOptions' => ['class' => 'col-lg-1 control-label'],
     ]
-]); ?>
+]);
+?>
+
 <div class="blockTitle">
     <p >基本信息</p>
 </div>
 </br>
+<?= $form->field($model,'GoodsCode')->textInput(); ?>
+<?= $form->field($model,'GoodsCode')->textInput(); ?>
 <?= $form->field($model,'GoodsCode')->textInput(); ?>
 
 <div class="blockTitle">

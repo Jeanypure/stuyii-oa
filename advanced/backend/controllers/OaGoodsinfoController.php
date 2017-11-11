@@ -116,6 +116,8 @@ class OaGoodsinfoController extends Controller
 
         $goodsItem = OaGoods::find()->select('oa_goods.*')->where(['nid'=>$conid])->all();
 
+
+r
         if (!$info) {
             throw new NotFoundHttpException("The product was not found.");
         }
@@ -176,7 +178,9 @@ class OaGoodsinfoController extends Controller
                     }
             }
             $info->save(false);
+
             $sub_cate = $updata['OaGoods']['subCate'];
+
             try {
                 $cateModel = GoodsCats::find()->where(['nid' => $sub_cate])->one();
             }
@@ -187,6 +191,7 @@ class OaGoodsinfoController extends Controller
             $current_model->catNid = $cateModel->CategoryParentID;
             $current_model->cate = $cateModel->CategoryParentName;
             $current_model->subCate = $cateModel->CategoryName;
+
             $current_model->vendor1 = $updata['OaGoods']['vendor1'];
             $current_model->vendor2 = $updata['OaGoods']['vendor2'];
             $current_model->vendor3 = $updata['OaGoods']['vendor3'];
@@ -195,6 +200,7 @@ class OaGoodsinfoController extends Controller
             $current_model->origin3= $updata['OaGoods']['origin3'];
 
             $current_model->developer= $updata['OaGoodsinfo']['developer'];
+
             $current_model->update(false);
             $this->redirect(['oa-goodsinfo/update','id'=>$id]);
 

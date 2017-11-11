@@ -13,11 +13,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="channel-index">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create Channel'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', '标记已完善'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
 

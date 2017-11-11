@@ -19,17 +19,20 @@ use yii\helpers\ArrayHelper;
 
         <?= $form->field($model, 'img')->textInput() ?>
 
-        <?php //echo  $form->field($model, 'cate')->textInput() ?>
+
+    <?php echo  $form->field($model, 'img',['template' => "<span style='color:red' >*{label}\n</span><div >{input}</div>\n<div >{error}</div>",])->textInput(['placeholder' => '--必填--']) ?>
+
 
         <?php //echo $form->field($model, 'subCate')->textInput() ?>
 
-        <?php
-        echo $form->field($model,'cate')->dropDownList($model->getCatList(0),
-            [
-                'prompt'=>'--请选择父类--',
-                'onchange'=>'           
+
+    <?= $form->field($model,'cate',['template' => "<span style='color:red' >*{label}\n</span><div >{input}</div>\n<div >{error}</div>",])->dropDownList($model->getCatList(0),
+        [
+            'prompt'=>'--请选择父类--',
+            'onchange'=>'           
             $.get("'.yii::$app->urlManager->createUrl('oa-goods/category').
-                    '?typeid=1&pid="+$(this).val(),function(data){
+                '?typeid=1&pid="+$(this).val(),function(data){
+
                 var str="";
               $("select#oagoods-subcate").children("option").remove();
               $.each(data,function(k,v){
@@ -37,7 +40,9 @@ use yii\helpers\ArrayHelper;
                     });
                 $("select#oagoods-subcate").html(str);
             });',
-            ]);?>
+
+        ]);?>
+
 
         <?php echo $form->field($model,'subCate')->dropDownList($model->getCatList($model->catNid),
             [

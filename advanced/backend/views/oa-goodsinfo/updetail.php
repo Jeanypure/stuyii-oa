@@ -193,11 +193,13 @@ echo Select2::widget([
 <?= $form->field($goodsItem,'cate')->dropDownList($goodsItem->getCatList(0),
     [
         'prompt'=>'--请选择父类--',
-        'onchange'=>'
-           
-            $.get("'.yii::$app->urlManager->createUrl('oa-goodsinfo/category').'?typeid=1&pid="+$(this).val(),function(data){
-                var str="";
-              $("select#oaforwardgoods-subcate").children("option").remove();
+
+        'onchange'=>'           
+            $("select#oagoods-subcate").children("option").remove();
+            $.get("'.yii::$app->urlManager->createUrl('oa-goodsinfo/category').
+            '?typeid=1&pid="+$(this).val(),function(data){
+                var str=""; 
+
               $.each(data,function(k,v){
                     str+="<option value="+v">"++"</option>";
                     });
@@ -349,7 +351,9 @@ echo TabularForm::widget([
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i> 管理SKU</h3>',
             'type'=>GridView::TYPE_PRIMARY,
 
+
             'footer'=>true,
+
             'after'=>
                 Html::input('text','rowNum','',['class' => 'x-row','placeholder'=>'行数']).' '.
                 Html::button('新增行', ['id'=>'add-row','type'=>'button', 'class'=>'btn kv-batch-create']) . ' ' .
