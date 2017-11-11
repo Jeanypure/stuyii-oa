@@ -17,12 +17,19 @@ class OaGoodsinfoSearch extends OaGoodsinfo
      *
      */
 
+
     public $GoodsName; //<=====就是加在这里
+    public $vendor1;
+    public $vendor2;
+    public $vendor3;
+    public $origin1;
+    public $origin2;
+    public $origin3;
     public function rules()
     {
         return [
             [['pid','IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged'], 'integer'],
-            [['developer','devDatetime','updateTime','achieveStatus','GoodsCode','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName','possessMan2'],'safe'],
+            [['vendor1','vendor2','vendor3','origin1','origin2','origin3','developer','devDatetime','updateTime','achieveStatus','GoodsCode','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName','possessMan2'],'safe'],
 
         ];
     }
@@ -47,7 +54,8 @@ class OaGoodsinfoSearch extends OaGoodsinfo
     public function search($params,$condition = [])
     {
 
-        $query = OaGoodsinfo::find()->orderBy(['pid' => SORT_DESC])->where($condition);
+        $query = OaGoodsinfo::find()->joinWith(['oa_goods'])->orderBy(['pid' => SORT_DESC])->where($condition);
+
 
         // add conditions that should always apply here
 
@@ -77,13 +85,14 @@ class OaGoodsinfoSearch extends OaGoodsinfo
             'StoreName'=>$this->StoreName,
             'Season'=>$this->Season,
             'IsLiquid' => $this->IsLiquid,
-            'IsPowder' => $this->IsPowder,
             'isMagnetism' => $this->isMagnetism,
             'IsCharged' => $this->IsCharged,
             'DictionaryName'=>$this->DictionaryName,
+            'IsPowder' => $this->IsPowder,
             'developer'=> $this->developer,
             'devDatetime'=>$this->devDatetime,
             'updateTime'=>$this->updateTime,
+            'vendor1' => $this->vendor1,
 
 
 
@@ -91,6 +100,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
 
         $query->andFilterWhere(['like', 'description', $this->description]);
         $query->andFilterWhere(['like', 'AliasCnName', $this->AliasCnName]);
+//        $query->andFilterWhere(['like', 'vendor1', $this->vendor1]);
 
         return $dataProvider;
     }

@@ -19,7 +19,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
 
-        <?= Html::button('标记已完善', ['id'=>'complete-lots','class' => 'btn btn-success']) ?>
+        <?= Html::button('标记已完善', ['id'=>'complete-lots','class' => 'btn btn-success']);
+
+        ?>
     </p>
 
     <?= GridView::widget([
@@ -78,6 +80,31 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'GoodsCode',
             'GoodsName',
+
+            [
+                'attribute' => 'vendor1',
+                'label'=>'供应商链接1',
+                'value' => function ($model) {
+                    return Html::a("供应商链接1",$model->oa_goods['vendor1'], ['target' => '_blank']);
+                },
+                'format' => 'raw',
+            ],
+            [
+                'attribute' => 'vendor2',
+                'label'=>'供应商链接2',
+                'value' => function ($model) {
+                    return Html::a("供应商链接2",$model->oa_goods['vendor2'], ['target' => '_blank']);
+                },
+                'format' => 'raw',
+            ],
+            [
+                'attribute' => 'vendor3',
+                'label'=>'供应商链接3',
+                'value' => function ($model) {
+                    return Html::a("供应商链接3",$model->oa_goods['vendor3'], ['target' => '_blank']);
+                },
+                'format' => 'raw',
+            ],
             'picStatus',
             'developer',
             [
@@ -85,6 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label'=>'开发时间',
                 'value'=>
                     function($model){
+
                         return  substr($model->devDatetime,0,19);   //主要通过此种方式实现
                     },
             ],
@@ -95,6 +123,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
     ]); ?>
+
 
     <?php
     //创建模态框

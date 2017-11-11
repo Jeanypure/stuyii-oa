@@ -2,14 +2,15 @@
 
 namespace backend\controllers;
 
+
 use Yii;
 use backend\models\Channel;
 use backend\models\ChannelSearch;
+use backend\models\Goodssku;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
-//use backend\controllers\ActiveDataProvider;
 
 /**
  * ChannelController implements the CRUD actions for Channel model.
@@ -91,13 +92,35 @@ class ChannelController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+//        $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->pid]);
-        } else {
-            return $this->render('editwish', [
-                'model' => $model,
+//        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+//            return $this->redirect(['view', 'id' => $model->pid]);
+//        } else {
+//            return $this->render('editwish', [
+//                'model' => $model,
+//            ]);
+//        }
+        $info = Channel::findOne($id);
+        $Goodssku = Goodssku::find()->where(['pid'=>$id])->all();
+        $dataProvider = new ActiveDataProvider([
+            'query' => Goodssku::find()->where(['pid'=>$id]),
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
+
+//        var_dump($dataProvider);die;
+        if($info->load(Yii::$app->request->post())){
+            $info->save();
+            return $this->redirect(['view','id'=>$info->pid]);
+
+        }else{
+            return $this->render('editwish',[
+                'info' =>$info,
+                'dataProvider' => $dataProvider,
+                'Goodssku' => $Goodssku[0],
             ]);
         }
     }
@@ -111,10 +134,11 @@ class ChannelController extends Controller
     public function actionUpdateWish($id){
         $model = $this->findModel($id);
 
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->pid]);
         } else {
-            return $this->render('updateWish', [
+            return $this->render('editwish', [
                 'model' => $model,
             ]);
         }

@@ -809,6 +809,7 @@ class OaGoodsController extends Controller
     {
         $model = $this->findModel($id);
         $user = yii::$app->user->identity->username;
+
         $model->devStatus = '正向认领';
         $model->checkStatus = '已认领';
         $model->developer = $user;

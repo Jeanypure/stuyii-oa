@@ -7,6 +7,8 @@ use yii\base\Model;
 use backend\models\OaGoodsinfo;
 use backend\models\OaGoodsinfoSearch;
 use backend\models\Goodssku;
+use backend\models\OaGoods;
+use backend\models\OaGoodsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

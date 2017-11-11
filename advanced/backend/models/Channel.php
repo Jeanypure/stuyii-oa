@@ -43,6 +43,7 @@ class Channel extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+
     public static function tableName()
     {
         return '{{%oa_goodsinfo}}';
@@ -98,13 +99,20 @@ class Channel extends \yii\db\ActiveRecord
             'AttributeName' => Yii::t('app', 'Attribute Name'),
             'bgoodsid' => Yii::t('app', 'Bgoodsid'),
             'completeStatus' => Yii::t('app', '完成状况'),
+            'cate' => Yii::t('app', '主类目'),
+            'subCate' => Yii::t('app', '子类目'),
         ];
     }
 
-    //oa_goodsinfo 关联oa_goods  获取 类别
+    /**
+     *  关联oa_Goods表
+     */
     public function getoa_goods()
     {
-        //同样第一个参数指定关联的子表模型类名
+        // hasOne要求返回两个参数 第一个参数是关联表的类名 第二个参数是两张表的关联关系
+        // 这里uid是auth表关联id, 关联user表的uid id是当前模型的主键id
         return $this->hasOne(OaGoods::className(), ['nid' => 'goodsid']);
     }
+
+
 }

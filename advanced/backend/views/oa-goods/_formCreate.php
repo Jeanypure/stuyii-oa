@@ -11,44 +11,52 @@ use yii\helpers\ArrayHelper;
 ?>
 
 <div class="oa-goods-form">
+        <?php $form = ActiveForm::begin([
+            'fieldConfig'=>[
+                'template'=> "{label}\n<div >{input}</div>\n{error}",
+            ]
+        ]); ?>
 
-    <?php $form = ActiveForm::begin(
-    ); ?>
+        <?= $form->field($model, 'img')->textInput() ?>
 
-    <?php echo  $form->field($model, 'img',['template' => "<font color='red'>*{label}</font>\n<div >{input}</div>\n<div >{error}</div>",])->textInput(['placeholder' => '--必填--']) ?>
+        <?php //echo  $form->field($model, 'cate')->textInput() ?>
 
+        <?php //echo $form->field($model, 'subCate')->textInput() ?>
 
-    <?= $form->field($model,'cate',['template' => "<font color='red'>*{label}</font>\n<div >{input}</div>\n<div >{error}</div>",])->dropDownList($model->getCatList(0),
-        [
-            'prompt'=>'--请选择父类--',
-            'onchange'=>'
-           
-            $.get("'.yii::$app->urlManager->createUrl('oa-goods/forward-create').'?typeid=1&pid="+$(this).val(),function(data){
+        <?php
+        echo $form->field($model,'cate')->dropDownList($model->getCatList(0),
+            [
+                'prompt'=>'--请选择父类--',
+                'onchange'=>'           
+            $.get("'.yii::$app->urlManager->createUrl('oa-goods/category').
+                    '?typeid=1&pid="+$(this).val(),function(data){
                 var str="";
-              $("select#oaforwardgoods-subcate").children("option").remove();
+              $("select#oagoods-subcate").children("option").remove();
               $.each(data,function(k,v){
                     str+="<option value="+v+">"+v+"</option>";
                     });
                 $("select#oagoods-subcate").html(str);
             });',
-        ]) ?>
+            ]);?>
 
-    <?= $form->field($model,'subCate',['template' => "<font color='red'>*{label}</font>\n<div >{input}</div>\n<div >{error}</div>",])->dropDownList($model->getCatList($model->cate),
-        [
-            'prompt'=>'--请选择子类--',
+        <?php echo $form->field($model,'subCate')->dropDownList($model->getCatList($model->catNid),
+            [
+                'prompt'=>'--请选择子类--',
 
-        ]) ?>
+            ]);
+        ?>
 
-    <?php echo  $form->field($model, 'vendor1')->textInput(['placeholder' => '--选填--']) ?>
+        <?= $form->field($model, 'vendor1')->textInput() ?>
 
-    <?php echo  $form->field($model, 'origin1')->textInput(['placeholder' => '--选填--']) ?>
+        <?= $form->field($model, 'origin1')->textInput() ?>
+        <?php echo  $form->field($model, 'introReason')->textInput(['placeholder' => '--选填--']) ?>
 
-    <?php echo  $form->field($model, 'introReason')->textInput(['placeholder' => '--选填--']) ?>
-    <div class="form-group">
-        <?= Html::submitButton('创建', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-    </div>
 
-    <?php ActiveForm::end(); ?>
 
+        <div class="form-group">
+            <?= Html::submitButton($model->isNewRecord ? '创建' : '更新', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-success']) ?>
+        </div>
+
+        <?php ActiveForm::end(); ?>
 
 </div>
