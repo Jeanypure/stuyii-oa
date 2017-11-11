@@ -201,7 +201,7 @@ class OaGoodsController extends Controller
         $status = ['create' => '待提交', 'check' => '待审批'];
         $request = Yii::$app->request;
         if ($request->isPost) {
-            if ($model->load($request->post()) && $model->save()) {
+            if ($model->load($request->post()) && $model->save(false)) {
                 //默认值更新到当前行中
                 $id = $model->nid;
                 $current_model = $this->findModel($id);

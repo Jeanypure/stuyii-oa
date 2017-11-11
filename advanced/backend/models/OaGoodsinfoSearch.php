@@ -18,11 +18,14 @@ class OaGoodsinfoSearch extends OaGoodsinfo
      */
 
     public $GoodsName; //<=====就是加在这里
+    public $vendor1;
+    public $vendor2;
+    public $vendor3;
     public function rules()
     {
         return [
             [['pid','IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged'], 'integer'],
-            [['developer','devDatetime','updateTime','achieveStatus','GoodsCode','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName','possessMan2'],'safe'],
+            [['vendor1','vendor2','vendor3','developer','devDatetime','updateTime','achieveStatus','GoodsCode','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName','possessMan2'],'safe'],
 
         ];
     }
@@ -47,14 +50,32 @@ class OaGoodsinfoSearch extends OaGoodsinfo
     public function search($params,$condition = [])
     {
 
-        $query = OaGoodsinfo::find()->orderBy(['pid' => SORT_DESC])->where($condition);
+        $query = OaGoodsinfo::find()->joinWith('oa_goods')->orderBy(['pid' => SORT_DESC])->where($condition);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 6,
+            ],
         ]);
 
+        // 增加关联字段的排序
+
+//        $dataProvider->setSort([
+//            'attributes' => [
+//                /* 其它字段不要动 */
+//                /* 下面这段是加入的 */
+//                /*=============*/
+//                'vendor1' => [
+//                    'asc' => ['oa_goods.vendor1' => SORT_ASC],
+//                    'desc' => ['oa_goods.vendor1' => SORT_DESC],
+//                    'label' => '供应商连接1'
+//                ],
+//                /*=============*/
+//            ]
+//        ]);
         $this->load($params);
 
         if (!$this->validate()) {
@@ -84,6 +105,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
             'developer'=> $this->developer,
             'devDatetime'=>$this->devDatetime,
             'updateTime'=>$this->updateTime,
+            'vendor1' => $this->vendor1,
 
 
 

@@ -115,9 +115,6 @@ class OaGoodsinfoController extends Controller
         $goodsItem = OaGoods::find()->select('oa_goods.*')->where(['nid'=>$conid])->all();
 
 
-//        $info =  OaGoodsinfo::find()->joinWith(['oaGoods'])->select('oa_goodsinfo.*,oa_goods.*')->where(['oa_goodsinfo.pid'=>$id])->all();
-
-
         if (!$info) {
             throw new NotFoundHttpException("The product was not found.");
         }
@@ -130,8 +127,8 @@ class OaGoodsinfoController extends Controller
             if(empty($Suppler)){
                 $Recorder = yii::$app->user->identity->username;
                 $InputDate = strftime('%F %T');
-                Yii::$app->db->createCommand("insert into  B_Supplier (SupplierName,Recorder,InputDate) 
-                  VALUES ('$SupplerName','$Recorder','$InputDate')")->execute();
+                Yii::$app->db->createCommand("insert into  B_Supplier (SupplierName,Recorder,InputDate,Used) 
+                  VALUES ('$SupplerName','$Recorder','$InputDate',0)")->execute();
             }
 
             $SupplerID = Yii::$app->db->createCommand("SELECT NID from  B_Supplier WHERE SupplierName='$SupplerName'")
@@ -162,6 +159,7 @@ class OaGoodsinfoController extends Controller
             $current_model->catNid = $cateModel->CategoryParentID;
             $current_model->cate = $cateModel->CategoryParentName;
             $current_model->subCate = $cateModel->CategoryName;
+            $current_model->developer= $_POST['OaGoodsinfo']['developer'];
             $current_model->vendor1 = $_POST['OaGoods']['vendor1'];
             $current_model->vendor2 = $_POST['OaGoods']['vendor2'];
             $current_model->vendor3 = $_POST['OaGoods']['vendor3'];
@@ -178,7 +176,7 @@ class OaGoodsinfoController extends Controller
             $dataProvider = new ActiveDataProvider([
                 'query' => Goodssku::find()->where(['pid'=>$id]),
                 'pagination' => [
-                    'pageSize' => 10,
+                    'pageSize' => 15,
                 ],
             ]);
             return $this->render('updetail',[

@@ -28,9 +28,9 @@ $this->registerJs($js);
 
 <footer class="main-footer">
     <div class="pull-right hidden-xs">
-        <b>Version</b> 2.0
+        <b>Version</b> 1.0
     </div>
-    <strong>Copyright &copy; 2014-2015 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights
+    <strong>Copyright &copy; 2017-2022 <a href="http://almsaeedstudio.com">ShangHai YouRan</a>.</strong> All rights
     reserved.
 </footer>
 
@@ -138,7 +138,6 @@ $this->registerJs($js);
                             Back End Framework
                             <span class="label label-primary pull-right">68%</span>
                         </h4>
-
                         <div class="progress progress-xxs">
                             <div class="progress-bar progress-bar-primary" style="width: 68%"></div>
                         </div>

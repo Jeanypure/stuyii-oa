@@ -73,10 +73,8 @@ class OaCheckController extends Controller
         $model = $this->findModel($id);
         $cate = $model->cate;
         $_model = new OaGoodsinfo();
-        $user = yii::$app->user->identity->username;
         $model ->checkStatus = '已审批';
         $model ->approvalNote = $approvalNote;
-        $model ->developer = $user;
         $model ->updateDate = strftime('%F %T');
         $model->update(false);
         //审批状态改变之后就插入数据到OaGoodsInfo
@@ -154,10 +152,8 @@ class OaCheckController extends Controller
         $id = $request['nid'];
         $approvalNote = $request['approvalNote'];
         $model = $this->findModel($id);
-        $user = yii::$app->user->identity->username;
         $model ->checkStatus = '未通过';
         $model ->approvalNote = $approvalNote;
-        $model ->developer = $user;
         $model ->updateDate = strftime('%F %T');
         $model->update(false);
         return $this->redirect(['to-check']);
@@ -188,9 +184,7 @@ class OaCheckController extends Controller
     public function actionTrash($id)
     {
         $model = $this->findModel($id);
-        $user = yii::$app->user->identity->username;
         $model ->checkStatus = '已作废';
-        $model ->developer = $user;
         $model ->updateDate = strftime('%F %T');
         $model->update(array('checkStatus','developer','updateDate'));
         return $this->redirect(['to-check']);

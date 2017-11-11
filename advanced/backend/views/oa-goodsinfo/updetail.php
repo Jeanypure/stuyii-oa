@@ -356,7 +356,7 @@ echo TabularForm::widget([
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i> 管理SKU</h3>',
             'type'=>GridView::TYPE_PRIMARY,
 
-            'footer'=>false,
+//            'footer'=>true,
             'after'=>
                 Html::input('text','rowNum','',['class' => 'x-row','placeholder'=>'行数']).' '.
                 Html::button('新增行', ['id'=>'add-row','type'=>'button', 'class'=>'btn kv-batch-create']) . ' ' .

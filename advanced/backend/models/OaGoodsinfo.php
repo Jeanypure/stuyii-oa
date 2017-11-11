@@ -71,6 +71,14 @@ class OaGoodsinfo extends GoodsCats
 
 
         ];
+
+    }
+
+    //oa_goodsinfo 关联oa_goods
+    public function getoa_goods()
+    {
+        //同样第一个参数指定关联的子表模型类名
+        return $this->hasOne(OaGoods::className(), ['nid' => 'goodsid']);
     }
 
 

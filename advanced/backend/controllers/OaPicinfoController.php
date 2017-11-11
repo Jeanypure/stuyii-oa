@@ -118,7 +118,7 @@ class OaPicinfoController extends Controller
             $dataProvider = new ActiveDataProvider([
                 'query' => Goodssku::find()->where(['pid'=>$id]),
                 'pagination' => [
-                    'pageSize' => 10,
+                    'pageSize' => 15,
                 ],
             ]);
             return $this->render('updetail',[

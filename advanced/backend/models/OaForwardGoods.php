@@ -38,7 +38,7 @@ class OaForwardGoods extends GoodsCats
         return [
       
             [['img','cate','subCate','vendor1'],'required'],
-            [['origin2','origin3','vendor2','vendor3','devNum',
+            [['origin1','origin2','origin3','vendor2','vendor3','devNum',
                 'developer','introducer','introReason','devStatus','checkStatus',
                 'salePrice','hopeWeight','hopeRate','hopeSale',
                 'hopeMonthProfit','createDate','updateDate','approvalNote'],'string'],
