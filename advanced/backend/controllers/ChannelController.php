@@ -93,17 +93,10 @@ class ChannelController extends Controller
      */
     public function actionUpdate($id)
     {
-//        $model = $this->findModel($id);
 
-//        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-//            return $this->redirect(['view', 'id' => $model->pid]);
-//        } else {
-//            return $this->render('editwish', [
-//                'model' => $model,
-//            ]);
-//        }
-        $info = Channel::findOne($id);
+        $info = new OaTemplates();
         $Goodssku = Goodssku::find()->where(['pid'=>$id])->all();
+
         $dataProvider = new ActiveDataProvider([
             'query' => Goodssku::find()->where(['pid'=>$id]),
             'pagination' => [
@@ -111,21 +104,32 @@ class ChannelController extends Controller
             ],
         ]);
 
+        if(Yii::$app->request->isPost){
 
-
-//        var_dump($dataProvider);die;
-        if($info->load(Yii::$app->request->post())){
-            $info->save();
-            return $this->redirect(['view','id'=>$info->pid]);
-
-        }else{
-            return $this->render('editwish',[
+        }
+        else{
+            return $this->render('update',[
                 'info' =>$info,
                 'dataProvider' => $dataProvider,
                 'Goodssku' => $Goodssku[0],
 
             ]);
         }
+
+//        if($info->load(Yii::$app->request->post())){
+//
+//            $info->save();
+//            return $this->redirect(['view','id'=>$info->nid]);
+//
+//        }else{
+//
+//            return $this->render('update',[
+//                'info' =>$info,
+//                'dataProvider' => $dataProvider,
+//                'Goodssku' => $Goodssku[0],
+//
+//            ]);
+//        }
     }
 
     /*

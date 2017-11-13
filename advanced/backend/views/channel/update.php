@@ -9,6 +9,10 @@ use kartik\builder\FormGrid;
 
 $this->title =  '更新平台信息';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '平台信息'), 'url' => ['index']];
+$shipping_templates = [
+    "template"=>"<div > {label} </div><div class='col-lg-6'>{input}</div>{hint}{error}",
+    'labelOptions' => ['class' => 'col-lg-2 control-label']
+                ]
 ?>
 <div>
     <p>
@@ -42,22 +46,83 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '平台信息'), 'url
     <p >基本信息</p>
 </div>
 </br>
-<?= $form->field($model,'GoodsCode')->textInput(); ?>
-<?= $form->field($model,'GoodsCode')->textInput(); ?>
-<?= $form->field($model,'GoodsCode')->textInput(); ?>
+<?= $form->field($info,'goodsid')->textInput(); ?>
+<?= $form->field($Goodssku,'linkurl')->textInput()->label('主图') ; ?>
+<?= $form->field($info,'location')->textInput(); ?>
+<?= $form->field($info,'country')->textInput(); ?>
+<?= $form->field($info,'postCode')->textInput(); ?>
+<?= $form->field($info,'prepareDay')->textInput(); ?>
 
 <div class="blockTitle">
     <p > 站点组</p>
 </div>
 </br>
-<?= $form->field($model,'GoodsCode')->textInput(); ?>
-
+<?= $form->field($info,'site')->textInput(); ?>
 <div class="blockTitle">
     <p > 多属性</p>
 </div>
 </br>
-<?= $form->field($model,'GoodsCode')->textInput(); ?>
 
+
+<div class="blockTitle">
+    <p > 主信息</p>
+</div>
+</br>
+<div>
+<?= $form->field($info,'listedCate')->textInput(); ?>
+<?= $form->field($info,'listedSubcate')->textInput(); ?>
+<?= $form->field($info,'listedSubcate')->textInput(); ?>
+<?= $form->field($info,'title')->textInput(); ?>
+<?= $form->field($info,'subTitle')->textInput(); ?>
+<?= $form->field($info,'description')->textarea(['rows'=>6]); ?>
+<?= $form->field($info,'quantity')->textInput(); ?>
+<?= $form->field($info,'nowPrice')->textInput(); ?>
+<?= $form->field($info,'UPC')->textInput(); ?>
+<?= $form->field($info,'EAN')->textInput(); ?>
+</div>
+
+<div class="blockTitle">
+    <p >物品属性</p>
+</div>
+</br>
+<?= $form->field($info,'Brand')->textInput(); ?>
+<?= $form->field($info,'MPN')->textInput(); ?>
+<?= $form->field($info,'Color')->textInput(); ?>
+<?= $form->field($info,'Type')->textInput(); ?>
+<?= $form->field($info,'Material')->textInput(); ?>
+<?= $form->field($info,'IntendedUse')->textInput(); ?>
+<?= $form->field($info,'unit')->textInput(); ?>
+<?= $form->field($info,'bundleListing')->textInput(); ?>
+<?= $form->field($info,'shape')->textInput(); ?>
+<?= $form->field($info,'features')->textInput(); ?>
+<?= $form->field($info,'regionManufacture')->textInput(); ?>
+
+<div class="blockTitle">
+    <p >物流设置</p>
+</div>
+</br
+<div>
+<div class="row" >
+    <div class="col-lg-6">
+    <span>境内运输方式</span>
+<?= $form->field($info,'InshippingMethod1',$shipping_templates)->textInput(['class' => 'col-lg-6']); ?>
+<?= $form->field($info,'InFirstCost1',$shipping_templates)->textInput(); ?>
+<?= $form->field($info,'InSuccessorCost1',$shipping_templates)->textInput(); ?>
+<?= $form->field($info,'InshippingMethod2',$shipping_templates)->textInput(); ?>
+<?= $form->field($info,'InFirstCost2',$shipping_templates)->textInput(); ?>
+<?= $form->field($info,'InSuccessorCost2',$shipping_templates)->textInput(); ?>
+    </div>
+    <div class="col-lg-6">
+    <span>境外运输方式</span>
+    <?= $form->field($info,'OutshippingMethod1',$shipping_templates)->textInput(); ?>
+    <?= $form->field($info,'OutFirstCost1',$shipping_templates)->textInput(); ?>
+    <?= $form->field($info,'OutSuccessorCost1',$shipping_templates)->textInput(); ?>
+    <?= $form->field($info,'OutshippingMethod2',$shipping_templates)->textInput(); ?>
+    <?= $form->field($info,'OutFirstCost2',$shipping_templates)->textInput(); ?>
+    <?= $form->field($info,'OutSuccessorCost2',$shipping_templates)->textInput(); ?>
+    </div>
+</div>
+</div>
 <?php ActiveForm::end() ?>
 
 <style>
