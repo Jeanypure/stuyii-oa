@@ -208,7 +208,7 @@ class OaGoodsinfoController extends Controller
             $dataProvider = new ActiveDataProvider([
                 'query' => Goodssku::find()->where(['pid'=>$id]),
                 'pagination' => [
-                    'pageSize' => 15,
+                    'pageSize' => 150,
                 ],
             ]);
 
