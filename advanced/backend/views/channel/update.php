@@ -24,7 +24,7 @@ use yii\bootstrap\Modal;
 Modal::begin([
     'id' => 'templates-modal',
     'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
-    'size' => "modal-lg"
+    'size' => "modal-xl"
 ]);
 //echo
 Modal::end();
@@ -250,17 +250,23 @@ $('.all-images').change(function() {
 
 // 多属性设置模态框
 $(".var-btn").click(function() {
-    alert("Hi");
-    $('.modal-body').html('fefe');
-//    $('.modal-body').children('div').remove(); //清空数据
-//    $.get('{$templatesVarUrl}',{id:5},
-//        function(data) {
-//            $('.modal-body').html(data);
-//        }
-//    );
+    $('.modal-body').children('div').remove(); //清空数据
+    $.get('{$templatesVarUrl}',{id:1},
+        function(data) {
+            $('.modal-body').html(data);
+        }
+    );
 });
 JS;
 $this->registerJs($js);
-
-
 ?>
+
+
+<style>
+    @media (min-width: 768px) {
+        .modal-xl {
+            width: 70%;
+            /*max-width:1200px;*/
+        }
+    }
+</style>
