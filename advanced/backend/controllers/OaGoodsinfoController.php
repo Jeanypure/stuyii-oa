@@ -143,11 +143,25 @@ class OaGoodsinfoController extends Controller
                 $info->DictionaryName = implode(',',$updata['DictionaryName']);
             }
             $info->updateTime = strftime('%F %T');
+            $developer = $updata['OaGoodsinfo']['developer'];
+            $info->developer = $developer;
+            if(!empty($updata['OaGoodsinfo']['possessMan1'])) {
+                $arc = $updata['OaGoodsinfo']['possessMan1'];
+            }
+            else {
+                $arc_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-arc-map'])->one();
+                $arc = $arc_model->ruleValue;
+            }
 
-            $info->developer = $updata['OaGoodsinfo']['developer'];
-
-            $info->Purchaser = $updata['OaGoodsinfo']['Purchaser'];
-            $info->possessMan1 = $updata['OaGoodsinfo']['possessMan1'];
+            if(!empty($updata['OaGoodsinfo']['Purchaser'])){
+                $pur = $updata['OaGoodsinfo']['Purchaser'];
+            }
+            else{
+                $pur_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-pur-map'])->one();
+                $pur = $pur_model->ruleValue;
+            }
+            $info->Purchaser = $pur;
+            $info->possessMan1 = $arc;
             $info->AttributeName = $updata['OaGoodsinfo']['AttributeName'];
             if(!empty($updata['OaGoodsinfo']['AttributeName'])){
 

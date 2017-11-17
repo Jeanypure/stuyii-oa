@@ -139,7 +139,14 @@ echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' 
                 ],
             ],
         ],
-
+        [
+            'attributes'=>[
+                'IsLiquid'=>['label'=>'是否液体','items'=>[ 1=>'Group 2'],'type'=>Form::INPUT_CHECKBOX],
+                'IsPowder'=>['label'=>'是否粉末','items'=>[ 1=>'Group 2'],'type'=>Form::INPUT_CHECKBOX],
+                'isMagnetism'=>['label'=>'是否带磁', 'items'=>[ 1=>'Group 2'], 'type'=>Form::INPUT_CHECKBOX],
+                'IsCharged'=>['label'=>'是否带电', 'items'=>[0=>'Group 1'], 'type'=>Form::INPUT_CHECKBOX],
+            ],
+        ],
 
         [
 
@@ -193,15 +200,13 @@ echo Select2::widget([
 <?= $form->field($goodsItem,'cate')->dropDownList($goodsItem->getCatList(0),
     [
         'prompt'=>'--请选择父类--',
-
         'onchange'=>'           
             $("select#oagoods-subcate").children("option").remove();
             $.get("'.yii::$app->urlManager->createUrl('oa-goodsinfo/category').
             '?typeid=1&pid="+$(this).val(),function(data){
                 var str=""; 
-
               $.each(data,function(k,v){
-                    str+="<option value="+v">"++"</option>";
+                    str+="<option value="+v+">"+v+"</option>";
                     });
                 $("select#oagoods-subcate").html(str);
             });',
@@ -351,9 +356,7 @@ echo TabularForm::widget([
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i> 管理SKU</h3>',
             'type'=>GridView::TYPE_PRIMARY,
 
-
             'footer'=>true,
-
             'after'=>
                 Html::input('text','rowNum','',['class' => 'x-row','placeholder'=>'行数']).' '.
                 Html::button('新增行', ['id'=>'add-row','type'=>'button', 'class'=>'btn kv-batch-create']) . ' ' .
@@ -364,11 +367,13 @@ echo TabularForm::widget([
                 Html::button('重量确定', ['id'=>'Weight-set','type'=>'button','class'=>'btn']).' '.
                 Html::input('text','RetailPrice','',['class' => 'RetailPrice-replace','placeholder'=>'零售价$']).' '.
                 Html::button('价格确定', ['id'=>'RetailPrice-set','type'=>'button','class'=>'btn']).' '.
+//                '<div class="row">'.
                 Html::button('一键生成SKU', ['id'=>'sku-set','type'=>'button','class'=>'btn btn-success']).' '.
                 Html::button('保存当前数据', ['id'=>'save-only','type'=>'button','class'=>'btn btn-info']).' '.
                 Html::button('保存并完善', ['id'=>'save-complete','type'=>'button','class'=>'btn btn-primary']).' '.
                 Html::button('导入普源', ['id'=>'data-input','type'=>'button','class'=>'btn btn-warning']).' '.
                 Html::button('删除行', ['id'=>'delete-row','type'=>'button', 'class'=>'btn btn-danger kv-batch-delete'])
+//                '</div>'
         ]
     ]
 

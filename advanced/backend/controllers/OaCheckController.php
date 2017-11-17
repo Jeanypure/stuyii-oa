@@ -6,6 +6,7 @@ use Yii;
 use backend\models\OaGoods;
 use backend\models\OaGoodsSearch;
 use backend\models\OaGoodsinfo;
+use backend\models\OaSysRules;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -91,6 +92,12 @@ class OaCheckController extends Controller
         $_model->updateTime =strftime('%F %T');;
         $_model->achieveStatus='待处理';
         $_model->GoodsName='';
+        $arc_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-arc-map'])->one();
+        $pur_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-pur-map'])->one();
+        $arc = $arc_model->ruleValue;
+        $pur = $pur_model->ruleValue;
+        $_model->possessMan1 = $arc;
+        $_model->Purchaser = $pur;
         $_model->save(false);
         return $this->redirect(['to-check']);
 
@@ -124,6 +131,12 @@ class OaCheckController extends Controller
             $_model->updateDatetime =strftime('%F %T');;
             $_model->achieveStatus='待处理';
             $_model->GoodsName='';
+            $arc_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-arc-map'])->one();
+            $pur_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-pur-map'])->one();
+            $arc = $arc_model->ruleValue;
+            $pur = $pur_model->ruleValue;
+            $_model->possessMan1 = $arc;
+            $_model->Purchaser = $pur;
             $_model->save(false);
         }
         return $this->redirect(['to-check']);

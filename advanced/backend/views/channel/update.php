@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\builder\FormGrid;
+use kartik\builder\TabularForm;
+use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Channel */
 
@@ -12,15 +14,22 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '平台信息'), 'url
 $shipping_templates = [
     "template"=>"<div > {label} </div><div class='col-lg-6'>{input}</div>{hint}{error}",
     'labelOptions' => ['class' => 'col-lg-2 control-label']
-                ]
+                ];
+
+
+$templatesVarUrl = Url::toRoute('templates-var'); // 多属性连接
+
+//创建模态框
+use yii\bootstrap\Modal;
+Modal::begin([
+    'id' => 'templates-modal',
+    'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
+    'size' => "modal-lg"
+]);
+//echo
+Modal::end();
 ?>
-<div>
-    <p>
-        <?= Html::button('保存当前数据', ['id' => 'save-only','class' =>'btn btn-success']) ?>
-        <?= Html::button('保存并完善', ['id' => 'save-complete','class' =>'btn btn-info']) ?>
-        <?= Html::button('导出刊登模板', ['id' => 'import-templates','class' =>'btn btn-primary']) ?>
-    </p>
-</div>
+
 <div class="channel-update">
 
     <ul class="nav nav-tabs">
@@ -30,7 +39,13 @@ $shipping_templates = [
     </ul>
 </div>
 </br>
-
+<div class="st">
+    <p>
+        <?= Html::button('保存当前数据', ['id' => 'save-only','class' =>'btn btn-success']) ?>
+        <?= Html::button('保存并完善', ['id' => 'save-complete','class' =>'btn btn-info']) ?>
+        <?= Html::button('导出刊登模板', ['id' => 'import-templates','class' =>'btn btn-primary']) ?>
+    </p>
+</div>
 <?php $form = ActiveForm::begin([
     'id' => 'msg-form',
     'options' => ['class'=>'form-horizontal'],
@@ -46,24 +61,53 @@ $shipping_templates = [
     <p >基本信息</p>
 </div>
 </br>
-<?= $form->field($info,'goodsid')->textInput(); ?>
-<?= $form->field($Goodssku,'linkurl')->textInput()->label('主图') ; ?>
-<?= $form->field($info,'location')->textInput(); ?>
-<?= $form->field($info,'country')->textInput(); ?>
+<?= $form->field($info,'sku')->textInput()?>
+<?php
+echo '<div class="form-group field-oatemplates-mainpage">
+    <label class="col-lg-1 control-label">主图</label>
+    <div class="col-lg-3"><input type="text" class="form-control" value="https://www.tupianku.com/view/full/10023/'.$info->sku.'-_0_.jpg"></div>
+    <div class="col-lg=1"> 
+    <a target="_blank" href="https://www.tupianku.com/view/full/10023/'.$info->sku.'-_0_.jpg">
+    <img src="https://www.tupianku.com/view/full/10023/'.$info->sku.'-_0_.jpg" width="50" height="50">
+    </a>
+    </div>
+</div>'
+;?>
+<?= $form->field($info,'extraPage')->textarea(['style'=>'display:']); ?>
+<?php
+for($i=1;$i<=12;$i++){
+    echo '<div class="form-group all-images">
+    <label class="col-lg-1"></label>
+    <div class="col-lg-3"><input  type="text" class="form-control extra-images" value="https://www.tupianku.com/view/full/10023/'.$info->sku.'-_'.$i.'_.jpg"></div>
+    <div class="col-lg=1">
+    <button  class="btn btn-error remove-image">删除</button>
+    <button class="btn btn-error">移动</button>
+    <a target="_blank" href="https://www.tupianku.com/view/full/10023/'.$info->sku.'-_'.$i.'_.jpg">
+    <img src="https://www.tupianku.com/view/full/10023/'.$info->sku.'-_'.$i.'_.jpg" width="50" height="50">
+    </a>
+    </div>
+</div>';
+}
+?>
+</br>
+<?= $form->field($info,'location')->textInput(['value'=>'ShangHai']); ?>
+<?= $form->field($info,'country')->textInput(['value' => 'CN' ]); ?>
 <?= $form->field($info,'postCode')->textInput(); ?>
-<?= $form->field($info,'prepareDay')->textInput(); ?>
+<?= $form->field($info,'prepareDay')->textInput(['value' => '3' ]); ?>
 
 <div class="blockTitle">
     <p > 站点组</p>
 </div>
 </br>
-<?= $form->field($info,'site')->textInput(); ?>
+<?= $form->field($info,'site')->textInput(['value' => '美国站' ]); ?>
 <div class="blockTitle">
     <p > 多属性</p>
 </div>
 </br>
-
-
+<div>
+<a  data-toggle="modal" data-target="#templates-modal" class=" var-btn btn btn-default ">设置多属性</a>
+    </div>
+</br>
 <div class="blockTitle">
     <p > 主信息</p>
 </div>
@@ -77,16 +121,17 @@ $shipping_templates = [
 <?= $form->field($info,'description')->textarea(['rows'=>6]); ?>
 <?= $form->field($info,'quantity')->textInput(); ?>
 <?= $form->field($info,'nowPrice')->textInput(); ?>
-<?= $form->field($info,'UPC')->textInput(); ?>
-<?= $form->field($info,'EAN')->textInput(); ?>
+<?= $form->field($info,'UPC')->textInput(['value' => 'Does not apply']); ?>
+<?= $form->field($info,'EAN')->textInput(['value' => 'Does not apply']); ?>
 </div>
 
 <div class="blockTitle">
     <p >物品属性</p>
 </div>
 </br>
-<?= $form->field($info,'Brand')->textInput(); ?>
-<?= $form->field($info,'MPN')->textInput(); ?>
+<div>
+<?= $form->field($info,'Brand')->textInput(['value' => 'Unbranded']); ?>
+<?= $form->field($info,'MPN')->textInput(['value' => 'Does not apply']); ?>
 <?= $form->field($info,'Color')->textInput(); ?>
 <?= $form->field($info,'Type')->textInput(); ?>
 <?= $form->field($info,'Material')->textInput(); ?>
@@ -95,34 +140,61 @@ $shipping_templates = [
 <?= $form->field($info,'bundleListing')->textInput(); ?>
 <?= $form->field($info,'shape')->textInput(); ?>
 <?= $form->field($info,'features')->textInput(); ?>
-<?= $form->field($info,'regionManufacture')->textInput(); ?>
-
+<?= $form->field($info,'regionManufacture')->textInput(['value' => 'China']); ?>
+</div>
 <div class="blockTitle">
     <p >物流设置</p>
+
 </div>
 </br
 <div>
 <div class="row" >
     <div class="col-lg-6">
     <span>境内运输方式</span>
-<?= $form->field($info,'InshippingMethod1',$shipping_templates)->textInput(['class' => 'col-lg-6']); ?>
-<?= $form->field($info,'InFirstCost1',$shipping_templates)->textInput(); ?>
-<?= $form->field($info,'InSuccessorCost1',$shipping_templates)->textInput(); ?>
-<?= $form->field($info,'InshippingMethod2',$shipping_templates)->textInput(); ?>
-<?= $form->field($info,'InFirstCost2',$shipping_templates)->textInput(); ?>
-<?= $form->field($info,'InSuccessorCost2',$shipping_templates)->textInput(); ?>
+<?=
+$form->field($info,'InshippingMethod1',$shipping_templates)->dropDownList($inShippingService,
+    [
+        'class' => 'col-lg-6',
+        'prompt'=>'--境内物流选择--',
+    ]
+); ?>
+<?= $form->field($info,'InFirstCost1',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
+<?= $form->field($info,'InSuccessorCost1',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
+        <?=
+        $form->field($info,'InshippingMethod2',$shipping_templates)->dropDownList($inShippingService,
+            [
+                'class' => 'col-lg-6',
+                'prompt'=>'--境内物流选择--',
+            ]
+        ); ?>
+<?= $form->field($info,'InFirstCost2',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
+<?= $form->field($info,'InSuccessorCost2',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
     </div>
     <div class="col-lg-6">
     <span>境外运输方式</span>
-    <?= $form->field($info,'OutshippingMethod1',$shipping_templates)->textInput(); ?>
-    <?= $form->field($info,'OutFirstCost1',$shipping_templates)->textInput(); ?>
-    <?= $form->field($info,'OutSuccessorCost1',$shipping_templates)->textInput(); ?>
-    <?= $form->field($info,'OutshippingMethod2',$shipping_templates)->textInput(); ?>
-    <?= $form->field($info,'OutFirstCost2',$shipping_templates)->textInput(); ?>
-    <?= $form->field($info,'OutSuccessorCost2',$shipping_templates)->textInput(); ?>
+        <?=
+        $form->field($info,'OutshippingMethod1',$shipping_templates)->dropDownList($outShippingService,
+            [
+                'class' => 'col-lg-6',
+                'prompt'=>'--境外物流选择--',
+            ]
+        ); ?>
+    <?= $form->field($info,'OutFirstCost1',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
+    <?= $form->field($info,'OutSuccessorCost1',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
+        <?=
+        $form->field($info,'OutshippingMethod2',$shipping_templates)->dropDownList($outShippingService,
+            [
+                'class' => 'col-lg-6',
+                'prompt'=>'--境外物流选择--',
+            ]
+        ); ?>
+    <?= $form->field($info,'OutFirstCost2',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
+    <?= $form->field($info,'OutSuccessorCost2',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
     </div>
 </div>
 </div>
+
+
 <?php ActiveForm::end() ?>
 
 <style>
@@ -135,3 +207,60 @@ $shipping_templates = [
         margin-left: -5px;
     }
 </style>
+
+<?php
+$js  = <<< JS
+//删除附加图
+$('.remove-image').on('click',function() {
+    $(this).closest('div .form-group').remove();
+     allImags();//重新生成JSON
+});
+
+
+//实时刷新图片
+
+$('.extra-images').change(function() {
+    
+    new_image = $(this).val();
+    $(this).parents('div .form-group').find('a').attr('href',new_image);
+    $(this).parents('div .form-group').find('img').attr('src',new_image);
+}
+);
+
+
+//绑定事件, 实时封装JSON数据
+$('.all-images').change(function() {
+    var text = '';
+    var images = new Array();
+    $('.extra-images').each(function() {
+        images.push($(this).val());
+    });
+    $('#oatemplates-extrapage').val(JSON.stringify({'images':images}));
+});
+
+//如果图片地址不改变就直接用原始数据
+    function allImags() {
+        var images = new Array();
+        $('.extra-images').each(function() {
+        images.push($(this).val());
+        });
+        $('#oatemplates-extrapage').val(JSON.stringify({'images':images}));
+    }
+    allImags();
+
+// 多属性设置模态框
+$(".var-btn").click(function() {
+    alert("Hi");
+    $('.modal-body').html('fefe');
+//    $('.modal-body').children('div').remove(); //清空数据
+//    $.get('{$templatesVarUrl}',{id:5},
+//        function(data) {
+//            $('.modal-body').html(data);
+//        }
+//    );
+});
+JS;
+$this->registerJs($js);
+
+
+?>

@@ -5,6 +5,7 @@ namespace backend\controllers;
 
 use Yii;
 use backend\models\Channel;
+use backend\models\OaTemplatesVar;
 use backend\models\OaTemplates;
 use backend\models\ChannelSearch;
 use backend\models\Goodssku;
@@ -12,7 +13,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
-
+use yii\helpers\ArrayHelper;
 /**
  * ChannelController implements the CRUD actions for Channel model.
  */
@@ -94,9 +95,14 @@ class ChannelController extends Controller
     public function actionUpdate($id)
     {
 
-        $info = new OaTemplates();
+        $info = OaTemplates::find()->where(['infoid' =>$id])->one();
         $Goodssku = Goodssku::find()->where(['pid'=>$id])->all();
-
+        $templatesVar = new ActiveDataProvider([
+            'query' => OaTemplatesVar::find()->where(['tid' =>$id]),
+            'pagination' => [
+                'pageSize' => 150,
+            ],
+        ]);
         $dataProvider = new ActiveDataProvider([
             'query' => Goodssku::find()->where(['pid'=>$id]),
             'pagination' => [
@@ -108,10 +114,15 @@ class ChannelController extends Controller
 
         }
         else{
+            $inShippingService = $this->getShippingService('In');
+            $OutShippingService = $this->getShippingService('Out');
             return $this->render('update',[
                 'info' =>$info,
                 'dataProvider' => $dataProvider,
                 'Goodssku' => $Goodssku[0],
+                'templatesVar' => $templatesVar,
+                'inShippingService' => $inShippingService,
+                'outShippingService' => $OutShippingService,
 
             ]);
         }
@@ -132,6 +143,25 @@ class ChannelController extends Controller
 //        }
     }
 
+    /**
+     * 多属性设置页面
+     * @param $id
+     * @return mixed
+     */
+
+    public function actionTemplatesVar($id)
+    {
+        $templatesVar = new ActiveDataProvider([
+            'query' => OaTemplatesVar::find()->where(['tid' =>$id]),
+            'pagination' => [
+                'pageSize' => 150,
+            ],
+        ]);
+        return $this->renderAjax('templatesVar',[
+            'templatesVar' => $templatesVar,
+        ]);
+    }
+    /**
     /*
      * UpdateWish
      * url  http://localhost:8076/channel/update-wish?id=
@@ -168,6 +198,7 @@ class ChannelController extends Controller
         return $this->redirect(['index']);
     }
 
+
     /**
      * Finds the Channel model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -183,4 +214,18 @@ class ChannelController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+
+    /**
+     *  返回物流名称
+     */
+    protected function getShippingService($type)
+    {
+        $sql = "select id, shippingName from oa_shippingService where type='{$type}'";
+        $connection = Yii::$app->db;
+        $ret = $connection->createCommand($sql)->queryAll();
+        $options = ArrayHelper::map($ret, 'id','shippingName');
+        return $options;
+    }
+
 }
