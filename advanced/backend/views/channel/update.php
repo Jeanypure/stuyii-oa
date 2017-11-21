@@ -33,19 +33,20 @@ Modal::end();
 <div class="channel-update">
 
     <ul class="nav nav-tabs">
-        <li role="presentation" class="active"><a href="#">平台信息</a></li>
-        <li role="presentation" ><a href="#">eBay</a></li>
+        <li role="presentation" class="active"><a href="#">eBay</a></li>
         <li role="presentation"><a href="#">Wish</a></li>
     </ul>
 </div>
 </br>
 <div class="st">
     <p>
-        <?= Html::button('保存当前数据', ['id' => 'save-only','class' =>'btn btn-success']) ?>
-        <?= Html::button('保存并完善', ['id' => 'save-complete','class' =>'btn btn-info']) ?>
-        <?= Html::button('导出刊登模板', ['id' => 'import-templates','class' =>'btn btn-primary']) ?>
+        <?= Html::button('保存当前数据', ['id' => 'save-only','class' =>'btn btn-default']) ?>
+        <?= Html::button('保存并完善', ['id' => 'save-complete','class' =>'btn btn-default']) ?>
+        <?= Html::button('导出刊登模板', ['id' => 'import-templates','class' =>'btn btn-default']) ?>
     </p>
 </div>
+</br>
+
 <?php $form = ActiveForm::begin([
     'id' => 'msg-form',
     'options' => ['class'=>'form-horizontal'],
@@ -75,19 +76,25 @@ echo '<div class="form-group field-oatemplates-mainpage">
 ;?>
 <?= $form->field($info,'extraPage')->textarea(['style'=>'display:']); ?>
 <?php
+echo '<div class="images">';
 for($i=1;$i<=12;$i++){
     echo '<div class="form-group all-images">
+    
     <label class="col-lg-1"></label>
+    <strong class="serial">#'.$i.'</strong>
     <div class="col-lg-3"><input  type="text" class="form-control extra-images" value="https://www.tupianku.com/view/full/10023/'.$info->sku.'-_'.$i.'_.jpg"></div>
     <div class="col-lg=1">
+    <button  class="btn add-images">增加</button>
     <button  class="btn btn-error remove-image">删除</button>
-    <button class="btn btn-error">移动</button>
+    <button class="btn up-btn btn-error">上移动</button>
+    <button class="btn down-btn btn-error">下移动</button>
     <a target="_blank" href="https://www.tupianku.com/view/full/10023/'.$info->sku.'-_'.$i.'_.jpg">
     <img src="https://www.tupianku.com/view/full/10023/'.$info->sku.'-_'.$i.'_.jpg" width="50" height="50">
     </a>
     </div>
 </div>';
 }
+echo '</div>';
 ?>
 </br>
 <?= $form->field($info,'location')->textInput(['value'=>'ShangHai']); ?>
@@ -210,34 +217,6 @@ $form->field($info,'InshippingMethod1',$shipping_templates)->dropDownList($inShi
 
 <?php
 $js  = <<< JS
-//删除附加图
-$('.remove-image').on('click',function() {
-    $(this).closest('div .form-group').remove();
-     allImags();//重新生成JSON
-});
-
-
-//实时刷新图片
-
-$('.extra-images').change(function() {
-    
-    new_image = $(this).val();
-    $(this).parents('div .form-group').find('a').attr('href',new_image);
-    $(this).parents('div .form-group').find('img').attr('src',new_image);
-}
-);
-
-
-//绑定事件, 实时封装JSON数据
-$('.all-images').change(function() {
-    var text = '';
-    var images = new Array();
-    $('.extra-images').each(function() {
-        images.push($(this).val());
-    });
-    $('#oatemplates-extrapage').val(JSON.stringify({'images':images}));
-});
-
 //如果图片地址不改变就直接用原始数据
     function allImags() {
         var images = new Array();
@@ -247,6 +226,118 @@ $('.all-images').change(function() {
         $('#oatemplates-extrapage').val(JSON.stringify({'images':images}));
     }
     allImags();
+
+
+// 生成图片序列
+
+function serialize() {
+    i=0;
+    $(".serial").each(function() {
+        i++;
+        $(this).text("#" + i);
+    });
+}
+
+//增加图片
+function addImages() {
+       
+  total = 0;//判断当前图片数量
+  $(".serial").each(function() {
+        total++;
+    });
+
+    if(total<12){
+        row = '<div class="form-group all-images">' +
+    '<label class="col-lg-1"></label>' +
+    '<strong class="serial">#</strong>'+
+    '<div class="col-lg-3"><input type="text" class="form-control extra-images" ></div>'+
+    '<div class="col-lg=1">'+
+    '<button class="btn add-images">增加</button> '+
+    '<button class="btn btn-error remove-image">删除</button> '+
+    '<button class="btn up-btn btn-error">上移动</button> '+
+    '<button class="btn down-btn btn-error">下移动</button> '+
+    '<a target="_blank" href="">'+
+    '<img src="" width="50" height="50">'+
+    '</a>'+
+    '</div>'+
+    '</div>';
+        $('.images').append(row);
+        //重新计算序列
+        serialize();
+    }
+}
+
+//绑定上移事件
+$('body').on('click','.up-btn',function() {
+    var point = $(this).closest('div .form-group').find('strong').text().replace('#','');
+    alert(point);
+    if(point > 1){
+        var temp = $(this).closest('div .all-images').clone(true);
+        $(this).closest('div .all-images').prev().before(temp);
+        $(this).closest('div .all-images').remove();
+        serialize();
+        //重新生成JSON
+        var images = new Array();
+        $('.extra-images').each(function() {
+        images.push($(this).val());
+        });
+        $('#oatemplates-extrapage').val(JSON.stringify({'images':images}));
+    }
+    return false;
+});
+
+//绑定下移事件
+$('body').on('click','.down-btn',function() {
+    var point = $(this).closest('div .form-group').find('strong').text().replace('#','');
+    alert(point);
+    if(point < 12){
+        var temp = $(this).closest('div .all-images').clone(true);
+        $(this).closest('div .all-images').next().after(temp);
+        $(this).closest('div .all-images').remove();
+        serialize();
+        //重新生成JSON
+        var images = new Array();
+        $('.extra-images').each(function() {
+        images.push($(this).val());
+        });
+        $('#oatemplates-extrapage').val(JSON.stringify({'images':images}));
+    }
+    return false;
+});
+
+
+//绑定增加按钮事件
+$('body').on('click','.add-images',function() {
+    addImages();
+    return false;
+    });
+//删除附加图
+$('body').on('click','.remove-image',function() {
+    $(this).closest('div .form-group').remove();
+    allImags();//重新生成JSON
+    serialize();//重新生成序列
+        
+        
+});
+
+
+//实时刷新图片
+$('body').on('click','.extra-images',function() {
+    new_image = $(this).val();
+    $(this).parents('div .form-group').find('a').attr('href',new_image);
+    $(this).parents('div .form-group').find('img').attr('src',new_image);
+});
+
+//绑定事件, 实时封装JSON数据
+$('body').on('click','.all-images',function() {
+    var text = '';
+    var images = new Array();
+    $('.extra-images').each(function() {
+        images.push($(this).val());
+    });
+    $('#oatemplates-extrapage').val(JSON.stringify({'images':images}));
+});
+
 
 // 多属性设置模态框
 $(".var-btn").click(function() {
