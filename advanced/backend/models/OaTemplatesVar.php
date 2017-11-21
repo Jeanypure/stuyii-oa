@@ -19,6 +19,7 @@ use Yii;
  */
 class OaTemplatesVar extends \yii\db\ActiveRecord
 {
+    public $image;
     /**
      * @inheritdoc
      */
@@ -34,7 +35,7 @@ class OaTemplatesVar extends \yii\db\ActiveRecord
     {
         return [
             [['tid', 'quantity'], 'integer'],
-            [['sku', 'imageUrl', 'color', 'UPC', 'EAN'], 'string'],
+            [['sku', 'imageUrl','image', 'color', 'UPC', 'EAN'], 'string'],
             [['retailPrice'], 'number'],
         ];
     }
@@ -51,6 +52,7 @@ class OaTemplatesVar extends \yii\db\ActiveRecord
             'quantity' => '数量',
             'retailPrice' => '价格',
             'imageUrl' => '图片地址',
+            'image' => '图片',
             'color' => 'Color',
             'UPC' => 'UPC',
             'EAN' => 'EAN',
