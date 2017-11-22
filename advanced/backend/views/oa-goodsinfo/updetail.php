@@ -139,14 +139,6 @@ echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' 
                 ],
             ],
         ],
-        [
-            'attributes'=>[
-                'IsLiquid'=>['label'=>'是否液体','items'=>[ 1=>'Group 2'],'type'=>Form::INPUT_CHECKBOX],
-                'IsPowder'=>['label'=>'是否粉末','items'=>[ 1=>'Group 2'],'type'=>Form::INPUT_CHECKBOX],
-                'isMagnetism'=>['label'=>'是否带磁', 'items'=>[ 1=>'Group 2'], 'type'=>Form::INPUT_CHECKBOX],
-                'IsCharged'=>['label'=>'是否带电', 'items'=>[0=>'Group 1'], 'type'=>Form::INPUT_CHECKBOX],
-            ],
-        ],
 
         [
 
@@ -157,7 +149,7 @@ echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' 
                     'type'=>Form::INPUT_DROPDOWN_LIST,
                 ],
                 'StoreName' =>[
-                    'label'=>'仓库',
+                    'label'=>"<span style = 'color:red'>*仓库</span>",
                     'items'=>$result,
                     'type'=>Form::INPUT_DROPDOWN_LIST,
                 ],

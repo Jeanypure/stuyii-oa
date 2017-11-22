@@ -137,18 +137,60 @@ echo '</div>';
 </div>
 </br>
 <div>
-<?= $form->field($info,'Brand')->textInput(['value' => 'Unbranded']); ?>
-<?= $form->field($info,'MPN')->textInput(['value' => 'Does not apply']); ?>
-<?= $form->field($info,'Color')->textInput(); ?>
-<?= $form->field($info,'Type')->textInput(); ?>
-<?= $form->field($info,'Material')->textInput(); ?>
-<?= $form->field($info,'IntendedUse')->textInput(); ?>
-<?= $form->field($info,'unit')->textInput(); ?>
-<?= $form->field($info,'bundleListing')->textInput(); ?>
-<?= $form->field($info,'shape')->textInput(); ?>
-<?= $form->field($info,'features')->textInput(); ?>
-<?= $form->field($info,'regionManufacture')->textInput(['value' => 'China']); ?>
+    <?= $form->field($info,'specifics')->textarea(['row' =>6]); ?>
+    <?php
+    echo
+    '<div class="row"><div class="col-lg-6"><table class="specifics-tab table table-hover">
+    <thead>
+    <tr>
+    <th>属性名称</th>
+    <th>属性内容</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <th>Brand</th>
+    <td><input size="40"></td>
+    </tr>
+    <tr>
+    <th>Type</th>
+    <td><input size="40"></td>
+    </tr>
+    <tr>
+    <th>Material</th>
+    <td><input size="40"></td>
+    </tr>
+    <tr>
+    <th>IntendedUse</th>
+    <td><input size="40"></td>
+    </tr>
+    <tr>
+    <th>unit</th>
+    <td><input size="40"></td>
+    </tr>
+    <tr>
+    <th>bundleListing</th>
+    <td><input size="40"></td>
+    </tr>
+    <tr>
+    <th>shape</th>
+    <td><input size="40"></td>
+    </tr>
+    <tr>
+    <th>features</th>
+    <td><input size="40"></td>
+    </tr>
+    <tr>
+    <th>regionManufacture</th>
+    <td><input size="40"></td>
+    </tr>
+    </tbody>
+    </table>
+    <button class=" add-specifics btn btn-default">增加属性</button>
+    </div></div>';
+    ?>
 </div>
+</br>
 <div class="blockTitle">
     <p >物流设置</p>
 
@@ -267,6 +309,37 @@ function addImages() {
     }
 }
 
+//增加属性的按钮
+
+$('.add-specifics').on('click',function() {
+    var key = '<tr><th><input type="text" name="specficsKey"></th>';
+    var value = '<td><input type="text" size="40" name="specficsValue"> ';
+    var delBtn = '<input type="button" value="删除" onclick="$(this.parentNode.parentNode).remove()"></td></tr>';
+    $('.specifics-tab').append(key + value + delBtn);
+    return false;
+});
+
+
+// 初始化属性JSON
+    function allSpecifics() {
+        textarea = $('#oatemplates-specifics');
+        var specifics = [];
+        $('.specifics-tab').find('input[size="40"]').each(function() {
+            var key = $(this).parents('tr').find('th').text();
+            var value = $(this).val();
+            if(key == ''){
+                var key = $(this).parents('tr').find('th').find('input').val();
+            }
+            specifics.push([key,value]);
+        });
+        textarea.text(JSON.stringify({sepecifices:specifics}));
+    }
+allSpecifics();
+
+// 属性变化事件,及时刷新JSON事件。
+$('.specifics-tab').on('change','input[size="40"]',function() {
+    allSpecifics();
+});
 //绑定上移事件
 $('body').on('click','.up-btn',function() {
     var point = $(this).closest('div .form-group').find('strong').text().replace('#','');

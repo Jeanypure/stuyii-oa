@@ -36,7 +36,7 @@ class OaGoodsinfo extends GoodsCats
             [['IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged','goodsid'], 'integer'],
             [['picStatus','updateTime','developer','devDatetime','GoodsCode','achieveStatus','description','SupplierName','Season','StoreName','PackName','DictionaryName','GoodsName'], 'string'],
 
-            [['GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description',], 'required'],
+            [['StoreName','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description',], 'required'],
             [['DictionaryName','vendor1'],'safe'],
         ];
     }
