@@ -1,0 +1,43 @@
+<tr class="kv-tabform-row" data-key="4"><td class="kv-align-center kv-align-middle" style="width:50px;" data-col-seq="0">4</td><td class="skip-export kv-align-center kv-align-middle kv-row-select" style="width:50px;" data-col-seq="1"><input type="checkbox" class="kv-row-checkbox" name="selection[]" value="4"></td><td class="skip-export kv-align-center kv-align-middle" style="width:80px;" data-col-seq="2"><a class="var-table-action-del" href="/channel/delete?id=4" title="删除" data-pjax="0"><span class="glyphicon glyphicon-trash"></span></a></td><td class="kv-align-top" data-col-seq="3">
+<div class="form-group field-oatemplatesvar-4-sku">
+
+<input type="text" id="oatemplatesvar-4-sku" class="sku form-control" name="OaTemplatesVar[4][sku]" value="7H030804">
+
+<div class="help-block"></div>
+</div>
+</td><td class="kv-align-top" data-col-seq="4">
+<div class="form-group field-oatemplatesvar-4-quantity">
+
+<input type="text" id="oatemplatesvar-4-quantity" class="quantity form-control" name="OaTemplatesVar[4][quantity]">
+
+<div class="help-block"></div>
+</div>
+</td><td class="kv-align-top" data-col-seq="5">
+<div class="form-group field-oatemplatesvar-4-retailprice">
+
+<input type="text" id="oatemplatesvar-4-retailprice" class="retailPrice form-control" name="OaTemplatesVar[4][retailPrice]" value="3.36">
+
+<div class="help-block"></div>
+</div>
+</td><td class="kv-align-middle" data-col-seq="6"><img weight="50" height="50" src="https://www.tupianku.com/view/full/10023/7H0308-_4_.jpg"></td><td class="kv-align-top" data-col-seq="7">
+<div class="form-group field-oatemplatesvar-4-color">
+
+<input type="text" id="oatemplatesvar-4-color" class="color form-control" name="OaTemplatesVar[4][color]" value="大红">
+
+<div class="help-block"></div>
+</div>
+</td><td class="kv-align-top" data-col-seq="8">
+<div class="form-group field-oatemplatesvar-4-upc">
+
+<input type="text" id="oatemplatesvar-4-upc" class="UPC form-control" name="OaTemplatesVar[4][UPC]" value="Does not apply">
+
+<div class="help-block"></div>
+</div>
+</td><td class="kv-align-top" data-col-seq="9">
+<div class="form-group field-oatemplatesvar-4-ean">
+
+<input type="text" id="oatemplatesvar-4-ean" class="EAN form-control" name="OaTemplatesVar[4][EAN]" value="Does not apply">
+
+<div class="help-block"></div>
+</div>
+</td></tr>

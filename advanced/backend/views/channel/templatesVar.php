@@ -43,7 +43,8 @@ use yii\helpers\Html;
                     'quantity'=>
                         [
                             'type'=>TabularForm::INPUT_TEXT,
-                            'options'=>['class'=>'quantity'],
+                            'options'=>['class'=>'quantity','value' => 5],
+
                         ],
                     'retailPrice'=>
                         [
