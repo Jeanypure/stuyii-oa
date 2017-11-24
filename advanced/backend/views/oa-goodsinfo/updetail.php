@@ -272,7 +272,7 @@ echo FormGrid::widget([
 
 <?php
     echo Html::submitButton($info->isNewRecord ? '创建' : '更新', ['class' => $info->isNewRecord ? 'btn btn-success' : 'btn btn-info']);
-ActiveForm::end();
+    ActiveForm::end();
 echo "<br>";
 ?>
 
@@ -417,11 +417,6 @@ $inputUrl = Url::toRoute(['input']);
 
 
 $js2 = <<<JS
-
-
-
-    
-    
 //能删除新增空行的删除行
     $('#delete-row').on('click', function() {
         $("input[name='selection[]']:checkbox:checked").each(function(){
@@ -620,7 +615,7 @@ $js2 = <<<JS
                 type: "POST",
                 url:'/goodssku/save-complete?pid={$pid}&type=goods-info',
                 data:$('#sku-info').serialize(),
-                // async: false,
+                // async: false,    
                 
                 success: function(data) {
                     alert(data);

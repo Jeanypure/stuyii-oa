@@ -113,7 +113,6 @@ class OaGoodsinfoSearch extends OaGoodsinfo
             'IsCharged' => $this->IsCharged,
             'DictionaryName'=>$this->DictionaryName,
             'IsPowder' => $this->IsPowder,
-            'developer'=> $this->developer,
             'devDatetime'=>$this->devDatetime,
             'updateTime'=>$this->updateTime,
             'vendor1' => $this->vendor1,
@@ -125,6 +124,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
         $query->andFilterWhere(['like', 'description', $this->description]);
         $query->andFilterWhere(['like', 'AliasCnName', $this->AliasCnName]);
 //        $query->andFilterWhere(['like', 'vendor1', $this->vendor1]);
+        $query->andFilterWhere(['like', 'oa_goodsinfo.developer', $this->developer]);
 
         return $dataProvider;
     }
