@@ -415,7 +415,7 @@ $('body').on('click','.all-images',function() {
 // 多属性设置模态框
 $(".var-btn").click(function() {
     $('.modal-body').children('div').remove(); //清空数据
-    $.get('{$templatesVarUrl}',{id:1},
+    $.get('{$templatesVarUrl}',{id:{$info->nid}},
         function(data) {
             $('.modal-body').html(data);
         }

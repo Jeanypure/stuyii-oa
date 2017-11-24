@@ -63,10 +63,20 @@ use yii\helpers\Html;
                             'value'=>function($data){return "<img weight='50' height='50' src='".$data->imageUrl."'>";}
                         ],
 
-                    'color'=>
+                    'property1'=>
                         [
                             'type'=>TabularForm::INPUT_TEXT,
-                            'options'=>['class'=>'color'],
+                            'options'=>['class'=>'property1'],
+                        ],
+                    'property2'=>
+                        [
+                            'type'=>TabularForm::INPUT_TEXT,
+                            'options'=>['class'=>'property2'],
+                        ],
+                    'property3'=>
+                        [
+                            'type'=>TabularForm::INPUT_TEXT,
+                            'options'=>['class'=>'property3'],
                         ],
                     'UPC'=>
                         [
@@ -141,7 +151,7 @@ $('#add-row').click(function() {
         
         
         //添加主字段
-        var inputFields = ['sku','quantity','reailPrice','imageUrl','image','color','UPC','EAN'];
+        var inputFields = ['sku','quantity','reailPrice','imageUrl','image','property1','property2','property3','UPC','EAN'];
         for(var i=3; i< inputFields.length + 3; i++){
             if(i==6){
                 var fun = " var new_image = $(this).val();;$(this).parents('tr').find('img').attr('src',new_image); ";
@@ -234,6 +244,60 @@ $('#add-row').click(function() {
             }
         });
     });
+    
+    
+// 点击触发编辑事件
+$(".table").find(".kv-align-top").bind("dblclick", function () {
+        var input = "<input type='text' id='temp' style='width:130px;' value=" + $(this).text() + " >";
+        $(this).text("");
+        $(this).append(input);
+        $("input#temp").focus();
+        $("input").blur(function () {
+            if ($(this).val() == "") {
+                $(this).remove();
+            } else {
+                $(this).closest("th").text($(this).val());
+            }
+        });
+    });
+
+// 可修改列加按键
+$('thead').find(".kv-align-top").each(function() {
+    var newHeader =  ' <span class="remove-col glyphicon glyphicon-remove"></span>';
+    if($(this).text().indexOf('款式')>-1){
+        $(this).append(newHeader);
+    }   
+});
+
+// 删除列事件
+$('.remove-col').click(function() {
+    var index = $(this).closest('th').attr('data-col-seq'); //找到列数
+    var selector = "[data-col-seq='" + index + "']";
+    $(selector).remove();
+});
+
+
+//保存按钮事件
+$('#save-only').click(function() {
+    //计算label值
+    var sequences = {"property1":"th[data-col-seq='8']","property2":"th[data-col-seq='9']","property3":"th[data-col-seq='10']"};
+    for (var key in sequences)
+    {   
+        // console.log($(sequences[i]).text());
+        sequences[key] = $(sequences[key]).text(); 
+    }
+    //ajax 提交方式
+   $.ajax({
+       type: "POST",
+       url: '/channel/var-save?id={$tid}',
+       data:JSON.stringify({form:$('#var-form').serialize(),label:sequences}),
+       success: function(data) {
+           alert(data);
+       }
+   });
+});
+
+// 提交的表单的时候,把属性名称也传后台
 JS;
 
 

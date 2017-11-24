@@ -630,7 +630,6 @@ $js2 = <<<JS
         $.get('{$requestUrl}', {},
             function (data) {
                 $('#create-modal').find('.modal-body').html(data);
-    
             }  
         );
     });   

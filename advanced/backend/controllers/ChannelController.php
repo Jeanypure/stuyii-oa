@@ -143,6 +143,17 @@ class ChannelController extends Controller
 //        }
     }
 
+
+
+    /**
+     * 多属性保存
+     * @param $id
+     */
+    public function actionVarSave($id)
+    {
+        var_dump($_POST);die;
+    }
+
     /**
      * 多属性设置页面
      * @param $id
@@ -159,6 +170,7 @@ class ChannelController extends Controller
         ]);
         return $this->renderAjax('templatesVar',[
             'templatesVar' => $templatesVar,
+            'tid' => $id,
         ]);
     }
     /**
