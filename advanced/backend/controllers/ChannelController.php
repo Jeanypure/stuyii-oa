@@ -151,7 +151,38 @@ class ChannelController extends Controller
      */
     public function actionVarSave($id)
     {
-        var_dump($_POST);die;
+        $varData = $_POST['OaTemplatesVar'];
+        $label = json_decode($_POST['label'],true);
+        foreach ($varData as $key=>$value)
+        {
+
+            //设置标签
+            foreach($label as $property=>$name){
+                if(!empty($name)){
+                    $value[$property] = "{'{$name}':'{$value[$property]}'}";
+                }
+            }
+            if(strpos($key, 'New') ===false){
+                //update
+                $ret =$this->findVar($key);
+                $ret->setAttributes($value,$safeOnly=false);
+                $ret->save(false);
+            }
+            else{
+                //create
+                $model = new OaTemplatesVar();
+                $model->setAttributes($value);
+                if($model->save(false)){
+
+                }
+                else {
+                    echo "Wrong!";
+                }
+            }
+
+        }
+        //根据varId的值，来决定更新还是创建
+
     }
 
     /**
@@ -210,7 +241,22 @@ class ChannelController extends Controller
         return $this->redirect(['index']);
     }
 
-
+    /**
+     * exists or not
+     * @param $id
+     * @return mixed
+     */
+    protected function findVar($id)
+    {
+        $model = OaTemplatesVar::find()->where(['nid'=>$id])->one();
+        if (!empty($model))
+        {
+            return $model;
+        }
+        else{
+            return false;
+        }
+    }
     /**
      * Finds the Channel model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

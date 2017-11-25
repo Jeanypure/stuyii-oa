@@ -104,6 +104,7 @@ use yii\helpers\Html;
                     Html::button('价格确定', ['id'=>'RetailPrice-set','type'=>'button','class'=>'btn']).''.
                     Html::input('text','EAN','',['class' => 'ean-replace','placeholder'=>'Does not apply']).' '.
                     Html::button('EAN确定', ['id'=>'ean-set','type'=>'button','class'=>'btn']).' '.
+                    Html::input('text','label','',['class' => 'label-input','hidden'=>true,'placeholder'=>'Does not apply']).' '.
                     Html::button('保存', ['id'=>'save-only','type'=>'button','class'=>'btn btn-info']).' '.
                     Html::button('删除行', ['id'=>'delete-row','type'=>'button', 'class'=>'btn btn-danger kv-batch-delete'])
             ]
@@ -157,7 +158,7 @@ $('#add-row').click(function() {
                 var fun = " var new_image = $(this).val();;$(this).parents('tr').find('img').attr('src',new_image); ";
                 var td = $('<td class="kv-align-top" data-col-seq="'+ i +'" >' +
                              '<div class="form-group">' +
-                                '<input type="text"  name="Goodssku[New-'+ row_count +']['+ inputFields[i-3] +']" class="form-control  '+ inputFields[i-3] +
+                                '<input type="text"  name="OaTemplatesVar[New-'+ row_count +']['+ inputFields[i-3] +']" class="form-control  '+ inputFields[i-3] +
                                 // '">' +
                                 '" onchange=' + '"'+ fun+'">' +
                              '</div>' +
@@ -174,7 +175,7 @@ $('#add-row').click(function() {
             else {
                 var td = $('<td class="kv-align-top" data-col-seq="'+ i +'" >' +
                              '<div class="form-group">' +
-                                '<input type="text"  name="Goodssku[New-'+ row_count +']['+ inputFields[i-3] +']" class="form-control  '+ inputFields[i-3] +'">' +
+                                '<input type="text"  name="OaTemplatesVar[New-'+ row_count +']['+ inputFields[i-3] +']" class="form-control  '+ inputFields[i-3] +'">' +
                                  
                              '</div>' +
                            '</td>');
@@ -247,7 +248,7 @@ $('#add-row').click(function() {
     
     
 // 点击触发编辑事件
-$(".table").find(".kv-align-top").bind("dblclick", function () {
+$(".table").find("th .kv-align-top").bind("dblclick", function () {
         var input = "<input type='text' id='temp' style='width:130px;' value=" + $(this).text() + " >";
         $(this).text("");
         $(this).append(input);
@@ -283,14 +284,16 @@ $('#save-only').click(function() {
     var sequences = {"property1":"th[data-col-seq='8']","property2":"th[data-col-seq='9']","property3":"th[data-col-seq='10']"};
     for (var key in sequences)
     {   
-        // console.log($(sequences[i]).text());
         sequences[key] = $(sequences[key]).text(); 
     }
     //ajax 提交方式
+   $('.label-input').val(JSON.stringify(sequences)); 
+   var varForm = $('#var-form').serialize();
    $.ajax({
        type: "POST",
        url: '/channel/var-save?id={$tid}',
-       data:JSON.stringify({form:$('#var-form').serialize(),label:sequences}),
+        // dataType:'json',
+       data:varForm,
        success: function(data) {
            alert(data);
        }
