@@ -172,12 +172,11 @@ $('#add-row').click(function() {
            if((typeof(enName) != "undefined")){
                 inputFields.push(enName); 
            }
-           
         });
         console.log(inputFields); 
         // var inputFields = ['sku','quantity','reailPrice','imageUrl','image','property1','property2','property3','UPC','EAN'];
         for(var i=3; i< inputFields.length + 3; i++){
-            if(i==6){
+            if(inputFields[i-3] == 'imageUrl'){
                 var fun = " var new_image = $(this).val();;$(this).parents('tr').find('img').attr('src',new_image); ";
                 var td = $('<td class="kv-align-top" data-col-seq="'+ i +'" >' +
                              '<div class="form-group">' +
@@ -187,7 +186,7 @@ $('#add-row').click(function() {
                              '</div>' +
                            '</td>');
             }
-            else if(i ==7){
+            else if(inputFields[i-3] == 'image'){
                 var td = $('<td class="kv-align-top" data-col-seq="'+ i +'" >' +
                              '<div class="form-group">' +
                                 "<img weight='50' height='50' src=''>" +
@@ -250,9 +249,7 @@ $('#add-row').click(function() {
     //监听图片变化事件
     
     $('.imageUrl').change(function() {
-        alert('It works!');
         var new_image = $(this).val();
-        
         $(this).parents('tr').find('img').attr('src',new_image); 
     })
 
