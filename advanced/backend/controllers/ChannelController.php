@@ -206,6 +206,26 @@ class ChannelController extends Controller
             'propertyVar' => $propertyVar,
         ]);
     }
+
+    /**
+     * delete row from templatesVar
+     * @return mixed
+     */
+
+    public function actionDeleteVar(){
+        $id = $_POST["id"];
+
+        // 根据id的类型来执行不同的操作
+        if(is_array($id)){
+            foreach($id as $row){
+                $this->findVar($row)->delete();
+            }
+
+        }
+        else{
+            $this->findVar($id)->delete();
+        }
+    }
     /**
     /*
      * UpdateWish

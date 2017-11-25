@@ -177,11 +177,28 @@ else{
 
 <?php
 $js = <<< JS
-//删除行
+
+//删除选中行
+
 $('#delete-row').click(function() {
+    var ids = [];
     $("[name='selection[]']:checkbox:checked").each(function() {
+        id = $(this).closest('tr').attr('data-key');
         $(this).closest('tr').remove();  
-    })
+        if(id){
+            ids.push(id);
+        }
+    });
+    // ajax方式提交数据到后台删除
+    if(ids){
+        $.ajax({
+            url:'/channel/delete-var',
+            type:'post',
+            data:{id:ids},
+            success: function (ret) {
+            }
+        })
+    }
 });
 
 //新增行
@@ -308,19 +325,22 @@ $('#add-row').click(function() {
     $('.imageUrl').change(function() {
         var new_image = $(this).val();
         $(this).parents('tr').find('img').attr('src',new_image); 
-    })
+    });
 
 //每行的删除操作改为ajax方式 新增行也能删除
     $('table').on('click','.delete-icon',function() {
         id = $(this).parents('tr').attr('data-key');
         $(this).parents('tr').remove();//前端删除
-        $.ajax({
-            url:'',
+        if(id){
+            $.ajax({
+            url:'/channel/delete-var',
             type:'post',
-            data:{id:pid},
+            data:{id:id},
             success: function(res) {
+            
             }
         });
+        }
     });
     
     
@@ -390,8 +410,6 @@ $('#save-only').click(function() {
        }
    });
 });
-
-// 提交的表单的时候,把属性名称也传后台
 JS;
 
 
