@@ -146,9 +146,9 @@ $('#add-row').click(function() {
         
         var actionTd = $(
              '<td class="skip-export kv-align-center kv-align-middle" style="width:80px;" data-col-seq="2">' +
-              '<a href="javascript:void(0)" onclick="removeTd(this)"' +
+              '<a href="javascript:void(0)" ' +
                'class="new-delete" title="删除" aria-label="删除" >' +
-               '<span class="glyphicon glyphicon-trash"></span></a></td>');
+               '<span class=" delete-icon glyphicon glyphicon-trash"></span></a></td>');
         row.append(actionTd);
         
         
@@ -173,7 +173,6 @@ $('#add-row').click(function() {
                 inputFields.push(enName); 
            }
         });
-        console.log(inputFields); 
         // var inputFields = ['sku','quantity','reailPrice','imageUrl','image','property1','property2','property3','UPC','EAN'];
         for(var i=3; i< inputFields.length + 3; i++){
             if(inputFields[i-3] == 'imageUrl'){
@@ -253,8 +252,8 @@ $('#add-row').click(function() {
         $(this).parents('tr').find('img').attr('src',new_image); 
     })
 
-//每行的删除操作改为ajax方式
-    $('.delete-icon').on('click',function() {
+//每行的删除操作改为ajax方式 新增行也能删除
+    $('table').on('click','.delete-icon',function() {
         id = $(this).parents('tr').attr('data-key');
         $(this).parents('tr').remove();//前端删除
         $.ajax({
