@@ -155,11 +155,11 @@ class ChannelController extends Controller
         $label = json_decode($_POST['label'],true);
         foreach ($varData as $key=>$value)
         {
-
+            $value['tid'] = $id;
             //设置标签
             foreach($label as $property=>$name){
                 if(!empty($name)){
-                    $value[$property] = "{'{$name}':'{$value[$property]}'}";
+                    $value[$property] = "{$name}:{$value[$property]}";
                 }
             }
             if(strpos($key, 'New') ===false){
@@ -199,9 +199,11 @@ class ChannelController extends Controller
                 'pageSize' => 150,
             ],
         ]);
+        $propertyVar = OaTemplatesVar::find()->where(['tid'=>$id])->all();
         return $this->renderAjax('templatesVar',[
             'templatesVar' => $templatesVar,
             'tid' => $id,
+            'propertyVar' => $propertyVar,
         ]);
     }
     /**

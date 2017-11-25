@@ -9,6 +9,48 @@ use kartik\widgets\ActiveForm;
 use kartik\builder\TabularForm;
 use kartik\grid\GridView;
 use yii\helpers\Html;
+
+//动态的去判断属性的名称和值
+//var_dump($propertyVar);die
+$property1Len = 0;
+$property2Len = 0;
+$property3Len = 0;
+$property1Vis = true;
+$property2Vis = true;
+$property3Vis = true;
+$property1Lab = '款式-1';
+$property2Lab = '款式-2';
+$property3Lab = '款式-3';
+$metaProperty = [
+    'property1'
+];
+foreach ($propertyVar as $row){
+    $property1Len += strlen($row->property1);
+    $property2Len += strlen($row->property2);
+    $property3Len += strlen($row->property3);
+}
+if($property1Len==0){
+    $property1Vis = false;
+}
+else{
+    $dump = $propertyVar[0]->property1;
+    $property1Lab = explode(':',$dump)[0];
+}
+
+if($property2Len==0){
+    $property2Vis = false;
+}
+else{
+    $dump = $propertyVar[0]->property2;
+    $property2Lab = explode(':',$dump)[0];
+}
+if($property3Len==0){
+    $property3Vis = false;
+}
+else{
+    $dump = $propertyVar[0]->property2;
+    $property2Lab = explode(':',$dump)[0];
+}
 ?>
 
 <div class="">
@@ -39,7 +81,6 @@ use yii\helpers\Html;
                         [
                             'label'=>'SKU', 'type'=>TabularForm::INPUT_TEXT,
                             'options'=>['class'=>'sku'],
-                            'labelOptions' => ['class'=> 'jingjing'],
                         ],
                     'quantity'=>
                         [
@@ -66,18 +107,35 @@ use yii\helpers\Html;
 
                     'property1'=>
                         [
-                            'type'=>TabularForm::INPUT_TEXT,
-                            'options'=>['class'=>'property1'],
+                            'type'=>TabularForm::INPUT_RAW,
+                            'options'=>[
+                                'class'=>'property1',
+                            ],
+
+                            'value'=>function($data,$key)
+                            {
+                                $property = $data->property1;
+                                $ret = explode(':',$property)[1];
+                                return '<input type="text"  class="property1 form-control kv-align-top" name="OaTemplatesVar['.$key.'][property1]" value="'.$ret.'">';
+                            },
+                            'label' => $property1Lab,
+                            'visible' =>$property1Vis,
                         ],
                     'property2'=>
                         [
                             'type'=>TabularForm::INPUT_TEXT,
                             'options'=>['class'=>'property2'],
+                            'value'=>function(){},
+                            'label' => '',
+                            'visible' =>$property2Vis,
                         ],
                     'property3'=>
                         [
                             'type'=>TabularForm::INPUT_TEXT,
                             'options'=>['class'=>'property3'],
+                            'value'=>function(){},
+                            'label' => '',
+                            'visible' =>$property3Vis,
                         ],
                     'UPC'=>
                         [
@@ -159,9 +217,9 @@ $('#add-row').click(function() {
             '价格':'reailPrice',
             '图片地址':'imageUrl',
             '图片':'image',
-            '款式-1':'property1',
-            '款式-2':'property2',
-            '款式-3':'property3',
+            '{$property1Lab}':'property1',
+            '{$property2Lab}':'property2',
+            '{$property3Lab}':'property3',
             'UPC':'UPC',
             'EAN':'EAN'
         };
@@ -267,7 +325,8 @@ $('#add-row').click(function() {
     
     
 // 点击触发编辑事件
-$(".table").find("th .kv-align-top").bind("dblclick", function () {
+$(".table").find("th ").bind("dblclick", function () {
+        // alert("Hi!");
         var input = "<input type='text' id='temp' style='width:130px;' value=" + $(this).text() + " >";
         $(this).text("");
         $(this).append(input);
@@ -282,12 +341,15 @@ $(".table").find("th .kv-align-top").bind("dblclick", function () {
     });
 
 // 可修改列加按键
-$('thead').find(".kv-align-top").each(function() {
+$('thead').find("th").each(function() {
     var newHeader =  ' <span class="remove-col glyphicon glyphicon-remove"></span>';
     if($(this).text().indexOf('款式')>-1){
         $(this).append(newHeader);
     }   
 });
+
+//设置所有输入框的样式为 kv-align-top
+$('td').attr('class',"kv-align-top");
 
 // 删除列事件
 $('.remove-col').click(function() {
@@ -299,11 +361,21 @@ $('.remove-col').click(function() {
 
 //保存按钮事件
 $('#save-only').click(function() {
-    //计算label值
-    var sequences = {"property1":"th[data-col-seq='8']","property2":"th[data-col-seq='9']","property3":"th[data-col-seq='10']"};
+    //计算label值;动态的计算label值
+    
+    var sequences = {"property1":'.property1',"property2":'.property2',"property3":'.property3'};
     for (var key in sequences)
     {   
-        sequences[key] = $(sequences[key]).text(); 
+        var seq = $(sequences[key]).closest('td').attr('data-col-seq');
+        if(seq){
+             var condation = 'th[data-col-seq="'+ seq+'"]';
+           
+            sequences[key] = $(condation).text(); 
+        }
+        else{
+            sequences[key] = '';
+        }
+       
     }
     //ajax 提交方式
    $('.label-input').val(JSON.stringify(sequences)); 
