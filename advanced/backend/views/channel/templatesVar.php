@@ -39,6 +39,7 @@ use yii\helpers\Html;
                         [
                             'label'=>'SKU', 'type'=>TabularForm::INPUT_TEXT,
                             'options'=>['class'=>'sku'],
+                            'labelOptions' => ['class'=> 'jingjing'],
                         ],
                     'quantity'=>
                         [
@@ -151,8 +152,30 @@ $('#add-row').click(function() {
         row.append(actionTd);
         
         
-        //添加主字段
-        var inputFields = ['sku','quantity','reailPrice','imageUrl','image','property1','property2','property3','UPC','EAN'];
+        //动态地添加主字段
+        var fieldsMap = {
+            'SKU':'sku',
+            '数量':'quantity',
+            '价格':'reailPrice',
+            '图片地址':'imageUrl',
+            '图片':'image',
+            '款式-1':'property1',
+            '款式-2':'property2',
+            '款式-3':'property3',
+            'UPC':'UPC',
+            'EAN':'EAN'
+        };
+        var inputFields = [];
+        $('thead th').each(function(index,element) {
+           var cnName = $.trim($(this).text());
+           var enName = fieldsMap[cnName];
+           if((typeof(enName) != "undefined")){
+                inputFields.push(enName); 
+           }
+           
+        });
+        console.log(inputFields); 
+        // var inputFields = ['sku','quantity','reailPrice','imageUrl','image','property1','property2','property3','UPC','EAN'];
         for(var i=3; i< inputFields.length + 3; i++){
             if(i==6){
                 var fun = " var new_image = $(this).val();;$(this).parents('tr').find('img').attr('src',new_image); ";

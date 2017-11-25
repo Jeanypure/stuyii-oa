@@ -53,9 +53,9 @@ class OaTemplatesVar extends \yii\db\ActiveRecord
             'retailPrice' => '价格',
             'imageUrl' => '图片地址',
             'image' => '图片',
-            'property1' => '款式1',
-            'property2' => '款式2',
-            'property3' => '款式3',
+            'property1' => '款式-1',
+            'property2' => '款式-2',
+            'property3' => '款式-3',
             'UPC' => 'UPC',
             'EAN' => 'EAN',
         ];
