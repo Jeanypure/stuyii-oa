@@ -87,12 +87,79 @@ class ChannelController extends Controller
     }
 
     /**
+     * Updates an existing Channel model.Default wish.
+     * If update is successful, the browser will be redirected to the 'editwish' page.
+     * @param integer $id.
+     * @return mixed
+     */
+
+    public function actionUpdate($id)
+    {
+
+        $info = Channel::findOne($id);
+        $Goodssku = Goodssku::find()->where(['pid'=>$id])->all();
+        $sku = OaWishgoods::find()->where(['infoid'=>$id])->all();
+        $dataProvider = new ActiveDataProvider([
+            'query' => Wishgoodssku::find()->where(['pid'=>$id]),
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+        if (!$info) {
+            throw new \NotFoundHttpException("The product was not found.");
+        }
+
+
+        if($sku[0]->load(Yii::$app->request->post())){
+            $dataPost =  $_POST;
+            $sku[0]['main_image'] =  $dataPost['main_image'];
+            unset( $sku[0]['extra_images']);
+            foreach($dataPost["extra_images"] as $key=>$value){
+                $sku[0]['extra_images'] .= $value."\r\n";
+
+            }
+
+            $sku[0]->update(false);
+            echo '更新成功！';
+//            return $this->redirect(['update','id'=>$info->pid]);
+
+        }else{
+            return $this->render('editwish',[
+                'info' =>$info,
+                'dataProvider' => $dataProvider,
+                'Goodssku' => $Goodssku[0],
+                'sku' => $sku[0],
+
+            ]);
+        }
+    }
+
+
+    /*
+     * 多属性信息
+     */
+    public function actionVarations($id='86'){
+        $sku = OaWishgoods::find()->where(['infoid'=>$id])->all();
+        $dataProvider = new ActiveDataProvider([
+            'query' => Wishgoodssku::find()->where(['pid'=>$id]),
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+        return $this->renderAjax('varations',[
+            'dataProvider' => $dataProvider,
+            'sku' => $sku[0],
+
+        ]);
+    }
+
+    /**
      * Updates an existing Channel model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
+    public function actionUpdateEbay($id)
     {
 
         $info = OaTemplates::find()->where(['infoid' =>$id])->one();
@@ -127,20 +194,6 @@ class ChannelController extends Controller
             ]);
         }
 
-//        if($info->load(Yii::$app->request->post())){
-//
-//            $info->save();
-//            return $this->redirect(['view','id'=>$info->nid]);
-//
-//        }else{
-//
-//            return $this->render('update',[
-//                'info' =>$info,
-//                'dataProvider' => $dataProvider,
-//                'Goodssku' => $Goodssku[0],
-//
-//            ]);
-//        }
     }
 
 
@@ -226,28 +279,6 @@ class ChannelController extends Controller
             $this->findVar($id)->delete();
         }
     }
-    /**
-    /*
-     * UpdateWish
-     * url  http://localhost:8076/channel/update-wish?id=
-     *
-     */
-
-    public function actionUpdateWish($id){
-        $model = $this->findModel($id);
-
-
-
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->pid]);
-        } else {
-            return $this->render('editwish', [
-                'model' => $model,
-            ]);
-        }
-    }
-
 
 
     /**
