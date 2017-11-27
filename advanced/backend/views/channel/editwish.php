@@ -14,9 +14,9 @@ use yii\helpers\Url;
 /* @var $model backend\models\Channel */
 $this->title = Yii::t('app', 'Update {modelClass}: ', [
         'modelClass' => 'Channel',
-    ]) . $info->pid;
+    ]) . $sku->infoid;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Channels'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $info->pid, 'url' => ['view', 'id' => $info->pid]];
+$this->params['breadcrumbs'][] = ['label' => $sku->infoid, 'url' => ['view', 'id' => $sku->infoid]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
 <div class="channel-update-form">
@@ -53,6 +53,18 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
         ]);
 
     ?>
+    <div class="form-group blockTitle">
+
+        <botton class="btn btn-info update-info">
+            更新
+        </botton>
+        <botton class="btn btn-primary ">
+            保存并完善
+        </botton>
+        <botton class="btn btn-success export">
+            导出ibay模版
+        </botton>
+    </div>
     <div class="blockTitle">
         <p >基本信息</p>
 
@@ -61,42 +73,35 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 
     echo $form->field($sku,'SKU')->textInput()->label('SKU');
     echo '<div class="form-group field-oatemplates-mainpage">
-    <label class="col-lg-1 control-label">主图</label>
-    <div class="col-lg-3"><input name="main_image" type="text" class="form-control" value="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_0_.jpg"></div>
-    <div class="col-lg=1"> 
-    <a target="_blank" href="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_0_.jpg">
-    <img src="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_0_.jpg" width="80" height="80">
-    </a>
-    </div>
-</div>';
+         <label class="col-lg-1 control-label">主图</label>
+            <div class="col-lg-3"><input name="main_image" type="text" class="form-control" value="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_0_.jpg">
+            </div>
+            <div class="col-lg=1"> 
+                <a target="_blank" href="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_0_.jpg">
+                <img src="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_0_.jpg" width="80" height="80">
+                </a>
+            </div>
+        </div>';
 
     ?>
     <?php
 
-    echo '<div class="form-group">
-    <label class="col-lg-1"></label>
-    <div class="col-lg-3"><input name="extra_images[]" type="text" class="form-control extra-images" value="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_00_.jpg"></div>
-    <div class="col-lg=1">
-    <button  class="btn btn-error remove-image">删除</button>
-    <button class="btn btn-error">移动</button>
-    <a target="_blank" href="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_00_.jpg">
-    <img src="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_00_.jpg" width="50" height="50"/>
-    </a>
-    </div>
-</div>';
-    for($i=1;$i<=20;$i++){
-    echo '<div class="form-group">
-    <label class="col-lg-1"></label>
-    <div class="col-lg-3"><input name="extra_images[]" type="text" class="form-control extra-images" value="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_'.$i.'_.jpg"></div>
-    <div class="col-lg=1">
-    <button  class="btn btn-error remove-image">删除</button>
-    <button class="btn btn-error">移动</button>
-    <a target="_blank" href="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_'.$i.'_.jpg">
-    <img src="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_'.$i.'_.jpg" width="50" height="50"/>
-    </a>
-    </div>
-</div>';
-    }
+        foreach ($extra_images as $key=>$value){
+
+            echo '<div class="form-group">
+                    <label class="col-lg-1"></label>
+                    <div class="col-lg-3">
+                        <input name="extra_images[]" type="text" class="form-control extra-images" value="'.$value.'">
+                    </div>
+                    <div class="col-lg=1">
+                    <button  class="btn btn-error remove-image">删除</button>
+                    <button class="btn btn-error">移动</button>
+                    <a target="_blank" href="'.$value.'">
+                    <img src="'.$value.'" width="50" height="50"/>
+                    </a>
+                    </div>
+                 </div>';
+        }
     ?>
 
     <div class="blockTitle">
@@ -119,18 +124,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     <div class="form-group">
         <a  data-toggle="modal" data-target="#edit-sku" class=" var-btn btn btn-default varations-set">设置多属性</a>
     </div>
-    <div class="form-group">
 
-        <botton class="btn btn-info update-info">
-            更新
-        </botton>
-        <botton class="btn btn-primary ">
-            保存并完善
-        </botton>
-        <botton class="btn btn-success export">
-            导出ibay模版
-        </botton>
-    </div>
 
 
 </div>
@@ -205,7 +199,7 @@ $js  = <<< JS
     $('.update-info').on('click',function(){
         $.ajax({
             type:'POST',
-            url:'/channel/update?id='+$info->pid,
+            url:'/channel/update?id='+$sku->infoid,
             data:$('#all-info').serialize(),
             success: function(res){
                 alert(res);
@@ -217,10 +211,10 @@ $js  = <<< JS
     $('.export').on('click',function(){
         $.ajax({
             type:'POST',
-            url:'/channel/export?id='+$info->pid,
+            url:'/channel/export?id='+$sku->infoid,
             // data:,
             success: function(){
-                window.location = '/channel/export?id='+$info->pid;
+                window.location = '/channel/export?id='+$sku->infoid;
 
             },
         });

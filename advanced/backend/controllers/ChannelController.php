@@ -91,26 +91,28 @@ class ChannelController extends Controller
      * If update is successful, the browser will be redirected to the 'editwish' page.
      * @param integer $id.
      * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
      */
 
     public function actionUpdate($id)
     {
 
-        $info = Channel::findOne($id);
-        $Goodssku = Goodssku::find()->where(['pid'=>$id])->all();
         $sku = OaWishgoods::find()->where(['infoid'=>$id])->all();
+
+//        var_dump($sku[0]['extra_images']);die;
+
         $dataProvider = new ActiveDataProvider([
             'query' => Wishgoodssku::find()->where(['pid'=>$id]),
             'pagination' => [
                 'pageSize' => 10,
             ],
         ]);
-        if (!$info) {
+      $extra_images =  explode("\r\n",$sku[0]['extra_images']) ;
+        array_pop($extra_images);
 
+        if (!$sku) {
             throw new \NotFoundHttpException("The product was not found.");
         }
-
-
 
         if($sku[0]->load(Yii::$app->request->post())){
             $dataPost =  $_POST;
@@ -121,16 +123,14 @@ class ChannelController extends Controller
 
             }
 
-
             $sku[0]->update(false);
             echo '更新成功！';
 //            return $this->redirect(['update','id'=>$info->pid]);
 
         }else{
             return $this->render('editwish',[
-                'info' =>$info,
                 'dataProvider' => $dataProvider,
-                'Goodssku' => $Goodssku[0],
+                'extra_images' => $extra_images,
                 'sku' => $sku[0],
 
             ]);
