@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7b1285c7870627d7531693eb1453baf1",
+    "content-hash": "0e506d5bf52d54261c749c58d5a5aab8",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -61,7 +61,7 @@
                 "shasum": ""
             },
             "require": {
-                "bower-asset/jquery": ">=1.9.1,<4.0"
+                "bower-asset/jquery": ">=1.9.1,<=3"
             },
             "type": "bower-asset-library",
             "extra": {
@@ -93,8 +93,7 @@
                 "mobile-first",
                 "responsive",
                 "web"
-            ],
-            "time": "2016-07-25T15:51:55+00:00"
+            ]
         },
         {
             "name": "bower-asset/bootstrap3-dialog",
@@ -147,8 +146,7 @@
                 "mobile-first",
                 "responsive",
                 "web"
-            ],
-            "time": "2017-03-24T01:21:30+00:00"
+            ]
         },
         {
             "name": "bower-asset/jquery",
@@ -179,8 +177,7 @@
                 "javascript",
                 "jquery",
                 "library"
-            ],
-            "time": "2016-05-20T17:24:43+00:00"
+            ]
         },
         {
             "name": "bower-asset/jquery.inputmask",
@@ -239,8 +236,7 @@
                 "jquery",
                 "mask",
                 "plugins"
-            ],
-            "time": "2017-08-24T08:08:54+00:00"
+            ]
         },
         {
             "name": "bower-asset/punycode",
@@ -268,8 +264,7 @@
                     "node_modules",
                     "package.json"
                 ]
-            },
-            "time": "2014-10-22T12:02:42+00:00"
+            }
         },
         {
             "name": "bower-asset/yii2-pjax",
@@ -965,7 +960,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2017-10-03 13:33:32"
+            "time": "2017-10-03T13:33:32+00:00"
         },
         {
             "name": "kartik-v/yii2-helpers",
@@ -1694,12 +1689,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-select2.git",
-                "reference": "2c3f47527c783d5d03e778b40d0f1a0f28f6e541"
+                "reference": "616b324b6d781ac9a02aa725ae3de239c743d565"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/kartik-v/yii2-widget-select2/2c3f47527c783d5d03e778b40d0f1a0f28f6e541.zip",
-                "reference": "2c3f47527c783d5d03e778b40d0f1a0f28f6e541",
+                "url": "https://files.phpcomposer.com/files/kartik-v/yii2-widget-select2/616b324b6d781ac9a02aa725ae3de239c743d565.zip",
+                "reference": "616b324b6d781ac9a02aa725ae3de239c743d565",
                 "shasum": ""
             },
             "require": {
@@ -1739,7 +1734,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2017-09-04 15:30:52"
+            "time": "2017-11-09T14:28:09+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-sidenav",
@@ -2100,7 +2095,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2015-12-05 10:37:16"
+            "time": "2015-12-05T10:37:16+00:00"
         },
         {
             "name": "mdmsoft/yii2-admin",
@@ -2159,6 +2154,51 @@
                 "yii"
             ],
             "time": "2016-05-20T23:38:13+00:00"
+        },
+        {
+            "name": "nterms/yii2-pagesize-widget",
+            "version": "v2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nterms/yii2-pagesize-widget.git",
+                "reference": "ddf3588fe2ede6ff42f3efe42e0399d009f1cd2f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/nterms/yii2-pagesize-widget/ddf3588fe2ede6ff42f3efe42e0399d009f1cd2f.zip",
+                "reference": "ddf3588fe2ede6ff42f3efe42e0399d009f1cd2f",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "nterms\\pagesize\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Saranga Abeykoon",
+                    "email": "amisaranga@gmail.com",
+                    "homepage": "http://nterms.com/"
+                }
+            ],
+            "description": "Widget for enabling dynamic page size selection on GridView",
+            "homepage": "https://github.com/nterms/yii2-pagesize-widget",
+            "keywords": [
+                "extension",
+                "grid-view",
+                "page-size",
+                "widget",
+                "yii2"
+            ],
+            "time": "2014-11-14T04:41:18+00:00"
         },
         {
             "name": "phpoffice/phpexcel",
@@ -2220,7 +2260,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2016-09-29 20:13:14"
+            "time": "2016-09-29T20:13:14+00:00"
         },
         {
             "name": "rmrevin/yii2-fontawesome",
@@ -2664,8 +2704,7 @@
             "type": "bower-asset-library",
             "extra": {
                 "bower-asset-main": "dist/typeahead.bundle.js"
-            },
-            "time": "2015-04-27T04:02:14+00:00"
+            }
         },
         {
             "name": "codeception/base",

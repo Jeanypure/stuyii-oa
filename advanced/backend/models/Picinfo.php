@@ -71,7 +71,7 @@ class Picinfo extends \yii\db\ActiveRecord
             'SupplierName' => Yii::t('app', 'Supplier Name'),
             'StoreName' => Yii::t('app', 'Store Name'),
             'Purchaser' => Yii::t('app', 'Purchaser'),
-            'possessMan1' => Yii::t('app', 'Possess Man1'),
+            'possessMan1' => Yii::t('app', '美工'),
             'possessMan2' => Yii::t('app', 'Possess Man2'),
             'DeclaredValue' => Yii::t('app', 'Declared Value'),
             'picUrl' => Yii::t('app', 'Pic Url'),

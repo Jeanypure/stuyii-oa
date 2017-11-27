@@ -9,6 +9,7 @@ use yii\widgets\DetailView;
 $this->title = $model->devNum;
 $this->params['breadcrumbs'][] = ['label' => '产品推荐', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="oa-goods-view">
     <div>
@@ -29,37 +30,104 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'vendor1',
                 'format' => 'raw',
-                'value' => Html::a("<a target='_blank' href=$model->vendor1>$model->vendor1</a>",$model->vendor1),
+
+                'value' => function($model){
+                    $text = $model->vendor1;
+                    if (strlen($text)>100){
+                        $standard_text = substr($text,0,99) . '...';
+                    }
+                    else{
+                        $standard_text = $text;
+                    }
+                    return Html::a("<a target='_blank' href=$text>$standard_text</a>",$text);
+
+                }
+
 
             ],
             [
                 'attribute' => 'vendor2',
                 'format' => 'raw',
-                'value' => Html::a("<a target='_blank' href=$model->vendor2>$model->vendor2</a>",$model->vendor2),
+
+                'value' => function($model){
+                    $text = $model->vendor2;
+                    if (strlen($text)>100){
+                        $standard_text = substr($text,0,99) . '...';
+                    }
+                    else{
+                        $standard_text = $text;
+                    }
+                    return Html::a("<a target='_blank' href=$text>$standard_text</a>",$text);
+
+                }
+
 
             ],
             [
                 'attribute' => 'vendor3',
                 'format' => 'raw',
-                'value' => Html::a("<a target='_blank' href=$model->vendor3>$model->vendor3</a>",$model->vendor3),
 
+                'value' => function($model){
+                    $text = $model->vendor3;
+                    if (strlen($text)>80){
+                        $standard_text = substr($text,0,50) . '...';
+                    }
+                    else{
+                        $standard_text = $text;
+                    }
+                    return "<a target='_blank'  href={$text}>{$standard_text}</a>";
+                }
             ],
             [
                 'attribute' => 'origin1',
                 'format' => 'raw',
-                'value' => Html::a("<a target='_blank' href=$model->origin1>$model->origin1</a>",$model->origin1),
+
+                'value' => function($model){
+                    $text = $model->origin1;
+                    if (strlen($text)>100){
+                        $standard_text = substr($text,0,99) . '...';
+                    }
+                    else{
+                        $standard_text = $text;
+                    }
+                    return "<a target='_blank'  href={$text}>{$standard_text}</a>";
+
+                }
+
 
             ],
             [
                 'attribute' => 'origin2',
                 'format' => 'raw',
-                'value' => Html::a("<a target='_blank' href=$model->origin2>$model->origin2</a>",$model->origin2),
+                'value' => function($model){
+                    $text = $model->origin2;
+                    if (strlen($text)>100){
+                        $standard_text = substr($text,0,99) . '...';
+                    }
+                    else{
+                        $standard_text = $text;
+                    }
+                    return Html::a("<a target='_blank' href=$text>$standard_text</a>",$text);
+
+                }
 
             ],
             [
                 'attribute' => 'origin3',
                 'format' => 'raw',
-                'value' => Html::a("<a target='_blank' href=$model->origin3>$model->origin3</a>",$model->origin3),
+
+                'value' => function($model){
+                    $text = $model->origin3;
+                    if (strlen($text)>100){
+                        $standard_text = substr($text,0,99).'...';
+                    }
+                    else{
+                        $standard_text = $text;
+                    }
+                    return "<a target='_blank'  href={$text}>{$standard_text}</a>";
+
+                }
+
 
             ],
 

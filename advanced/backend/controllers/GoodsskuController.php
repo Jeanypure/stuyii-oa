@@ -216,7 +216,7 @@ class GoodsskuController extends Controller
                         $goods_model ->achieveStatus = '已完善';
                         $goods_model ->picStatus = '待处理';
                         $goods_model->updateTime =strftime('%F %T');
-                        $goods_model->possessMan2 = $arc;
+                        $goods_model->possessMan1 = $arc;
                         $goods_model->Purchaser = $pur;
                         $goods_model->update(false);
                         echo "保存完成";

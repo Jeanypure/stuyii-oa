@@ -5,6 +5,10 @@ namespace backend\controllers;
 
 use Yii;
 use backend\models\Channel;
+
+use backend\models\OaTemplatesVar;
+use backend\models\OaTemplates;
+
 use backend\models\ChannelSearch;
 use backend\models\Goodssku;
 use backend\models\OaWishgoods;
@@ -13,7 +17,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
-
+use yii\helpers\ArrayHelper;
 /**
  * ChannelController implements the CRUD actions for Channel model.
  */
@@ -81,7 +85,9 @@ class ChannelController extends Controller
     }
 
     /**
-     * Updates an existing Channel model. dafault Wish
+
+     * Updates an existing Channel model.Default wish.
+
      * If update is successful, the browser will be redirected to the 'editwish' page.
      * @param integer $id.
      * @return mixed
@@ -100,18 +106,21 @@ class ChannelController extends Controller
             ],
         ]);
         if (!$info) {
-            throw new NotFoundHttpException("The product was not found.");
+
+            throw new \NotFoundHttpException("The product was not found.");
         }
 
 
+
         if($sku[0]->load(Yii::$app->request->post())){
-           $dataPost =  $_POST;
+            $dataPost =  $_POST;
             $sku[0]['main_image'] =  $dataPost['main_image'];
-           unset( $sku[0]['extra_images']);
+            unset( $sku[0]['extra_images']);
             foreach($dataPost["extra_images"] as $key=>$value){
                 $sku[0]['extra_images'] .= $value."\r\n";
 
             }
+
 
             $sku[0]->update(false);
             echo '更新成功！';
@@ -145,6 +154,133 @@ class ChannelController extends Controller
             'sku' => $sku[0],
 
         ]);
+
+    }
+
+    /**
+     * Updates an existing Channel model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionUpdateEbay($id)
+    {
+
+        $info = OaTemplates::find()->where(['infoid' =>$id])->one();
+        $Goodssku = Goodssku::find()->where(['pid'=>$id])->all();
+        $templatesVar = new ActiveDataProvider([
+            'query' => OaTemplatesVar::find()->where(['tid' =>$id]),
+            'pagination' => [
+                'pageSize' => 150,
+            ],
+        ]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => Goodssku::find()->where(['pid'=>$id]),
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
+        if(Yii::$app->request->isPost){
+
+        }
+        else{
+            $inShippingService = $this->getShippingService('In');
+            $OutShippingService = $this->getShippingService('Out');
+            return $this->render('update',[
+                'info' =>$info,
+                'dataProvider' => $dataProvider,
+                'Goodssku' => $Goodssku[0],
+                'templatesVar' => $templatesVar,
+                'inShippingService' => $inShippingService,
+                'outShippingService' => $OutShippingService,
+
+            ]);
+        }
+
+    }
+
+
+    /**
+     * 多属性保存
+     * @param $id
+     */
+    public function actionVarSave($id)
+    {
+        $varData = $_POST['OaTemplatesVar'];
+        $label = json_decode($_POST['label'],true);
+        foreach ($varData as $key=>$value)
+        {
+            $value['tid'] = $id;
+            //设置标签
+            foreach($label as $property=>$name){
+                if(!empty($name)){
+                    $value[$property] = "{$name}:{$value[$property]}";
+                }
+            }
+            if(strpos($key, 'New') ===false){
+                //update
+                $ret =$this->findVar($key);
+                $ret->setAttributes($value,$safeOnly=false);
+                $ret->save(false);
+            }
+            else{
+                //create
+                $model = new OaTemplatesVar();
+                $model->setAttributes($value);
+                if($model->save(false)){
+
+                }
+                else {
+                    echo "Wrong!";
+                }
+            }
+
+        }
+        //根据varId的值，来决定更新还是创建
+
+    }
+
+    /**
+     * 多属性设置页面
+     * @param $id
+     * @return mixed
+     */
+
+    public function actionTemplatesVar($id)
+    {
+        $templatesVar = new ActiveDataProvider([
+            'query' => OaTemplatesVar::find()->where(['tid' =>$id]),
+            'pagination' => [
+                'pageSize' => 150,
+            ],
+        ]);
+        $propertyVar = OaTemplatesVar::find()->where(['tid'=>$id])->all();
+        return $this->renderAjax('templatesVar',[
+            'templatesVar' => $templatesVar,
+            'tid' => $id,
+            'propertyVar' => $propertyVar,
+        ]);
+    }
+
+    /**
+     * delete row from templatesVar
+     * @return mixed
+     */
+
+    public function actionDeleteVar(){
+        $id = $_POST["id"];
+
+        // 根据id的类型来执行不同的操作
+        if(is_array($id)){
+            foreach($id as $row){
+                $this->findVar($row)->delete();
+            }
+
+        }
+        else{
+            $this->findVar($id)->delete();
+        }
     }
 
 
@@ -162,6 +298,22 @@ class ChannelController extends Controller
     }
 
     /**
+     * exists or not
+     * @param $id
+     * @return mixed
+     */
+    protected function findVar($id)
+    {
+        $model = OaTemplatesVar::find()->where(['nid'=>$id])->one();
+        if (!empty($model))
+        {
+            return $model;
+        }
+        else{
+            return false;
+        }
+    }
+    /**
      * Finds the Channel model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
@@ -176,6 +328,21 @@ class ChannelController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+
+
+    /**
+     *  返回物流名称
+     */
+    protected function getShippingService($type)
+    {
+        $sql = "select id, shippingName from oa_shippingService where type='{$type}'";
+        $connection = Yii::$app->db;
+        $ret = $connection->createCommand($sql)->queryAll();
+        $options = ArrayHelper::map($ret, 'id','shippingName');
+        return $options;
+    }
+
 
     //导出数据
     public  function actionExport($id){
@@ -267,4 +434,5 @@ class ChannelController extends Controller
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
     }
+
 }

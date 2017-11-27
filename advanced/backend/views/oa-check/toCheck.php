@@ -18,6 +18,7 @@ Modal::begin([
     'id' => 'tocheck-modal',
 //    'header' => '<h4 class="modal-title">认领产品</h4>',
     'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
+    'size' => "modal-lg"
 ]);
 Modal::end();
 
@@ -31,6 +32,7 @@ $js = <<<JS
 
 //通过对话框
 $('.data-pass').on('click',function() {
+    $('.modal-body').children('div').remove();
     $.get('{$passUrl}',  { id: $(this).closest('tr').data('key') },
             function (data) {
                 $('.modal-body').html(data);
@@ -40,6 +42,7 @@ $('.data-pass').on('click',function() {
 
 // 失败对话框
 $('.data-fail').on('click',function() {
+     $('.modal-body').children('div').remove();
     $.get('{$failUrl}',  { id: $(this).closest('tr').data('key') },
             function (data) {
                 $('.modal-body').html(data);
@@ -49,6 +52,7 @@ $('.data-fail').on('click',function() {
 
 // 查看框
 $('.data-view').on('click',  function () {
+         $('.modal-body').children('div').remove();
         $.get('{$viewUrl}',  { id: $(this).closest('tr').data('key') },
             function (data) {
                 $('.modal-body').html(data);
@@ -107,9 +111,6 @@ $('.data-view').on('click',  function () {
         $('.glyphicon-eye-open').addClass('icon-cell');
         $('.wrapper').addClass('body-color');
 
-    
-   
-    
 
 JS;
 $this->registerJs($js);

@@ -140,7 +140,6 @@ echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' 
             ],
         ],
 
-
         [
 
             'attributes' =>[
@@ -150,7 +149,7 @@ echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' 
                     'type'=>Form::INPUT_DROPDOWN_LIST,
                 ],
                 'StoreName' =>[
-                    'label'=>'仓库',
+                    'label'=>"<span style = 'color:red'>*仓库</span>",
                     'items'=>$result,
                     'type'=>Form::INPUT_DROPDOWN_LIST,
                 ],
@@ -193,15 +192,13 @@ echo Select2::widget([
 <?= $form->field($goodsItem,'cate')->dropDownList($goodsItem->getCatList(0),
     [
         'prompt'=>'--请选择父类--',
-
         'onchange'=>'           
             $("select#oagoods-subcate").children("option").remove();
             $.get("'.yii::$app->urlManager->createUrl('oa-goodsinfo/category').
             '?typeid=1&pid="+$(this).val(),function(data){
                 var str=""; 
-
               $.each(data,function(k,v){
-                    str+="<option value="+v">"++"</option>";
+                    str+="<option value="+v+">"+v+"</option>";
                     });
                 $("select#oagoods-subcate").html(str);
             });',
@@ -351,9 +348,7 @@ echo TabularForm::widget([
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i> 管理SKU</h3>',
             'type'=>GridView::TYPE_PRIMARY,
 
-
             'footer'=>true,
-
             'after'=>
                 Html::input('text','rowNum','',['class' => 'x-row','placeholder'=>'行数']).' '.
                 Html::button('新增行', ['id'=>'add-row','type'=>'button', 'class'=>'btn kv-batch-create']) . ' ' .
@@ -364,11 +359,13 @@ echo TabularForm::widget([
                 Html::button('重量确定', ['id'=>'Weight-set','type'=>'button','class'=>'btn']).' '.
                 Html::input('text','RetailPrice','',['class' => 'RetailPrice-replace','placeholder'=>'零售价$']).' '.
                 Html::button('价格确定', ['id'=>'RetailPrice-set','type'=>'button','class'=>'btn']).' '.
+//                '<div class="row">'.
                 Html::button('一键生成SKU', ['id'=>'sku-set','type'=>'button','class'=>'btn btn-success']).' '.
                 Html::button('保存当前数据', ['id'=>'save-only','type'=>'button','class'=>'btn btn-info']).' '.
                 Html::button('保存并完善', ['id'=>'save-complete','type'=>'button','class'=>'btn btn-primary']).' '.
                 Html::button('导入普源', ['id'=>'data-input','type'=>'button','class'=>'btn btn-warning']).' '.
                 Html::button('删除行', ['id'=>'delete-row','type'=>'button', 'class'=>'btn btn-danger kv-batch-delete'])
+//                '</div>'
         ]
     ]
 
@@ -602,6 +599,16 @@ $js2 = <<<JS
     
 // 保存数据的提交按钮
     $('#save-only').on('click',function() {
+        //判断SKU是否已经生成，如果没有，则自动生成
+        var sku=0;
+        
+        $('td[data-col-seq="3"]').each(function() {
+            sku += $(this).val().length;
+        });
+        if(sku==0){
+            $("#sku-set").trigger("click");
+        }
+        
         var form = $('#sku-info');
         form.attr('action', '/goodssku/save-only?pid={$pid}&type=goods-info');
         form.submit();
@@ -628,7 +635,6 @@ $js2 = <<<JS
         $.get('{$requestUrl}', {},
             function (data) {
                 $('#create-modal').find('.modal-body').html(data);
-    
             }  
         );
     });   

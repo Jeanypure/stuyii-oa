@@ -66,8 +66,8 @@ class OaTemplates extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['goodsid', 'prepareDay', 'quantity'], 'integer'],
-            [['location', 'country', 'postCode', 'site', 'listedCate', 'listedSubcate', 'title', 'subTitle', 'description', 'UPC', 'EAN', 'Brand', 'MPN', 'Color', 'Type', 'Material', 'IntendedUse', 'unit', 'bundleListing', 'shape', 'features', 'regionManufacture', 'reserveField', 'InshippingMethod1', 'InshippingMethod2', 'OutshippingMethod1', 'OutShiptoCountry1', 'OutshippingMethod2', 'OutShiptoCountry2'], 'string'],
+            [['infoid','goodsid', 'prepareDay', 'quantity'], 'integer'],
+            [['specifics','sku','mainPage','extraPage','location', 'country', 'postCode', 'site', 'listedCate', 'listedSubcate', 'title', 'subTitle', 'description', 'UPC', 'EAN', 'Brand', 'MPN', 'Color', 'Type', 'Material', 'IntendedUse', 'unit', 'bundleListing', 'shape', 'features', 'regionManufacture', 'reserveField', 'InshippingMethod1', 'InshippingMethod2', 'OutshippingMethod1', 'OutShiptoCountry1', 'OutshippingMethod2', 'OutShiptoCountry2'], 'string'],
             [['nowPrice', 'InFirstCost1', 'InSuccessorCost1', 'InFirstCost2', 'InSuccessorCost2', 'OutFirstCost1', 'OutSuccessorCost1', 'OutFirstCost2', 'OutSuccessorCost2'], 'number'],
         ];
     }
@@ -79,23 +79,27 @@ class OaTemplates extends \yii\db\ActiveRecord
     {
         return [
             'nid' => 'Nid',
-            'goodsid' => 'Goodsid',
-            'location' => 'Location',
-            'country' => 'Country',
-            'postCode' => 'Post Code',
-            'prepareDay' => 'Prepare Day',
-            'site' => 'Site',
-            'listedCate' => 'Listed Cate',
-            'listedSubcate' => 'Listed Subcate',
-            'title' => 'Title',
-            'subTitle' => 'Sub Title',
-            'description' => 'Description',
-            'quantity' => 'Quantity',
-            'nowPrice' => 'Now Price',
-            'UPC' => 'Upc',
-            'EAN' => 'Ean',
+            'infoid' => 'infoid',
+            'goodsid' => '产品编号',
+            'sku' => 'SKU',
+            'mainPage' => '主图',
+            'extraPage' => '附加图',
+            'location' => '商品所在地',
+            'country' => '国家',
+            'postCode' => '邮编',
+            'prepareDay' => '备货天数',
+            'site' => '站点',
+            'listedCate' => '刊登分类',
+            'listedSubcate' => '刊登分类2',
+            'title' => '标题',
+            'subTitle' => '子标题',
+            'description' => '描述',
+            'quantity' => '数量',
+            'nowPrice' => '一口价',
+            'UPC' => 'UPC',
+            'EAN' => 'EAN',
             'Brand' => 'Brand',
-            'MPN' => 'Mpn',
+            'MPN' => 'MPN',
             'Color' => 'Color',
             'Type' => 'Type',
             'Material' => 'Material',
@@ -104,22 +108,23 @@ class OaTemplates extends \yii\db\ActiveRecord
             'bundleListing' => 'Bundle Listing',
             'shape' => 'Shape',
             'features' => 'Features',
-            'regionManufacture' => 'Region Manufacture',
+            'regionManufacture' => 'Country/Region Manufacture',
             'reserveField' => 'Reserve Field',
-            'InshippingMethod1' => 'Inshipping Method1',
-            'InFirstCost1' => 'In First Cost1',
-            'InSuccessorCost1' => 'In Successor Cost1',
-            'InshippingMethod2' => 'Inshipping Method2',
-            'InFirstCost2' => 'In First Cost2',
-            'InSuccessorCost2' => 'In Successor Cost2',
-            'OutshippingMethod1' => 'Outshipping Method1',
-            'OutFirstCost1' => 'Out First Cost1',
-            'OutSuccessorCost1' => 'Out Successor Cost1',
-            'OutShiptoCountry1' => 'Out Shipto Country1',
-            'OutshippingMethod2' => 'Outshipping Method2',
-            'OutFirstCost2' => 'Out First Cost2',
-            'OutSuccessorCost2' => 'Out Successor Cost2',
-            'OutShiptoCountry2' => 'Out Shipto Country2',
+            'InshippingMethod1' => '运输方式1',
+            'InFirstCost1' => '首件运费',
+            'InSuccessorCost1' => '续件运费',
+            'InshippingMethod2' => '运输方式2',
+            'InFirstCost2' => '首件运费',
+            'InSuccessorCost2' => '续建运费',
+            'OutshippingMethod1' => '运输方式1',
+            'OutFirstCost1' => '首件运费',
+            'OutSuccessorCost1' => '续件运费',
+            'OutShiptoCountry1' => '可运送至国家',
+            'OutshippingMethod2' => '运输方式2',
+            'OutFirstCost2' => '首件运费',
+            'OutSuccessorCost2' => '续件运费',
+            'OutShiptoCountry2' => '可运送至国家',
+            'specifics' => '物品属性',
         ];
     }
 
@@ -131,4 +136,9 @@ class OaTemplates extends \yii\db\ActiveRecord
     {
         return new OaTemplatesQuery(get_called_class());
     }
+
+
+
+
+
 }
