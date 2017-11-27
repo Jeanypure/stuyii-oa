@@ -2,9 +2,6 @@
 
 use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
-use kartik\builder\Form;
-use kartik\builder\FormGrid;
-use kartik\builder\TabularForm;
 use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Channel */
@@ -74,7 +71,7 @@ echo '<div class="form-group field-oatemplates-mainpage">
     </div>
 </div>'
 ;?>
-<?= $form->field($info,'extraPage')->textarea(['style'=>'display:']); ?>
+<?= $form->field($info,'extraPage')->textarea(['style'=>'display:none']); ?>
 <?php
 echo '<div class="images">';
 $images = json_decode($info->extraPage,true)['images'];
@@ -138,8 +135,9 @@ echo '</div>';
 </div>
 </br>
 <div>
-    <?= $form->field($info,'specifics')->textarea(['row' =>6]); ?>
+    <?= $form->field($info,'specifics')->textarea(['style'=>'display:none'])->label(false); ?>
     <?php
+    $specifics = json_decode($info->specifics,true)['specifics'];
     echo
     '<div class="row"><div class="col-lg-6"><table class="specifics-tab table table-hover">
     <thead>
@@ -149,43 +147,14 @@ echo '</div>';
     </tr>
     </thead>
     <tbody>
-    <tr>
-    <th>Brand</th>
-    <td><input size="40"></td>
-    </tr>
-    <tr>
-    <th>Type</th>
-    <td><input size="40"></td>
-    </tr>
-    <tr>
-    <th>Material</th>
-    <td><input size="40"></td>
-    </tr>
-    <tr>
-    <th>IntendedUse</th>
-    <td><input size="40"></td>
-    </tr>
-    <tr>
-    <th>unit</th>
-    <td><input size="40"></td>
-    </tr>
-    <tr>
-    <th>bundleListing</th>
-    <td><input size="40"></td>
-    </tr>
-    <tr>
-    <th>shape</th>
-    <td><input size="40"></td>
-    </tr>
-    <tr>
-    <th>features</th>
-    <td><input size="40"></td>
-    </tr>
-    <tr>
-    <th>regionManufacture</th>
-    <td><input size="40"></td>
-    </tr>
-    </tbody>
+    <tr>';
+    foreach($specifics as $row){
+        echo '<th>'.array_keys($row)[0].'</th>
+    <td><input size="40" value="'.array_values($row)[0].'"></td>
+    </tr>';
+    }
+    echo
+    '</tbody>
     </table>
     <button class=" add-specifics btn btn-default">增加属性</button>
     </div></div>';
@@ -331,9 +300,11 @@ $('.add-specifics').on('click',function() {
             if(key == ''){
                 var key = $(this).parents('tr').find('th').find('input').val();
             }
-            specifics.push([key,value]);
+            var map ={};
+            map[key] = value;
+            specifics.push(map);
         });
-        textarea.text(JSON.stringify({sepecifices:specifics}));
+        textarea.text(JSON.stringify({specifics:specifics}));
     }
 allSpecifics();
 
@@ -344,7 +315,6 @@ $('.specifics-tab').on('change','input[size="40"]',function() {
 //绑定上移事件
 $('body').on('click','.up-btn',function() {
     var point = $(this).closest('div .form-group').find('strong').text().replace('#','');
-    alert(point);
     if(point > 1){
         var temp = $(this).closest('div .all-images').clone(true);
         $(this).closest('div .all-images').prev().before(temp);
@@ -363,7 +333,6 @@ $('body').on('click','.up-btn',function() {
 //绑定下移事件
 $('body').on('click','.down-btn',function() {
     var point = $(this).closest('div .form-group').find('strong').text().replace('#','');
-    alert(point);
     if(point < 12){
         var temp = $(this).closest('div .all-images').clone(true);
         $(this).closest('div .all-images').next().after(temp);
