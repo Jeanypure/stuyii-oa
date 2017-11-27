@@ -121,7 +121,6 @@ class ChannelController extends Controller
 
             }
 
-
             $sku[0]->update(false);
             echo '更新成功！';
 //            return $this->redirect(['update','id'=>$info->pid]);
@@ -163,21 +162,14 @@ class ChannelController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdateEbay($id)
+    public function actionUpdateEbay($id=45)
     {
 
         $info = OaTemplates::find()->where(['infoid' =>$id])->one();
-        $Goodssku = Goodssku::find()->where(['pid'=>$id])->all();
         $templatesVar = new ActiveDataProvider([
             'query' => OaTemplatesVar::find()->where(['tid' =>$id]),
             'pagination' => [
                 'pageSize' => 150,
-            ],
-        ]);
-        $dataProvider = new ActiveDataProvider([
-            'query' => Goodssku::find()->where(['pid'=>$id]),
-            'pagination' => [
-                'pageSize' => 10,
             ],
         ]);
 
@@ -189,8 +181,6 @@ class ChannelController extends Controller
             $OutShippingService = $this->getShippingService('Out');
             return $this->render('update',[
                 'info' =>$info,
-                'dataProvider' => $dataProvider,
-                'Goodssku' => $Goodssku[0],
                 'templatesVar' => $templatesVar,
                 'inShippingService' => $inShippingService,
                 'outShippingService' => $OutShippingService,
@@ -200,7 +190,23 @@ class ChannelController extends Controller
 
     }
 
+    /**
+     * ebay基本信息保存
+     * @param $id
+     */
 
+    public function  actionEbaySave($id=45){
+        $template = OaTemplates::find()->where(['infoid'=>$id])->one();
+        $data = $_POST['OaTemplates'];
+        $template->setAttributes($data,true);
+        if($template->update(false)){
+            echo "保存成功";
+        }
+        else {
+            echo "保存失败";
+        }
+
+    }
     /**
      * 多属性保存
      * @param $id

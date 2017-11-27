@@ -77,19 +77,20 @@ echo '<div class="form-group field-oatemplates-mainpage">
 <?= $form->field($info,'extraPage')->textarea(['style'=>'display:']); ?>
 <?php
 echo '<div class="images">';
-for($i=1;$i<=12;$i++){
+$images = json_decode($info->extraPage,true)['images'];
+foreach($images as $key=>$image){
     echo '<div class="form-group all-images">
     
     <label class="col-lg-1"></label>
-    <strong class="serial">#'.$i.'</strong>
-    <div class="col-lg-3"><input  type="text" class="form-control extra-images" value="https://www.tupianku.com/view/full/10023/'.$info->sku.'-_'.$i.'_.jpg"></div>
+    <strong class="serial">#'.($key+1).'</strong>
+    <div class="col-lg-3"><input  type="text" class="form-control extra-images" value="'.$image.'"></div>
     <div class="col-lg=1">
     <button  class="btn add-images">增加</button>
     <button  class="btn btn-error remove-image">删除</button>
     <button class="btn up-btn btn-error">上移动</button>
     <button class="btn down-btn btn-error">下移动</button>
-    <a target="_blank" href="https://www.tupianku.com/view/full/10023/'.$info->sku.'-_'.$i.'_.jpg">
-    <img src="https://www.tupianku.com/view/full/10023/'.$info->sku.'-_'.$i.'_.jpg" width="50" height="50">
+    <a target="_blank" href="'.$image.'">
+    <img src="'.$image.'" width="50" height="50">
     </a>
     </div>
 </div>';
@@ -421,6 +422,19 @@ $(".var-btn").click(function() {
         }
     );
 });
+
+
+//保存按钮
+$('#save-only').on('click',function() {
+    $.ajax({
+        url:'/channel/ebay-save',
+        type:'post',
+        data:$('#msg-form').serialize(),
+        success:function(ret) {
+            alert(ret);
+        }
+    });
+})
 JS;
 $this->registerJs($js);
 ?>
