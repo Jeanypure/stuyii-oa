@@ -77,11 +77,10 @@ echo '<div class="images">';
 $images = json_decode($info->extraPage,true)['images'];
 foreach($images as $key=>$image){
     echo '<div class="form-group all-images">
-    
     <label class="col-lg-1"></label>
-    <strong class="serial">#'.($key+1).'</strong>
     <div class="col-lg-3"><input  type="text" class="form-control extra-images" value="'.$image.'"></div>
     <div class="col-lg=1">
+    <strong class="serial">#'.($key+1).'</strong>
     <button  class="btn add-images">增加</button>
     <button  class="btn btn-error remove-image">删除</button>
     <button class="btn up-btn btn-error">上移动</button>
@@ -120,7 +119,6 @@ echo '</div>';
 <div>
 <?= $form->field($info,'listedCate')->textInput(); ?>
 <?= $form->field($info,'listedSubcate')->textInput(); ?>
-<?= $form->field($info,'listedSubcate')->textInput(); ?>
 <?= $form->field($info,'title')->textInput(); ?>
 <?= $form->field($info,'subTitle')->textInput(); ?>
 <?= $form->field($info,'description')->textarea(['rows'=>6]); ?>
@@ -146,12 +144,11 @@ echo '</div>';
     <th>属性内容</th>
     </tr>
     </thead>
-    <tbody>
-    <tr>';
+    <tbody>';
     foreach($specifics as $row){
-        echo '<th>'.array_keys($row)[0].'</th>
-    <td><input size="40" value="'.array_values($row)[0].'"></td>
-    </tr>';
+        echo '<tr><th><input name="specificsKey" value="'.array_keys($row)[0].'"></th>
+    <td><input size="40" calss="specifics-value" value="'.array_values($row)[0].'">
+    <input type="button" value="删除" onclick="$(this.parentNode.parentNode).remove()"></td></tr>';
     }
     echo
     '</tbody>
@@ -174,7 +171,7 @@ echo '</div>';
 $form->field($info,'InshippingMethod1',$shipping_templates)->dropDownList($inShippingService,
     [
         'class' => 'col-lg-6',
-        'prompt'=>'--境内物流选择--',
+        'prompt'=>'Economy Shipping from outside US(11-23days)',
     ]
 ); ?>
 <?= $form->field($info,'InFirstCost1',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
@@ -195,7 +192,7 @@ $form->field($info,'InshippingMethod1',$shipping_templates)->dropDownList($inShi
         $form->field($info,'OutshippingMethod1',$shipping_templates)->dropDownList($outShippingService,
             [
                 'class' => 'col-lg-6',
-                'prompt'=>'--境外物流选择--',
+                'prompt'=>'Economy Shipping from China/Hong Kong/Taiwan to worldwide(11-35days)',
             ]
         ); ?>
     <?= $form->field($info,'OutFirstCost1',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
@@ -282,7 +279,7 @@ function addImages() {
 //增加属性的按钮
 
 $('.add-specifics').on('click',function() {
-    var key = '<tr><th><input type="text" name="specficsKey"></th>';
+    var key = '<tr><th><input  type="text" name="specificsKey"></th>';
     var value = '<td><input type="text" size="40" name="specficsValue"> ';
     var delBtn = '<input type="button" value="删除" onclick="$(this.parentNode.parentNode).remove()"></td></tr>';
     $('.specifics-tab').append(key + value + delBtn);
@@ -295,11 +292,8 @@ $('.add-specifics').on('click',function() {
         textarea = $('#oatemplates-specifics');
         var specifics = [];
         $('.specifics-tab').find('input[size="40"]').each(function() {
-            var key = $(this).parents('tr').find('th').text();
+            var key = $(this).parents('tr').find('input[name="specificsKey"]').val();
             var value = $(this).val();
-            if(key == ''){
-                var key = $(this).parents('tr').find('th').find('input').val();
-            }
             var map ={};
             map[key] = value;
             specifics.push(map);
@@ -310,6 +304,10 @@ allSpecifics();
 
 // 属性变化事件,及时刷新JSON事件。
 $('.specifics-tab').on('change','input[size="40"]',function() {
+    allSpecifics();
+});
+
+$('.specifics-tab').on('change','input[name="specificsKey"]',function() {
     allSpecifics();
 });
 //绑定上移事件
