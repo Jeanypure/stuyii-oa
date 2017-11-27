@@ -218,7 +218,7 @@ class GoodsskuController extends Controller
                         $goods_model->updateTime =strftime('%F %T');
                         $goods_model->possessMan2 = $arc;
                         $goods_model->Purchaser = $pur;
-                        $goods_model->update(['achieveStatus']);
+                        $goods_model->update(false);
                         echo "保存完成";
 //                        $this->redirect(['oa-goodsinfo/index']);
                     }
@@ -245,7 +245,7 @@ class GoodsskuController extends Controller
                     //更新商品状态
                     $goods_model = OaGoodsinfo::find()->where(['pid' => $pid])->one();
                     $goods_model ->picStatus = '已完善';
-                    $goods_model->update(['achieveStatus']);
+                    $goods_model->update();
                     $goods_model->updateTime =strftime('%F %T');
                     $this->redirect(['oa-goodsinfo/index']);
                     $this->redirect(['oa-picinfo/update','id'=>$pid]);

@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     echo $form->field($sku,'SKU')->textInput()->label('SKU');
     echo '<div class="form-group field-oatemplates-mainpage">
     <label class="col-lg-1 control-label">主图</label>
-    <div class="col-lg-3"><input type="text" class="form-control" value="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_0_.jpg"></div>
+    <div class="col-lg-3"><input name="main_image" type="text" class="form-control" value="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_0_.jpg"></div>
     <div class="col-lg=1"> 
     <a target="_blank" href="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_0_.jpg">
     <img src="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_0_.jpg" width="80" height="80">
@@ -71,18 +71,28 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 </div>';
 
     ?>
-    <?= $form->field($sku,'extra_image')->textarea(['style'=>'display:none']); ?>
-
     <?php
-    for($i=1;$i<=20;$i++){
-        echo '<div class="form-group">
+
+    echo '<div class="form-group">
     <label class="col-lg-1"></label>
-    <div class="col-lg-3"><input  type="text" class="form-control extra-images" value="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_'.$i.'_.jpg"></div>
+    <div class="col-lg-3"><input name="extra_images[]" type="text" class="form-control extra-images" value="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_00_.jpg"></div>
+    <div class="col-lg=1">
+    <button  class="btn btn-error remove-image">删除</button>
+    <button class="btn btn-error">移动</button>
+    <a target="_blank" href="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_00_.jpg">
+    <img src="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_00_.jpg" width="50" height="50"/>
+    </a>
+    </div>
+</div>';
+    for($i=1;$i<=20;$i++){
+    echo '<div class="form-group">
+    <label class="col-lg-1"></label>
+    <div class="col-lg-3"><input name="extra_images[]" type="text" class="form-control extra-images" value="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_'.$i.'_.jpg"></div>
     <div class="col-lg=1">
     <button  class="btn btn-error remove-image">删除</button>
     <button class="btn btn-error">移动</button>
     <a target="_blank" href="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_'.$i.'_.jpg">
-    <img src="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_'.$i.'_.jpg" width="50" height="50">
+    <img src="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_'.$i.'_.jpg" width="50" height="50"/>
     </a>
     </div>
 </div>';
@@ -105,7 +115,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     <div class="blockTitle">
         <p> 多属性(Varations)设置</p>
     </div>
-
+</br>
     <div class="form-group">
         <a  data-toggle="modal" data-target="#edit-sku" class=" var-btn btn btn-default varations-set">设置多属性</a>
     </div>
@@ -121,10 +131,10 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
             导出ibay模版
         </botton>
     </div>
-<?php  ActiveForm::end();?>
+
 
 </div>
-
+<?php  ActiveForm::end();?>
 
 
 <?php
@@ -154,18 +164,17 @@ Modal::end();
 </script>
 
 <style>
-    .align-center {
-        clear: both;
-        display: block;
-        margin:auto;
-    }
+
     .blockTitle {
         font-size: 16px;
         background-color: #f7f7f7;
         border-top: 0.5px solid #eee;
         border-bottom: 0.5px solid #eee;
         padding: 2px 12px;
-        margin-left: -5px;
+        margin-left: -20px;
+    }
+    .channel-update-form {
+        margin-left: 20px;
     }
 </style>
 
@@ -211,9 +220,7 @@ $js  = <<< JS
             url:'/channel/export?id='+$info->pid,
             // data:,
             success: function(){
-              // window.open('http://localhost:8076/channel/update?id=86','_blank' );
                 window.location = '/channel/export?id='+$info->pid;
-              //  window.location.href = response.url;  
 
             },
         });

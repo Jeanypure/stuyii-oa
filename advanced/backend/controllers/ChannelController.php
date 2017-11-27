@@ -81,9 +81,9 @@ class ChannelController extends Controller
     }
 
     /**
-     * Updates an existing Channel model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * Updates an existing Channel model. dafault Wish
+     * If update is successful, the browser will be redirected to the 'editwish' page.
+     * @param integer $id.
      * @return mixed
      */
 
@@ -105,8 +105,15 @@ class ChannelController extends Controller
 
 
         if($sku[0]->load(Yii::$app->request->post())){
+           $dataPost =  $_POST;
+            $sku[0]['main_image'] =  $dataPost['main_image'];
+           unset( $sku[0]['extra_images']);
+            foreach($dataPost["extra_images"] as $key=>$value){
+                $sku[0]['extra_images'] .= $value."\r\n";
 
-            $sku[0]->save(false);
+            }
+
+            $sku[0]->update(false);
             echo '更新成功！';
 //            return $this->redirect(['update','id'=>$info->pid]);
 
@@ -139,9 +146,6 @@ class ChannelController extends Controller
 
         ]);
     }
-
-
-
 
 
     /**
@@ -245,7 +249,7 @@ class ChannelController extends Controller
             $objPHPExcel->getActiveSheet()->setCellValue('G'.$row,$foo[0]['shipping']);
             $objPHPExcel->getActiveSheet()->setCellValue('H'.$row,'shipping_time');
             $objPHPExcel->getActiveSheet()->setCellValue('I'.$row,$foo[0]['main_image']);
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$row,$foo[0]['extra_image']);
+            $objPHPExcel->getActiveSheet()->setCellValue('J'.$row,$foo[0]['extra_images']);
             $objPHPExcel->getActiveSheet()->setCellValue('K'.$row,$strvariant);
             $objPHPExcel->getActiveSheet()->setCellValue('L'.$row,'landing_page_url');
             $objPHPExcel->getActiveSheet()->setCellValue('M'.$row,$foo[0]['tags']);

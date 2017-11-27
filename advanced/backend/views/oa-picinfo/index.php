@@ -219,7 +219,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return  substr($model->devDatetime,0,19);   //主要通过此种方式实现
                     },
             ],
-            'possessMan2',
+            'possessMan1',
         ],
 
 
