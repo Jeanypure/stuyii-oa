@@ -83,7 +83,7 @@ class OaGoodsinfo extends GoodsCats
         return $this->hasOne(OaGoods::className(), ['nid' => 'goodsid']);
     }
 
-    
+
     //关联oa_goodssku
     public function getgoodssku(){
         return $this->hasMany(Goodssku::className(),['pid' => 'pid']);

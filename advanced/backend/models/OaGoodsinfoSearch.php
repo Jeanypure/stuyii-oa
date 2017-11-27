@@ -113,7 +113,6 @@ class OaGoodsinfoSearch extends OaGoodsinfo
             'IsCharged' => $this->IsCharged,
             'DictionaryName'=>$this->DictionaryName,
             'IsPowder' => $this->IsPowder,
-//            'developer'=> $this->developer,
             'devDatetime'=>$this->devDatetime,
             'updateTime'=>$this->updateTime,
             'vendor1' => $this->vendor1,

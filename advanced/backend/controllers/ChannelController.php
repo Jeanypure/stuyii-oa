@@ -5,10 +5,14 @@ namespace backend\controllers;
 
 use Yii;
 use backend\models\Channel;
+
 use backend\models\OaTemplatesVar;
 use backend\models\OaTemplates;
+
 use backend\models\ChannelSearch;
 use backend\models\Goodssku;
+use backend\models\OaWishgoods;
+use backend\models\Wishgoodssku;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -41,14 +45,8 @@ class ChannelController extends Controller
     public function actionIndex()
     {
         $searchModel = new ChannelSearch();
-//        $oaGoodsinfo = new Channel();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-//        $dataProvider = new ActiveDataProvider([
-//            'query' => $oaGoodsinfo->find()->with('oa_goods'),
-//            'pagination' => [
-//                'pageSize' => 10,
-//            ]
-//        ]);
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -87,7 +85,9 @@ class ChannelController extends Controller
     }
 
     /**
+
      * Updates an existing Channel model.Default wish.
+
      * If update is successful, the browser will be redirected to the 'editwish' page.
      * @param integer $id.
      * @return mixed
@@ -106,8 +106,10 @@ class ChannelController extends Controller
             ],
         ]);
         if (!$info) {
+
             throw new \NotFoundHttpException("The product was not found.");
         }
+
 
 
         if($sku[0]->load(Yii::$app->request->post())){
@@ -118,6 +120,7 @@ class ChannelController extends Controller
                 $sku[0]['extra_images'] .= $value."\r\n";
 
             }
+
 
             $sku[0]->update(false);
             echo '更新成功！';
@@ -151,6 +154,7 @@ class ChannelController extends Controller
             'sku' => $sku[0],
 
         ]);
+
     }
 
     /**
@@ -195,7 +199,6 @@ class ChannelController extends Controller
         }
 
     }
-
 
 
     /**
@@ -327,6 +330,7 @@ class ChannelController extends Controller
     }
 
 
+
     /**
      *  返回物流名称
      */
@@ -337,6 +341,98 @@ class ChannelController extends Controller
         $ret = $connection->createCommand($sql)->queryAll();
         $options = ArrayHelper::map($ret, 'id','shippingName');
         return $options;
+    }
+
+
+    //导出数据
+    public  function actionExport($id){
+
+        $objPHPExcel = new \PHPExcel();
+        $sheet=0;
+
+        $objPHPExcel->setActiveSheetIndex($sheet);
+        $foos[0] = OaWishgoods::find()->where(['infoid'=>$id])->all();
+        $variants = Wishgoodssku::find()->where(['pid'=>$id])->all();
+        $variation = [];
+        $varitem = [];
+        foreach($variants as $key=>$value){
+            $varitem['sku'] = $value['sku'];
+            $varitem['color'] = $value['color'];
+            $varitem['size'] = $value['size'];
+            $varitem['inventory'] = $value['inventory'];
+            $varitem['price'] = $value['price'];
+            $varitem['shipping'] = $value['shipping'];
+            $varitem['msrp'] = $value['msrp'];
+            $varitem['shipping_time'] = $value['shipping_time'];
+            $varitem['main_image'] = $value['linkurl'];
+            $variation[] = $varitem;
+        }
+    $strvariant = json_encode($variation,true);
+
+
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
+
+        $objPHPExcel->getActiveSheet()->setTitle('xxx')
+            ->setCellValue('A1', 'sku')
+            ->setCellValue('B1', 'selleruserid')
+            ->setCellValue('C1', 'name')
+            ->setCellValue('D1', 'inventory')
+            ->setCellValue('E1', 'price')
+            ->setCellValue('F1', 'msrp')
+            ->setCellValue('G1', 'shipping')
+            ->setCellValue('H1', 'shipping_time')
+            ->setCellValue('I1', 'main_image')
+            ->setCellValue('J1', 'extra_images')
+            ->setCellValue('K1', 'variants')
+            ->setCellValue('L1', 'landing_page_url')
+            ->setCellValue('M1', 'tags')
+            ->setCellValue('N1', 'description')
+            ->setCellValue('O1', 'brand')
+            ->setCellValue('P1', 'upc');
+
+        $row=2;
+
+        foreach ($foos as $foo) {
+
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$row,$foo[0]['SKU']);
+            $objPHPExcel->getActiveSheet()->setCellValue('B'.$row,'01-buycloth');
+            $objPHPExcel->getActiveSheet()->setCellValue('C'.$row,$foo[0]['title']);
+            $objPHPExcel->getActiveSheet()->setCellValue('D'.$row,$foo[0]['inventory']);
+            $objPHPExcel->getActiveSheet()->setCellValue('E'.$row,$foo[0]['price']);
+            $objPHPExcel->getActiveSheet()->setCellValue('F'.$row,$foo[0]['msrp']);
+            $objPHPExcel->getActiveSheet()->setCellValue('G'.$row,$foo[0]['shipping']);
+            $objPHPExcel->getActiveSheet()->setCellValue('H'.$row,'shipping_time');
+            $objPHPExcel->getActiveSheet()->setCellValue('I'.$row,$foo[0]['main_image']);
+            $objPHPExcel->getActiveSheet()->setCellValue('J'.$row,$foo[0]['extra_images']);
+            $objPHPExcel->getActiveSheet()->setCellValue('K'.$row,$strvariant);
+            $objPHPExcel->getActiveSheet()->setCellValue('L'.$row,'landing_page_url');
+            $objPHPExcel->getActiveSheet()->setCellValue('M'.$row,$foo[0]['tags']);
+            $objPHPExcel->getActiveSheet()->setCellValue('N'.$row,$foo[0]['description']);
+            $objPHPExcel->getActiveSheet()->setCellValue('O'.$row,'brand');
+            $objPHPExcel->getActiveSheet()->setCellValue('P'.$row,'upc');
+
+            $row++ ;
+        }
+
+        header('Content-Type: application/vnd.ms-excel');
+        $filename = "MyExcelReport_".date("d-m-Y-His").".xls";
+        header('Content-Disposition: attachment;filename='.$filename .' ');
+        header('Cache-Control: max-age=0');
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
     }
 
 }

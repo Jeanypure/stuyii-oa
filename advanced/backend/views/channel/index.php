@@ -30,12 +30,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\CheckboxColumn'],
             ['class' => 'yii\grid\ActionColumn'],
 
-//            'pid',
-//            'IsLiquid',
-//            'IsPowder',
-//            'isMagnetism',
-//            'IsCharged',
-            // 'description',
             [
                 'attribute' => 'picUrl',
                 'value' =>function($model,$key, $index, $widget) {
@@ -53,36 +47,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute'=> 'subCate',
                 'value'=>'oa_goods.subCate'
             ],
-//            'oaGoods.cate',
-//            'oaGoods.subCate',
-            // 'AliasCnName',
-            // 'AliasEnName',
-            // 'PackName',
-            // 'Season',
 
              'SupplierName',
              'StoreName',
             'developer',
              'Purchaser',
              'possessMan1',
-
-            // 'possessMan2',
-            // 'DeclaredValue',
-            // 'picUrl:url',
-            // 'goodsid',
-
-            // 'achieveStatus',
              'devDatetime',
             'completeStatus',
             'DictionaryName',
-
-
-            // 'updateTime',
-            // 'picStatus',
-            // 'SupplierID',
-            // 'StoreID',
-            // 'AttributeName',
-            // 'bgoodsid',
 
 
         ],
