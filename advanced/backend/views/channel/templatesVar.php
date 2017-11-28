@@ -9,6 +9,9 @@ use kartik\widgets\ActiveForm;
 use kartik\builder\TabularForm;
 use kartik\grid\GridView;
 use yii\helpers\Html;
+use kartik\dialog\Dialog;
+
+
 
 //动态的去判断属性的名称和值
 //var_dump($propertyVar);die
@@ -105,54 +108,49 @@ else{
                             'value'=>function($data){return "<img weight='50' height='50' src='".$data->imageUrl."'>";}
                         ],
 
-                    'property1'=>
-                        [
-                            'type'=>TabularForm::INPUT_RAW,
-                            'options'=>[
-                                'class'=>'property1',
-                            ],
-
-                            'value'=>function($data,$key)
-                            {
-                                $property = $data->property1;
-                                $ret = explode(':',$property)[1];
-                                return '<input type="text"  class="property1 form-control kv-align-top" name="OaTemplatesVar['.$key.'][property1]" value="'.$ret.'">';
-                            },
-                            'label' => $property1Lab,
-                            'visible' =>$property1Vis,
-                        ],
-                    'property2'=>
-                        [
-                            'type'=>TabularForm::INPUT_TEXT,
-                            'options'=>['class'=>'property2'],
-                            'value'=>function(){},
-                            'label' => '',
-                            'visible' =>$property2Vis,
-                        ],
-                    'property3'=>
-                        [
-                            'type'=>TabularForm::INPUT_TEXT,
-                            'options'=>['class'=>'property3'],
-                            'value'=>function(){},
-                            'label' => '',
-                            'visible' =>$property3Vis,
-                        ],
+//                    'property1'=>
+//                        [
+//                            'type'=>TabularForm::INPUT_RAW,
+//                            'options'=>[
+//                                'class'=>'property1',
+//                            ],
+//
+//                            'value'=>function($data,$key)
+//                            {
+//                                $property = $data->property1;
+//                                $ret = explode(':',$property)[1];
+//                                return '<input type="text"  class="property1 form-control kv-align-top" name="OaTemplatesVar['.$key.'][property1]" value="'.$ret.'">';
+//                            },
+//                            'label' => $property1Lab,
+//                            'visible' =>$property1Vis,
+//                        ],
+//                    'property2'=>
+//                        [
+//                            'type'=>TabularForm::INPUT_TEXT,
+//                            'options'=>['class'=>'property2'],
+//                            'value'=>function(){},
+//                            'label' => '',
+//                            'visible' =>$property2Vis,
+//                        ],
+//                    'property3'=>
+//                        [
+//                            'type'=>TabularForm::INPUT_TEXT,
+//                            'options'=>['class'=>'property3'],
+//                            'value'=>function(){},
+//                            'label' => '',
+//                            'visible' =>$property3Vis,
+//                        ],
                     'UPC'=>
                         [
                             'type'=>TabularForm::INPUT_TEXT,
                             'options'=>['class'=>'UPC','value' => 'Does not apply'],
 
                         ],
-                    'EAN'=>
-                        [
-                            'type'=>TabularForm::INPUT_TEXT,
-                            'options'=>['class'=>'EAN','value' => 'Does not apply'],
 
-                        ],
                 ],
             'gridSettings'=>[
             'panel'=>[
-                'heading'=>'<h3 class="panel-title">多属性设置</h3>',
+                'heading'=>'<div><h3 class="panel-title">多属性设置</h3></div>',
                 'type'=>GridView::TYPE_PRIMARY,
                 'after'=>
                     Html::input('text','rowNum','',['class' => 'x-row','placeholder'=>'行数']).' '.
@@ -176,8 +174,52 @@ else{
 </div>
 
 <?php
+// widget with default options
+echo Dialog::widget([
+    'libName' => 'krajeeDialogCust',
+    'options' => ['draggable' => true, 'closable' => true], // custom options
+]);
 $js = <<< JS
 
+// 添加列的按钮
+$('.kv-panel-before').after('<div align="right"><button class="btn add-col btn-warnning"><i class="glyphicon glyphicon-plus"></i></button></div>');
+
+//添加列的事件
+$('.add-col').on('click',function() {
+    //对话框交互
+    krajeeDialogCust.prompt({placeholder:'属性名称'}, function(out){
+        if (out) {
+            // 开始增加新列
+            var seq = 0;
+            $('table tr th').each(function() {
+                seq +=1;
+            });
+            seq = seq -5; //减去固定列的数量
+            var nextSeq = seq + 1;
+            var th = '<th class="kv-align-top"  style="width: 5.01%;" data-col-seq="'+nextSeq +'"><input  type="text" size="6" value= "'+ out +'"><span class="remove-col glyphicon glyphicon-remove"></span></button></th>';
+            var thSelector = 'th[data-col-seq="'+seq+'"]';
+            $(thSelector).after(th);
+            var td = '<td class="kv-align-top" data-col-seq="'+ nextSeq +'">' +
+                    '<div class="form-group field-oatemplatesvar-1-'+ out+ '">' +
+                    '<input type="text" id="oatemplatesvar-1-'+ out +'" class="'+out+' form-control" name="OaTemplatesVar[1]['+out+']">' +
+                    '<div class="help-block"></div>' +
+                    '</div>' +
+                    '</td>';
+            var tdSelector = 'td[data-col-seq="'+seq+'"]';
+            $(tdSelector).each(function() {
+                $(this).after(td);  
+            });
+        }
+    });
+    return false;
+});
+
+//删除当前列
+$('table').on('click','.remove-col',function() {
+    var index = $(this).closest('th').attr('data-col-seq'); //找到列数
+    var selector = "[data-col-seq='" + index + "']";
+    $(selector).remove();
+});
 //删除选中行
 
 $('#delete-row').click(function() {
@@ -239,6 +281,7 @@ $('#add-row').click(function() {
             '{$property3Lab}':'property3',
             'UPC':'UPC',
             'EAN':'EAN'
+            
         };
         var inputFields = [];
         $('thead th').each(function(index,element) {
@@ -370,13 +413,8 @@ $('thead').find("th").each(function() {
 
 //设置所有输入框的样式为 kv-align-top
 $('td').attr('class',"kv-align-top");
+$('th').attr('class',"kv-align-top");
 
-// 删除列事件
-$('.remove-col').click(function() {
-    var index = $(this).closest('th').attr('data-col-seq'); //找到列数
-    var selector = "[data-col-seq='" + index + "']";
-    $(selector).remove();
-});
 
 
 //保存按钮事件
