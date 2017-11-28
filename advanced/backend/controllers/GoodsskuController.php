@@ -234,19 +234,43 @@ class GoodsskuController extends Controller
                 if ($type=='pic-info')
                 {
                     $Rows = $request->post()['Goodssku'];
+
                     foreach ($Rows as $row_key=>$row_value)
                     {
                         $sid = $row_key;
                         $update_model = Goodssku::find()->where(['sid' => $sid])->one();
                         $update_model->linkurl = $row_value['linkurl'];
+
                         $update_model->save(false);
 
                     }
                     //更新商品状态
                     $goods_model = OaGoodsinfo::find()->where(['pid' => $pid])->one();
                     $goods_model ->picStatus = '已完善';
-                    $goods_model->update();
                     $goods_model->updateTime =strftime('%F %T');
+                    $goods_model->update();
+//                    $arr = [
+//                        46,69,192,138,169,175,75,181,195,146,152,189,78,32,129,86,135,55,49,149,198,184,127,173,156,64,
+//                        193,150,50,24,47,70,141,187,30,153,133,142,73,179,136,148,185,128,76,53,102,45,48,71,186,77,154,
+//                        34,54,103,80,37,137
+//                    ];
+//
+//                    foreach ($arr as $key=>$value){
+//                        $sql_wish = "exec P_oaGoods_TowishGoods '".$value."'";
+//                        $posts = Yii::$app->db->createCommand($sql_wish)->execute();
+//                    }
+
+
+                    //新开产品导入模板表中 oa_wishgoods ,oa_wishgoodssku 存储过程P_oaGoods_TowishGoods
+                    //t图片不空 倒入模版
+                   $pic_url = array_column($Rows, 'linkurl');
+                   $val_count = array_count_values($pic_url);
+                   $res = array_key_exists('',  $val_count);
+
+                   if(!$res){
+                        $sql_wish = "exec P_oaGoods_TowishGoods '".$pid."'";
+                        $posts = Yii::$app->db->createCommand($sql_wish)->execute();
+                    }
                     $this->redirect(['oa-goodsinfo/index']);
                     $this->redirect(['oa-picinfo/update','id'=>$pid]);
 

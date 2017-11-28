@@ -59,6 +59,18 @@ $skuForm = ActiveForm::begin([
             'linkurl'=>['label'=>'主图', 'type'=>TabularForm::INPUT_TEXT,
                 'options'=>['class'=>'linkurl'],
             ],
+//            'imageUrl' =>
+//                [
+//                    'type' => TabularForm::INPUT_TEXT,
+//                    'options' => ['class' =>'imageUrl']
+//                ],
+            'image'=>
+                [
+                    'label'=>'图片',
+                    'type'=>TabularForm::INPUT_RAW,
+                    'options' => ['class' => 'image'],
+                    'value'=>function($data){return "<img weight='50' height='50' src='".$data->linkurl."'>";}
+                ],
 
 
         ],

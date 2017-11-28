@@ -99,19 +99,18 @@ class ChannelController extends Controller
 
         $sku = OaWishgoods::find()->where(['infoid'=>$id])->all();
 
-//        var_dump($sku[0]['extra_images']);die;
-
         $dataProvider = new ActiveDataProvider([
             'query' => Wishgoodssku::find()->where(['pid'=>$id]),
             'pagination' => [
                 'pageSize' => 10,
             ],
         ]);
-      $extra_images =  explode("\r\n",$sku[0]['extra_images']) ;
-        array_pop($extra_images);
+
+      $extra_images =  explode("\n",$sku[0]['extra_images']) ;
+    array_pop($extra_images);
 
         if (!$sku) {
-            throw new \NotFoundHttpException("The product was not found.");
+            throw new NotFoundHttpException("The product was not found.");
         }
 
         if($sku[0]->load(Yii::$app->request->post())){
@@ -141,7 +140,7 @@ class ChannelController extends Controller
     /*
      * 多属性信息
      */
-    public function actionVarations($id='86'){
+    public function actionVarations($id){
         $sku = OaWishgoods::find()->where(['infoid'=>$id])->all();
         $dataProvider = new ActiveDataProvider([
             'query' => Wishgoodssku::find()->where(['pid'=>$id]),

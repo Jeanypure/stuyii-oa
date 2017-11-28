@@ -340,6 +340,7 @@ allSpecifics();
 $('.specifics-tab').on('change','input[size="40"]',function() {
     allSpecifics();
 });
+
 //绑定上移事件
 $('body').on('click','.up-btn',function() {
     var point = $(this).closest('div .form-group').find('strong').text().replace('#','');

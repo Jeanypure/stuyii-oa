@@ -88,14 +88,16 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 
         foreach ($extra_images as $key=>$value){
 
-            echo '<div class="form-group">
+            echo '<div class="form-group all-images">
                     <label class="col-lg-1"></label>
+                    <strong class="serial">#'.($key+1).'</strong>
                     <div class="col-lg-3">
                         <input name="extra_images[]" type="text" class="form-control extra-images" value="'.$value.'">
                     </div>
                     <div class="col-lg=1">
                     <button  class="btn btn-error remove-image">删除</button>
-                    <button class="btn btn-error">移动</button>
+                    <button class="btn up-btn btn-error">上移动</button>
+                    <button class="btn down-btn btn-error">下移动</button>
                     <a target="_blank" href="'.$value.'">
                     <img src="'.$value.'" width="50" height="50"/>
                     </a>
@@ -109,13 +111,14 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     </div>
     </br>
     <?= $form->field($sku,'title')->textInput(); ?>
+    <?= $form->field($sku,'tags')->textInput(['class'=>'tags-input']); ?>
     <?= $form->field($sku,'description')->textarea(['rows'=>6]); ?>
     <?= $form->field($sku,'inventory')->textInput(); ?>
     <?= $form->field($sku,'price')->textInput(); ?>
     <?= $form->field($sku,'msrp')->textInput(); ?>
     <?= $form->field($sku,'shipping')->textInput(); ?>
     <?= $form->field($sku,'shippingtime')->textInput(); ?>
-    <?= $form->field($sku,'tags')->textInput(['class'=>'tags-input']); ?>
+
 
     <div class="blockTitle">
         <p> 多属性(Varations)设置</p>
@@ -179,7 +182,7 @@ Modal::end();
 $js  = <<< JS
     //多属性内容写到模态框
     $('.varations-set').on('click',function(){
-        $.get('{$requestUrlsku}',{},function(data){
+        $.get('{$requestUrlsku}',{id:{$sku->infoid}},function(data){
             $('#edit-sku').find('.modal-body').html(data);
         });
     }); 
@@ -192,9 +195,37 @@ $js  = <<< JS
     
       if(arr.length>=11){
           alert('关键词不能超过10个--请注意');
-      }
-        
+      }        
     });
+   
+   //绑定上移事件
+$('body').on('click','.up-btn',function() {
+    var point = $(this).closest('div .form-group').find('strong').text().replace('#','');
+    if(point > 1){
+        var temp = $(this).closest('div .all-images').clone(true);
+        $(this).closest('div .all-images').prev().before(temp);
+        $(this).closest('div .all-images').remove();
+        //重新生成JSON
+        var images = new Array();
+        $('.extra-images').each(function() {
+        images.push($(this).val());
+        });
+       
+    }
+    return false;
+});
+
+//绑定下移事件
+$('body').on('click','.down-btn',function() {
+    var point = $(this).closest('div .form-group').find('strong').text().replace('#','');
+    if(point <=20){
+        var temp = $(this).closest('div .all-images').clone(true);
+        $(this).closest('div .all-images').next().after(temp);
+        $(this).closest('div .all-images').remove();
+       
+    }
+    return false;
+});
 //update-info 提交表单数据更新wishgoods
     $('.update-info').on('click',function(){
         $.ajax({
