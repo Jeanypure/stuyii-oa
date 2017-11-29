@@ -440,24 +440,7 @@ $('th').attr('class',"kv-align-top");
 
 //保存按钮事件
 $('#save-only').click(function() {
-    //计算label值;动态的计算label值
-    
-    var sequences = {"property1":'.property1',"property2":'.property2',"property3":'.property3'};
-    for (var key in sequences)
-    {   
-        var seq = $(sequences[key]).closest('td').attr('data-col-seq');
-        if(seq){
-             var condation = 'th[data-col-seq="'+ seq+'"]';
-           
-            sequences[key] = $(condation).text(); 
-        }
-        else{
-            sequences[key] = '';
-        }
-       
-    }
     //ajax 提交方式
-   $('.label-input').val(JSON.stringify(sequences)); 
    var varForm = $('#var-form').serialize();
    $.ajax({
        type: "POST",
