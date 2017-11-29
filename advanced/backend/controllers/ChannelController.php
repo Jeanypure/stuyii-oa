@@ -106,8 +106,7 @@ class ChannelController extends Controller
             ],
         ]);
 
-      $extra_images =  explode("\n",$sku[0]['extra_images']) ;
-    array_pop($extra_images);
+
 
         if (!$sku) {
             throw new NotFoundHttpException("The product was not found.");
@@ -118,15 +117,16 @@ class ChannelController extends Controller
             $sku[0]['main_image'] =  $dataPost['main_image'];
             unset( $sku[0]['extra_images']);
             foreach($dataPost["extra_images"] as $key=>$value){
-                $sku[0]['extra_images'] .= $value."\r\n";
+                $sku[0]['extra_images'] .= $value."\n";
 
             }
 
             $sku[0]->update(false);
             echo '更新成功！';
-//            return $this->redirect(['update','id'=>$info->pid]);
 
         }else{
+            $extra_images =  explode("\n",$sku[0]['extra_images']) ;
+            array_pop($extra_images);
             return $this->render('editwish',[
                 'dataProvider' => $dataProvider,
                 'extra_images' => $extra_images,

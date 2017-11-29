@@ -85,8 +85,9 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 
     ?>
     <?php
+        echo '<div class="images">';
 
-        foreach ($extra_images as $key=>$value){
+            foreach ($extra_images as $key=>$value){
 
             echo '<div class="form-group all-images">
                     <label class="col-lg-1"></label>
@@ -95,6 +96,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                         <input name="extra_images[]" type="text" class="form-control extra-images" value="'.$value.'">
                     </div>
                     <div class="col-lg=1">
+                    <button  class="btn add-images">增加</button>
                     <button  class="btn btn-error remove-image">删除</button>
                     <button class="btn up-btn btn-error">上移动</button>
                     <button class="btn down-btn btn-error">下移动</button>
@@ -104,6 +106,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                     </div>
                  </div>';
         }
+        echo '</div>';
     ?>
 
     <div class="blockTitle">
@@ -198,6 +201,40 @@ $js  = <<< JS
       }        
     });
    
+   //增加图片
+function addImages() {
+       
+  total = 0;//判断当前图片数量
+  $(".serial").each(function() {
+        total++;
+    });
+
+    if(total<20){
+        row = '<div class="form-group all-images">' +
+    '<label class="col-lg-1"></label>' +
+    '<strong class="serial">#</strong>'+
+    '<div class="col-lg-3"><input type="text" name="extra_images[]" class="form-control extra-images" ></div>'+
+    '<div class="col-lg=1">'+
+    '<button class="btn add-images">增加</button> '+
+    '<button class="btn btn-error remove-image">删除</button> '+
+    '<button class="btn up-btn btn-error">上移动</button> '+
+    '<button class="btn down-btn btn-error">下移动</button> '+
+    '<a target="_blank" href="">'+
+    '<img src="" width="50" height="50">'+
+    '</a>'+
+    '</div>'+
+    '</div>';
+        $('.images').append(row);
+        //重新计算序列
+        // serialize();
+    }
+}
+   //绑定增加按钮事件
+$('body').on('click','.add-images',function() {
+    
+    addImages();
+    return false;
+    });
    //绑定上移事件
 $('body').on('click','.up-btn',function() {
     var point = $(this).closest('div .form-group').find('strong').text().replace('#','');

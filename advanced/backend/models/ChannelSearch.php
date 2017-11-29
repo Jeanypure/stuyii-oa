@@ -45,14 +45,21 @@ class ChannelSearch extends Channel
     public function search($params)
     {
         $query = Channel::find();
-//        $query->joinWith(['oa_goods']);
+//       $query->joinWith(['oa_goods']);
 
         // add conditions that should always apply here
 
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'devDatetime' => SORT_DESC,
+                    //'title' => SORT_ASC,
+                ]
+            ],
         ]);
+
 
         $dataProvider->setSort([
             'attributes' => [
@@ -125,7 +132,7 @@ class ChannelSearch extends Channel
             ->andFilterWhere(['like', 'GoodsCode', $this->GoodsCode])
             ->andFilterWhere(['like', 'achieveStatus', $this->achieveStatus])
             ->andFilterWhere(['like', 'developer', $this->developer])
-            ->andFilterWhere(['like', 'picStatus', $this->picStatus])
+            ->andFilterWhere(['like', 'picStatus', '已完善'])
             ->andFilterWhere(['like', 'AttributeName', $this->AttributeName])
             ->andFilterWhere(['like', 'cate', $this->cate])
             ->andFilterWhere(['like', 'subCate', $this->subCate])
