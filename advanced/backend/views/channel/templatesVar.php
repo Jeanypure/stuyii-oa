@@ -11,49 +11,6 @@ use kartik\grid\GridView;
 use yii\helpers\Html;
 use kartik\dialog\Dialog;
 
-
-
-//动态的去判断属性的名称和值
-//var_dump($propertyVar);die
-$property1Len = 0;
-$property2Len = 0;
-$property3Len = 0;
-$property1Vis = true;
-$property2Vis = true;
-$property3Vis = true;
-$property1Lab = '款式-1';
-$property2Lab = '款式-2';
-$property3Lab = '款式-3';
-$metaProperty = [
-    'property1'
-];
-foreach ($propertyVar as $row){
-    $property1Len += strlen($row->property1);
-    $property2Len += strlen($row->property2);
-    $property3Len += strlen($row->property3);
-}
-if($property1Len==0){
-    $property1Vis = false;
-}
-else{
-    $dump = $propertyVar[0]->property1;
-    $property1Lab = explode(':',$dump)[0];
-}
-
-if($property2Len==0){
-    $property2Vis = false;
-}
-else{
-    $dump = $propertyVar[0]->property2;
-    $property2Lab = explode(':',$dump)[0];
-}
-if($property3Len==0){
-    $property3Vis = false;
-}
-else{
-    $dump = $propertyVar[0]->property2;
-    $property2Lab = explode(':',$dump)[0];
-}
 ?>
 
 <div class="">
@@ -183,16 +140,6 @@ $js = <<< JS
 // 加载图片关联
 $('.kv-panel-pager').append('<div class="radio"><span class="assoc_pic_key">图片关联： <label class="radio-inline"><input name="optionsRadios" type="radio">Option1</label></span></div>');
 
-
-//动态添加图片关联选项
-
-$('thead').on('change',function() {
-  var option = '<label  ><input name="optionsRadios"  type="radio"> Option 3</label>';
-  $('.assoc_pic_key').append(option);
-})
-
-$('')
-
 // 添加列的按钮
 $('.kv-panel-before').after('<div align="right"><button class="btn add-col btn-warnning"><i class="glyphicon glyphicon-plus"></i></button></div>');
 
@@ -223,7 +170,7 @@ $('.add-col').on('click',function() {
                 $(this).append(td);  
             });
             //顺便添加图片关联选项
-            var option = '<label  class=" seq-'+ nextSeq +' radio-inline"><input name="optionsRadios"  type="radio">'+ out +'</label>';
+            var option = '<label  class=" seq-'+ nextSeq +' radio-inline"><input name="optionsRadios" value="'+ out+'" type="radio">'+ out +'</label>';
             $('.assoc_pic_key').append(option);
         }
     });
@@ -440,6 +387,9 @@ $('th').attr('class',"kv-align-top");
 
 //保存按钮事件
 $('#save-only').click(function() {
+    //获取选中的图片关联选项
+    var picKey = $('.assoc_pic_key').find("input[name='optionsRadios']:checked").val();
+    alert(picKey);
     //ajax 提交方式
    var varForm = $('#var-form').serialize();
    $.ajax({

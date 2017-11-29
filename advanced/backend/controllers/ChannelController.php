@@ -208,33 +208,42 @@ class ChannelController extends Controller
 
     }
     /**
-     * 多属性保存
+     * @brief 多属性保存
      * @param $id
      */
     public function actionVarSave($id)
     {
         $varData = $_POST['OaTemplatesVar'];
-        var_dump($_POST);die;
-        $label = json_decode($_POST['label'],true);
+        $var = new OaTemplatesVar();
+        $fields = $var->attributeLabels();
+        $row = [];
         foreach ($varData as $key=>$value)
         {
             $value['tid'] = $id;
-            //设置标签
-            foreach($label as $property=>$name){
-                if(!empty($name)){
-                    $value[$property] = "{$name}:{$value[$property]}";
+            //动态生成property列的值
+            $property = ['property' => [],'pictureKey'=>''];
+            foreach ($value as $field=>$val)
+            {
+
+                if (in_array($field,array_keys($fields)))
+                {
+                    $row[$field] = $val;
+                }
+                else{
+                    array_push($property['property'],[$field=>$val]);
                 }
             }
+            $row['property'] = json_encode($property);
             if(strpos($key, 'New') ===false){
                 //update
                 $ret =$this->findVar($key);
-                $ret->setAttributes($value,$safeOnly=false);
+                $ret->setAttributes($row,$safeOnly=false);
                 $ret->save(false);
             }
             else{
                 //create
                 $model = new OaTemplatesVar();
-                $model->setAttributes($value);
+                $model->setAttributes($row);
                 if($model->save(false)){
 
                 }
