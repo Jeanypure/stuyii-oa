@@ -214,6 +214,7 @@ class ChannelController extends Controller
     public function actionVarSave($id)
     {
         $varData = $_POST['OaTemplatesVar'];
+        var_dump($_POST);die;
         $label = json_decode($_POST['label'],true);
         foreach ($varData as $key=>$value)
         {

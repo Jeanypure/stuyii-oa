@@ -206,21 +206,21 @@ $('.add-col').on('click',function() {
             $('#var-table').find('th').each(function() {
                 seq +=1;
             });
-           seq = seq -1; //减去固定列的数量
+            seq = seq -1; //减去固定列的数量
             var nextSeq = seq + 1;
             var th = '<th class="kv-align-top"  style="width: 5.01%;" data-col-seq="'+nextSeq +'"><input  type="text" size="6" value= "'+ out +'"><span class="remove-col glyphicon glyphicon-remove"></span></button></th>';
             var thSelector = 'th[data-col-seq="'+seq+'"]';
             $(thSelector).after(th);
-            
-            var tdSelector = 'td[data-col-seq="'+seq+'"]';
-            $(tdSelector).each(function(index,ele) {
+            // var tdSelector = 'td[data-col-seq="'+seq+'"]';
+            $('#var-table').find('tbody').find('tr').each(function() {
+                var key = $(this).attr('data-key');
                 var td = '<td class="kv-align-top" data-col-seq="'+ nextSeq +'">' +
-                    '<div class="form-group field-oatemplatesvar-1-'+ out+ '">' +
-                    '<input type="text" id="oatemplatesvar-1-'+ out +'" class="'+out+' form-control" name="OaTemplatesVar['+(index +1)+']['+out+']">' +
+                    '<div class="form-group field-oatemplatesvar-'+ key +'-'+ out+ '">' +
+                    '<input type="text" id="oatemplatesvar-'+ key +'-'+ out +'" class="'+out+' form-control" name="OaTemplatesVar['+ key +']['+out+']">' +
                     '<div class="help-block"></div>' +
                     '</div>' +
                     '</td>';
-                $(this).after(td);  
+                $(this).append(td);  
             });
             //顺便添加图片关联选项
             var option = '<label  class=" seq-'+ nextSeq +' radio-inline"><input name="optionsRadios"  type="radio">'+ out +'</label>';
