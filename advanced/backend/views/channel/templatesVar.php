@@ -180,6 +180,18 @@ echo Dialog::widget([
     'options' => ['draggable' => true, 'closable' => true], // custom options
 ]);
 $js = <<< JS
+// 加载图片关联
+$('.kv-panel-pager').append('<div class="radio"><span class="assoc_pic_key">图片关联： <label class="radio-inline"><input name="optionsRadios" type="radio">Option1</label></span></div>');
+
+
+//动态添加图片关联选项
+
+$('thead').on('change',function() {
+  var option = '<label  ><input name="optionsRadios"  type="radio"> Option 3</label>';
+  $('.assoc_pic_key').append(option);
+})
+
+$('')
 
 // 添加列的按钮
 $('.kv-panel-before').after('<div align="right"><button class="btn add-col btn-warnning"><i class="glyphicon glyphicon-plus"></i></button></div>');
@@ -191,24 +203,28 @@ $('.add-col').on('click',function() {
         if (out) {
             // 开始增加新列
             var seq = 0;
-            $('table tr th').each(function() {
+            $('#var-table').find('th').each(function() {
                 seq +=1;
             });
-            seq = seq -5; //减去固定列的数量
+           seq = seq -1; //减去固定列的数量
             var nextSeq = seq + 1;
             var th = '<th class="kv-align-top"  style="width: 5.01%;" data-col-seq="'+nextSeq +'"><input  type="text" size="6" value= "'+ out +'"><span class="remove-col glyphicon glyphicon-remove"></span></button></th>';
             var thSelector = 'th[data-col-seq="'+seq+'"]';
             $(thSelector).after(th);
-            var td = '<td class="kv-align-top" data-col-seq="'+ nextSeq +'">' +
+            
+            var tdSelector = 'td[data-col-seq="'+seq+'"]';
+            $(tdSelector).each(function(index,ele) {
+                var td = '<td class="kv-align-top" data-col-seq="'+ nextSeq +'">' +
                     '<div class="form-group field-oatemplatesvar-1-'+ out+ '">' +
-                    '<input type="text" id="oatemplatesvar-1-'+ out +'" class="'+out+' form-control" name="OaTemplatesVar[1]['+out+']">' +
+                    '<input type="text" id="oatemplatesvar-1-'+ out +'" class="'+out+' form-control" name="OaTemplatesVar['+(index +1)+']['+out+']">' +
                     '<div class="help-block"></div>' +
                     '</div>' +
                     '</td>';
-            var tdSelector = 'td[data-col-seq="'+seq+'"]';
-            $(tdSelector).each(function() {
                 $(this).after(td);  
             });
+            //顺便添加图片关联选项
+            var option = '<label  class=" seq-'+ nextSeq +' radio-inline"><input name="optionsRadios"  type="radio">'+ out +'</label>';
+            $('.assoc_pic_key').append(option);
         }
     });
     return false;
@@ -218,13 +234,15 @@ $('.add-col').on('click',function() {
 $('table').on('click','.remove-col',function() {
     var index = $(this).closest('th').attr('data-col-seq'); //找到列数
     var selector = "[data-col-seq='" + index + "']";
+    var optionClass = '.seq-' + index;
+    $(optionClass).remove(); //删除图片关联选项
     $(selector).remove();
 });
 //删除选中行
 
 $('#delete-row').click(function() {
     var ids = [];
-    $("[name='selection[]']:checkbox:checked").each(function() {
+    $("[name='selection[]']:radio:checked").each(function() {
         id = $(this).closest('tr').attr('data-key');
         $(this).closest('tr').remove();  
         if(id){
@@ -257,7 +275,7 @@ $('#add-row').click(function() {
         
         var checkBoxTd =$(
             '<td class="skip-export kv-align-center kv-align-middle kv-row-select" style="width:50px;" data-col-seq="1">' +
-            '<input type="checkbox" class="kv-row-checkbox" name="selection[]" >' +
+            '<input type="radio" class="kv-row-radio" name="selection[]" >' +
              '</td>');
         row.append(checkBoxTd);
         
@@ -276,20 +294,23 @@ $('#add-row').click(function() {
             '价格':'reailPrice',
             '图片地址':'imageUrl',
             '图片':'image',
-            '{$property1Lab}':'property1',
-            '{$property2Lab}':'property2',
-            '{$property3Lab}':'property3',
             'UPC':'UPC',
             'EAN':'EAN'
             
         };
         var inputFields = [];
-        $('thead th').each(function(index,element) {
-           var cnName = $.trim($(this).text());
-           var enName = fieldsMap[cnName];
-           if((typeof(enName) != "undefined")){
+        $('#var-table').find('th').each(function(index,element) {
+            if (index>2){
+                var cnName = $.trim($(this).text());
+                var enName = fieldsMap[cnName];
+                if((typeof(enName) != "undefined")){
                 inputFields.push(enName); 
-           }
+                }
+                else {
+                var name = $(this).find('input').val();
+                inputFields.push(name);
+                }  
+            }
         });
         // var inputFields = ['sku','quantity','reailPrice','imageUrl','image','property1','property2','property3','UPC','EAN'];
         for(var i=3; i< inputFields.length + 3; i++){
