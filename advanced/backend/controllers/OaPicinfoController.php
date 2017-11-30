@@ -82,12 +82,9 @@ class OaPicinfoController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->pid]);
         } else {
-            $data = $this->actionSelectParam();
 
             return $this->render('create', [
                 'model' => $model,
-                'result' => $data['res'],
-                'lock' => $data['platFrom'],
 
             ]);
         }
@@ -108,15 +105,12 @@ class OaPicinfoController extends Controller
         }
 
         if($info->load(Yii::$app->request->post())){
-            if (!empty($_POST['DictionaryName'])){
-                $info->DictionaryName = implode(',',$_POST['DictionaryName']);
-            }
+
             $info->save();
             $this->redirect(['oa-goodsinfo/update','id'=>$id]);
 
         }else{
 
-            $data = $this->actionSelectParam();
             $dataProvider = new ActiveDataProvider([
                 'query' => Goodssku::find()->where(['pid'=>$id]),
                 'pagination' => [
@@ -127,20 +121,11 @@ class OaPicinfoController extends Controller
                 'info'=>$info,
                 'pid' =>$id,
                 'dataProvider' => $dataProvider,
-                'result' => $data['res'],
-                'lock' => $data['platFrom'],
 
             ]);
 
         }
-
-
-
     }
-
-
-
-
 
 
     /**
@@ -201,37 +186,6 @@ class OaPicinfoController extends Controller
         return ActiveForm::validate($model);
 
     }
-
-
-    /**
-     * @return array $data 包含仓库 禁售平台信息
-     */
-    public function actionSelectParam(){
-        $connection = Yii::$app->db;
-        $sql ="SELECT StoreName from B_store";
-        $command = $connection->createCommand($sql);
-        $result = $command->queryAll();
-        array_push($result,['StoreName'=>'']);
-        foreach ($result as $key=>$value){
-            $StoreName[$key] = $value['StoreName'];
-        }
-        array_multisort($StoreName,SORT_ASC,$result);
-        $res = array_column($result, 'StoreName', 'StoreName');
-
-        $comm = $connection->createCommand('select DictionaryName from B_Dictionary where CategoryID=9');
-        $plat = $comm->queryAll();
-        array_push($plat,['DictionaryName'=>'']);
-        foreach ($plat as $key=>$value){
-            $DictionaryName[$key] = $value['DictionaryName'];
-        }
-        array_multisort($DictionaryName,SORT_ASC,$plat);
-        $platFrom = array_column($plat, 'DictionaryName', 'DictionaryName');
-        $data =[];
-        $data['res'] =$res;
-        $data['platFrom'] =$platFrom;
-        return $data;
-    }
-
 
     /**
      * mark as completed

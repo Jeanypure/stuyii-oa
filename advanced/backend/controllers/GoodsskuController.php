@@ -249,6 +249,14 @@ class GoodsskuController extends Controller
                     $goods_model ->picStatus = '已完善';
                     $goods_model->updateTime =strftime('%F %T');
                     $goods_model->update();
+//                 $arr = [33,36,38,40,42,43,51,66,81,82,83,84,85,91,93,100,104,105,106,107,108,110,
+//                     111,115,116,117,118,122,124,130,134,155,157,165,166,167,168,170,172,176,197,200,
+//                     201,225,233,234,235,236,237,238];
+//
+//                    foreach ($arr as $key=>$value){
+//                        $sql_wish = "exec P_oaGoods_TowishGoods '".$value."'";
+//                        $posts = Yii::$app->db->createCommand($sql_wish)->execute();
+//                    }
 
 
                     //新开产品导入模板表中 oa_wishgoods ,oa_wishgoodssku 存储过程P_oaGoods_TowishGoods

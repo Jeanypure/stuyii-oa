@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
             'id'=>'all-info',
             'options' => ['class'=>'form-horizontal'],
             'enableAjaxValidation'=>false,
-            'fieldConfig'=>[
+                'fieldConfig'=>[
                 'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-9\">{error}</div>",
                 'labelOptions' => ['class' => 'col-lg-1 control-label'],
 
@@ -115,7 +115,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     </div>
     </br>
     <?= $form->field($sku,'title')->textInput(); ?>
-    <?= $form->field($sku,'tags')->textInput(['class'=>'tags-input']); ?>
+    <?= $form->field($sku,'tags')->textInput(['class'=>'tags-input'])->hint('键词不能超过10个'); ?>
     <?= $form->field($sku,'description')->textarea(['rows'=>6]); ?>
     <?= $form->field($sku,'inventory')->textInput(); ?>
     <?= $form->field($sku,'price')->textInput(); ?>
