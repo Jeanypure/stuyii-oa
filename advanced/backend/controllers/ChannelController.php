@@ -214,6 +214,7 @@ class ChannelController extends Controller
     public function actionVarSave($id)
     {
         $varData = $_POST['OaTemplatesVar'];
+        $pictureKey = $_POST['picKey'];
         $var = new OaTemplatesVar();
         $fields = $var->attributeLabels();
         $row = [];
@@ -221,7 +222,7 @@ class ChannelController extends Controller
         {
             $value['tid'] = $id;
             //动态生成property列的值
-            $property = ['property' => [],'pictureKey'=>''];
+            $property = ['columns' => [],'pictureKey'=>$pictureKey];
             foreach ($value as $field=>$val)
             {
 
@@ -230,7 +231,7 @@ class ChannelController extends Controller
                     $row[$field] = $val;
                 }
                 else{
-                    array_push($property['property'],[$field=>$val]);
+                    array_push($property['columns'],[$field=>$val]);
                 }
             }
             $row['property'] = json_encode($property);

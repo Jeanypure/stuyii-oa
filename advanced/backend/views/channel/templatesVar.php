@@ -138,7 +138,7 @@ echo Dialog::widget([
 ]);
 $js = <<< JS
 // 加载图片关联
-$('.kv-panel-pager').append('<div class="radio"><span class="assoc_pic_key">图片关联： <label class="radio-inline"><input name="optionsRadios" type="radio">Option1</label></span></div>');
+$('.kv-panel-pager').append('<div class="radio"><span class="assoc_pic_key">图片关联： <label class="radio-inline"><input name="picKey" type="radio">Option1</label></span></div>');
 
 // 添加列的按钮
 $('.kv-panel-before').after('<div align="right"><button class="btn add-col btn-warnning"><i class="glyphicon glyphicon-plus"></i></button></div>');
@@ -170,7 +170,7 @@ $('.add-col').on('click',function() {
                 $(this).append(td);  
             });
             //顺便添加图片关联选项
-            var option = '<label  class=" seq-'+ nextSeq +' radio-inline"><input name="optionsRadios" value="'+ out+'" type="radio">'+ out +'</label>';
+            var option = '<label  class=" seq-'+ nextSeq +' radio-inline"><input name="picKey" value="'+ out+'" type="radio">'+ out +'</label>';
             $('.assoc_pic_key').append(option);
         }
     });
@@ -388,7 +388,7 @@ $('th').attr('class',"kv-align-top");
 //保存按钮事件
 $('#save-only').click(function() {
     //获取选中的图片关联选项
-    var picKey = $('.assoc_pic_key').find("input[name='optionsRadios']:checked").val();
+    var picKey = $('.assoc_pic_key').find("input[name='picKey']:checked").val();
     alert(picKey);
     //ajax 提交方式
    var varForm = $('#var-form').serialize();
