@@ -11,6 +11,47 @@ use kartik\grid\GridView;
 use yii\helpers\Html;
 use kartik\dialog\Dialog;
 
+//动态的添加列
+$pictureKey = $columns['pictureKey'];
+$col = json_encode($columns);
+
+$attributes  = [
+    'sku'=>
+        [
+            'label'=>'SKU', 'type'=>TabularForm::INPUT_TEXT,
+            'options'=>['class'=>'sku'],
+        ],
+    'quantity'=>
+        [
+            'type'=>TabularForm::INPUT_TEXT,
+            'options'=>['class'=>'quantity','value' => 5],
+
+        ],
+    'retailPrice'=>
+        [
+            'type'=>TabularForm::INPUT_TEXT,
+            'options'=>['class'=>'retailPrice'],
+        ],
+    'imageUrl' =>
+        [
+            'type' => TabularForm::INPUT_TEXT,
+            'options' => ['class' =>'imageUrl'],
+        ],
+    'image'=>
+        [
+            'type'=>TabularForm::INPUT_RAW,
+            'options' => ['class' => 'image'],
+            'value'=>function($data){return "<img weight='50' height='50' src='".$data->imageUrl."'>";}
+        ],
+    'UPC'=>
+        [
+            'type'=>TabularForm::INPUT_TEXT,
+            'options'=>['class'=>'UPC','value' => 'Does not apply'],
+
+        ],
+
+];
+
 ?>
 
 <div class="">
@@ -35,76 +76,7 @@ use kartik\dialog\Dialog;
                             }
                         ]
                 ],
-            'attributes' =>
-                [
-                    'sku'=>
-                        [
-                            'label'=>'SKU', 'type'=>TabularForm::INPUT_TEXT,
-                            'options'=>['class'=>'sku'],
-                        ],
-                    'quantity'=>
-                        [
-                            'type'=>TabularForm::INPUT_TEXT,
-                            'options'=>['class'=>'quantity','value' => 5],
-
-                        ],
-                    'retailPrice'=>
-                        [
-                            'type'=>TabularForm::INPUT_TEXT,
-                            'options'=>['class'=>'retailPrice'],
-                        ],
-                    'imageUrl' =>
-                        [
-                            'type' => TabularForm::INPUT_TEXT,
-                            'options' => ['class' =>'imageUrl']
-                        ],
-                    'image'=>
-                        [
-                            'type'=>TabularForm::INPUT_RAW,
-                            'options' => ['class' => 'image'],
-                            'value'=>function($data){return "<img weight='50' height='50' src='".$data->imageUrl."'>";}
-                        ],
-
-//                    'property1'=>
-//                        [
-//                            'type'=>TabularForm::INPUT_RAW,
-//                            'options'=>[
-//                                'class'=>'property1',
-//                            ],
-//
-//                            'value'=>function($data,$key)
-//                            {
-//                                $property = $data->property1;
-//                                $ret = explode(':',$property)[1];
-//                                return '<input type="text"  class="property1 form-control kv-align-top" name="OaTemplatesVar['.$key.'][property1]" value="'.$ret.'">';
-//                            },
-//                            'label' => $property1Lab,
-//                            'visible' =>$property1Vis,
-//                        ],
-//                    'property2'=>
-//                        [
-//                            'type'=>TabularForm::INPUT_TEXT,
-//                            'options'=>['class'=>'property2'],
-//                            'value'=>function(){},
-//                            'label' => '',
-//                            'visible' =>$property2Vis,
-//                        ],
-//                    'property3'=>
-//                        [
-//                            'type'=>TabularForm::INPUT_TEXT,
-//                            'options'=>['class'=>'property3'],
-//                            'value'=>function(){},
-//                            'label' => '',
-//                            'visible' =>$property3Vis,
-//                        ],
-                    'UPC'=>
-                        [
-                            'type'=>TabularForm::INPUT_TEXT,
-                            'options'=>['class'=>'UPC','value' => 'Does not apply'],
-
-                        ],
-
-                ],
+            'attributes' => $attributes,
             'gridSettings'=>[
             'panel'=>[
                 'heading'=>'<div><h3 class="panel-title">多属性设置</h3></div>',
@@ -137,10 +109,51 @@ echo Dialog::widget([
     'options' => ['draggable' => true, 'closable' => true], // custom options
 ]);
 $js = <<< JS
-// 加载图片关联
-$('.kv-panel-pager').append('<div class="radio"><span class="assoc_pic_key">图片关联： <label class="radio-inline"><input name="picKey" type="radio">Option1</label></span></div>');
 
-// 添加列的按钮
+// 加载图片关联
+$('.kv-panel-pager').append('<div class="radio"><span class="assoc_pic_key">图片关联： <label class="radio-inline"><input name="picKey" type="radio" checked="true" value="{$pictureKey}">{$pictureKey}</label></span></div>');
+
+//添加列的函数
+    function addColumns(out,value=''){
+        var seq = 0;
+        $('#var-table').find('th').each(function() {
+            seq +=1;
+        });
+        seq = seq -1; //减去固定列的数量
+        var nextSeq = seq + 1;
+        var th = '<th class="kv-align-top"  style="width: 5.01%;" data-col-seq="'+nextSeq +'"><input  type="text" size="6" value= "'+ out +'"><span class="remove-col glyphicon glyphicon-remove"></span></button></th>';
+        var thSelector = 'th[data-col-seq="'+seq+'"]';
+        $(thSelector).after(th);
+        // var tdSelector = 'td[data-col-seq="'+seq+'"]';
+        $('#var-table').find('tbody').find('tr').each(function() {
+            var key = $(this).attr('data-key');
+            var td = '<td class="kv-align-top" data-col-seq="'+ nextSeq +'">' +
+                '<div class="form-group field-oatemplatesvar-'+ key +'-'+ out+ '">' +
+                '<input type="text" id="oatemplatesvar-'+ key +'-'+ out +'" class="'+out+' form-control" value="'+ value +'"name="OaTemplatesVar['+ key +']['+out+']">' +
+                '<div class="help-block"></div>' +
+                '</div>' +
+                '</td>';
+            $(this).append(td);  
+        });
+    }
+// 从PHP里面获取列值并动态的加载出来
+var col = JSON.parse('{$col}');
+for(var colKey in col){
+    if(typeof(col[colKey]) != "string"){
+        addColumns(colKey,''); 
+        $.each(col[key],function(index,ele) {
+             // 逐个赋值
+             var selector = 'td .' + colKey;
+            $(selector).each(function(inx) {
+                if(inx==index){
+                    $(this).val(ele);
+                }
+            })
+        });
+    }
+}
+
+// 按钮添加列的按钮
 $('.kv-panel-before').after('<div align="right"><button class="btn add-col btn-warnning"><i class="glyphicon glyphicon-plus"></i></button></div>');
 
 //添加列的事件

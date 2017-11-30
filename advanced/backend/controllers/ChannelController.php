@@ -172,7 +172,6 @@ class ChannelController extends Controller
                 'pageSize' => 150,
             ],
         ]);
-
         if(Yii::$app->request->isPost){
 
         }
@@ -273,10 +272,27 @@ class ChannelController extends Controller
             ],
         ]);
         $propertyVar = OaTemplatesVar::find()->where(['tid'=>$id])->all();
+        $columns = [];
+        foreach ($propertyVar as $row){
+            $pro = json_decode($row->property,true);
+            $columns['pictureKey'] = $pro['pictureKey'];
+            $col = $pro['columns'];
+            foreach ($col as $ele){
+                foreach ($ele as $key=>$value){
+                    if(array_key_exists($key,$columns)){
+                        array_push($columns[$key],$value);
+                    }
+                    else{
+                        $columns[$key] =[$value];
+                    }
+                }
+            }
+        }
         return $this->renderAjax('templatesVar',[
             'templatesVar' => $templatesVar,
             'tid' => $id,
             'propertyVar' => $propertyVar,
+            'columns' => $columns,
         ]);
     }
 
