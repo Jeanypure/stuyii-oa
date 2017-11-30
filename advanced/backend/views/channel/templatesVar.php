@@ -141,7 +141,7 @@ var col = JSON.parse('{$col}');
 for(var colKey in col){
     if(typeof(col[colKey]) != "string"){
         addColumns(colKey,''); 
-        $.each(col[key],function(index,ele) {
+        $.each(col[colKey],function(index,ele) {
              // 逐个赋值
              var selector = 'td .' + colKey;
             $(selector).each(function(inx) {
@@ -370,7 +370,6 @@ $('#add-row').click(function() {
     
 // 点击触发编辑事件
 $(".table").find("th ").bind("dblclick", function () {
-        // alert("Hi!");
         var input = "<input type='text' id='temp' style='width:130px;' value=" + $(this).text() + " >";
         $(this).text("");
         $(this).append(input);
@@ -402,7 +401,6 @@ $('th').attr('class',"kv-align-top");
 $('#save-only').click(function() {
     //获取选中的图片关联选项
     var picKey = $('.assoc_pic_key').find("input[name='picKey']:checked").val();
-    alert(picKey);
     //ajax 提交方式
    var varForm = $('#var-form').serialize();
    $.ajax({
