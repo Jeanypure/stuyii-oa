@@ -18,7 +18,6 @@ $skuForm = ActiveForm::begin([
             'template' =>'{delete}',
             'buttons' => [
                 'delete' => function ($url, $model, $key) {
-//                    $url ='/wishgoodssku/delete';
                     $options = [
                         'title' => '删除',
                         'aria-label' => '删除',
@@ -60,13 +59,21 @@ $skuForm = ActiveForm::begin([
                 'options'=>['class'=>'linkurl'],
             ],
 
+            'image'=>
+                [
+                    'label'=>'图片',
+                    'type'=>TabularForm::INPUT_RAW,
+                    'options' => ['class' => 'image'],
+                    'value'=>function($data){return "<img weight='50' height='50' src='".$data->linkurl."'>";}
+                ],
+
 
         ],
 
         // configure other gridview settings
         'gridSettings'=>[
             'panel'=>[
-                'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i> 多属性SKU</h3>',
+//                'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i> 多属性SKU</h3>',
                 'type'=>GridView::TYPE_PRIMARY,
                 'footer'=>true,
                 'after'=>
@@ -98,6 +105,7 @@ $skuForm = ActiveForm::begin([
 <?php
 
 $js2 = <<<JS
+
 
     //sku信息保存
     $('#save-sku').on('click',function(){
@@ -255,8 +263,25 @@ $this->registerJs($js2);
 <style>
     @media (min-width: 768px) {
         .modal-xl {
-            width: 100%;
+            width: 70%;
             /*max-width:1200px;*/
         }
+    }
+
+    .panel-primary > .panel-heading {
+        color: black;
+        background-color: whitesmoke;
+        border-color: transparent;
+    }
+    .panel-primary {
+        border-color: transparent;
+    }
+
+    .panel-footer {
+        padding: 10px 15px;
+        background-color: white;
+        border-top: 1px solid #ddd;
+        border-bottom-right-radius: 3px;
+        border-bottom-left-radius: 3px;
     }
 </style>

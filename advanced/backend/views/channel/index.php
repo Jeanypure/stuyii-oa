@@ -1,8 +1,6 @@
 <?php
-
 use yii\helpers\Html;
 use yii\grid\GridView;
-
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\ChannelSearch */
@@ -12,8 +10,6 @@ $this->title = Yii::t('app', '平台信息');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="channel-index">
-
-
 
     <p>
         <?= Html::a(Yii::t('app', '标记已完善'), ['create'], ['class' => 'btn btn-success']) ?>

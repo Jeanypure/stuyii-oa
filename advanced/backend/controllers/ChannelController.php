@@ -91,45 +91,47 @@ class ChannelController extends Controller
      * If update is successful, the browser will be redirected to the 'editwish' page.
      * @param integer $id.
      * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
      */
 
     public function actionUpdate($id)
     {
 
-        $info = Channel::findOne($id);
-        $Goodssku = Goodssku::find()->where(['pid'=>$id])->all();
         $sku = OaWishgoods::find()->where(['infoid'=>$id])->all();
+
         $dataProvider = new ActiveDataProvider([
             'query' => Wishgoodssku::find()->where(['pid'=>$id]),
             'pagination' => [
-                'pageSize' => 10,
+                'pageSize' => 150,
             ],
         ]);
-        if (!$info) {
 
-            throw new \NotFoundHttpException("The product was not found.");
+        if (!$sku) {
+            throw new NotFoundHttpException("The product was not found.");
         }
-
-
 
         if($sku[0]->load(Yii::$app->request->post())){
             $dataPost =  $_POST;
             $sku[0]['main_image'] =  $dataPost['main_image'];
             unset( $sku[0]['extra_images']);
             foreach($dataPost["extra_images"] as $key=>$value){
-                $sku[0]['extra_images'] .= $value."\r\n";
+                $sku[0]['extra_images'] .= $value."\n";
 
             }
 
+            $sku[0]['extra_images'] = rtrim($sku[0]['extra_images'], "\n");
+
+
             $sku[0]->update(false);
             echo '更新成功！';
-//            return $this->redirect(['update','id'=>$info->pid]);
 
         }else{
+
+            $extra_images =  explode("\n", $sku[0]['extra_images']) ;
+
             return $this->render('editwish',[
-                'info' =>$info,
                 'dataProvider' => $dataProvider,
-                'Goodssku' => $Goodssku[0],
+                'extra_images' => $extra_images,
                 'sku' => $sku[0],
 
             ]);
@@ -140,7 +142,7 @@ class ChannelController extends Controller
     /*
      * 多属性信息
      */
-    public function actionVarations($id='86'){
+    public function actionVarations($id){
         $sku = OaWishgoods::find()->where(['infoid'=>$id])->all();
         $dataProvider = new ActiveDataProvider([
             'query' => Wishgoodssku::find()->where(['pid'=>$id]),
