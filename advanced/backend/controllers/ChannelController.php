@@ -118,7 +118,9 @@ class ChannelController extends Controller
                 $sku[0]['extra_images'] .= $value."\n";
 
             }
+
             $sku[0]['extra_images'] = rtrim($sku[0]['extra_images'], "\n");
+
 
             $sku[0]->update(false);
             echo '更新成功！';
@@ -162,24 +164,16 @@ class ChannelController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdateEbay($id)
+    public function actionUpdateEbay($id=45)
     {
 
         $info = OaTemplates::find()->where(['infoid' =>$id])->one();
-        $Goodssku = Goodssku::find()->where(['pid'=>$id])->all();
         $templatesVar = new ActiveDataProvider([
             'query' => OaTemplatesVar::find()->where(['tid' =>$id]),
             'pagination' => [
                 'pageSize' => 150,
             ],
         ]);
-        $dataProvider = new ActiveDataProvider([
-            'query' => Goodssku::find()->where(['pid'=>$id]),
-            'pagination' => [
-                'pageSize' => 10,
-            ],
-        ]);
-
         if(Yii::$app->request->isPost){
 
         }
@@ -188,8 +182,6 @@ class ChannelController extends Controller
             $OutShippingService = $this->getShippingService('Out');
             return $this->render('update',[
                 'info' =>$info,
-                'dataProvider' => $dataProvider,
-                'Goodssku' => $Goodssku[0],
                 'templatesVar' => $templatesVar,
                 'inShippingService' => $inShippingService,
                 'outShippingService' => $OutShippingService,
@@ -199,34 +191,61 @@ class ChannelController extends Controller
 
     }
 
-
     /**
-     * 多属性保存
+     * ebay基本信息保存
+     * @param $id
+     */
+
+    public function  actionEbaySave($id=45){
+        $template = OaTemplates::find()->where(['infoid'=>$id])->one();
+        $data = $_POST['OaTemplates'];
+        $template->setAttributes($data,true);
+        if($template->update(false)){
+            echo "保存成功";
+        }
+        else {
+            echo "保存失败";
+        }
+
+    }
+    /**
+     * @brief 多属性保存
      * @param $id
      */
     public function actionVarSave($id)
     {
         $varData = $_POST['OaTemplatesVar'];
-        $label = json_decode($_POST['label'],true);
+        $pictureKey = $_POST['picKey'];
+        $var = new OaTemplatesVar();
+        $fields = $var->attributeLabels();
+        $row = [];
         foreach ($varData as $key=>$value)
         {
             $value['tid'] = $id;
-            //设置标签
-            foreach($label as $property=>$name){
-                if(!empty($name)){
-                    $value[$property] = "{$name}:{$value[$property]}";
+            //动态生成property列的值
+            $property = ['columns' => [],'pictureKey'=>$pictureKey];
+            foreach ($value as $field=>$val)
+            {
+
+                if (in_array($field,array_keys($fields)))
+                {
+                    $row[$field] = $val;
+                }
+                else{
+                    array_push($property['columns'],[$field=>$val]);
                 }
             }
+            $row['property'] = json_encode($property);
             if(strpos($key, 'New') ===false){
                 //update
                 $ret =$this->findVar($key);
-                $ret->setAttributes($value,$safeOnly=false);
+                $ret->setAttributes($row,$safeOnly=false);
                 $ret->save(false);
             }
             else{
                 //create
                 $model = new OaTemplatesVar();
-                $model->setAttributes($value);
+                $model->setAttributes($row);
                 if($model->save(false)){
 
                 }
@@ -255,10 +274,27 @@ class ChannelController extends Controller
             ],
         ]);
         $propertyVar = OaTemplatesVar::find()->where(['tid'=>$id])->all();
+        $columns = [];
+        foreach ($propertyVar as $row){
+            $pro = json_decode($row->property,true);
+            $columns['pictureKey'] = $pro['pictureKey'];
+            $col = $pro['columns'];
+            foreach ($col as $ele){
+                foreach ($ele as $key=>$value){
+                    if(array_key_exists($key,$columns)){
+                        array_push($columns[$key],$value);
+                    }
+                    else{
+                        $columns[$key] =[$value];
+                    }
+                }
+            }
+        }
         return $this->renderAjax('templatesVar',[
             'templatesVar' => $templatesVar,
             'tid' => $id,
             'propertyVar' => $propertyVar,
+            'columns' => $columns,
         ]);
     }
 

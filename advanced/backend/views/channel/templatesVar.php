@@ -9,48 +9,49 @@ use kartik\widgets\ActiveForm;
 use kartik\builder\TabularForm;
 use kartik\grid\GridView;
 use yii\helpers\Html;
+use kartik\dialog\Dialog;
 
-//动态的去判断属性的名称和值
-//var_dump($propertyVar);die
-$property1Len = 0;
-$property2Len = 0;
-$property3Len = 0;
-$property1Vis = true;
-$property2Vis = true;
-$property3Vis = true;
-$property1Lab = '款式-1';
-$property2Lab = '款式-2';
-$property3Lab = '款式-3';
-$metaProperty = [
-    'property1'
+//动态的添加列
+$pictureKey = $columns['pictureKey'];
+$col = json_encode($columns);
+
+$attributes  = [
+    'sku'=>
+        [
+            'label'=>'SKU', 'type'=>TabularForm::INPUT_TEXT,
+            'options'=>['class'=>'sku'],
+        ],
+    'quantity'=>
+        [
+            'type'=>TabularForm::INPUT_TEXT,
+            'options'=>['class'=>'quantity','value' => 5],
+
+        ],
+    'retailPrice'=>
+        [
+            'type'=>TabularForm::INPUT_TEXT,
+            'options'=>['class'=>'retailPrice'],
+        ],
+    'imageUrl' =>
+        [
+            'type' => TabularForm::INPUT_TEXT,
+            'options' => ['class' =>'imageUrl'],
+        ],
+    'image'=>
+        [
+            'type'=>TabularForm::INPUT_RAW,
+            'options' => ['class' => 'image'],
+            'value'=>function($data){return "<img weight='50' height='50' src='".$data->imageUrl."'>";}
+        ],
+    'UPC'=>
+        [
+            'type'=>TabularForm::INPUT_TEXT,
+            'options'=>['class'=>'UPC','value' => 'Does not apply'],
+
+        ],
+
 ];
-foreach ($propertyVar as $row){
-    $property1Len += strlen($row->property1);
-    $property2Len += strlen($row->property2);
-    $property3Len += strlen($row->property3);
-}
-if($property1Len==0){
-    $property1Vis = false;
-}
-else{
-    $dump = $propertyVar[0]->property1;
-    $property1Lab = explode(':',$dump)[0];
-}
 
-if($property2Len==0){
-    $property2Vis = false;
-}
-else{
-    $dump = $propertyVar[0]->property2;
-    $property2Lab = explode(':',$dump)[0];
-}
-if($property3Len==0){
-    $property3Vis = false;
-}
-else{
-    $dump = $propertyVar[0]->property2;
-    $property2Lab = explode(':',$dump)[0];
-}
 ?>
 
 <div class="">
@@ -75,84 +76,10 @@ else{
                             }
                         ]
                 ],
-            'attributes' =>
-                [
-                    'sku'=>
-                        [
-                            'label'=>'SKU', 'type'=>TabularForm::INPUT_TEXT,
-                            'options'=>['class'=>'sku'],
-                        ],
-                    'quantity'=>
-                        [
-                            'type'=>TabularForm::INPUT_TEXT,
-                            'options'=>['class'=>'quantity','value' => 5],
-
-                        ],
-                    'retailPrice'=>
-                        [
-                            'type'=>TabularForm::INPUT_TEXT,
-                            'options'=>['class'=>'retailPrice'],
-                        ],
-                    'imageUrl' =>
-                        [
-                            'type' => TabularForm::INPUT_TEXT,
-                            'options' => ['class' =>'imageUrl']
-                        ],
-                    'image'=>
-                        [
-                            'type'=>TabularForm::INPUT_RAW,
-                            'options' => ['class' => 'image'],
-                            'value'=>function($data){return "<img weight='50' height='50' src='".$data->imageUrl."'>";}
-                        ],
-
-                    'property1'=>
-                        [
-                            'type'=>TabularForm::INPUT_RAW,
-                            'options'=>[
-                                'class'=>'property1',
-                            ],
-
-                            'value'=>function($data,$key)
-                            {
-                                $property = $data->property1;
-                                $ret = explode(':',$property)[1];
-                                return '<input type="text"  class="property1 form-control kv-align-top" name="OaTemplatesVar['.$key.'][property1]" value="'.$ret.'">';
-                            },
-                            'label' => $property1Lab,
-                            'visible' =>$property1Vis,
-                        ],
-                    'property2'=>
-                        [
-                            'type'=>TabularForm::INPUT_TEXT,
-                            'options'=>['class'=>'property2'],
-                            'value'=>function(){},
-                            'label' => '',
-                            'visible' =>$property2Vis,
-                        ],
-                    'property3'=>
-                        [
-                            'type'=>TabularForm::INPUT_TEXT,
-                            'options'=>['class'=>'property3'],
-                            'value'=>function(){},
-                            'label' => '',
-                            'visible' =>$property3Vis,
-                        ],
-                    'UPC'=>
-                        [
-                            'type'=>TabularForm::INPUT_TEXT,
-                            'options'=>['class'=>'UPC','value' => 'Does not apply'],
-
-                        ],
-                    'EAN'=>
-                        [
-                            'type'=>TabularForm::INPUT_TEXT,
-                            'options'=>['class'=>'EAN','value' => 'Does not apply'],
-
-                        ],
-                ],
+            'attributes' => $attributes,
             'gridSettings'=>[
             'panel'=>[
-                'heading'=>'<h3 class="panel-title">多属性设置</h3>',
+                'heading'=>'<div><h3 class="panel-title">多属性设置</h3></div>',
                 'type'=>GridView::TYPE_PRIMARY,
                 'after'=>
                     Html::input('text','rowNum','',['class' => 'x-row','placeholder'=>'行数']).' '.
@@ -176,13 +103,106 @@ else{
 </div>
 
 <?php
+// widget with default options
+echo Dialog::widget([
+    'libName' => 'krajeeDialogCust',
+    'options' => ['draggable' => true, 'closable' => true], // custom options
+]);
 $js = <<< JS
 
+// 加载图片关联
+$('.kv-panel-pager').append('<div class="radio"><span class="assoc_pic_key">图片关联： <label class="radio-inline"><input name="picKey" type="radio" checked="true" value="{$pictureKey}">{$pictureKey}</label></span></div>');
+
+//添加列的函数
+    function addColumns(out,value=''){
+        var seq = 0;
+        $('#var-table').find('th').each(function() {
+            seq +=1;
+        });
+        seq = seq -1; //减去固定列的数量
+        var nextSeq = seq + 1;
+        var th = '<th class="kv-align-top"  style="width: 5.01%;" data-col-seq="'+nextSeq +'"><input  type="text" size="6" value= "'+ out +'"><span class="remove-col glyphicon glyphicon-remove"></span></button></th>';
+        var thSelector = 'th[data-col-seq="'+seq+'"]';
+        $(thSelector).after(th);
+        // var tdSelector = 'td[data-col-seq="'+seq+'"]';
+        $('#var-table').find('tbody').find('tr').each(function() {
+            var key = $(this).attr('data-key');
+            var td = '<td class="kv-align-top" data-col-seq="'+ nextSeq +'">' +
+                '<div class="form-group field-oatemplatesvar-'+ key +'-'+ out+ '">' +
+                '<input type="text" id="oatemplatesvar-'+ key +'-'+ out +'" class="'+out+' form-control" value="'+ value +'"name="OaTemplatesVar['+ key +']['+out+']">' +
+                '<div class="help-block"></div>' +
+                '</div>' +
+                '</td>';
+            $(this).append(td);  
+        });
+    }
+// 从PHP里面获取列值并动态的加载出来
+var col = JSON.parse('{$col}');
+for(var colKey in col){
+    if(typeof(col[colKey]) != "string"){
+        addColumns(colKey,''); 
+        $.each(col[key],function(index,ele) {
+             // 逐个赋值
+             var selector = 'td .' + colKey;
+            $(selector).each(function(inx) {
+                if(inx==index){
+                    $(this).val(ele);
+                }
+            })
+        });
+    }
+}
+
+// 按钮添加列的按钮
+$('.kv-panel-before').after('<div align="right"><button class="btn add-col btn-warnning"><i class="glyphicon glyphicon-plus"></i></button></div>');
+
+//添加列的事件
+$('.add-col').on('click',function() {
+    //对话框交互
+    krajeeDialogCust.prompt({placeholder:'属性名称'}, function(out){
+        if (out) {
+            // 开始增加新列
+            var seq = 0;
+            $('#var-table').find('th').each(function() {
+                seq +=1;
+            });
+            seq = seq -1; //减去固定列的数量
+            var nextSeq = seq + 1;
+            var th = '<th class="kv-align-top"  style="width: 5.01%;" data-col-seq="'+nextSeq +'"><input  type="text" size="6" value= "'+ out +'"><span class="remove-col glyphicon glyphicon-remove"></span></button></th>';
+            var thSelector = 'th[data-col-seq="'+seq+'"]';
+            $(thSelector).after(th);
+            // var tdSelector = 'td[data-col-seq="'+seq+'"]';
+            $('#var-table').find('tbody').find('tr').each(function() {
+                var key = $(this).attr('data-key');
+                var td = '<td class="kv-align-top" data-col-seq="'+ nextSeq +'">' +
+                    '<div class="form-group field-oatemplatesvar-'+ key +'-'+ out+ '">' +
+                    '<input type="text" id="oatemplatesvar-'+ key +'-'+ out +'" class="'+out+' form-control" name="OaTemplatesVar['+ key +']['+out+']">' +
+                    '<div class="help-block"></div>' +
+                    '</div>' +
+                    '</td>';
+                $(this).append(td);  
+            });
+            //顺便添加图片关联选项
+            var option = '<label  class=" seq-'+ nextSeq +' radio-inline"><input name="picKey" value="'+ out+'" type="radio">'+ out +'</label>';
+            $('.assoc_pic_key').append(option);
+        }
+    });
+    return false;
+});
+
+//删除当前列
+$('table').on('click','.remove-col',function() {
+    var index = $(this).closest('th').attr('data-col-seq'); //找到列数
+    var selector = "[data-col-seq='" + index + "']";
+    var optionClass = '.seq-' + index;
+    $(optionClass).remove(); //删除图片关联选项
+    $(selector).remove();
+});
 //删除选中行
 
 $('#delete-row').click(function() {
     var ids = [];
-    $("[name='selection[]']:checkbox:checked").each(function() {
+    $("[name='selection[]']:radio:checked").each(function() {
         id = $(this).closest('tr').attr('data-key');
         $(this).closest('tr').remove();  
         if(id){
@@ -215,7 +235,7 @@ $('#add-row').click(function() {
         
         var checkBoxTd =$(
             '<td class="skip-export kv-align-center kv-align-middle kv-row-select" style="width:50px;" data-col-seq="1">' +
-            '<input type="checkbox" class="kv-row-checkbox" name="selection[]" >' +
+            '<input type="radio" class="kv-row-radio" name="selection[]" >' +
              '</td>');
         row.append(checkBoxTd);
         
@@ -234,19 +254,23 @@ $('#add-row').click(function() {
             '价格':'reailPrice',
             '图片地址':'imageUrl',
             '图片':'image',
-            '{$property1Lab}':'property1',
-            '{$property2Lab}':'property2',
-            '{$property3Lab}':'property3',
             'UPC':'UPC',
             'EAN':'EAN'
+            
         };
         var inputFields = [];
-        $('thead th').each(function(index,element) {
-           var cnName = $.trim($(this).text());
-           var enName = fieldsMap[cnName];
-           if((typeof(enName) != "undefined")){
+        $('#var-table').find('th').each(function(index,element) {
+            if (index>2){
+                var cnName = $.trim($(this).text());
+                var enName = fieldsMap[cnName];
+                if((typeof(enName) != "undefined")){
                 inputFields.push(enName); 
-           }
+                }
+                else {
+                var name = $(this).find('input').val();
+                inputFields.push(name);
+                }  
+            }
         });
         // var inputFields = ['sku','quantity','reailPrice','imageUrl','image','property1','property2','property3','UPC','EAN'];
         for(var i=3; i< inputFields.length + 3; i++){
@@ -370,35 +394,16 @@ $('thead').find("th").each(function() {
 
 //设置所有输入框的样式为 kv-align-top
 $('td').attr('class',"kv-align-top");
+$('th').attr('class',"kv-align-top");
 
-// 删除列事件
-$('.remove-col').click(function() {
-    var index = $(this).closest('th').attr('data-col-seq'); //找到列数
-    var selector = "[data-col-seq='" + index + "']";
-    $(selector).remove();
-});
 
 
 //保存按钮事件
 $('#save-only').click(function() {
-    //计算label值;动态的计算label值
-    
-    var sequences = {"property1":'.property1',"property2":'.property2',"property3":'.property3'};
-    for (var key in sequences)
-    {   
-        var seq = $(sequences[key]).closest('td').attr('data-col-seq');
-        if(seq){
-             var condation = 'th[data-col-seq="'+ seq+'"]';
-           
-            sequences[key] = $(condation).text(); 
-        }
-        else{
-            sequences[key] = '';
-        }
-       
-    }
+    //获取选中的图片关联选项
+    var picKey = $('.assoc_pic_key').find("input[name='picKey']:checked").val();
+    alert(picKey);
     //ajax 提交方式
-   $('.label-input').val(JSON.stringify(sequences)); 
    var varForm = $('#var-form').serialize();
    $.ajax({
        type: "POST",

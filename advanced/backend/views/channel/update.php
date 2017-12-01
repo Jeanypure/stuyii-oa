@@ -2,9 +2,6 @@
 
 use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
-use kartik\builder\Form;
-use kartik\builder\FormGrid;
-use kartik\builder\TabularForm;
 use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Channel */
@@ -74,22 +71,22 @@ echo '<div class="form-group field-oatemplates-mainpage">
     </div>
 </div>'
 ;?>
-<?= $form->field($info,'extraPage')->textarea(['style'=>'display:']); ?>
+<?= $form->field($info,'extraPage')->textarea(['style'=>'display:none']); ?>
 <?php
 echo '<div class="images">';
-for($i=1;$i<=12;$i++){
+$images = json_decode($info->extraPage,true)['images'];
+foreach($images as $key=>$image){
     echo '<div class="form-group all-images">
-    
     <label class="col-lg-1"></label>
-    <strong class="serial">#'.$i.'</strong>
-    <div class="col-lg-3"><input  type="text" class="form-control extra-images" value="https://www.tupianku.com/view/full/10023/'.$info->sku.'-_'.$i.'_.jpg"></div>
+    <div class="col-lg-3"><input  type="text" class="form-control extra-images" value="'.$image.'"></div>
     <div class="col-lg=1">
+    <strong class="serial">#'.($key+1).'</strong>
     <button  class="btn add-images">增加</button>
     <button  class="btn btn-error remove-image">删除</button>
     <button class="btn up-btn btn-error">上移动</button>
     <button class="btn down-btn btn-error">下移动</button>
-    <a target="_blank" href="https://www.tupianku.com/view/full/10023/'.$info->sku.'-_'.$i.'_.jpg">
-    <img src="https://www.tupianku.com/view/full/10023/'.$info->sku.'-_'.$i.'_.jpg" width="50" height="50">
+    <a target="_blank" href="'.$image.'">
+    <img src="'.$image.'" width="50" height="50">
     </a>
     </div>
 </div>';
@@ -122,7 +119,6 @@ echo '</div>';
 <div>
 <?= $form->field($info,'listedCate')->textInput(); ?>
 <?= $form->field($info,'listedSubcate')->textInput(); ?>
-<?= $form->field($info,'listedSubcate')->textInput(); ?>
 <?= $form->field($info,'title')->textInput(); ?>
 <?= $form->field($info,'subTitle')->textInput(); ?>
 <?= $form->field($info,'description')->textarea(['rows'=>6]); ?>
@@ -137,8 +133,9 @@ echo '</div>';
 </div>
 </br>
 <div>
-    <?= $form->field($info,'specifics')->textarea(['row' =>6]); ?>
+    <?= $form->field($info,'specifics')->textarea(['style'=>'display:none'])->label(false); ?>
     <?php
+    $specifics = json_decode($info->specifics,true)['specifics'];
     echo
     '<div class="row"><div class="col-lg-6"><table class="specifics-tab table table-hover">
     <thead>
@@ -147,44 +144,14 @@ echo '</div>';
     <th>属性内容</th>
     </tr>
     </thead>
-    <tbody>
-    <tr>
-    <th>Brand</th>
-    <td><input size="40"></td>
-    </tr>
-    <tr>
-    <th>Type</th>
-    <td><input size="40"></td>
-    </tr>
-    <tr>
-    <th>Material</th>
-    <td><input size="40"></td>
-    </tr>
-    <tr>
-    <th>IntendedUse</th>
-    <td><input size="40"></td>
-    </tr>
-    <tr>
-    <th>unit</th>
-    <td><input size="40"></td>
-    </tr>
-    <tr>
-    <th>bundleListing</th>
-    <td><input size="40"></td>
-    </tr>
-    <tr>
-    <th>shape</th>
-    <td><input size="40"></td>
-    </tr>
-    <tr>
-    <th>features</th>
-    <td><input size="40"></td>
-    </tr>
-    <tr>
-    <th>regionManufacture</th>
-    <td><input size="40"></td>
-    </tr>
-    </tbody>
+    <tbody>';
+    foreach($specifics as $row){
+        echo '<tr><th><input name="specificsKey" value="'.array_keys($row)[0].'"></th>
+    <td><input size="40" calss="specifics-value" value="'.array_values($row)[0].'">
+    <input type="button" value="删除" onclick="$(this.parentNode.parentNode).remove()"></td></tr>';
+    }
+    echo
+    '</tbody>
     </table>
     <button class=" add-specifics btn btn-default">增加属性</button>
     </div></div>';
@@ -204,7 +171,7 @@ echo '</div>';
 $form->field($info,'InshippingMethod1',$shipping_templates)->dropDownList($inShippingService,
     [
         'class' => 'col-lg-6',
-        'prompt'=>'--境内物流选择--',
+        'prompt'=>'Economy Shipping from outside US(11-23days)',
     ]
 ); ?>
 <?= $form->field($info,'InFirstCost1',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
@@ -225,7 +192,7 @@ $form->field($info,'InshippingMethod1',$shipping_templates)->dropDownList($inShi
         $form->field($info,'OutshippingMethod1',$shipping_templates)->dropDownList($outShippingService,
             [
                 'class' => 'col-lg-6',
-                'prompt'=>'--境外物流选择--',
+                'prompt'=>'Economy Shipping from China/Hong Kong/Taiwan to worldwide(11-35days)',
             ]
         ); ?>
     <?= $form->field($info,'OutFirstCost1',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
@@ -312,7 +279,7 @@ function addImages() {
 //增加属性的按钮
 
 $('.add-specifics').on('click',function() {
-    var key = '<tr><th><input type="text" name="specficsKey"></th>';
+    var key = '<tr><th><input  type="text" name="specificsKey"></th>';
     var value = '<td><input type="text" size="40" name="specficsValue"> ';
     var delBtn = '<input type="button" value="删除" onclick="$(this.parentNode.parentNode).remove()"></td></tr>';
     $('.specifics-tab').append(key + value + delBtn);
@@ -325,14 +292,13 @@ $('.add-specifics').on('click',function() {
         textarea = $('#oatemplates-specifics');
         var specifics = [];
         $('.specifics-tab').find('input[size="40"]').each(function() {
-            var key = $(this).parents('tr').find('th').text();
+            var key = $(this).parents('tr').find('input[name="specificsKey"]').val();
             var value = $(this).val();
-            if(key == ''){
-                var key = $(this).parents('tr').find('th').find('input').val();
-            }
-            specifics.push([key,value]);
+            var map ={};
+            map[key] = value;
+            specifics.push(map);
         });
-        textarea.text(JSON.stringify({sepecifices:specifics}));
+        textarea.text(JSON.stringify({specifics:specifics}));
     }
 allSpecifics();
 
@@ -341,10 +307,14 @@ $('.specifics-tab').on('change','input[size="40"]',function() {
     allSpecifics();
 });
 
+
+$('.specifics-tab').on('change','input[name="specificsKey"]',function() {
+    allSpecifics();
+});
+
 //绑定上移事件
 $('body').on('click','.up-btn',function() {
     var point = $(this).closest('div .form-group').find('strong').text().replace('#','');
-    alert(point);
     if(point > 1){
         var temp = $(this).closest('div .all-images').clone(true);
         $(this).closest('div .all-images').prev().before(temp);
@@ -363,7 +333,6 @@ $('body').on('click','.up-btn',function() {
 //绑定下移事件
 $('body').on('click','.down-btn',function() {
     var point = $(this).closest('div .form-group').find('strong').text().replace('#','');
-    alert(point);
     if(point < 12){
         var temp = $(this).closest('div .all-images').clone(true);
         $(this).closest('div .all-images').next().after(temp);
@@ -422,6 +391,19 @@ $(".var-btn").click(function() {
         }
     );
 });
+
+
+//保存按钮
+$('#save-only').on('click',function() {
+    $.ajax({
+        url:'/channel/ebay-save',
+        type:'post',
+        data:$('#msg-form').serialize(),
+        success:function(ret) {
+            alert(ret);
+        }
+    });
+})
 JS;
 $this->registerJs($js);
 ?>
