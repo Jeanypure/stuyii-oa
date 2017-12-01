@@ -33,3 +33,4 @@ phpunit.phar
 
 # vagrant runtime
 /.vagrant
+/advanced/backend/web/php-info.php
