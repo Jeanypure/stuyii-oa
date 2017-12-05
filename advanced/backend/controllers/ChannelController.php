@@ -397,16 +397,7 @@ class ChannelController extends Controller
         header('Content-Disposition: attachment;filename='.$fileName .' ');
         header('Cache-Control: max-age=0');
 
-    /*
-    *编辑完成状态
-    */
-    public function actionWishSign($id){
-        $completeStatus = Channel::find()->where(['pid'=>$id])->all();
-        $completeStatus[0]->completeStatus = 'Wish已完善';
-        $completeStatus[0]->update(false);
-        echo 'Wish已完善';
 
-    }
 
 
         //获取列名
@@ -519,5 +510,15 @@ class ChannelController extends Controller
 
     }
 
+    /*
+   *编辑完成状态
+   */
+    public function actionWishSign($id){
+        $completeStatus = Channel::find()->where(['pid'=>$id])->all();
+        $completeStatus[0]->completeStatus = 'Wish已完善';
+        $completeStatus[0]->update(false);
+        echo 'Wish已完善';
+
+    }
 
 }
