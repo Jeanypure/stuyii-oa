@@ -30,6 +30,7 @@ return [
     ],
     'aliases' => [
         '@mdm/admin' => '@vendor/mdmsoft/yii2-admin',
+        '@unitools' => '@app/unitools',
     ],
     'language' => 'zh-CN',
     'components' => [

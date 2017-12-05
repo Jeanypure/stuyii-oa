@@ -37,9 +37,9 @@ Modal::end();
 </br>
 <div class="st">
     <p>
-        <?= Html::button('保存当前数据', ['id' => 'save-only','class' =>'btn btn-default']) ?>
-        <?= Html::button('保存并完善', ['id' => 'save-complete','class' =>'btn btn-default']) ?>
-        <?= Html::button('导出刊登模板', ['id' => 'import-templates','class' =>'btn btn-default']) ?>
+        <?= Html::button('保存当前数据', ['class' =>' save-only btn btn-default']) ?>
+        <?= Html::button('保存并完善', ['class' =>'save-complete btn btn-default']) ?>
+        <?= Html::button('导出刊登模板', ['class' =>'export-ebay btn btn-default']) ?>
     </p>
 </div>
 </br>
@@ -207,7 +207,17 @@ $form->field($info,'InshippingMethod1',$shipping_templates)->dropDownList($inShi
     <?= $form->field($info,'OutFirstCost2',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
     <?= $form->field($info,'OutSuccessorCost2',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
     </div>
+
 </div>
+<br>
+    <hr>
+    <div class="st">
+        <p>
+            <?= Html::button('保存当前数据', ['class' =>' save-only btn btn-default']) ?>
+            <?= Html::button('保存并完善', ['class' =>'save-complete btn btn-default']) ?>
+            <?= Html::button('导出刊登模板', ['class' =>'export-ebay btn btn-default']) ?>
+        </p>
+    </div>
 </div>
 
 
@@ -225,7 +235,13 @@ $form->field($info,'InshippingMethod1',$shipping_templates)->dropDownList($inShi
 </style>
 
 <?php
+$exportUlr = URL::toRoute(['export-ebay','id'=>$info->nid]);
+
 $js  = <<< JS
+//信息保存
+$(".export-ebay").on('click',function() {
+    window.location.href='{$exportUlr}';
+});
 //如果图片地址不改变就直接用原始数据
     function allImags() {
         var images = new Array();
@@ -394,7 +410,7 @@ $(".var-btn").click(function() {
 
 
 //保存按钮
-$('#save-only').on('click',function() {
+$('.save-only').on('click',function() {
     $.ajax({
         url:'/channel/ebay-save',
         type:'post',
