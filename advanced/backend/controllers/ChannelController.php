@@ -2,7 +2,7 @@
 
 namespace backend\controllers;
 
-
+use backend\unitools\PHPExcelTools;
 use Yii;
 use backend\models\Channel;
 
@@ -352,7 +352,7 @@ class ChannelController extends Controller
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
      * @return Channel the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws /NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
@@ -377,6 +377,26 @@ class ChannelController extends Controller
         return $options;
     }
 
+    /**
+     * @brief 导出ebay模板
+     * @param $id
+     */
+    public  function  actionExportEbay($id)
+    {
+        $sql = 'oa_P_ebayTemplates';
+        $query = yii::$app->db->createCommand($sql);
+        $ret = $query->queryAll();
+
+        $objPHPExcel = new \PHPExcel();
+        $sheetNumber= 0;
+        $objPHPExcel->setActiveSheetIndex($sheetNumber);
+        $sheetName = 'ebay模板';
+        $objPHPExcel->getActiveSheet()->setTitle($sheetName);
+        header('Content-Type: application/vnd.ms-excel');
+        $fileName = "eBay模板-".date("d-m-Y-His").".xls";
+        header('Content-Disposition: attachment;filename='.$fileName .' ');
+        header('Cache-Control: max-age=0');
+
     /*
     *编辑完成状态
     */
@@ -388,6 +408,27 @@ class ChannelController extends Controller
 
     }
 
+
+        //获取列名
+        $tabFields = [];
+        if(!empty($ret)){
+            $tabFields = array_keys($ret[0]);
+        }
+
+        // 写入列名
+        foreach($tabFields as $num => $name){
+            $objPHPExcel->getActiveSheet()->setCellValue(PHPExcelTools::stringFromColumnIndex($num).'1',$name);
+        }
+
+        //写入单元格值
+        foreach ($ret as $rowNum => $row) {
+            foreach($tabFields as $num => $name){
+                $objPHPExcel->getActiveSheet()->setCellValue(PHPExcelTools::stringFromColumnIndex($num).($rowNum + 2),$row[$name]);
+            }
+        }
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+    }
     //导出数据
     public  function actionExport($id){
 

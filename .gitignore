@@ -5,7 +5,7 @@
 
 # phpstorm project files
 .idea
-
+.demo.sql
 # netbeans project files
 nbproject
 
@@ -33,3 +33,5 @@ phpunit.phar
 
 # vagrant runtime
 /.vagrant
+/advanced/backend/web/php-info.php
+/demo.sql
