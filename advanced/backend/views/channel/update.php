@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use yii\helpers\Url;
+use yii\bootstrap\Tabs;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Channel */
 
@@ -26,14 +27,37 @@ Modal::begin([
 //echo
 Modal::end();
 ?>
+<?=
+ Tabs::widget([
 
-<div class="channel-update">
+    'items' => [
+        [
+            'label' => 'Wish',
+            'url' => '/channel/update?id='.$info->infoid,
 
-    <ul class="nav nav-tabs">
-        <li role="presentation" class="active"><a href="#">eBay</a></li>
-        <li role="presentation"><a href="#">Wish</a></li>
-    </ul>
-</div>
+            'headerOptions' => ["id" => 'tab1'],
+            'options' => ['id' => 'article'],
+
+        ],
+        [
+            'label' => 'eBay',
+            'url' => '/channel/update-ebay?id='.$info->infoid,
+            'headerOptions' => ["id" => 'tab1'],
+            'options' => ['id' => 'topic'],
+            'active' => true,
+        ],
+
+
+    ],
+]);?>
+
+<!--<div class="channel-update">-->
+<!---->
+<!--    <ul class="nav nav-tabs">-->
+<!--        <li role="presentation" class="active"><a href="#">eBay</a></li>-->
+<!--        <li role="presentation"><a href="#">Wish</a></li>-->
+<!--    </ul>-->
+<!--</div>-->
 </br>
 <div class="st">
     <p>
