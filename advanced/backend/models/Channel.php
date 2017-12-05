@@ -37,6 +37,7 @@ use Yii;
  * @property integer $StoreID
  * @property string $AttributeName
  * @property integer $bgoodsid
+ * @completeStatus varchar $completeStatus
  */
 class Channel extends \yii\db\ActiveRecord
 {
@@ -56,7 +57,7 @@ class Channel extends \yii\db\ActiveRecord
     {
         return [
             [['IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged', 'goodsid', 'SupplierID', 'StoreID', 'bgoodsid'], 'integer'],
-            [['description', 'GoodsName', 'AliasCnName', 'AliasEnName', 'PackName', 'Season', 'DictionaryName', 'SupplierName', 'StoreName', 'Purchaser', 'possessMan1', 'possessMan2', 'picUrl', 'GoodsCode', 'achieveStatus', 'developer', 'picStatus', 'AttributeName','completeStatus'], 'string'],
+            [['completeStatus','description', 'GoodsName', 'AliasCnName', 'AliasEnName', 'PackName', 'Season', 'DictionaryName', 'SupplierName', 'StoreName', 'Purchaser', 'possessMan1', 'possessMan2', 'picUrl', 'GoodsCode', 'achieveStatus', 'developer', 'picStatus', 'AttributeName','completeStatus'], 'string'],
             [['DeclaredValue'], 'number'],
             [['devDatetime', 'updateTime'], 'safe'],
         ];

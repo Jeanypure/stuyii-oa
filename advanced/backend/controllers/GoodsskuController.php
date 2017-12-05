@@ -168,6 +168,7 @@ class GoodsskuController extends Controller
     {
         $request = Yii::$app->request;
         $model = new Goodssku();
+
         if($request->isPost)
         {
             //提交过来的表单数据
@@ -265,9 +266,12 @@ class GoodsskuController extends Controller
                    $val_count = array_count_values($pic_url);
                    $res = array_key_exists('',  $val_count);
 
+
                    if(!$res){
-                        $sql_wish = "exec P_oaGoods_TowishGoods '".$pid."'";
-                        $posts = Yii::$app->db->createCommand($sql_wish)->execute();
+
+                     $sql_wish = "exec P_oaGoods_TowishGoods '".$pid."'";
+                     $posts = Yii::$app->db->createCommand($sql_wish)->execute();
+//
                     }
                     $this->redirect(['oa-goodsinfo/index']);
                     $this->redirect(['oa-picinfo/update','id'=>$pid]);

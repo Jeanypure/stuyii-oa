@@ -32,25 +32,30 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                 'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-9\">{error}</div>",
                 'labelOptions' => ['class' => 'col-lg-1 control-label'],
 
-            ]]);
-
-        $items[] = [
-        'label' => '产品平台',
-        'active' => false,
-         ];
-        $items[] = [
-            'label' => 'eBay',
-            'active' => false,
-        ];
-        $items[] = [
-            'label' => 'Wish',
-            'active' => true,
-        ];
-
-
-        echo Tabs::widget([
-            'items' => $items,
+            ]
         ]);
+
+    echo Tabs::widget([
+
+        'items' => [
+            [
+                'label' => 'Wish',
+                'url' => '/channel/update?id='.$sku->infoid,
+
+                'headerOptions' => ["id" => 'tab1'],
+                'options' => ['id' => 'article'],
+                'active' => true,
+            ],
+            [
+                'label' => 'eBay',
+                'url' => '/channel/update-ebay?id='.$sku->infoid,
+                'headerOptions' => ["id" => 'tab1'],
+                'options' => ['id' => 'topic'],
+            ],
+
+
+        ],
+    ]);
 
     ?>
     <div class="form-group blockTitle">
@@ -58,7 +63,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
         <botton class="btn btn-info update-info">
             更新
         </botton>
-        <botton class="btn btn-primary ">
+        <botton class="btn btn-primary wish-sign">
             保存并完善
         </botton>
         <botton class="btn btn-success export">
@@ -140,7 +145,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     <botton class="btn btn-info update-info">
         更新
     </botton>
-    <botton class="btn btn-primary ">
+    <botton class="btn btn-primary wish-sign">
         保存并完善
     </botton>
     <botton class="btn btn-success export">
@@ -296,15 +301,20 @@ $('body').on('click','.down-btn',function() {
 
   //导出数据到ibay 
     $('.export').on('click',function(){
+          window.location = '/channel/export?id='+$sku->infoid;
+    });
+    //标记wish已完成
+    $('.wish-sign').on('click',function(){
         $.ajax({
-            type:'POST',
-            url:'/channel/export?id='+$sku->infoid,
-            // data:,
-            success: function(){
-                window.location = '/channel/export?id='+$sku->infoid;
-
-            },
+            type:"POST",
+            url:'/channel/wish-sign?id='+$sku->infoid,
+            success:function(res) {
+                alert(res);
+              
+            }
         });
+      
+    
     });
 
 //删除附加图
