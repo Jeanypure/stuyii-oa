@@ -275,7 +275,6 @@ $(".tem-page").on('change',function() {
     $(this).parents('div .form-group').find('img').attr('src',new_image);
     //更新主图值
     $('.main-page').val(new_image);
-    
 })
 //信息保存
 $(".export-ebay").on('click',function() {
