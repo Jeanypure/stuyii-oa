@@ -85,9 +85,11 @@ Modal::end();
 </br>
 <?= $form->field($info,'sku')->textInput()?>
 <?php
+$mainPage = "https://www.tupianku.com/view/full/10023/$info->sku-_0_.jpg";
+ echo $form->field($info,'mainPage')->textInput(['class'=>'main-page','style'=>'display:none']);
 echo '<div class="form-group field-oatemplates-mainpage">
-    <label class="col-lg-1 control-label">主图</label>
-    <div class="col-lg-3"><input type="text" class="form-control" value="https://www.tupianku.com/view/full/10023/'.$info->sku.'-_0_.jpg"></div>
+    <label class="col-lg-1 control-label"></label>
+    <div class="col-lg-3"><input type="text" class="form-control tem-page" value="https://www.tupianku.com/view/full/10023/'.$info->sku.'-_0_.jpg"></div>
     <div class="col-lg=1"> 
     <a target="_blank" href="https://www.tupianku.com/view/full/10023/'.$info->sku.'-_0_.jpg">
     <img src="https://www.tupianku.com/view/full/10023/'.$info->sku.'-_0_.jpg" width="50" height="50">
@@ -262,6 +264,19 @@ $form->field($info,'InshippingMethod1',$shipping_templates)->dropDownList($inShi
 $exportUlr = URL::toRoute(['export-ebay','id'=>$info->nid]);
 
 $js  = <<< JS
+//主图赋值
+$('.main-page').val($('.tem-page').val());
+
+//监听主图变化事件
+$(".tem-page").on('change',function() {
+    //图片切换
+    new_image = $(this).val();
+    $(this).parents('div .form-group').find('a').attr('href',new_image);
+    $(this).parents('div .form-group').find('img').attr('src',new_image);
+    //更新主图值
+    $('.main-page').val(new_image);
+    
+})
 //信息保存
 $(".export-ebay").on('click',function() {
     window.location.href='{$exportUlr}';
@@ -405,7 +420,7 @@ $('body').on('click','.remove-image',function() {
 
 
 //实时刷新图片
-$('body').on('click','.extra-images',function() {
+$('body').on('change','.extra-images',function() {
     new_image = $(this).val();
     $(this).parents('div .form-group').find('a').attr('href',new_image);
     $(this).parents('div .form-group').find('img').attr('src',new_image);
@@ -420,6 +435,7 @@ $('body').on('click','.all-images',function() {
     });
     $('#oatemplates-extrapage').val(JSON.stringify({'images':images}));
 });
+
 
 
 // 多属性设置模态框
