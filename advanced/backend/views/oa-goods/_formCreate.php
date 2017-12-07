@@ -17,9 +17,6 @@ use yii\helpers\ArrayHelper;
             ]
         ]); ?>
 
-        <?= $form->field($model, 'img')->textInput() ?>
-
-
     <?php echo  $form->field($model, 'img',['template' => "<span style='color:red' >*{label}\n</span><div >{input}</div>\n<div >{error}</div>",])->textInput(['placeholder' => '--必填--']) ?>
 
 
