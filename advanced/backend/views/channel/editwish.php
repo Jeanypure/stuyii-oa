@@ -69,6 +69,9 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
         <botton class="btn btn-success export">
             导出ibay模版
         </botton>
+        <botton class="btn btn-warning Joom-csv">
+            导出Joom(csv)
+        </botton>
     </div>
     <div class="blockTitle">
         <p >基本信息</p>
@@ -150,6 +153,9 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     </botton>
     <botton class="btn btn-success export">
         导出ibay模版
+    </botton>
+    <botton class="btn btn-warning Joom-csv">
+        导出Joom(csv)
     </botton>
 </div>
 <?php  ActiveForm::end();?>
@@ -303,6 +309,12 @@ $('body').on('click','.down-btn',function() {
     $('.export').on('click',function(){
           window.location = '/channel/export?id='+$sku->infoid;
     });
+    
+    //导出数据Joom CSV
+    $('.Joom-csv').on('click',function(){
+         window.location = '/channel/export-joom?id='+$sku->infoid;
+    });
+    
     //标记wish已完成
     $('.wish-sign').on('click',function(){
         $.ajax({
