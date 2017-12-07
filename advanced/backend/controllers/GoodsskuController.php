@@ -260,17 +260,18 @@ class GoodsskuController extends Controller
 //                    }
 
 
-                    //新开产品导入模板表中 oa_wishgoods ,oa_wishgoodssku 存储过程P_oaGoods_TowishGoods
-                    //t图片不空 倒入模版
+                    //标记完善时，开产品导入ebay和wish模板
+
+                    //图片验空
                    $pic_url = array_column($Rows, 'linkurl');
                    $val_count = array_count_values($pic_url);
                    $res = array_key_exists('',  $val_count);
 
-
                    if(!$res){
+                       $sql_wish = "exec P_oaGoods_TowishGoods '".$pid."'";
+                       $sql_ebay = "";
+                       $posts = Yii::$app->db->createCommand($sql_wish)->execute();
 
-                     $sql_wish = "exec P_oaGoods_TowishGoods '".$pid."'";
-                     $posts = Yii::$app->db->createCommand($sql_wish)->execute();
 //
                     }
                     $this->redirect(['oa-goodsinfo/index']);
