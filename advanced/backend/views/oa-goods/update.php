@@ -60,7 +60,7 @@ $this->registerJs($JS);
                 var str="";
               $("select#oagoods-subcate").children("option").remove();
               $.each(data,function(k,v){
-                    str+="<option value="+v+">"+v+"</option>";
+                    str+="<option value="+k+">"+v+"</option>";
                     });
                 $("select#oagoods-subcate").html(str);
             });',
