@@ -43,12 +43,6 @@ $attributes  = [
             'options' => ['class' => 'image'],
             'value'=>function($data){return "<img weight='50' height='50' src='".$data->imageUrl."'>";}
         ],
-    'UPC'=>
-        [
-            'type'=>TabularForm::INPUT_TEXT,
-            'options'=>['class'=>'UPC','value' => 'Does not apply'],
-
-        ],
 
 ];
 

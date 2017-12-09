@@ -114,9 +114,10 @@ class OaCheckController extends Controller
         $ids = yii::$app->request->post()["id"];
         foreach ($ids as $id)
         {
-            $model = $this->findModel($id); //model   oa_goods
+
+            $model = $this->findModel($id);
             $model->checkStatus ='已审批';
-            $model->update(false);
+            $model->update(['checkStatus']);
             //插入到OagoodsInfo里面
             $developer = $model->developer;
             $_model = clone $_model;
@@ -127,7 +128,7 @@ class OaCheckController extends Controller
             $_model->picUrl = $img;
             $_model->developer =$developer;
             $_model->devDatetime =strftime('%F %T');;
-            $_model->updateTime =strftime('%F %T');;
+            $_model->updateDatetime =strftime('%F %T');;
             $_model->achieveStatus='待处理';
             $_model->GoodsName='';
             $arc_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-arc-map'])->one();
@@ -137,9 +138,7 @@ class OaCheckController extends Controller
             $_model->possessMan1 = $arc;
             $_model->Purchaser = $pur;
             $_model->save(false);
-
         }
-//        exit();
         return $this->redirect(['to-check']);
     }
 

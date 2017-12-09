@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\OaGoodsinfo;
 use backend\unitools\PHPExcelTools;
 use Yii;
 use backend\models\Channel;
@@ -10,6 +11,7 @@ use backend\models\OaTemplatesVar;
 use backend\models\OaTemplates;
 
 use backend\models\ChannelSearch;
+use backend\models\Goodssku;
 use backend\models\OaWishgoods;
 use backend\models\Wishgoodssku;
 use yii\web\Controller;
@@ -165,7 +167,6 @@ class ChannelController extends Controller
      */
     public function actionUpdateEbay($id=45)
     {
-
         $info = OaTemplates::find()->where(['infoid' =>$id])->one();
         $templatesVar = new ActiveDataProvider([
             'query' => OaTemplatesVar::find()->where(['tid' =>$id]),
@@ -197,9 +198,46 @@ class ChannelController extends Controller
 
     public function  actionEbaySave($id=45){
         $template = OaTemplates::find()->where(['infoid'=>$id])->one();
+//        var_dump($template);die;
         $data = $_POST['OaTemplates'];
+        //设置默认物流
+        try {
+            $data['OutshippingMethod1']  or $data['OutshippingMethod1']=23;
+            $data['InshippingMethod1'] = $data['InshippingMethod1']?:93;
+            $template->setAttributes($data,true);
+            if($template->update(true)){
+                echo "保存成功";
+            }
+            else {
+                echo "保存失败";
+            }
+        }
+        catch (\Exception $ex){
+            echo $ex;
+        }
+
+    }
+
+    /**
+     * ebay 完善模板
+     * @param $id
+     */
+
+    public function  actionEbayComplete($id=45){
+        $template = OaTemplates::find()->where(['infoid'=>$id])->one();
+        var_dump($_POST);die;
+        $data = $_POST['OaTemplates'];
+
+        //设置默认物流
+        $data['OutshippingMethod1']  or $data['OutshippingMethod1']=23;
+        $data['InshippingMethod1'] = $data['InshippingMethod1']?:93;
         $template->setAttributes($data,true);
-        if($template->update(false)){
+
+        //更新产品的信息的状态
+        $info = OaGoodsinfo::find()->where(['pid'=>$id])->one();
+        $complete_status = $info->completeStatus?:'';
+        $info->completeStatus = $complete_status + '|eBay已完善';
+        if($template->update(false) and $info->update(false)){
             echo "保存成功";
         }
         else {
@@ -213,6 +251,7 @@ class ChannelController extends Controller
      */
     public function actionVarSave($id)
     {
+//        var_dump($_POST);die;
         $varData = $_POST['OaTemplatesVar'];
         $pictureKey = $_POST['picKey'];
         $var = new OaTemplatesVar();
@@ -381,12 +420,15 @@ class ChannelController extends Controller
      * @brief 导出ebay模板
      * @param $id
      */
-    public  function  actionExportEbay($id)
+    public  function  actionExportEbay($id=45)
     {
         $sql = 'oa_P_ebayTemplates';
-        $query = yii::$app->db->createCommand($sql);
+        $db = yii::$app->db;
+        $query = $db->createCommand($sql);
         $ret = $query->queryAll();
-
+        if(empty($ret)){
+            return;
+        }
         $objPHPExcel = new \PHPExcel();
         $sheetNumber= 0;
         $objPHPExcel->setActiveSheetIndex($sheetNumber);
@@ -396,11 +438,82 @@ class ChannelController extends Controller
         $fileName = "eBay模板-".date("d-m-Y-His").".xls";
         header('Content-Disposition: attachment;filename='.$fileName .' ');
         header('Cache-Control: max-age=0');
-        //获取列名
+        //获取列名&设置image字段
         $tabFields = [];
-        if(!empty($ret)){
-            $tabFields = array_keys($ret[0]);
+        $image = '';
+
+        $templates = OaTemplates::find()->where(['infoid'=>45])->one();
+        $firstRow = $ret[0];
+        $tabFields = array_keys($firstRow);
+        $mainPage = $templates->mainPage;
+        $image .= $mainPage."\r\n";
+        $extraPage = json_decode($templates->extraPage,true)['images'];
+        foreach ($extraPage as $ima){
+            $image .= $ima."\r\n";
         }
+
+        // 设置变体
+        $checkSql = "select count(*) from oa_templates as ots left join 
+                oa_templatesvar as otr on ots.nid=otr.tid where ots.infoid=45";
+        $flag = $db->createCommand($checkSql)->queryAll();
+        if($flag<=1){
+            $var =[];
+        }
+        else {
+            $findSql = "select *,otr.sku as varSku,otr.quantity as varQuantity from oa_templates as ots left join 
+                    oa_templatesvar as otr on ots.nid=otr.tid where ots.infoid=45";
+            $allRows = $db->createCommand($findSql)->queryAll();
+            $picKey = json_decode($allRows[0]['property'],true)['pictureKey'];
+            $columns = json_decode($allRows[0]['property'],true)['columns'];
+            $picCount = count($extraPage);
+
+            //设置属性名
+            $variationSpecificsSet = ['NameValueList' =>[]];
+            foreach ($columns as $col){
+                $map = ['name'=>array_keys($col)[0],'value' =>array_values($col)[0]];
+                array_push($variationSpecificsSet['NameValueList'],$map);
+            }
+
+            //设置图片&//设置变体
+            $pictures = [];
+            $variation = [];
+            foreach ($allRows as $row){
+                $variationSpecificsSet = ['NameValueList' =>[]];
+                $columns = json_decode($row['property'],true)['columns'];
+                $value = ['value'=>''];
+                foreach ($columns as $col){
+                    if(array_keys($col)[0] == $picKey){
+                        $value['value'] = $col[$picKey];
+                        break;
+                    }
+                }
+                foreach ($columns as $col){
+                    $map = ['name'=>array_keys($col)[0],'value' =>array_values($col)[0]];
+                    array_push($variationSpecificsSet['NameValueList'],$map);
+                }
+                $pic = ['VariationSpecificPictureSet'=>['PictureURL'=>[$row['imageUrl']]],'Value'=>$value['value']];
+                array_push($pictures,$pic);
+                $var = [
+                    'SKU'=>$row['varSku'],
+                    'Quantity'=>$row['varQuantity'],
+                    'StartPrice'=>$row['retailPrice'],
+                    'VariationSpecifics'=>$variationSpecificsSet,
+
+                ];
+                array_push($variation,$var);
+            }
+
+            $var = [
+                'assoc_pic_key'=>$picKey,
+                'assoc_pic_count'=>$picCount,
+                'Variation'=>$variation,
+                'Pictures'=>$pictures,
+                'VariationSpecificsSet'=>$variationSpecificsSet
+            ];
+        }
+
+
+
 
         // 写入列名
         foreach($tabFields as $num => $name){
@@ -409,6 +522,8 @@ class ChannelController extends Controller
 
         //写入单元格值
         foreach ($ret as $rowNum => $row) {
+            $row['PictureURL'] = $image;
+            $row['Variation'] = json_encode($var);
             foreach($tabFields as $num => $name){
                 $objPHPExcel->getActiveSheet()->setCellValue(PHPExcelTools::stringFromColumnIndex($num).($rowNum + 2),$row[$name]);
             }
@@ -442,6 +557,7 @@ class ChannelController extends Controller
             $varitem['main_image'] = $value['linkurl'];
             $variation[] = $varitem;
         }
+
         $strvariant = json_encode($variation,true);
         $columnNum = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P'];
         $colName = [
@@ -478,9 +594,6 @@ class ChannelController extends Controller
             $objPHPExcel->getActiveSheet()->setCellValue('P'.$row,'');
         }
 
-
-
-
         header('Content-Type: application/vnd.ms-excel');
         $filename = 'Wish模版'.$foos[0][0]['SKU'].date("d-m-Y-His").".xls";
         header('Content-Disposition: attachment;filename='.$filename .' ');
@@ -488,6 +601,7 @@ class ChannelController extends Controller
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
     }
+
 
     /*
      * 拼接 wish账号
@@ -504,7 +618,6 @@ class ChannelController extends Controller
             $wish_suffix[]  = 'wish_'.substr($val["DictionaryName"],3,$len);
         }
 
-
         return $wish_suffix;
 
     }
@@ -519,6 +632,4 @@ class ChannelController extends Controller
         echo 'Wish已完善';
 
     }
-
-
 }

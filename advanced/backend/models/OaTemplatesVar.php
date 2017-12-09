@@ -35,7 +35,7 @@ class OaTemplatesVar extends \yii\db\ActiveRecord
     {
         return [
             [['tid', 'quantity'], 'integer'],
-            [['property','sku', 'imageUrl','image','UPC', 'EAN'], 'string'],
+            [['property','sku', 'imageUrl','image'], 'string'],
             [['retailPrice'], 'number'],
         ];
     }
@@ -54,8 +54,6 @@ class OaTemplatesVar extends \yii\db\ActiveRecord
             'retailPrice' => '价格',
             'imageUrl' => '图片地址',
             'image' => '图片',
-            'UPC' => 'UPC',
-            'EAN' => 'EAN',
         ];
     }
 }
