@@ -1,0 +1,9 @@
+--2017-12-09--
+
+1.添加update-ebay specifics默认值。
+2. 图片显示值以数据库为准，前台不在拼接。
+3.多属性设置中UPC和EAN
+4.UPC属性值前端加载部分
+*5.oa_goods 和oa_goodsinfo 建立索引和唯一约束
+6. 删除temVar 中EAN和UPC字段
+--END--

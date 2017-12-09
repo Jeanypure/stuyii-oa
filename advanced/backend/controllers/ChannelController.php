@@ -216,6 +216,7 @@ class ChannelController extends Controller
      */
     public function actionVarSave($id)
     {
+//        var_dump($_POST);die;
         $varData = $_POST['OaTemplatesVar'];
         $pictureKey = $_POST['picKey'];
         $var = new OaTemplatesVar();
