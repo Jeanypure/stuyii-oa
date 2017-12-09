@@ -6,4 +6,6 @@
 4.UPC属性值前端加载部分
 *5.oa_goods 和oa_goodsinfo 建立索引和唯一约束
 6. 删除temVar 中EAN和UPC字段
+7. 修改商品编码生成规则,避免重复。
+8.更新并保存模板
 --END--
