@@ -221,15 +221,12 @@ class GoodsskuController extends Controller
                         $goods_model->Purchaser = $pur;
                         $goods_model->update(false);
                         echo "保存完成";
-//                        $this->redirect(['oa-goodsinfo/index']);
                     }
                     catch (\Exception $e) {
                         echo $e;
                         echo "美工或采购填写不对,请仔细检查数据";
                     }
-
-
-
+                    $this->redirect(['oa-goodsinfo/index']);
                 }
 
                 if ($type=='pic-info')
@@ -241,45 +238,37 @@ class GoodsskuController extends Controller
                         $sid = $row_key;
                         $update_model = Goodssku::find()->where(['sid' => $sid])->one();
                         $update_model->linkurl = $row_value['linkurl'];
-
                         $update_model->save(false);
-
                     }
-                    //更新商品状态
-                    $goods_model = OaGoodsinfo::find()->where(['pid' => $pid])->one();
-                    $goods_model ->picStatus = '已完善';
-                    $goods_model->updateTime =strftime('%F %T');
-                    $goods_model->update();
-//                 $arr = [33,36,38,40,42,43,51,66,81,82,83,84,85,91,93,100,104,105,106,107,108,110,
-//                     111,115,116,117,118,122,124,130,134,155,157,165,166,167,168,170,172,176,197,200,
-//                     201,225,233,234,235,236,237,238];
-//
-//                    foreach ($arr as $key=>$value){
-//                        $sql_wish = "exec P_oaGoods_TowishGoods '".$value."'";
-//                        $posts = Yii::$app->db->createCommand($sql_wish)->execute();
-//                    }
-
-
-                    //标记完善时，开产品导入ebay和wish模板
 
                     //图片验空
                    $pic_url = array_column($Rows, 'linkurl');
                    $val_count = array_count_values($pic_url);
                    $res = array_key_exists('',  $val_count);
 
+                    //图片全不为空时，开产品导入ebay和wish模板
                    if(!$res){
-                       $sql_wish = "exec P_oaGoods_TowishGoods '".$pid."'";
-                       $sql_ebay = "";
-                       $posts = Yii::$app->db->createCommand($sql_wish)->execute();
-
-//
+                       $sql_wish = "exec P_oaGoods_TowishGoods $pid";
+                       $sql_ebay = "exec P_oaGoods_ToEbayGoods $pid";
+                       $connection = Yii::$app->db;
+                       $import_trans =$connection->beginTransaction();
+                       try{
+                           $connection->createCommand($sql_wish)->execute();
+                           $connection->createCommand($sql_ebay)->execute();
+                           //更新商品状态
+                           $goods_model = OaGoodsinfo::find()->where(['pid' => $pid])->one();
+                           $goods_model ->picStatus = '已完善';
+                           $goods_model->updateTime =strftime('%F %T');
+                           $goods_model->update();
+                           //提交事务
+                           $import_trans->commit();
+                       }
+                       catch (\Exception $er) {
+                           $import_trans->rollBack();
+                       }
                     }
-                    $this->redirect(['oa-goodsinfo/index']);
                     $this->redirect(['oa-picinfo/update','id'=>$pid]);
-
                 }
-
-
             }
             catch (Exception  $e)
             {
