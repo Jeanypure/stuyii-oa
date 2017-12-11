@@ -69,8 +69,8 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
         <botton class="btn btn-success export">
             导出ibay模版
         </botton>
-        <botton class="btn btn-warning Joom-csv">
-            导出Joom(csv)
+        <botton class="btn btn-warning joom-csv">
+            导出joom(csv)
         </botton>
     </div>
     <div class="blockTitle">
@@ -154,8 +154,8 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     <botton class="btn btn-success export">
         导出ibay模版
     </botton>
-    <botton class="btn btn-warning Joom-csv">
-        导出Joom(csv)
+    <botton class="btn btn-warning joom-csv">
+        导出joom(csv)
     </botton>
 </div>
 <?php  ActiveForm::end();?>
@@ -310,8 +310,9 @@ $('body').on('click','.down-btn',function() {
           window.location = '/channel/export?id='+$sku->infoid;
     });
     
-    //导出数据Joom CSV
-    $('.Joom-csv').on('click',function(){
+    //导出数据joom CSV
+    $('.joom-csv').on('click',function(){
+        alert(888);
          window.location = '/channel/export-joom?id='+$sku->infoid;
     });
     
