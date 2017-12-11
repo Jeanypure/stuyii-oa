@@ -82,8 +82,8 @@ $attributes  = [
                     Html::button('数量确定', ['id'=>'number','type'=>'button','class'=>'btn']).' '.
                     Html::input('text','RetailPrice','',['class' => 'RetailPrice-replace','placeholder'=>'零售价$']).' '.
                     Html::button('价格确定', ['id'=>'RetailPrice-set','type'=>'button','class'=>'btn']).''.
-                    Html::input('text','EAN','',['class' => 'ean-replace','placeholder'=>'Does not apply']).' '.
-                    Html::button('EAN确定', ['id'=>'ean-set','type'=>'button','class'=>'btn']).' '.
+                    Html::input('text','UPC','',['class' => 'upc-replace','placeholder'=>'Does not apply']).' '.
+                    Html::button('UPC确定', ['id'=>'upc-set','type'=>'button','class'=>'btn']).' '.
                     Html::input('text','label','',['class' => 'label-input','hidden'=>true,'placeholder'=>'Does not apply']).' '.
                     Html::button('保存', ['id'=>'save-only','type'=>'button','class'=>'btn btn-info']).' '.
                     Html::button('删除行', ['id'=>'delete-row','type'=>'button', 'class'=>'btn btn-danger kv-batch-delete'])
@@ -330,11 +330,11 @@ $('#add-row').click(function() {
     });
 
 
-//批量设置EAN
-    $('#ean-set').on('click',function() {
-        var newEAN = $('.ean-replace').val();
-        $('.EAN').each(function() {
-            $(this).val(newEAN);
+//批量设置UPC
+    $('#upc-set').on('click',function() {
+        var newUPC = $('.upc-replace').val();
+        $('.UPC').each(function() {
+            $(this).val(newUPC);
         });
     });
 
