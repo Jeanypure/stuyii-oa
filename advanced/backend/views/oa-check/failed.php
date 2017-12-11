@@ -218,6 +218,7 @@ function centerFormat($name) {
             centerFormat('updateDate'),
             centerFormat('salePrice'),
             centerFormat('hopeWeight'),
+            centerFormat('hopeCost'),
             centerFormat('hopeRate'),
             centerFormat('hopeSale'),
             centerFormat('hopeMonthProfit'),
