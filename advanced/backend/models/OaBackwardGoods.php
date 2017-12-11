@@ -40,7 +40,7 @@ class OaBackwardGoods extends GoodsCats
             [['img','cate','subCate','origin1'],'required'],
             [['origin2','origin3','vendor2','vendor3','devNum',
                 'developer','introducer','introReason','devStatus','checkStatus',
-                'salePrice','hopeWeight','hopeRate','hopeSale',
+                'salePrice','hopeWeight','hopeRate','hopeSale','hopeCost',
                 'hopeMonthProfit','createDate','updateDate','approvalNote'],'string'],
             [['cate', 'subCate','salePrice','hopeWeight','hopeRate','hopeSale',],'safe']
         ];
@@ -68,6 +68,7 @@ class OaBackwardGoods extends GoodsCats
             'devStatus' => '认领',
             'checkStatus' => '产品状态',
             'salePrice' => '售价($)',
+            'hopeCost' => '预估成本(￥)',
             'hopeWeight' => '预估重量(克)',
             'hopeRate' => '预估利润率(%)',
             'hopeSale' => '预估月销量',
