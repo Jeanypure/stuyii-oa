@@ -577,16 +577,14 @@ $js2 = <<<JS
            $(this).val(newWeight);
        });
     });
+    
     //零售价
     $('#RetailPrice-set').on('click',function(){
        var newRetailprice = $('.RetailPrice-replace').val(); 
        $('.RetailPrice').each(function(){
            $(this).val(newRetailprice);
-           
        });
     });
-    
-    
     
     //批量编辑
     $('.data-edit').on('click', function() {        
@@ -599,16 +597,6 @@ $js2 = <<<JS
     
 // 保存数据的提交按钮
     $('#save-only').on('click',function() {
-        //判断SKU是否已经生成，如果没有，则自动生成
-        var sku=0;
-        
-        $('td[data-col-seq="3"]').each(function() {
-            sku += $(this).val().length;
-        });
-        if(sku==0){
-            $("#sku-set").trigger("click");
-        }
-        
         var form = $('#sku-info');
         form.attr('action', '/goodssku/save-only?pid={$pid}&type=goods-info');
         form.submit();
