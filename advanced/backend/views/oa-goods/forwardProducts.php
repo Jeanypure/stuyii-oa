@@ -294,21 +294,21 @@ function centerFormat($name) {
             centerFormat('developer'),
             centerFormat('introducer'),
 //            centerFormat('devStatus'),
-//            centerFormat('checkStatus'),
-            [
-                'attribute'=>'checkStatus',
-                'width'=>'250px',
-                'value'=>function ($model, $key, $index, $widget) {
-                    return $model->checkStatus;
-                },
-                'filterType'=>GridView::FILTER_SELECT2,
-//                'filter'=>ArrayHelper::map(\backend\models\OaGoods::find()->orderBy('checkStatus') ->asArray()->all(), 'nid', 'checkStatus'),
-                'filter'=> ['1' => "待提交", 2 =>'已审批'],
-                'filterWidgetOptions'=>[
-                    'pluginOptions'=>['allowClear'=>true],
-                ],
-                'filterInputOptions'=>['placeholder'=>'产品状态']
-            ],
+            centerFormat('checkStatus'),
+//            [
+//                'attribute'=>'checkStatus',
+//                'width'=>'250px',
+//                'value'=>function ($model, $key, $index, $widget) {
+//                    return $model->checkStatus;
+//                },
+//                'filterType'=>GridView::FILTER_SELECT2,
+////                'filter'=>ArrayHelper::map(\backend\models\OaGoods::find()->orderBy('checkStatus') ->asArray()->all(), 'nid', 'checkStatus'),
+//                'filter'=> [1 => "待提交", 2 =>'已审批',3=>'已认领'],
+//                'filterWidgetOptions'=>[
+//                    'pluginOptions'=>['allowClear'=>true],
+//                ],
+//                'filterInputOptions'=>['placeholder'=>'产品状态']
+//            ],
             centerFormat('approvalNote'),
             centerFormat('createDate'),
             centerFormat('updateDate'),

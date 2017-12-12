@@ -214,30 +214,7 @@ class ChannelController extends Controller
 
     }
 
-    /**
-     * ebay 完善模板
-     * @param $id
-     */
 
-    public function  actionEbayComplete($id=45){
-        $template = OaTemplates::find()->where(['infoid'=>$id])->one();
-        $data = $_POST['OaTemplates'];
-        //设置默认物流
-        $data['OutshippingMethod1']  or $data['OutshippingMethod1']=23;
-        $data['InshippingMethod1'] = $data['InshippingMethod1']?:93;
-        $template->setAttributes($data,true);
-
-        //更新产品的信息的状态
-        $info = OaGoodsinfo::find()->where(['pid'=>$id])->one();
-        $complete_status = $info->completeStatus?:'';
-        $info->completeStatus = $complete_status + '|eBay已完善';
-        if($template->update(false) and $info->update(false)){
-            echo "保存成功";
-        }
-        catch (\Exception $ex){
-            echo "保存失败";
-        }
-    }
 
     /**
      * ebay 完善模板
