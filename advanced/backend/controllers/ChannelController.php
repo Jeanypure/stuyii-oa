@@ -167,13 +167,7 @@ class ChannelController extends Controller
      */
     public function actionUpdateEbay($id=45)
     {
-        $info = OaTemplates::find()->where(['infoid' =>$id])->one();
-        $templatesVar = new ActiveDataProvider([
-            'query' => OaTemplatesVar::find()->where(['tid' =>$id]),
-            'pagination' => [
-                'pageSize' => 150,
-            ],
-        ]);
+        $templates = OaTemplates::find()->where(['infoid' =>$id])->one();
         if(Yii::$app->request->isPost){
 
         }
@@ -181,8 +175,8 @@ class ChannelController extends Controller
             $inShippingService = $this->getShippingService('In');
             $OutShippingService = $this->getShippingService('Out');
             return $this->render('update',[
-                'info' =>$info,
-                'templatesVar' => $templatesVar,
+                'templates' =>$templates,
+                'infoId' => $id,
                 'inShippingService' => $inShippingService,
                 'outShippingService' => $OutShippingService,
 
@@ -198,9 +192,9 @@ class ChannelController extends Controller
      * @param $id
      */
 
-    public function  actionEbaySave($id=45){
-        $template = OaTemplates::find()->where(['infoid'=>$id])->one();
-//        var_dump($template);die;
+    public function  actionEbaySave($id){
+        $template = OaTemplates::find()->where(['nid'=>$id])->one();
+
         $data = $_POST['OaTemplates'];
         //设置默认物流
         try {
@@ -240,11 +234,44 @@ class ChannelController extends Controller
         if($template->update(false) and $info->update(false)){
             echo "保存成功";
         }
-        else {
+        catch (\Exception $ex){
             echo "保存失败";
         }
-
     }
+
+    /**
+     * ebay 完善模板
+     * @param $id
+     * @param $infoId
+     */
+
+    public function  actionEbayComplete($id, $infoId){
+        $template = OaTemplates::find()->where(['nid'=>$id])->one();
+        $info = OaGoodsinfo::find()->where(['pid'=>$infoId])->one();
+        $data = $_POST['OaTemplates'];
+        //设置默认物流
+        try {
+            $template->setAttributes($data,true);
+
+            //动态计算产品的状态
+            $complete_status = '';
+            if (!empty($info->completeStatus)) {
+                $status = str_replace('|eBay已完善', '', $info->completeStatus);
+                $complete_status = $status . '|eBay已完善';
+            }
+            $info->completeStatus = $complete_status;
+            if($template->update(true) && $info->save(false)){
+                echo "保存成功";
+            }
+            else {
+                echo "2保存失败";
+            }
+        }
+        catch (\Exception $ex){
+            echo "1保存失败";
+        }
+    }
+
     /**
      * @brief 多属性保存
      * @param $id
@@ -292,6 +319,7 @@ class ChannelController extends Controller
             }
 
         }
+        echo "保存成功！";
         //根据varId的值，来决定更新还是创建
 
     }
@@ -421,7 +449,7 @@ class ChannelController extends Controller
      */
     public  function  actionExportEbay($id=45)
     {
-        $sql = 'oa_P_ebayTemplates';
+        $sql = "oa_P_ebayTemplates {$id}";
         $db = yii::$app->db;
         $query = $db->createCommand($sql);
         $ret = $query->queryAll();
@@ -510,6 +538,9 @@ class ChannelController extends Controller
                 'VariationSpecificsSet'=>$variationSpecificsSet
             ];
         }
+
+
+
 
         // 写入列名
         foreach($tabFields as $num => $name){
@@ -628,7 +659,6 @@ class ChannelController extends Controller
         echo 'Wish已完善';
 
     }
-
 
 
     /**

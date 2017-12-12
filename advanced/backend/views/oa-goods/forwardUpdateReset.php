@@ -94,6 +94,7 @@ $this->registerJs($JS);
         <?php echo  $form->field($model, 'hopeSale')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'hopeRate')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'hopeWeight')->textInput(['placeholder' => '--选填--']) ?>
+        <?php echo  $form->field($model, 'hopeCost')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'hopeMonthProfit')->textInput(['readonly'=> 'true','placeholder' => '--选填--']) ?>
         <div class="form-group">
             <?= Html::submitButton($model->isNewRecord ? '创建' : '更新', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-success']) ?>

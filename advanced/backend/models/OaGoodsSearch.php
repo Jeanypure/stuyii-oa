@@ -20,7 +20,7 @@ class OaGoodsSearch extends OaGoods
                 'devStatus', 'checkStatus','subCate','vendor1','vendor2','vendor3',
                 'origin2','origin3','introReason','approvalNote',
             ], 'string'],
-            [['hopeRate','salePrice', 'hopeWeight','hopeMonthProfit','hopeSale','nid'], 'number'],
+            [['hopeRate','salePrice', 'hopeWeight','hopeMonthProfit','hopeSale','hopeCost','nid'], 'number'],
             [['cate','subCate','createDate', 'updateDate',], 'safe'],
         ];
     }

@@ -140,6 +140,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'updateDate',
             'salePrice',
             'hopeWeight',
+            'hopeCost',
             'hopeRate',
             'hopeSale',
             'hopeMonthProfit',

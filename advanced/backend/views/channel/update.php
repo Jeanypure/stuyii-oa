@@ -33,7 +33,7 @@ Modal::end();
     'items' => [
         [
             'label' => 'Wish',
-            'url' => '/channel/update?id='.$info->infoid,
+            'url' => '/channel/update?id='.$templates->infoid,
 
             'headerOptions' => ["id" => 'tab1'],
             'options' => ['id' => 'article'],
@@ -41,7 +41,7 @@ Modal::end();
         ],
         [
             'label' => 'eBay',
-            'url' => '/channel/update-ebay?id='.$info->infoid,
+            'url' => '/channel/update-ebay?id='.$templates->infoid,
             'headerOptions' => ["id" => 'tab1'],
             'options' => ['id' => 'topic'],
             'active' => true,
@@ -83,24 +83,25 @@ Modal::end();
     <p >基本信息</p>
 </div>
 </br>
-<?= $form->field($info,'sku')->textInput()?>
+<?= $form->field($templates,'sku')->textInput()?>
 <?php
-$mainPage = "https://www.tupianku.com/view/full/10023/$info->sku-_0_.jpg";
- echo $form->field($info,'mainPage')->textInput(['class'=>'main-page','style'=>'display:none']);
+$mainPage = "https://www.tupianku.com/view/full/10023/$templates->sku-_0_.jpg";
+ echo $form->field($templates,'mainPage')->textInput(['class'=>'main-page','style'=>'display:none']);
 echo '<div class="form-group field-oatemplates-mainpage">
     <label class="col-lg-1 control-label"></label>
-    <div class="col-lg-3"><input type="text" class="form-control tem-page" value="https://www.tupianku.com/view/full/10023/'.$info->sku.'-_0_.jpg"></div>
+    <div class="col-lg-3"><input type="text" class="form-control tem-page" value="https://www.tupianku.com/view/full/10023/'.$templates->sku.'-_0_.jpg"></div>
+
     <div class="col-lg=1"> 
-    <a target="_blank" href="https://www.tupianku.com/view/full/10023/'.$info->sku.'-_0_.jpg">
-    <img src="https://www.tupianku.com/view/full/10023/'.$info->sku.'-_0_.jpg" width="50" height="50">
+    <a target="_blank" href="https://www.tupianku.com/view/full/10023/'.$templates->sku.'-_0_.jpg">
+    <img src="https://www.tupianku.com/view/full/10023/'.$templates->sku.'-_0_.jpg" width="50" height="50">
     </a>
     </div>
 </div>'
 ;?>
-<?= $form->field($info,'extraPage')->textarea(['style'=>'display:none']); ?>
+<?= $form->field($templates,'extraPage')->textarea(['style'=>'display:none']); ?>
 <?php
 echo '<div class="images">';
-$images = json_decode($info->extraPage,true)['images'];
+$images = json_decode($templates->extraPage,true)['images'];
 foreach($images as $key=>$image){
     echo '<div class="form-group all-images">
     <label class="col-lg-1"></label>
@@ -120,16 +121,16 @@ foreach($images as $key=>$image){
 echo '</div>';
 ?>
 </br>
-<?= $form->field($info,'location')->textInput(['value'=>'ShangHai']); ?>
-<?= $form->field($info,'country')->textInput(['value' => 'CN' ]); ?>
-<?= $form->field($info,'postCode')->textInput(); ?>
-<?= $form->field($info,'prepareDay')->textInput(['value' => '3' ]); ?>
+<?= $form->field($templates,'location')->textInput(['value'=>'ShangHai']); ?>
+<?= $form->field($templates,'country')->textInput(['value' => 'CN' ]); ?>
+<?= $form->field($templates,'postCode')->textInput(); ?>
+<?= $form->field($templates,'prepareDay')->textInput(['value' => '3' ]); ?>
 
 <div class="blockTitle">
     <p > 站点组</p>
 </div>
 </br>
-<?= $form->field($info,'site')->textInput(['value' => '美国站' ]); ?>
+<?= $form->field($templates,'site')->textInput(['value' => '美国站' ]); ?>
 <div class="blockTitle">
     <p > 多属性</p>
 </div>
@@ -143,15 +144,15 @@ echo '</div>';
 </div>
 </br>
 <div>
-<?= $form->field($info,'listedCate')->textInput(); ?>
-<?= $form->field($info,'listedSubcate')->textInput(); ?>
-<?= $form->field($info,'title')->textInput(); ?>
-<?= $form->field($info,'subTitle')->textInput(); ?>
-<?= $form->field($info,'description')->textarea(['rows'=>6]); ?>
-<?= $form->field($info,'quantity')->textInput(); ?>
-<?= $form->field($info,'nowPrice')->textInput(); ?>
-<?= $form->field($info,'UPC')->textInput(['value' => 'Does not apply']); ?>
-<?= $form->field($info,'EAN')->textInput(['value' => 'Does not apply']); ?>
+<?= $form->field($templates,'listedCate')->textInput(); ?>
+<?= $form->field($templates,'listedSubcate')->textInput(); ?>
+<?= $form->field($templates,'title')->textInput(); ?>
+<?= $form->field($templates,'subTitle')->textInput(); ?>
+<?= $form->field($templates,'description')->textarea(['rows'=>6]); ?>
+<?= $form->field($templates,'quantity')->textInput(); ?>
+<?= $form->field($templates,'nowPrice')->textInput(); ?>
+<?= $form->field($templates,'UPC')->textInput(['value' => 'Does not apply']); ?>
+<?= $form->field($templates,'EAN')->textInput(['value' => 'Does not apply']); ?>
 </div>
 
 <div class="blockTitle">
@@ -159,9 +160,9 @@ echo '</div>';
 </div>
 </br>
 <div>
-    <?= $form->field($info,'specifics')->textarea(['style'=>'display:none'])->label(false); ?>
+    <?= $form->field($templates,'specifics')->textarea(['style'=>'display:none'])->label(false); ?>
     <?php
-    $specifics = json_decode($info->specifics,true)['specifics'];
+    $specifics = json_decode($templates->specifics,true)['specifics'];
     echo
     '<div class="row"><div class="col-lg-6"><table class="specifics-tab table table-hover">
     <thead>
@@ -194,44 +195,44 @@ echo '</div>';
     <div class="col-lg-6">
     <span>境内运输方式</span>
 <?=
-$form->field($info,'InshippingMethod1',$shipping_templates)->dropDownList($inShippingService,
+$form->field($templates,'InshippingMethod1',$shipping_templates)->dropDownList($inShippingService,
     [
         'class' => 'col-lg-6',
         'prompt'=>'Economy Shipping from outside US(11-23days)',
     ]
 ); ?>
-<?= $form->field($info,'InFirstCost1',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
-<?= $form->field($info,'InSuccessorCost1',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
+<?= $form->field($templates,'InFirstCost1',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
+<?= $form->field($templates,'InSuccessorCost1',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
         <?=
-        $form->field($info,'InshippingMethod2',$shipping_templates)->dropDownList($inShippingService,
+        $form->field($templates,'InshippingMethod2',$shipping_templates)->dropDownList($inShippingService,
             [
                 'class' => 'col-lg-6',
                 'prompt'=>'--境内物流选择--',
             ]
         ); ?>
-<?= $form->field($info,'InFirstCost2',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
-<?= $form->field($info,'InSuccessorCost2',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
+<?= $form->field($templates,'InFirstCost2',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
+<?= $form->field($templates,'InSuccessorCost2',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
     </div>
     <div class="col-lg-6">
     <span>境外运输方式</span>
         <?=
-        $form->field($info,'OutshippingMethod1',$shipping_templates)->dropDownList($outShippingService,
+        $form->field($templates,'OutshippingMethod1',$shipping_templates)->dropDownList($outShippingService,
             [
                 'class' => 'col-lg-6',
                 'prompt'=>'Economy Shipping from China/Hong Kong/Taiwan to worldwide(11-35days)',
             ]
         ); ?>
-    <?= $form->field($info,'OutFirstCost1',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
-    <?= $form->field($info,'OutSuccessorCost1',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
+    <?= $form->field($templates,'OutFirstCost1',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
+    <?= $form->field($templates,'OutSuccessorCost1',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
         <?=
-        $form->field($info,'OutshippingMethod2',$shipping_templates)->dropDownList($outShippingService,
+        $form->field($templates,'OutshippingMethod2',$shipping_templates)->dropDownList($outShippingService,
             [
                 'class' => 'col-lg-6',
                 'prompt'=>'--境外物流选择--',
             ]
         ); ?>
-    <?= $form->field($info,'OutFirstCost2',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
-    <?= $form->field($info,'OutSuccessorCost2',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
+    <?= $form->field($templates,'OutFirstCost2',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
+    <?= $form->field($templates,'OutSuccessorCost2',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
     </div>
 
 </div>
@@ -261,7 +262,7 @@ $form->field($info,'InshippingMethod1',$shipping_templates)->dropDownList($inShi
 </style>
 
 <?php
-$exportUlr = URL::toRoute(['export-ebay','id'=>$info->nid]);
+$exportUlr = URL::toRoute(['export-ebay','id'=>$templates->nid]);
 
 $js  = <<< JS
 //主图赋值
@@ -440,7 +441,7 @@ $('body').on('click','.all-images',function() {
 // 多属性设置模态框
 $(".var-btn").click(function() {
     $('.modal-body').children('div').remove(); //清空数据
-    $.get('{$templatesVarUrl}',{id:{$info->nid}},
+    $.get('{$templatesVarUrl}',{id:{$templates->nid}},
         function(data) {
             $('.modal-body').html(data);
         }
@@ -451,7 +452,7 @@ $(".var-btn").click(function() {
 //保存按钮
 $('.save-only').on('click',function() {
     $.ajax({
-        url:'/channel/ebay-save',
+        url:'/channel/ebay-save?id={$templates->nid}',
         type:'post',
         data:$('#msg-form').serialize(),
         success:function(ret) {
@@ -462,12 +463,16 @@ $('.save-only').on('click',function() {
 
 //保存并完善按钮
 $('.save-complete').on('click',function() {
+    $(this).attr('disabled','disabled');
+    var button = $(this);
     $.ajax({
-        url:'/channel/ebay-complete',
+        url:'/channel/ebay-complete?id={$templates->nid}&infoId={$infoId}',
         type:'post',
         data:$('#msg-form').serialize(),
         success:function(ret) {
             alert(ret);
+            button.attr('disabled',false);
+
         }
     });
 });

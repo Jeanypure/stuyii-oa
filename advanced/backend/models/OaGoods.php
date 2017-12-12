@@ -40,7 +40,7 @@ class OaGoods extends GoodsCats
             [['img','cate', 'subCate','origin1','vendor1'],'safe'],
             [['origin2','origin3','vendor2','vendor3','devNum',
                 'developer','introducer','introReason','devStatus','checkStatus',
-                'salePrice','hopeWeight','hopeRate','hopeSale',
+                'salePrice','hopeWeight','hopeRate','hopeSale','hopeCost',
                 'hopeMonthProfit','createDate','updateDate','approvalNote'],'string'],
             [['cate', 'subCate','salePrice','hopeWeight','hopeRate','hopeSale',],'safe']
 
@@ -73,6 +73,7 @@ class OaGoods extends GoodsCats
             'hopeWeight' => '预估重量(克)',
             'hopeRate' => '预估利润率(%)',
             'hopeSale' => '预估月销量',
+            'hopeCost' => '预估成本(￥)',
             'hopeMonthProfit' => '预估月毛利($)',
             'createDate' => '创建时间',
             'updateDate' => '更新时间',

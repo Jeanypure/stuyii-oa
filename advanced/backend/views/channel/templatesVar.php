@@ -13,8 +13,8 @@ use kartik\dialog\Dialog;
 
 //动态的添加列
 $pictureKey = $columns['pictureKey'];
+$pictureOptions =json_encode(array_keys($columns));
 $col = json_encode($columns);
-
 $attributes  = [
     'sku'=>
         [
@@ -82,8 +82,8 @@ $attributes  = [
                     Html::button('数量确定', ['id'=>'number','type'=>'button','class'=>'btn']).' '.
                     Html::input('text','RetailPrice','',['class' => 'RetailPrice-replace','placeholder'=>'零售价$']).' '.
                     Html::button('价格确定', ['id'=>'RetailPrice-set','type'=>'button','class'=>'btn']).''.
-                    Html::input('text','EAN','',['class' => 'ean-replace','placeholder'=>'Does not apply']).' '.
-                    Html::button('EAN确定', ['id'=>'ean-set','type'=>'button','class'=>'btn']).' '.
+                    Html::input('text','UPC','',['class' => 'upc-replace','placeholder'=>'Does not apply']).' '.
+                    Html::button('UPC确定', ['id'=>'upc-set','type'=>'button','class'=>'btn']).' '.
                     Html::input('text','label','',['class' => 'label-input','hidden'=>true,'placeholder'=>'Does not apply']).' '.
                     Html::button('保存', ['id'=>'save-only','type'=>'button','class'=>'btn btn-info']).' '.
                     Html::button('删除行', ['id'=>'delete-row','type'=>'button', 'class'=>'btn btn-danger kv-batch-delete'])
@@ -104,10 +104,48 @@ echo Dialog::widget([
 ]);
 $js = <<< JS
 
-// 加载图片关联
-$('.kv-panel-pager').append('<div class="radio"><span class="assoc_pic_key">图片关联： <label class="radio-inline"><input name="picKey" type="radio" checked="true" value="{$pictureKey}">{$pictureKey}</label></span></div>');
+// 加载图片关联的所有选项
+    function showPicKeys() {
+       var panel = $('.kv-panel-pager');
+       panel.append('<div class="radio"><span class="assoc_pic_key">图片关联： ');
+       var picOptions = JSON.parse('{$pictureOptions}');
+       $(picOptions).each(function(index,ele) {
+       if( index>=1){
+            if(ele =='{$pictureKey}'){
+            panel.append('<label class="radio-inline"><input class="{$pictureKey}" name="picKey" type="radio" checked="true" value="{$pictureKey}">{$pictureKey}</label>');    
+         }
+            else{
+            panel.append('<label class="radio-inline"><input class="'+ele+'" name="picKey" type="radio" value="'+ele+'">'+ele+'</label>');
+         }
+       }
+       });
+       panel.append('</span></div>');
+    }
+    showPicKeys();
 
-//添加列的函数
+
+//图片关联监听事件
+function changePicKey(name) {
+    var id = '#' + name;
+    var new_value = $(id).val();
+    $(id).attr('id',new_value)
+    var selector = '.' + name;
+    // $(selector).val(new_value);
+    // $(selector).attr('class',new_value);
+    if($(selector).is(':checked')) {   
+        var new_input = '<input class="'+new_value+'"checked="true" name="picKey" type="radio" value="'+new_value+'">' +new_value;
+    }
+    else 
+        {
+            var new_input = '<input class="'+new_value+'name="picKey" type="radio" value="'+new_value+'">' +new_value;
+        }
+    var label = $(selector).closest('label');
+    label.text('');
+    label.append(new_input);
+}
+
+
+//添加列的函数 增加onchange
     function addColumns(out,value=''){
         var seq = 0;
         $('#var-table').find('th').each(function() {
@@ -115,7 +153,7 @@ $('.kv-panel-pager').append('<div class="radio"><span class="assoc_pic_key">图�
         });
         seq = seq -1; //减去固定列的数量
         var nextSeq = seq + 1;
-        var th = '<th class="kv-align-top"  style="width: 5.01%;" data-col-seq="'+nextSeq +'"><input  type="text" size="6" value= "'+ out +'"><span class="remove-col glyphicon glyphicon-remove"></span></button></th>';
+        var th = '<th class="kv-align-top"  style="width: 5.01%;" data-col-seq="'+nextSeq +'"><input id="'+out+'" onchange="changePicKey(this.id)" type="text" size="6" value= "'+ out +'"><span class="remove-col glyphicon glyphicon-remove"></span></button></th>';
         var thSelector = 'th[data-col-seq="'+seq+'"]';
         $(thSelector).after(th);
         // var tdSelector = 'td[data-col-seq="'+seq+'"]';
@@ -162,7 +200,7 @@ $('.add-col').on('click',function() {
             });
             seq = seq -1; //减去固定列的数量
             var nextSeq = seq + 1;
-            var th = '<th class="kv-align-top"  style="width: 5.01%;" data-col-seq="'+nextSeq +'"><input  type="text" size="6" value= "'+ out +'"><span class="remove-col glyphicon glyphicon-remove"></span></button></th>';
+            var th = '<th class="kv-align-top"  style="width: 5.01%;" data-col-seq="'+nextSeq +'"><input id="'+out+'" type="text" size="6" value= "'+ out +'"><span class="remove-col glyphicon glyphicon-remove"></span></button></th>';
             var thSelector = 'th[data-col-seq="'+seq+'"]';
             $(thSelector).after(th);
             // var tdSelector = 'td[data-col-seq="'+seq+'"]';
@@ -177,21 +215,26 @@ $('.add-col').on('click',function() {
                 $(this).append(td);  
             });
             //顺便添加图片关联选项
-            var option = '<label  class=" seq-'+ nextSeq +' radio-inline"><input name="picKey" value="'+ out+'" type="radio">'+ out +'</label>';
-            $('.assoc_pic_key').append(option);
+            var option = '<label  class=" seq-'+ nextSeq +' radio-inline"><input class="'+out+'" name="picKey" value="'+ out+'" type="radio">'+ out +'</label>';
+            $('.kv-panel-pager').append(option);
         }
     });
     return false;
 });
 
+//可编辑的列增加监听事件 及时更改图片关联名称
+
 //删除当前列
 $('table').on('click','.remove-col',function() {
     var index = $(this).closest('th').attr('data-col-seq'); //找到列数
+    var id = $(this).closest('th').find('input').attr('id');
     var selector = "[data-col-seq='" + index + "']";
     var optionClass = '.seq-' + index;
-    $(optionClass).remove(); //删除图片关联选项
+    var pic_key = '.' + id;
+    $(pic_key).closest('label').remove(); //删除图片关联选项
     $(selector).remove();
 });
+
 //删除选中行
 
 $('#delete-row').click(function() {
@@ -330,11 +373,11 @@ $('#add-row').click(function() {
     });
 
 
-//批量设置EAN
-    $('#ean-set').on('click',function() {
-        var newEAN = $('.ean-replace').val();
-        $('.EAN').each(function() {
-            $(this).val(newEAN);
+//批量设置UPC
+    $('#upc-set').on('click',function() {
+        var newUPC = $('.upc-replace').val();
+        $('.UPC').each(function() {
+            $(this).val(newUPC);
         });
     });
 
@@ -361,21 +404,6 @@ $('#add-row').click(function() {
         }
     });
     
-    
-// 点击触发编辑事件
-$(".table").find("th ").bind("dblclick", function () {
-        var input = "<input type='text' id='temp' style='width:130px;' value=" + $(this).text() + " >";
-        $(this).text("");
-        $(this).append(input);
-        $("input#temp").focus();
-        $("input").blur(function () {
-            if ($(this).val() == "") {
-                $(this).remove();
-            } else {
-                $(this).closest("th").text($(this).val());
-            }
-        });
-    });
 
 // 可修改列加按键
 $('thead').find("th").each(function() {
