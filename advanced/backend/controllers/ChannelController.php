@@ -186,12 +186,15 @@ class ChannelController extends Controller
     }
 
     /**
+     *
+     *
      * ebay基本信息保存
      * @param $id
      */
 
     public function  actionEbaySave($id){
         $template = OaTemplates::find()->where(['nid'=>$id])->one();
+
         $data = $_POST['OaTemplates'];
         //设置默认物流
         try {
@@ -204,6 +207,32 @@ class ChannelController extends Controller
             else {
                 echo "保存失败";
             }
+        }
+        catch (\Exception $ex){
+            echo $ex;
+        }
+
+    }
+
+    /**
+     * ebay 完善模板
+     * @param $id
+     */
+
+    public function  actionEbayComplete($id=45){
+        $template = OaTemplates::find()->where(['infoid'=>$id])->one();
+        $data = $_POST['OaTemplates'];
+        //设置默认物流
+        $data['OutshippingMethod1']  or $data['OutshippingMethod1']=23;
+        $data['InshippingMethod1'] = $data['InshippingMethod1']?:93;
+        $template->setAttributes($data,true);
+
+        //更新产品的信息的状态
+        $info = OaGoodsinfo::find()->where(['pid'=>$id])->one();
+        $complete_status = $info->completeStatus?:'';
+        $info->completeStatus = $complete_status + '|eBay已完善';
+        if($template->update(false) and $info->update(false)){
+            echo "保存成功";
         }
         catch (\Exception $ex){
             echo "保存失败";
@@ -418,7 +447,7 @@ class ChannelController extends Controller
      * @brief 导出ebay模板
      * @param $id
      */
-    public  function  actionExportEbay($id)
+    public  function  actionExportEbay($id=45)
     {
         $sql = "oa_P_ebayTemplates {$id}";
         $db = yii::$app->db;
@@ -529,7 +558,7 @@ class ChannelController extends Controller
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
     }
-    //导出数据
+    //导出数据 wish平台
     public  function actionExport($id){
 
         $objPHPExcel = new \PHPExcel();
@@ -629,5 +658,94 @@ class ChannelController extends Controller
         $completeStatus[0]->update(false);
         echo 'Wish已完善';
 
+    }
+
+
+    /**
+     * 导出CSV文件 Joom
+     * @param array $data        数据
+     * @param array $header_data 首行数据
+     * @param string $file_name  文件名称
+     * @return string
+     */
+    public function actionExportJoom2($data = [], $header_data = [], $file_name = '')
+    {
+
+        $data = [
+            ['id'=>'0001','name'=>'test1'],
+            ['id'=>'0002','name'=>'test2'],
+        ];
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename=' . $file_name);
+        if (!empty($header_data)) {
+            echo iconv('utf-8','gbk//TRANSLIT','"'.implode('","',$header_data).'"'."\n");
+        }
+        foreach ($data as $key => $value) {
+            $output = array();
+            $output[] = $value['id'];
+            $output[] = $value['name'];
+            echo iconv('utf-8','gbk//TRANSLIT','"'.implode('","', $output)."\"\n");
+        }
+    }
+    /**
+     * 导出CSV文件
+     * @param int $pid
+     * @param array $data        数据
+     * @param array $header_data 首行数据
+     * @param string $file_name  文件名称
+     * @return string
+     */
+    public function actionExportJoom($id,$data = [], $header_data = [], $file_name = '')
+    {
+        $sql = 'P_oa_toJoom @pid='.$id;
+        $db = yii::$app->db;
+        $query = $db->createCommand($sql);
+        $joomRes = $query->queryAll();
+//        var_dump($joomRes);die;
+        if(empty($joomRes)){
+            return;
+        }
+
+        $header_data = array_keys($joomRes[0]);
+        $data = $joomRes;
+//        var_dump($data);die;
+//        $data = [
+//            ['id'=>'0001','name'=>'test1'],
+//            ['id'=>'0002','name'=>'test2'],
+//        ];
+//        $header_data = ['id','name'];
+        $file_name = $joomRes[0]['Parent Unique ID'].'Joom-CSV';
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename='.$file_name.'.csv');
+        header('Cache-Control: max-age=0');
+        $fp = fopen('php://output', 'a');
+        if (!empty($header_data)) {
+            foreach ($header_data as $key => $value) {
+                $header_data[$key] = iconv('utf-8', 'gbk', $value);
+            }
+            fputcsv($fp, $header_data);
+        }
+        $num = 0;
+        //每隔$limit行，刷新一下输出buffer，不要太大，也不要太小
+        $limit = 100000;
+        //逐行取出数据，不浪费内存
+        $count = count($data);
+        if ($count > 0) {
+            for ($i = 0; $i < $count; $i++) {
+                $num++;
+                //刷新一下输出buffer，防止由于数据过多造成问题
+                if ($limit == $num) {
+                    ob_flush();
+                    flush();
+                    $num = 0;
+                }
+                $row = $data[$i];
+                foreach ($row as $key => $value) {
+                    $row[$key] = iconv('utf-8', 'gbk', $value);
+                }
+                fputcsv($fp, $row);
+            }
+        }
+        fclose($fp);
     }
 }

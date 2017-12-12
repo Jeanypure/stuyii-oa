@@ -126,8 +126,8 @@ class OaCheckController extends Controller
             $_model->goodsid =$nid;
             $_model->picUrl = $img;
             $_model->developer =$developer;
-            $_model->devDatetime =strftime('%F %T');;
-            $_model->updateTime =strftime('%F %T');;
+            $_model->devDatetime =strftime('%F %T');
+            $_model->updatTime =strftime('%F %T');
             $_model->achieveStatus='待处理';
             $_model->GoodsName='';
             $arc_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-arc-map'])->one();

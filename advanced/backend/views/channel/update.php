@@ -90,6 +90,7 @@ $mainPage = "https://www.tupianku.com/view/full/10023/$templates->sku-_0_.jpg";
 echo '<div class="form-group field-oatemplates-mainpage">
     <label class="col-lg-1 control-label"></label>
     <div class="col-lg-3"><input type="text" class="form-control tem-page" value="https://www.tupianku.com/view/full/10023/'.$templates->sku.'-_0_.jpg"></div>
+
     <div class="col-lg=1"> 
     <a target="_blank" href="https://www.tupianku.com/view/full/10023/'.$templates->sku.'-_0_.jpg">
     <img src="https://www.tupianku.com/view/full/10023/'.$templates->sku.'-_0_.jpg" width="50" height="50">
@@ -471,6 +472,7 @@ $('.save-complete').on('click',function() {
         success:function(ret) {
             alert(ret);
             button.attr('disabled',false);
+
         }
     });
 });
