@@ -249,7 +249,6 @@ class ChannelController extends Controller
      */
     public function actionVarSave($id)
     {
-//        var_dump($_POST);die;
         $varData = $_POST['OaTemplatesVar'];
         $pictureKey = $_POST['picKey'];
         $var = new OaTemplatesVar();
@@ -291,6 +290,7 @@ class ChannelController extends Controller
             }
 
         }
+        echo "保存成功！";
         //根据varId的值，来决定更新还是创建
 
     }
@@ -418,9 +418,9 @@ class ChannelController extends Controller
      * @brief 导出ebay模板
      * @param $id
      */
-    public  function  actionExportEbay($id=45)
+    public  function  actionExportEbay($id)
     {
-        $sql = 'oa_P_ebayTemplates';
+        $sql = "oa_P_ebayTemplates {$id}";
         $db = yii::$app->db;
         $query = $db->createCommand($sql);
         $ret = $query->queryAll();

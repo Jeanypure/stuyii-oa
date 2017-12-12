@@ -116,8 +116,7 @@ class OaCheckController extends Controller
         {
 
             $model = $this->findModel($id);
-            $model->checkStatus ='已审批';
-            $model->update(['checkStatus']);
+
             //插入到OagoodsInfo里面
             $developer = $model->developer;
             $_model = clone $_model;
@@ -137,7 +136,13 @@ class OaCheckController extends Controller
             $pur = $pur_model->ruleValue;
             $_model->possessMan1 = $arc;
             $_model->Purchaser = $pur;
-            $_model->save(false);
+            if($_model->save(false)){
+                $model->checkStatus ='已审批';
+                $model->update(['checkStatus']);
+            }
+            else {
+                echo "此条失败！";
+            }
         }
         return $this->redirect(['to-check']);
     }
