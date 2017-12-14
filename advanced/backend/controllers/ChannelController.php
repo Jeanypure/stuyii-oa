@@ -127,11 +127,12 @@ class ChannelController extends Controller
             echo '更新成功！';
 
         }else{
-
+           // $main_image
+//            var_dump($sku[0]);die;
             $extra_images =  explode("\n", $sku[0]['extra_images']) ;
 
             return $this->render('editwish',[
-                'dataProvider' => $dataProvider,
+//                'dataProvider' => $dataProvider,
                 'extra_images' => $extra_images,
                 'sku' => $sku[0],
 
@@ -575,6 +576,8 @@ class ChannelController extends Controller
         }
 
         $suffix = $this->actionFetchSuffix();
+
+
 
         foreach($suffix as $key=>$value){
             $row = $key+2;

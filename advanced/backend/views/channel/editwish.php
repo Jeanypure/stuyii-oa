@@ -83,11 +83,11 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     echo '<div class="form-group field-oatemplates-mainpage">
          
          <label class="col-lg-1 control-label">主图</label>
-            <div class="col-lg-3"><input name="main_image" type="text" class="form-control" value="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_0_.jpg">
+            <div class="col-lg-3"><input name="main_image" type="text" class="form-control" value="'.$sku->main_image.'">
             </div>
             <div class="col-lg=1"> 
-                <a target="_blank" href="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_0_.jpg">
-                <img src="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_0_.jpg" width="80" height="80">
+                <a target="_blank" href="'.$sku->main_image.'">
+                <img src="'.$sku->main_image.'" width="80" height="80">
                 </a>
             </div>
         </div>';
