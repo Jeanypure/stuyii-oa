@@ -13,6 +13,7 @@ class ChannelSearch extends Channel
 {
     public $cate;
     public $subCate;
+    public $introducer;
     /**
      * @inheritdoc
      */
@@ -20,7 +21,7 @@ class ChannelSearch extends Channel
     {
         return [
             [['pid', 'IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged', 'goodsid', 'SupplierID', 'StoreID', 'bgoodsid'], 'integer'],
-            [['cate','subCate','description', 'GoodsName', 'AliasCnName', 'AliasEnName', 'PackName', 'Season', 'DictionaryName', 'SupplierName', 'StoreName',
+            [['introducer','cate','subCate','description', 'GoodsName', 'AliasCnName', 'AliasEnName', 'PackName', 'Season', 'DictionaryName', 'SupplierName', 'StoreName',
                 'Purchaser', 'possessMan1', 'possessMan2', 'picUrl', 'GoodsCode', 'achieveStatus', 'devDatetime', 'developer', 'updateTime', 'picStatus', 'AttributeName','cate','subCat'], 'safe'],
             [['DeclaredValue'], 'number'],
         ];
@@ -45,11 +46,7 @@ class ChannelSearch extends Channel
     public function search($params)
     {
         $query = Channel::find();
-//       $query->joinWith(['oa_goods']);
-
-        // add conditions that should always apply here
-
-
+        $query->joinWith(['oa_goods']);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'sort' => [
@@ -88,6 +85,11 @@ class ChannelSearch extends Channel
                     'label' => '子分类'
                 ],
                 /*=============*/
+                'introducer'=> [
+                    'asc' => ['oa_goods.introducer' => SORT_ASC],
+                    'desc' => ['oa_goods.introducer' => SORT_DESC],
+                    'label' => '推荐人'
+                ],
             ]
         ]);
 
@@ -136,6 +138,7 @@ class ChannelSearch extends Channel
             ->andFilterWhere(['like', 'AttributeName', $this->AttributeName])
             ->andFilterWhere(['like', 'cate', $this->cate])
             ->andFilterWhere(['like', 'subCate', $this->subCate])
+            ->andFilterWhere(['like', 'oa_goods.introducer', $this->introducer])
 ;
 
         return $dataProvider;
