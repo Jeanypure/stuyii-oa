@@ -36,7 +36,6 @@ $this->registerJs($js);
 
     <?php echo  $form->field($model, 'img',['template' => "<font color='red'>*{label}</font>\n<div >{input}</div>\n<div >{error}</div>",])->textInput(['placeholder' => '--必填--']) ?>
 
-    <?php //echo $form->field($model, 'cate',['template' => "<font color='red'>*{label}</font>\n<div >{input}</div>\n<div>{error}</div>",])->textInput(['placeholder' => '--必填--']) ?>
 
     <?= $form->field($model,'cate',['template' => "<font color='red'>*{label}</font>\n<div >{input}</div>\n<div >{error}</div>",])->dropDownList($model->getCatList(0),
         [

@@ -46,6 +46,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
              'SupplierName',
              'StoreName',
+            [
+                'attribute'=> 'introducer',
+                'value'=>'oa_goods.introducer'
+            ],
             'developer',
              'Purchaser',
              'possessMan1',

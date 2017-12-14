@@ -92,6 +92,7 @@ class Channel extends \yii\db\ActiveRecord
             'GoodsCode' => Yii::t('app', '商品编码'),
             'achieveStatus' => Yii::t('app', 'Achieve Status'),
             'devDatetime' => Yii::t('app', '开发时间'),
+            'introducer' => Yii::t('app', '推荐人'),
             'developer' => Yii::t('app', '开发员'),
             'updateTime' => Yii::t('app', 'Update Time'),
             'picStatus' => Yii::t('app', 'Pic Status'),
