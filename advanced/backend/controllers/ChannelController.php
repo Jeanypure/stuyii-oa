@@ -143,17 +143,15 @@ class ChannelController extends Controller
     /*
      * 多属性信息
      */
-    public function actionVarations($id){
-        $sku = OaWishgoods::find()->where(['infoid'=>$id])->all();
+    public function actionVariations($id){
         $dataProvider = new ActiveDataProvider([
             'query' => Wishgoodssku::find()->where(['pid'=>$id]),
             'pagination' => [
-                'pageSize' => 10,
+                'pageSize' => 200,
             ],
         ]);
-        return $this->renderAjax('varations',[
+        return $this->renderAjax('variations',[
             'dataProvider' => $dataProvider,
-            'sku' => $sku[0],
 
         ]);
 

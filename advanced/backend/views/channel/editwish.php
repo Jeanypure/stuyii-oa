@@ -137,7 +137,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     </div>
 </br>
     <div class="form-group">
-        <a  data-toggle="modal" data-target="#edit-sku" class=" var-btn btn btn-default varations-set">设置多属性</a>
+        <a  data-toggle="modal" data-target="#edit-sku" class=" var-btn btn btn-default variations-set">设置多属性</a>
     </div>
 
 
@@ -174,7 +174,7 @@ Modal::begin([
 ]);
 
 
-$requestUrlsku = Url::toRoute(['varations']);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
+$requestUrlsku = Url::toRoute(['variations']);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
 
 
 
@@ -218,7 +218,7 @@ Modal::end();
 <?php
 $js  = <<< JS
     //多属性内容写到模态框
-    $('.varations-set').on('click',function(){
+    $('.variations-set').on('click',function(){
         $.get('{$requestUrlsku}',{id:{$sku->infoid}},function(data){
             $('#edit-sku').find('.modal-body').html(data);
         });

@@ -73,21 +73,20 @@ $skuForm = ActiveForm::begin([
         // configure other gridview settings
         'gridSettings'=>[
             'panel'=>[
-//                'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i> 多属性SKU</h3>',
                 'type'=>GridView::TYPE_PRIMARY,
                 'footer'=>true,
                 'after'=>
-                    Html::input('text','rowNum','',['class' => 'x-row','placeholder'=>'行数']).' '.
+                    Html::input('text','rowNum','',['class' => 'x-row','placeholder'=>'行数','size'=>'8']).' '.
                     Html::button('新增行', ['id'=>'add-row','type'=>'button', 'class'=>'btn kv-batch-create']) . ' ' .
-                    Html::input('text','inventory','',['class' => 'inventory-replace','placeholder'=>'数量']).' '.
+                    Html::input('text','inventory','',['class' => 'inventory-replace','placeholder'=>'数量','size'=>'8']).' '.
                     Html::button('数量确定', ['id'=>'inventory-set','type'=>'button','class'=>'btn']).' '.
-                    Html::input('text','price','',['class' => 'price-replace','placeholder'=>'价格']).' '.
+                    Html::input('text','price','',['class' => 'price-replace','placeholder'=>'价格','size'=>'8']).' '.
                     Html::button('价格确定', ['id'=>'price-set','type'=>'button','class'=>'btn']).' '.
-                    Html::input('text','shipping','',['class' => 'shipping-replace','placeholder'=>'运费']).' '.
+                    Html::input('text','shipping','',['class' => 'shipping-replace','placeholder'=>'运费','size'=>'8']).' '.
                     Html::button('运费确定', ['id'=>'shipping-set','type'=>'button','class'=>'btn']).' '.
-                    Html::input('text','msrp','',['class' => 'msrp-replace','placeholder'=>'建议零售价']).' '.
-                    Html::button('建议零售价确定', ['id'=>'msrp-set','type'=>'button','class'=>'btn']).' '.
-                    Html::input('text','shipping_time','',['class' => 'shipping_time-replace','placeholder'=>'运输时间']).' '.
+                    Html::input('text','msrp','',['class' => 'msrp-replace','placeholder'=>'建议零售价','size'=>'8']).' '.
+                    Html::button('建议零售价', ['id'=>'msrp-set','type'=>'button','class'=>'btn']).' '.
+                    Html::input('text','shipping_time','',['class' => 'shipping_time-replace','placeholder'=>'运输时间','size'=>'8']).' '.
                     Html::button('运输时间', ['id'=>'shipping_time-set','type'=>'button','class'=>'btn']).' '.
                     Html::button('删除行', ['id'=>'delete-row','type'=>'button', 'class'=>'btn btn-danger kv-batch-delete']).'  '.
                 Html::button('保存', ['id'=>'save-sku','type'=>'button','class'=>'btn btn-info'])
