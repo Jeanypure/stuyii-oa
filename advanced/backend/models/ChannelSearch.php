@@ -46,7 +46,7 @@ class ChannelSearch extends Channel
     public function search($params)
     {
         $query = Channel::find();
-//       $query->joinWith(['oa_goods']);
+       $query->joinWith(['oa_goods']);
 
         // add conditions that should always apply here
 
