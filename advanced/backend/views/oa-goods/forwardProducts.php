@@ -217,7 +217,6 @@ function centerFormat($name) {
         <?= Html::a('新增产品',"javascript:void(0);",  ['title'=>'create','data-toggle' => 'modal','data-target' => '#forward-modal','class' => 'forward-create btn btn-primary']) ?>
         <?= Html::a('批量导入', "javascript:void(0);", ['title' => 'upload', 'class' => 'upload btn btn-info']) ?>
         <?= Html::a('批量删除',"javascript:void(0);",  ['title'=>'deleteLots','class' => 'delete-lots btn btn-danger']) ?>
-
         <?= Html::a('下载模板', ['template'], ['class' => 'btn btn-success']) ?>
         <?= Html::a('批量审批',"javascript:void(0);",  ['title'=>'approveLots','class' => 'approve-lots btn btn-warning']) ?>
         <input type="file" id="import" name="import" style="display: none" >
@@ -285,30 +284,24 @@ function centerFormat($name) {
             centerFormat('cate'),
             centerFormat('subCate'),
             centerFormat('vendor1'),
-//            centerFormat('vendor2'),
-//            centerFormat('vendor3'),
             centerFormat('origin1'),
-//            centerFormat('origin2'),
-//            centerFormat('origin3'),
             centerFormat('devNum'),
             centerFormat('developer'),
             centerFormat('introducer'),
-//            centerFormat('devStatus'),
-//            centerFormat('checkStatus'),
-            [
-                'attribute'=>'checkStatus',
-                'width'=>'250px',
-                'value'=>function ($model, $key, $index, $widget) {
-                    return $model->checkStatus;
-                },
-                'filterType'=>GridView::FILTER_SELECT2,
-//                'filter'=>ArrayHelper::map(\backend\models\OaGoods::find()->orderBy('checkStatus') ->asArray()->all(), 'nid', 'checkStatus'),
-                'filter'=> ['1' => "待提交", 2 =>'已审批'],
-                'filterWidgetOptions'=>[
-                    'pluginOptions'=>['allowClear'=>true],
-                ],
-                'filterInputOptions'=>['placeholder'=>'产品状态']
-            ],
+            centerFormat('checkStatus'),
+//            [
+//                'attribute'=>'checkStatus',
+//                'width'=>'250px',
+//                'value'=>function ($model, $key, $index, $widget) {
+//                    return $model->checkStatus;
+//                },
+//                'filterType'=>GridView::FILTER_SELECT2,
+//                'filter'=> ['1' => "待提交", 2 =>'已审批'],
+//                'filterWidgetOptions'=>[
+//                    'pluginOptions'=>['allowClear'=>true],
+//                ],
+//                'filterInputOptions'=>['placeholder'=>'产品状态']
+//            ],
             centerFormat('approvalNote'),
             centerFormat('createDate'),
             centerFormat('updateDate'),
@@ -318,11 +311,8 @@ function centerFormat($name) {
             centerFormat('hopeSale'),
             centerFormat('hopeMonthProfit'),
 
-
         ],
     ]);
-//    $test = ArrayHelper::map(\backend\models\OaGoods::find()->orderBy('checkStatus')->asArray()->all(), 'nid', 'checkStatus');
-//    var_dump($test);die;
     ?>
 </div>
 

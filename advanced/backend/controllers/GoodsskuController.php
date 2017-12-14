@@ -226,7 +226,6 @@ class GoodsskuController extends Controller
                         echo $e;
                         echo "美工或采购填写不对,请仔细检查数据";
                     }
-                    $this->redirect(['oa-goodsinfo/index']);
                 }
 
                 if ($type=='pic-info')
