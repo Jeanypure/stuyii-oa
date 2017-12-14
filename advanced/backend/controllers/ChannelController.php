@@ -99,14 +99,6 @@ class ChannelController extends Controller
     {
 
         $sku = OaWishgoods::find()->where(['infoid'=>$id])->all();
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => Wishgoodssku::find()->where(['pid'=>$id]),
-            'pagination' => [
-                'pageSize' => 150,
-            ],
-        ]);
-
         if (!$sku) {
             throw new NotFoundHttpException("The product was not found.");
         }
@@ -119,20 +111,14 @@ class ChannelController extends Controller
                 $sku[0]['extra_images'] .= $value."\n";
 
             }
-
             $sku[0]['extra_images'] = rtrim($sku[0]['extra_images'], "\n");
-
-
             $sku[0]->update(false);
             echo '更新成功！';
 
         }else{
-           // $main_image
-//            var_dump($sku[0]);die;
-            $extra_images =  explode("\n", $sku[0]['extra_images']) ;
 
+            $extra_images =  explode("\n", $sku[0]['extra_images']) ;
             return $this->render('editwish',[
-//                'dataProvider' => $dataProvider,
                 'extra_images' => $extra_images,
                 'sku' => $sku[0],
 
