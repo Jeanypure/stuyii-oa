@@ -625,60 +625,18 @@ class ChannelController extends Controller
     }
 
 
-    /**
-     * 导出CSV文件 Joom
-     * @param array $data        数据
-     * @param array $header_data 首行数据
-     * @param string $file_name  文件名称
-     * @return string
-     */
-    public function actionExportJoom2($data = [], $header_data = [], $file_name = '')
-    {
 
-        $data = [
-            ['id'=>'0001','name'=>'test1'],
-            ['id'=>'0002','name'=>'test2'],
-        ];
-        header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename=' . $file_name);
-        if (!empty($header_data)) {
-            echo iconv('utf-8','gbk//TRANSLIT','"'.implode('","',$header_data).'"'."\n");
-        }
-        foreach ($data as $key => $value) {
-            $output = array();
-            $output[] = $value['id'];
-            $output[] = $value['name'];
-            echo iconv('utf-8','gbk//TRANSLIT','"'.implode('","', $output)."\"\n");
-        }
-    }
     /**
      * 导出CSV文件
-     * @param int $pid
+
      * @param array $data        数据
      * @param array $header_data 首行数据
      * @param string $file_name  文件名称
      * @return string
      */
-    public function actionExportJoom($id,$data = [], $header_data = [], $file_name = '')
+    public function actionExportCsv($data = [], $header_data = [], $file_name = '')
     {
-        $sql = 'P_oa_toJoom @pid='.$id;
-        $db = yii::$app->db;
-        $query = $db->createCommand($sql);
-        $joomRes = $query->queryAll();
-//        var_dump($joomRes);die;
-        if(empty($joomRes)){
-            return;
-        }
 
-        $header_data = array_keys($joomRes[0]);
-        $data = $joomRes;
-//        var_dump($data);die;
-//        $data = [
-//            ['id'=>'0001','name'=>'test1'],
-//            ['id'=>'0002','name'=>'test2'],
-//        ];
-//        $header_data = ['id','name'];
-        $file_name = $joomRes[0]['Parent Unique ID'].'Joom-CSV';
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename='.$file_name.'.csv');
         header('Cache-Control: max-age=0');
@@ -711,5 +669,26 @@ class ChannelController extends Controller
             }
         }
         fclose($fp);
+    }
+
+    /*
+     * 导出Joom
+     * @param int $id 商品id
+     *
+     */
+
+    public function actionExportJoom($id){
+        $sql = 'P_oa_toJoom @pid='.$id;
+        $db = yii::$app->db;
+        $query = $db->createCommand($sql);
+        $joomRes = $query->queryAll();
+        if(empty($joomRes)){
+            return;
+        }
+        $data = $joomRes;
+        $header_data = array_keys($joomRes[0]);
+        $file_name = $joomRes[0]['Parent Unique ID'].'Joom-CSV';
+        $this->actionExportCsv($data,$header_data,$file_name);
+
     }
 }
