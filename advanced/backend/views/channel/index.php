@@ -45,6 +45,11 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
              'SupplierName',
+            [
+                'attribute'=> 'introducer',
+                'value'=>'oa_goods.introducer',
+                'label'=>'推荐人'
+            ],
              'StoreName',
             [
                 'attribute'=> 'introducer',
@@ -56,6 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
              'devDatetime',
             'completeStatus',
             'DictionaryName',
+            'isVar',
 
 
         ],

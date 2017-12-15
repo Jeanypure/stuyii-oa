@@ -74,8 +74,8 @@ $skuForm = ActiveForm::begin([
         'gridSettings'=>[
             'panel'=>[
                 'type'=>GridView::TYPE_PRIMARY,
-                'footer'=>true,
                 'after'=>
+<<<<<<< HEAD:advanced/backend/views/channel/variations.php
                     Html::input('text','rowNum','',['class' => 'x-row','placeholder'=>'行数','size'=>'8']).' '.
                     Html::button('新增行', ['id'=>'add-row','type'=>'button', 'class'=>'btn kv-batch-create']) . ' ' .
                     Html::input('text','inventory','',['class' => 'inventory-replace','placeholder'=>'数量','size'=>'8']).' '.
@@ -87,9 +87,22 @@ $skuForm = ActiveForm::begin([
                     Html::input('text','msrp','',['class' => 'msrp-replace','placeholder'=>'建议零售价','size'=>'8']).' '.
                     Html::button('建议零售价', ['id'=>'msrp-set','type'=>'button','class'=>'btn']).' '.
                     Html::input('text','shipping_time','',['class' => 'shipping_time-replace','placeholder'=>'运输时间','size'=>'8']).' '.
+=======
+                    Html::input('text','rowNum','',['class' => 'x-row','size'=>'9','placeholder'=>'行数']).' '.
+                    Html::button('新增行', ['id'=>'add-row','type'=>'button', 'class'=>'btn kv-batch-create']) . ' ' .
+                    Html::input('text','inventory','',['class' => 'inventory-replace','size'=>'9','placeholder'=>'数量']).' '.
+                    Html::button('数量确定', ['id'=>'inventory-set','type'=>'button','class'=>'btn']).' '.
+                    Html::input('text','price','',['class' => 'price-replace','size'=>'9','placeholder'=>'价格']).' '.
+                    Html::button('价格确定', ['id'=>'price-set','type'=>'button','class'=>'btn']).' '.
+                    Html::input('text','shipping','',['class' => 'shipping-replace','size'=>'9','placeholder'=>'运费']).' '.
+                    Html::button('运费确定', ['id'=>'shipping-set','type'=>'button','class'=>'btn']).' '.
+                    Html::input('text','msrp','',['class' => 'msrp-replace','size'=>'9','placeholder'=>'建议零售价']).' '.
+                    Html::button('零售价确定', ['id'=>'msrp-set','type'=>'button','class'=>'btn']).' '.
+                    Html::input('text','shipping_time','',['class' => 'shipping_time-replace','size'=>'9','placeholder'=>'运输时间']).' '.
+>>>>>>> cbae69c1cb30938afaabe6a14ab740d1843376da:advanced/backend/views/channel/varations.php
                     Html::button('运输时间', ['id'=>'shipping_time-set','type'=>'button','class'=>'btn']).' '.
                     Html::button('删除行', ['id'=>'delete-row','type'=>'button', 'class'=>'btn btn-danger kv-batch-delete']).'  '.
-                Html::button('保存', ['id'=>'save-sku','type'=>'button','class'=>'btn btn-info'])
+                    Html::button('保存', ['id'=>'save-sku','type'=>'button','class'=>'btn btn-info'])
             ]
         ]
 

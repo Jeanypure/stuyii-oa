@@ -94,6 +94,17 @@ class GoodsskuController extends Controller
                 if($type == 'goods-info')
                 {
                     $skuRows = $request->post()['Goodssku'];
+
+                    //根据SKU行数来判断是否是多属性
+                    $count = count($skuRows);
+                    $info = OaGoodsinfo::find()->where(['pid'=>$pid])->one();
+                    if($count>1){
+                        $info->isVar = '是';
+                    }
+                    else{
+                        $info->isVar = '否';
+                    }
+                    $info->save(false);
                     foreach ($skuRows as $row_key=>$row_value)
                     {
                         $row_value['pid'] = intval($pid); //pid传进来
@@ -177,6 +188,15 @@ class GoodsskuController extends Controller
                 if($type=='goods-info')
                 {
                     $skuRows = $request->post()['Goodssku'];
+                    $count = count($skuRows);
+                    $info = OaGoodsinfo::find()->where(['pid'=>$pid])->one();
+                    if($count>1){
+                        $info->isVar = '是';
+                    }
+                    else{
+                        $info->isVar = '否';
+                    }
+                    $info->save(false);
                     foreach ($skuRows as $row_key=>$row_value)
                     {
                         $row_value['pid'] = intval($pid); //pid传进来

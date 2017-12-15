@@ -133,6 +133,7 @@ class ChannelController extends Controller
             'query' => Wishgoodssku::find()->where(['pid'=>$id]),
             'pagination' => [
                 'pageSize' => 200,
+
             ],
         ]);
         return $this->renderAjax('variations',[
@@ -196,8 +197,6 @@ class ChannelController extends Controller
         }
 
     }
-
-
 
     /**
      * ebay 完善模板
@@ -402,12 +401,15 @@ class ChannelController extends Controller
         $options = ArrayHelper::map($ret, 'id','shippingName');
         return $options;
     }
-
+    /**
+     * @brief ebay模板导出时多余的字段维护在一个数组中
+     */
+    private $extra_fields = ['nameCode','specifics'];//因其他需要返回的字段
     /**
      * @brief 导出ebay模板
      * @param $id
      */
-    public  function  actionExportEbay($id=45)
+    public  function  actionExportEbay($id)
     {
         $sql = "oa_P_ebayTemplates {$id}";
         $db = yii::$app->db;
@@ -425,33 +427,26 @@ class ChannelController extends Controller
         $fileName = "eBay模板-".date("d-m-Y-His").".xls";
         header('Content-Disposition: attachment;filename='.$fileName .' ');
         header('Cache-Control: max-age=0');
+
+
         //获取列名&设置image字段
-        $tabFields = [];
-        $image = '';
-
-        $templates = OaTemplates::find()->where(['infoid'=>45])->one();
         $firstRow = $ret[0];
-        $tabFields = array_keys($firstRow);
-        $mainPage = $templates->mainPage;
-        $image .= $mainPage."\r\n";
-        $extraPage = json_decode($templates->extraPage,true)['images'];
-        foreach ($extraPage as $ima){
-            $image .= $ima."\r\n";
-        }
-
+        //过滤掉多余字段
+        $tabFields = array_filter(array_keys($firstRow),function($item){return !in_array($item,$this->extra_fields);});
         // 设置变体
         $checkSql = "select count(*) from oa_templates as ots left join 
-                oa_templatesvar as otr on ots.nid=otr.tid where ots.infoid=45";
+                oa_templatesvar as otr on ots.nid=otr.tid where otr.tid={$id}";
         $flag = $db->createCommand($checkSql)->queryAll();
         if($flag<=1){
             $var =[];
         }
         else {
             $findSql = "select *,otr.sku as varSku,otr.quantity as varQuantity from oa_templates as ots left join 
-                    oa_templatesvar as otr on ots.nid=otr.tid where ots.infoid=45";
+                    oa_templatesvar as otr on ots.nid=otr.tid where otr.tid={$id}";
             $allRows = $db->createCommand($findSql)->queryAll();
             $picKey = json_decode($allRows[0]['property'],true)['pictureKey'];
             $columns = json_decode($allRows[0]['property'],true)['columns'];
+            $extraPage = json_decode($allRows[0]['extraPage'],true)['images'];
             $picCount = count($extraPage);
 
             //设置属性名
@@ -461,46 +456,8 @@ class ChannelController extends Controller
                 array_push($variationSpecificsSet['NameValueList'],$map);
             }
 
-            //设置图片&//设置变体
-            $pictures = [];
-            $variation = [];
-            foreach ($allRows as $row){
-                $variationSpecificsSet = ['NameValueList' =>[]];
-                $columns = json_decode($row['property'],true)['columns'];
-                $value = ['value'=>''];
-                foreach ($columns as $col){
-                    if(array_keys($col)[0] == $picKey){
-                        $value['value'] = $col[$picKey];
-                        break;
-                    }
-                }
-                foreach ($columns as $col){
-                    $map = ['name'=>array_keys($col)[0],'value' =>array_values($col)[0]];
-                    array_push($variationSpecificsSet['NameValueList'],$map);
-                }
-                $pic = ['VariationSpecificPictureSet'=>['PictureURL'=>[$row['imageUrl']]],'Value'=>$value['value']];
-                array_push($pictures,$pic);
-                $var = [
-                    'SKU'=>$row['varSku'],
-                    'Quantity'=>$row['varQuantity'],
-                    'StartPrice'=>$row['retailPrice'],
-                    'VariationSpecifics'=>$variationSpecificsSet,
 
-                ];
-                array_push($variation,$var);
-            }
-
-            $var = [
-                'assoc_pic_key'=>$picKey,
-                'assoc_pic_count'=>$picCount,
-                'Variation'=>$variation,
-                'Pictures'=>$pictures,
-                'VariationSpecificsSet'=>$variationSpecificsSet
-            ];
         }
-
-
-
 
         // 写入列名
         foreach($tabFields as $num => $name){
@@ -509,14 +466,70 @@ class ChannelController extends Controller
 
         //写入单元格值
         foreach ($ret as $rowNum => $row) {
-            $row['PictureURL'] = $image;
-            $row['Variation'] = json_encode($var);
+            $row['Variation'] = json_encode($this->getVariations($allRows,$picKey,$picCount,$row['nameCode']));
+            //specifics 重新赋值
+            $specifics = json_decode($row['specifics'],true)['specifics'];
+            foreach ($specifics as $index=>$map){
+                $key = array_keys($map)[0];
+                $value = array_values($map)[0];
+                $row['Specifics'.strval($index+1)] = $key.':'.$value;
+            }
             foreach($tabFields as $num => $name){
                 $objPHPExcel->getActiveSheet()->setCellValue(PHPExcelTools::stringFromColumnIndex($num).($rowNum + 2),$row[$name]);
             }
         }
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
+    }
+
+
+    /**
+     * @brief 封装多属性的内部方法
+     * @param $allRows,
+     * @param $picKey,
+     * @param $picCount
+     * @param $accountName
+     * @return array $var
+     */
+    private  function  getVariations($allRows,$picKey,$picCount,$accountName)
+    {
+        //设置图片&//设置变体
+        $pictures = [];
+        $variation = [];
+        foreach ($allRows as $row){
+            $variationSpecificsSet = ['NameValueList' =>[]];
+            $columns = json_decode($row['property'],true)['columns'];
+            $value = ['value'=>''];
+            foreach ($columns as $col){
+                if(array_keys($col)[0] == $picKey){
+                    $value['value'] = $col[$picKey];
+                    break;
+                }
+            }
+            foreach ($columns as $col){
+                $map = ['name'=>array_keys($col)[0],'value' =>array_values($col)[0]];
+                array_push($variationSpecificsSet['NameValueList'],$map);
+            }
+            $pic = ['VariationSpecificPictureSet'=>['PictureURL'=>[$row['imageUrl']]],'Value'=>$value['value']];
+            array_push($pictures,$pic);
+            $var = [
+                'SKU'=>$row['varSku'].'@#'.$accountName,
+                'Quantity'=>$row['varQuantity'],
+                'StartPrice'=>$row['retailPrice'],
+                'VariationSpecifics'=>$variationSpecificsSet,
+
+            ];
+            array_push($variation,$var);
+        }
+
+        $var = [
+            'assoc_pic_key'=>$picKey,
+            'assoc_pic_count'=>$picCount,
+            'Variation'=>$variation,
+            'Pictures'=>$pictures,
+            'VariationSpecificsSet'=>$variationSpecificsSet
+        ];
+        return $var;
     }
     //导出数据 wish平台
     public  function actionExport($id){
@@ -636,8 +649,6 @@ class ChannelController extends Controller
         echo 'Wish已完善';
 
     }
-
-
 
     /**
      * 导出CSV文件
