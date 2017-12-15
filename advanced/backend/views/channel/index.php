@@ -51,6 +51,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label'=>'推荐人'
             ],
              'StoreName',
+            [
+                'attribute'=> 'introducer',
+                'value'=>'oa_goods.introducer'
+            ],
             'developer',
              'Purchaser',
              'possessMan1',

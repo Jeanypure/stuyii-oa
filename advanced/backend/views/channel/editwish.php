@@ -83,11 +83,11 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     echo '<div class="form-group field-oatemplates-mainpage">
          
          <label class="col-lg-1 control-label">主图</label>
-            <div class="col-lg-3"><input name="main_image" type="text" class="form-control" value="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_0_.jpg">
+            <div class="col-lg-3"><input name="main_image" type="text" class="form-control" value="'.$sku->main_image.'">
             </div>
             <div class="col-lg=1"> 
-                <a target="_blank" href="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_0_.jpg">
-                <img src="https://www.tupianku.com/view/full/10023/'.$sku->SKU.'-_0_.jpg" width="80" height="80">
+                <a target="_blank" href="'.$sku->main_image.'">
+                <img src="'.$sku->main_image.'" width="80" height="80">
                 </a>
             </div>
         </div>';
@@ -137,7 +137,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     </div>
 </br>
     <div class="form-group">
-        <a  data-toggle="modal" data-target="#edit-sku" class=" var-btn btn btn-default varations-set">设置多属性</a>
+        <a  data-toggle="modal" data-target="#edit-sku" class=" var-btn btn btn-default variations-set">设置多属性</a>
     </div>
 
 
@@ -174,7 +174,7 @@ Modal::begin([
 ]);
 
 
-$requestUrlsku = Url::toRoute(['varations']);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
+$requestUrlsku = Url::toRoute(['variations']);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
 
 
 
@@ -218,7 +218,7 @@ Modal::end();
 <?php
 $js  = <<< JS
     //多属性内容写到模态框
-    $('.varations-set').on('click',function(){
+    $('.variations-set').on('click',function(){
         $.get('{$requestUrlsku}',{id:{$sku->infoid}},function(data){
             $('#edit-sku').find('.modal-body').html(data);
         });

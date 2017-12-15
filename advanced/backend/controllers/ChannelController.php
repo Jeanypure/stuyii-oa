@@ -6,12 +6,10 @@ use backend\models\OaGoodsinfo;
 use backend\unitools\PHPExcelTools;
 use Yii;
 use backend\models\Channel;
-
 use backend\models\OaTemplatesVar;
 use backend\models\OaTemplates;
-
 use backend\models\ChannelSearch;
-use backend\models\Goodssku;
+use backend\models\WishSuffixDictionary;
 use backend\models\OaWishgoods;
 use backend\models\Wishgoodssku;
 use yii\web\Controller;
@@ -99,14 +97,6 @@ class ChannelController extends Controller
     {
 
         $sku = OaWishgoods::find()->where(['infoid'=>$id])->all();
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => Wishgoodssku::find()->where(['pid'=>$id]),
-            'pagination' => [
-                'pageSize' => 150,
-            ],
-        ]);
-
         if (!$sku) {
             throw new NotFoundHttpException("The product was not found.");
         }
@@ -119,19 +109,14 @@ class ChannelController extends Controller
                 $sku[0]['extra_images'] .= $value."\n";
 
             }
-
             $sku[0]['extra_images'] = rtrim($sku[0]['extra_images'], "\n");
-
-
             $sku[0]->update(false);
             echo '更新成功！';
 
         }else{
 
             $extra_images =  explode("\n", $sku[0]['extra_images']) ;
-
             return $this->render('editwish',[
-                'dataProvider' => $dataProvider,
                 'extra_images' => $extra_images,
                 'sku' => $sku[0],
 
@@ -143,16 +128,17 @@ class ChannelController extends Controller
     /*
      * 多属性信息
      */
-    public function actionVarations($id){
-
+    public function actionVariations($id){
         $dataProvider = new ActiveDataProvider([
             'query' => Wishgoodssku::find()->where(['pid'=>$id]),
             'pagination' => [
-                'pageSize' => 1000,
+                'pageSize' => 200,
+
             ],
         ]);
-        return $this->renderAjax('varations',[
+        return $this->renderAjax('variations',[
             'dataProvider' => $dataProvider,
+
         ]);
 
     }
@@ -211,7 +197,6 @@ class ChannelController extends Controller
         }
 
     }
-
 
     /**
      * ebay 完善模板
@@ -587,7 +572,10 @@ class ChannelController extends Controller
                 ->setCellValue($value.$sub, $combineArr[$value]);
         }
 
-        $suffix = $this->actionFetchSuffix();
+//        $suffix = $this->actionFetchSuffix();
+        $suffix = $this->actionSuffix();
+
+
 
         foreach($suffix as $key=>$value){
             $row = $key+2;
@@ -620,6 +608,7 @@ class ChannelController extends Controller
 
     /*
      * 拼接 wish账号
+     *
      */
     public function actionFetchSuffix(){
 
@@ -638,8 +627,21 @@ class ChannelController extends Controller
     }
 
     /*
-    *编辑完成状态
-   */
+     * 处理wish账号,默认是表中所有的账号
+     */
+
+    public function actionSuffix(){
+
+        $suffixAll = WishSuffixDictionary::find()
+                ->asArray()
+                ->all(); //返回数组对象
+        $suffix = array_column($suffixAll, 'IbaySuffix');
+        return $suffix;
+    }
+
+    /*
+     *编辑完成状态
+     */
     public function actionWishSign($id){
         $completeStatus = Channel::find()->where(['pid'=>$id])->all();
         $completeStatus[0]->completeStatus = 'Wish已完善';
@@ -648,62 +650,16 @@ class ChannelController extends Controller
 
     }
 
-
-    /**
-     * 导出CSV文件 Joom
-     * @param array $data        数据
-     * @param array $header_data 首行数据
-     * @param string $file_name  文件名称
-     * @return string
-     */
-    public function actionExportJoom2($data = [], $header_data = [], $file_name = '')
-    {
-
-        $data = [
-            ['id'=>'0001','name'=>'test1'],
-            ['id'=>'0002','name'=>'test2'],
-        ];
-        header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename=' . $file_name);
-        if (!empty($header_data)) {
-            echo iconv('utf-8','gbk//TRANSLIT','"'.implode('","',$header_data).'"'."\n");
-        }
-        foreach ($data as $key => $value) {
-            $output = array();
-            $output[] = $value['id'];
-            $output[] = $value['name'];
-            echo iconv('utf-8','gbk//TRANSLIT','"'.implode('","', $output)."\"\n");
-        }
-    }
-
     /**
      * 导出CSV文件
-     * @param int $pid
      * @param array $data        数据
      * @param array $header_data 首行数据
      * @param string $file_name  文件名称
      * @return string
      */
-    public function actionExportJoom($id,$data = [], $header_data = [], $file_name = '')
+    public function actionExportCsv($data = [], $header_data = [], $file_name = '')
     {
-        $sql = 'P_oa_toJoom @pid='.$id;
-        $db = yii::$app->db;
-        $query = $db->createCommand($sql);
-        $joomRes = $query->queryAll();
-//        var_dump($joomRes);die;
-        if(empty($joomRes)){
-            return;
-        }
 
-        $header_data = array_keys($joomRes[0]);
-        $data = $joomRes;
-//        var_dump($data);die;
-//        $data = [
-//            ['id'=>'0001','name'=>'test1'],
-//            ['id'=>'0002','name'=>'test2'],
-//        ];
-//        $header_data = ['id','name'];
-        $file_name = $joomRes[0]['Parent Unique ID'].'Joom-CSV';
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename='.$file_name.'.csv');
         header('Cache-Control: max-age=0');
@@ -736,5 +692,26 @@ class ChannelController extends Controller
             }
         }
         fclose($fp);
+    }
+
+    /*
+     * 导出Joom
+     * @param int $id 商品id
+     *
+     */
+
+    public function actionExportJoom($id){
+        $sql = 'P_oa_toJoom @pid='.$id;
+        $db = yii::$app->db;
+        $query = $db->createCommand($sql);
+        $joomRes = $query->queryAll();
+        if(empty($joomRes)){
+            return;
+        }
+        $data = $joomRes;
+        $header_data = array_keys($joomRes[0]);
+        $file_name = $joomRes[0]['Parent Unique ID'].'Joom-CSV';
+        $this->actionExportCsv($data,$header_data,$file_name);
+
     }
 }

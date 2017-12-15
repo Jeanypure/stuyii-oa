@@ -46,6 +46,9 @@ class ChannelSearch extends Channel
     public function search($params)
     {
         $query = Channel::find();
+
+        // add conditions that should always apply here
+
         $query->joinWith(['oa_goods']);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -83,6 +86,11 @@ class ChannelSearch extends Channel
                     'asc' => ['oa_goods.subCate' => SORT_ASC],
                     'desc' => ['oa_goods.subCate' => SORT_DESC],
                     'label' => '子分类'
+                ],
+                'introducer'=> [
+                    'asc' => ['oa_goods.introducer' => SORT_ASC],
+                    'desc' => ['oa_goods.introducer' => SORT_DESC],
+                    'label' => '推荐人'
                 ],
                 /*=============*/
                 'introducer'=> [
@@ -138,6 +146,8 @@ class ChannelSearch extends Channel
             ->andFilterWhere(['like', 'developer', $this->developer])
             ->andFilterWhere(['like', 'picStatus', '已完善'])
             ->andFilterWhere(['like', 'AttributeName', $this->AttributeName])
+            ->andFilterWhere(['like', 'oa_goods.cate', $this->cate])
+            ->andFilterWhere(['like', 'oa_goods.subCate', $this->subCate])
             ->andFilterWhere(['like', 'cate', $this->cate])
             ->andFilterWhere(['like', 'subCate', $this->subCate])
             ->andFilterWhere(['like', 'oa_goods.introducer', $this->introducer])

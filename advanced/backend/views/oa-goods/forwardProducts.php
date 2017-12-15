@@ -288,20 +288,8 @@ function centerFormat($name) {
             centerFormat('devNum'),
             centerFormat('developer'),
             centerFormat('introducer'),
+//            centerFormat('devStatus'),
             centerFormat('checkStatus'),
-//            [
-//                'attribute'=>'checkStatus',
-//                'width'=>'250px',
-//                'value'=>function ($model, $key, $index, $widget) {
-//                    return $model->checkStatus;
-//                },
-//                'filterType'=>GridView::FILTER_SELECT2,
-//                'filter'=> ['1' => "待提交", 2 =>'已审批'],
-//                'filterWidgetOptions'=>[
-//                    'pluginOptions'=>['allowClear'=>true],
-//                ],
-//                'filterInputOptions'=>['placeholder'=>'产品状态']
-//            ],
             centerFormat('approvalNote'),
             centerFormat('createDate'),
             centerFormat('updateDate'),

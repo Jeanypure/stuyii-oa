@@ -268,7 +268,9 @@ class OaGoodsController extends Controller
 
         $request = Yii::$app->request;
         if ($request->isPost) {
-            if ($model->load(Yii::$app->request->post()) && $model->save(false)) {
+
+            if ($model->load(Yii::$app->request->post())&&$model->save(false) ) {
+
                 //默认值更新到当前行中
                 $id = $model->nid;
                 $current_model = $this->findModel($id);
@@ -288,11 +290,8 @@ class OaGoodsController extends Controller
                 $sale = $current_model->hopeSale;
                 $moth_profit = $price*$rate*$sale*0.01;
                 $current_model->hopeMonthProfit = $moth_profit;
-//                $subCateNameModel = GoodsCats::find()->where(['NID' => $model->subCate])->one();
-//                $current_model->subCate = $subCateNameModel->CategoryName;
                 $current_model->devNum = '20' . date('ymd', time()) . strval($id);
                 $current_model->devStatus = '逆向认领';
-
                 $current_model->checkStatus = $status[$type];;
                 $current_model->developer = $user;
                 $current_model->updateDate = strftime('%F %T');
@@ -300,6 +299,7 @@ class OaGoodsController extends Controller
                 $current_model->catNid = $cateModel->CategoryParentID;
                 $current_model->cate = $cateModel->CategoryParentName;
                 $current_model->subCate = $cateModel->CategoryName;
+
                 $current_model->update(false);
                 return $this->redirect(['backward-products']);
             } else {
@@ -333,7 +333,6 @@ class OaGoodsController extends Controller
      */
     public function actionForwardUpdate($id)
     {
-//        $model = $this->findModel($id);
         $model = OaForwardGoods::find()->where(['nid' => $id]) ->one();
 
         if ($model->load(Yii::$app->request->post()) && $model->save(false) ) {
