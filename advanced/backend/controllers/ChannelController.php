@@ -590,7 +590,7 @@ class ChannelController extends Controller
             $objPHPExcel->getActiveSheet()->setCellValue('I'.$row,$foos[0][0]['main_image']);
             $objPHPExcel->getActiveSheet()->setCellValue('J'.$row,$foos[0][0]['extra_images']);
             $objPHPExcel->getActiveSheet()->setCellValue('K'.$row,$strvariant);
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$row,'landing_page_url');
+            $objPHPExcel->getActiveSheet()->setCellValue('L'.$row,'');
             $objPHPExcel->getActiveSheet()->setCellValue('M'.$row,$foos[0][0]['tags']);
             $objPHPExcel->getActiveSheet()->setCellValue('N'.$row,$foos[0][0]['description']);
             $objPHPExcel->getActiveSheet()->setCellValue('O'.$row,'');
