@@ -21,7 +21,7 @@ class ChannelSearch extends Channel
     {
         return [
             [['pid', 'IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged', 'goodsid', 'SupplierID', 'StoreID', 'bgoodsid'], 'integer'],
-            [['introducer','cate','subCate','description', 'GoodsName', 'AliasCnName', 'AliasEnName', 'PackName', 'Season', 'DictionaryName', 'SupplierName', 'StoreName',
+            [['introducer','isVar','cate','subCate','description', 'GoodsName', 'AliasCnName', 'AliasEnName', 'PackName', 'Season', 'DictionaryName', 'SupplierName', 'StoreName',
                 'Purchaser', 'possessMan1', 'possessMan2', 'picUrl', 'GoodsCode', 'achieveStatus', 'devDatetime', 'developer', 'updateTime', 'picStatus', 'AttributeName','cate','subCat'], 'safe'],
             [['DeclaredValue'], 'number'],
         ];
@@ -90,6 +90,7 @@ class ChannelSearch extends Channel
                     'desc' => ['oa_goods.introducer' => SORT_DESC],
                     'label' => '推荐人'
                 ],
+                'isVar',
             ]
         ]);
 
@@ -115,6 +116,7 @@ class ChannelSearch extends Channel
             'SupplierID' => $this->SupplierID,
             'StoreID' => $this->StoreID,
             'bgoodsid' => $this->bgoodsid,
+            'isVar' => $this->isVar,
         ]);
 
         $query

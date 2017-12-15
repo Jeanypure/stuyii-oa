@@ -57,6 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
              'devDatetime',
             'completeStatus',
             'DictionaryName',
+            'isVar',
 
 
         ],

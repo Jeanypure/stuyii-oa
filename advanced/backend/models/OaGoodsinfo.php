@@ -34,8 +34,7 @@ class OaGoodsinfo extends GoodsCats
     {
         return [
             [['IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged','goodsid'], 'integer'],
-            [['completeStatus','picStatus','updateTime','developer','devDatetime','GoodsCode','achieveStatus','description','SupplierName','Season','StoreName','PackName','DictionaryName','GoodsName'], 'string'],
-
+            [['isVar','completeStatus','picStatus','updateTime','developer','devDatetime','GoodsCode','achieveStatus','description','SupplierName','Season','StoreName','PackName','DictionaryName','GoodsName'], 'string'],
             [['StoreName','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description',], 'required'],
             [['completeStatus','DictionaryName','vendor1'],'safe'],
         ];
@@ -70,6 +69,7 @@ class OaGoodsinfo extends GoodsCats
             'Purchaser' => '采购',
             'possessMan1' => '美工',
             'vendor1' => '供应商链接1',
+            'isVar' => '是否多属性',
 
 
         ];
