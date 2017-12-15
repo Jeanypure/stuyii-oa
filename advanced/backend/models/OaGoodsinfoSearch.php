@@ -26,13 +26,14 @@ class OaGoodsinfoSearch extends OaGoodsinfo
     public $origin1;
     public $origin2;
     public $origin3;
+    public $hopeWeight;
 
     public function rules()
     {
         return [
             [['pid','IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged'], 'integer'],
 
-            [['picStatus','vendor1','vendor2','vendor3','developer','devDatetime','updateTime','achieveStatus','GoodsCode','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName','possessMan2','possessMan1'],'safe'],
+            [['hopeWeight','picStatus','vendor1','vendor2','vendor3','developer','devDatetime','updateTime','achieveStatus','GoodsCode','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName','possessMan2','possessMan1'],'safe'],
 
 
         ];
@@ -61,7 +62,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
 
         $query = OaGoodsinfo::find()->joinWith('oa_goods')->orderBy(['pid' => SORT_DESC])->where($condition);
 
- 
+//        $query->joinWith('oa_goods');
 
         // add conditions that should always apply here
 
