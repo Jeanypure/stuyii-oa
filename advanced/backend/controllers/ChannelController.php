@@ -6,12 +6,10 @@ use backend\models\OaGoodsinfo;
 use backend\unitools\PHPExcelTools;
 use Yii;
 use backend\models\Channel;
-
 use backend\models\OaTemplatesVar;
 use backend\models\OaTemplates;
-
 use backend\models\ChannelSearch;
-use backend\models\Goodssku;
+use backend\models\WishSuffixDictionary;
 use backend\models\OaWishgoods;
 use backend\models\Wishgoodssku;
 use yii\web\Controller;
@@ -561,7 +559,8 @@ class ChannelController extends Controller
                 ->setCellValue($value.$sub, $combineArr[$value]);
         }
 
-        $suffix = $this->actionFetchSuffix();
+//        $suffix = $this->actionFetchSuffix();
+        $suffix = $this->actionSuffix();
 
 
 
@@ -596,6 +595,7 @@ class ChannelController extends Controller
 
     /*
      * 拼接 wish账号
+     *
      */
     public function actionFetchSuffix(){
 
@@ -614,8 +614,21 @@ class ChannelController extends Controller
     }
 
     /*
-    *编辑完成状态
-   */
+     * 处理wish账号,默认是表中所有的账号
+     */
+
+    public function actionSuffix(){
+
+        $suffixAll = WishSuffixDictionary::find()
+                ->asArray()
+                ->all(); //返回数组对象
+        $suffix = array_column($suffixAll, 'IbaySuffix');
+        return $suffix;
+    }
+
+    /*
+     *编辑完成状态
+     */
     public function actionWishSign($id){
         $completeStatus = Channel::find()->where(['pid'=>$id])->all();
         $completeStatus[0]->completeStatus = 'Wish已完善';
@@ -628,7 +641,6 @@ class ChannelController extends Controller
 
     /**
      * 导出CSV文件
-
      * @param array $data        数据
      * @param array $header_data 首行数据
      * @param string $file_name  文件名称
