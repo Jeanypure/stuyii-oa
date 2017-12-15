@@ -149,7 +149,7 @@ class ChannelController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdateEbay($id=45)
+    public function actionUpdateEbay($id)
     {
         $templates = OaTemplates::find()->where(['infoid' =>$id])->one();
         if(Yii::$app->request->isPost){
