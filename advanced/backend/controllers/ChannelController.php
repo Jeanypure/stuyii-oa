@@ -538,27 +538,6 @@ class ChannelController extends Controller
         $sheet=0;
         $objPHPExcel->setActiveSheetIndex($sheet);
         $foos[0] = OaWishgoods::find()->where(['infoid'=>$id])->all();
-        $variants = Wishgoodssku::find()->where(['pid'=>$id])->all();
-        $variation = [];
-        $varitem = [];
-        if(!isset($variants)||empty($variants)){
-            return;
-        }
-
-        foreach($variants as $key=>$value){
-            $varitem['sku'] = $value['sku'];
-            $varitem['color'] = $value['color'];
-            $varitem['size'] = $value['size'];
-            $varitem['inventory'] = $value['inventory'];
-            $varitem['price'] = $value['price'];
-            $varitem['shipping'] = $value['shipping'];
-            $varitem['msrp'] = $value['msrp'];
-            $varitem['shipping_time'] = $value['shipping_time'];
-            $varitem['main_image'] = $value['linkurl'];
-            $variation[] = $varitem;
-        }
-
-        $strvariant = json_encode($variation,true);
         $columnNum = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P'];
         $colName = [
             'sku','selleruserid','name','inventory','price','msrp','shipping','shipping_time','main_image','extra_images',
@@ -575,11 +554,25 @@ class ChannelController extends Controller
 //        $suffix = $this->actionFetchSuffix();
         $suffix = $this->actionSuffix();
 
-
+//判断 @# 是否需要添加 规则：新账号需要拼接 @#
 
         foreach($suffix as $key=>$value){
+            $sub1 = substr(substr($value,5),0,1);
+            if($sub1=='E'){      //新账号
+                $su = $this->sub_zhanghao($value,'_','-');
+                $sub = '@#'.$su;
+
+            }
+            else{
+                $sub = '';
+            }
+
+
+            $strvariant = $this->actionVariationWish($id,$sub);
+
+
             $row = $key+2;
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$row,$foos[0][0]['SKU']);
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$row,$foos[0][0]['SKU'].$sub);
             $objPHPExcel->getActiveSheet()->setCellValue('B'.$row,$value);
             $objPHPExcel->getActiveSheet()->setCellValue('C'.$row,$foos[0][0]['title']);
             $objPHPExcel->getActiveSheet()->setCellValue('D'.$row,$foos[0][0]['inventory']);
@@ -597,6 +590,7 @@ class ChannelController extends Controller
             $objPHPExcel->getActiveSheet()->setCellValue('P'.$row,'');
         }
 
+
         header('Content-Type: application/vnd.ms-excel');
         $filename = 'Wish模版'.$foos[0][0]['SKU'].date("d-m-Y-His").".xls";
         header('Content-Disposition: attachment;filename='.$filename .' ');
@@ -605,9 +599,51 @@ class ChannelController extends Controller
         $objWriter->save('php://output');
     }
 
+    /*
+     * 处理多属性
+     * @param $id int 商品ID
+     */
+    function actionVariationWish($id,$sub){
+
+        $variants = Wishgoodssku::find()->where(['pid'=>$id])->all();
+        $variation = [];
+        $varitem = [];
+        if(!isset($variants)||empty($variants)){
+            return;
+        }
+
+        foreach($variants as $key=>$value){
+            $varitem['sku'] = $value['sku'].$sub;
+            $varitem['color'] = $value['color'];
+            $varitem['size'] = $value['size'];
+            $varitem['inventory'] = $value['inventory'];
+            $varitem['price'] = $value['price'];
+            $varitem['shipping'] = $value['shipping'];
+            $varitem['msrp'] = $value['msrp'];
+            $varitem['shipping_time'] = $value['shipping_time'];
+            $varitem['main_image'] = $value['linkurl'];
+            $variation[] = $varitem;
+        }
+
+        $strvariant = json_encode($variation,true);
+        return $strvariant;
+    }
+
+    //截取wish_E100-swordyee  中间的 E100
+    public function sub_zhanghao($selleruserid,$mark1,$mark2){
+
+        $st =stripos($selleruserid,$mark1);
+        $ed =stripos($selleruserid,$mark2);
+        if(($st==false||$ed==false)||$st>=$ed)
+            return 0;
+        $kw=substr($selleruserid,($st+1),($ed-$st-1));
+        return $kw;
+
+    }
+
 
     /*
-     * 拼接 wish账号
+     *拼接 wish账号
      *
      */
     public function actionFetchSuffix(){
