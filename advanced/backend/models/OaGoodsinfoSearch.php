@@ -60,7 +60,41 @@ class OaGoodsinfoSearch extends OaGoodsinfo
 
 
         $query = OaGoodsinfo::find()->joinWith('oa_goods')->orderBy(['pid' => SORT_DESC])->where($condition);
+        //返回当前登录用户
+        $user = yii::$app->user->identity->username;
+        //根据角色 过滤
+        $role_sql = yii::$app->db->createCommand("SELECT t2.item_name FROM [user] t1,[auth_assignment] t2 
+                    WHERE  t1.id=t2.user_id and
+                    username='$user'
+                    ");
+        $role = $role_sql
+            ->queryAll();
 
+        // 返回当前用户管辖下的用户
+        $sql = "oa_P_users '{$user}'";
+        $connection = Yii::$app->db;
+        $command = $connection->createCommand($sql);
+        $result = $command->queryAll();
+        $users = [];
+        foreach ($result as $user) {
+            array_push($users, $user['userName']);
+        }
+
+
+
+        if($role[0]['item_name']=='部门主管'){
+            $query->andWhere(['in', 'oa_goods.developer', $users]);
+        }elseif($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='Wish销售'){
+            $query->andWhere(['in', 'introducer', $users]);
+        }elseif ($role[0]['item_name']=='产品开发'){
+            $query->andWhere(['in', 'oa_goods.developer', $users]);
+        }elseif($role[0]['item_name']=='产品开发组长'){
+            $query->andWhere(['in', 'oa_goods.developer', $users]);
+        }elseif ($role[0]['item_name']=='美工'){
+            $query->andWhere(['in', 'possessMan1', $users]);
+        }
+        // add conditions that should always apply here
+//        $query->andWhere(['in', 'possessMan1', $users]);
  
 
         // add conditions that should always apply here
@@ -79,9 +113,9 @@ class OaGoodsinfoSearch extends OaGoodsinfo
 //                /* 其它字段不要动 */
 //                /* 下面这段是加入的 */
 //                /*=============*/
-//                'vendor1' => [
-//                    'asc' => ['oa_goods.vendor1' => SORT_ASC],
-//                    'desc' => ['oa_goods.vendor1' => SORT_DESC],
+//                'oa_goods.developer' => [
+//                    'asc' => ['oa_goods.developer' => SORT_ASC],
+//                    'desc' => ['oa_goods.developer' => SORT_DESC],
 //                    'label' => '供应商连接1'
 //                ],
 //                /*=============*/
@@ -127,7 +161,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
         $query->andFilterWhere(['like', 'description', $this->description]);
         $query->andFilterWhere(['like', 'AliasCnName', $this->AliasCnName]);
         $query->andFilterWhere(['like', 'vendor1', $this->vendor1]);
-        $query->andFilterWhere(['like', 'oa_goodsinfo.developer', $this->developer]);
+        $query->andFilterWhere(['like', 'oa_goods.developer', $this->developer]);
 
         return $dataProvider;
     }

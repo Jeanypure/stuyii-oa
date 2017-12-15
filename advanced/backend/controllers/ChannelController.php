@@ -643,7 +643,7 @@ class ChannelController extends Controller
 
 
     /*
-     *拼接 wish账号
+     * 拼接wish账号
      *
      */
     public function actionFetchSuffix(){
@@ -662,8 +662,10 @@ class ChannelController extends Controller
 
     }
 
+
     /*
      * 处理wish账号,默认是表中所有的账号
+     *
      */
 
     public function actionSuffix(){

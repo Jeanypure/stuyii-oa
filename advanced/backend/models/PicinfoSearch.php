@@ -45,7 +45,6 @@ class PicinfoSearch extends Picinfo
         $query = Picinfo::find();
         $query->joinWith(['oa_goods']);
 
-        // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
