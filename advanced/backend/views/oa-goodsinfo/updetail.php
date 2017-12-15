@@ -80,26 +80,7 @@ echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' 
 
             ],
         ],
-        [
-            'attributes' =>[
-                'oa_goods.hopeWeight' =>[
-                    'label'=>'预估重量',
-                    'items'=>[ 1=>'Group 2'],
-                    'type'=>Form::INPUT_TEXT,
-                    'readonly'=>true,
-                    'options'=> ['class'=>'GoodsCode'],
-                ],
-                'oa_goods.hopeCost' =>[
-                    'label'=>"<span style = 'color:red'>预估价格</span>",
-                    'items'=>[ 1=>'Group 2'],
-                    'type'=>Form::INPUT_TEXT,
-                    'options'=> ['class'=>'GoodsName'],
-                ],
 
-
-
-            ],
-        ],
         [
             'attributes' =>[
                 'Purchaser' =>[    //Purchaser   developer  possessMan1

@@ -288,29 +288,8 @@ function centerFormat($name) {
             centerFormat('devNum'),
             centerFormat('developer'),
             centerFormat('introducer'),
-<<<<<<< HEAD
 //            centerFormat('devStatus'),
-=======
->>>>>>> cbae69c1cb30938afaabe6a14ab740d1843376da
             centerFormat('checkStatus'),
-//            [
-//                'attribute'=>'checkStatus',
-//                'width'=>'250px',
-//                'value'=>function ($model, $key, $index, $widget) {
-//                    return $model->checkStatus;
-//                },
-//                'filterType'=>GridView::FILTER_SELECT2,
-<<<<<<< HEAD
-////                'filter'=>ArrayHelper::map(\backend\models\OaGoods::find()->orderBy('checkStatus') ->asArray()->all(), 'nid', 'checkStatus'),
-//                'filter'=> [1 => "待提交", 2 =>'已审批',3=>'已认领'],
-=======
-//                'filter'=> ['1' => "待提交", 2 =>'已审批'],
->>>>>>> cbae69c1cb30938afaabe6a14ab740d1843376da
-//                'filterWidgetOptions'=>[
-//                    'pluginOptions'=>['allowClear'=>true],
-//                ],
-//                'filterInputOptions'=>['placeholder'=>'产品状态']
-//            ],
             centerFormat('approvalNote'),
             centerFormat('createDate'),
             centerFormat('updateDate'),
