@@ -420,7 +420,6 @@ class ChannelController extends Controller
     public  function  actionExportEbay($id,$accounts='')
     {
         $sql = "oa_P_ebayTemplates {$id},'{$accounts}'";
-        var_dump($sql);die;
         $db = yii::$app->db;
         $query = $db->createCommand($sql);
         $ret = $query->queryAll();

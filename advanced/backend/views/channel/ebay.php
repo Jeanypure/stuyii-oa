@@ -255,11 +255,32 @@ $form->field($templates,'InshippingMethod1',$shipping_templates)->dropDownList($
 <br>
     <hr>
     <div class="st">
-        <p>
-            <?= Html::button('保存当前数据', ['class' =>' save-only btn btn-default']) ?>
-            <?= Html::button('保存并完善', ['class' =>'save-complete btn btn-default']) ?>
-            <?= Html::button('导出刊登模板', ['class' =>'export-ebay btn btn-default']) ?>
-        </p>
+        <div class="row">
+            <div class="col-sm-3">
+                <?= Html::button('保存当前数据', ['class' =>' save-only btn btn-default']) ?>
+
+                <?= Html::button('保存并完善', ['class' =>'save-complete btn btn-default']) ?>
+
+            </div>
+            <div class="col-sm-2">
+                <?php
+                echo Select2::widget([
+                    'name' => 'color_2',
+                    'data' => $ebayAccount,
+                    'maintainOrder' => true,
+                    'options' => ['placeholder' => '选择一个账号 ', 'multiple' => true,'class' => 'ebay-chosen'],
+                    'pluginOptions' => [
+                        'tags' => true,
+                    ],
+                ]);
+
+                ?>
+            </div>
+            <div class="col-sm-1">
+                <?php echo Html::button('导出所选账号模板',['class' =>'export-ebay-given btn btn-default'])    ?>
+            </div>
+
+        </div>
     </div>
 </div>
 
