@@ -165,7 +165,7 @@ class ChannelController extends Controller
             }
             $inShippingService = $this->getShippingService('In');
             $OutShippingService = $this->getShippingService('Out');
-            return $this->render('ebay',[
+            return $this->render('editEbay',[
                 'templates' =>$templates,
                 'infoId' => $id,
                 'inShippingService' => $inShippingService,
