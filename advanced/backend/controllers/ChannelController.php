@@ -434,15 +434,13 @@ class ChannelController extends Controller
         //过滤掉多余字段
         $tabFields = array_filter(array_keys($firstRow),function($item){return !in_array($item,$this->extra_fields);});
         // 设置变体
-        $checkSql = "select count(*) from oa_templates as ots left join 
+        $checkSql = "select isnull(count(*),0) as skuNumber from oa_templates as ots left join 
                 oa_templatesvar as otr on ots.nid=otr.tid where otr.tid={$id}";
-        $flag = $db->createCommand($checkSql)->queryAll();
-        if($flag<=1){
-            $var =[];
-        }
-        else {
+        $flag = $db->createCommand($checkSql)->queryone();
+        $count = intval($flag['skuNumber']);
+        if($count>1){
             $findSql = "select *,otr.sku as varSku,otr.quantity as varQuantity from oa_templates as ots left join 
-                    oa_templatesvar as otr on ots.nid=otr.tid where otr.tid={$id}";
+                oa_templatesvar as otr on ots.nid=otr.tid where otr.tid={$id}";
             $allRows = $db->createCommand($findSql)->queryAll();
             $picKey = json_decode($allRows[0]['property'],true)['pictureKey'];
             $columns = json_decode($allRows[0]['property'],true)['columns'];
@@ -455,9 +453,9 @@ class ChannelController extends Controller
                 $map = ['name'=>array_keys($col)[0],'value' =>array_values($col)[0]];
                 array_push($variationSpecificsSet['NameValueList'],$map);
             }
-
-
         }
+
+
 
         // 写入列名
         foreach($tabFields as $num => $name){
@@ -466,7 +464,11 @@ class ChannelController extends Controller
 
         //写入单元格值
         foreach ($ret as $rowNum => $row) {
-            $row['Variation'] = json_encode($this->getVariations($allRows,$picKey,$picCount,$row['nameCode']));
+
+            if($count>1){
+                $var = $this->getVariations($count,$allRows,$picKey,$picCount,$row['nameCode']);
+                $row['Variation'] = json_encode($var);
+            }
             //specifics 重新赋值
             $specifics = json_decode($row['specifics'],true)['specifics'];
             foreach ($specifics as $index=>$map){
@@ -485,14 +487,18 @@ class ChannelController extends Controller
 
     /**
      * @brief 封装多属性的内部方法
+     * @param $count, sku计数
      * @param $allRows,
      * @param $picKey,
      * @param $picCount
      * @param $accountName
      * @return array $var
      */
-    private  function  getVariations($allRows,$picKey,$picCount,$accountName)
+    private  function  getVariations($count,$allRows,$picKey,$picCount,$accountName)
     {
+        if($count<=1){
+            return false;
+        }
         //设置图片&//设置变体
         $pictures = [];
         $variation = [];
