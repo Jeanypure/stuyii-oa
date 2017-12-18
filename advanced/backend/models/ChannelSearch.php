@@ -120,7 +120,7 @@ class ChannelSearch extends Channel
             'IsCharged' => $this->IsCharged,
             'DeclaredValue' => $this->DeclaredValue,
             'goodsid' => $this->goodsid,
-            'devDatetime' => $this->devDatetime,
+//            'devDatetime' => $this->devDatetime,
             'updateTime' => $this->updateTime,
             'SupplierID' => $this->SupplierID,
             'StoreID' => $this->StoreID,
@@ -151,7 +151,7 @@ class ChannelSearch extends Channel
             ->andFilterWhere(['like', 'oa_goods.subCate', $this->subCate])
             ->andFilterWhere(['like', 'cate', $this->cate])
             ->andFilterWhere(['like', 'subCate', $this->subCate])
-            ->andFilterWhere(['like', 'devDatetime', $this->devDatetime])
+            ->andFilterWhere(['like', 'convert(varchar(10),devDatetime,120)', strval($this->devDatetime)])
             ->andFilterWhere(['like', 'oa_goods.introducer', $this->introducer]);
         return $dataProvider;
     }

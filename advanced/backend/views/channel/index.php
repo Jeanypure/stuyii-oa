@@ -58,11 +58,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'developer',
              'Purchaser',
              'possessMan1',
-             'devDatetime',
+            [
+                'attribute' => 'devDatetime',
+                'value' => function ($model) {
+                    return substr(strval($model->devDatetime),0,20);
+                },
+            ],
             'completeStatus',
             'DictionaryName',
             'isVar',
-
 
         ],
     ]); ?>
