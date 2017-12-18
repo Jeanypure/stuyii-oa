@@ -45,7 +45,7 @@ class ChannelSearch extends Channel
      */
     public function search($params)
     {
-        $query = Channel::find();
+        $query = ChannelSearch::find()->orderBy('devDatetime desc');
 
         // add conditions that should always apply here
 
@@ -54,7 +54,8 @@ class ChannelSearch extends Channel
             'query' => $query,
             'sort' => [
                 'defaultOrder' => [
-                    'devDatetime' => SORT_DESC,
+//                    'devDatetime' => SORT_DESC,
+                    'pid' => SORT_DESC,
                     //'title' => SORT_ASC,
                 ]
             ],
@@ -119,7 +120,7 @@ class ChannelSearch extends Channel
             'IsCharged' => $this->IsCharged,
             'DeclaredValue' => $this->DeclaredValue,
             'goodsid' => $this->goodsid,
-            'devDatetime' => $this->devDatetime,
+//            'devDatetime' => $this->devDatetime,
             'updateTime' => $this->updateTime,
             'SupplierID' => $this->SupplierID,
             'StoreID' => $this->StoreID,
@@ -150,9 +151,8 @@ class ChannelSearch extends Channel
             ->andFilterWhere(['like', 'oa_goods.subCate', $this->subCate])
             ->andFilterWhere(['like', 'cate', $this->cate])
             ->andFilterWhere(['like', 'subCate', $this->subCate])
-            ->andFilterWhere(['like', 'oa_goods.introducer', $this->introducer])
-;
-
+            ->andFilterWhere(['like', 'convert(varchar(10),devDatetime,120)', strval($this->devDatetime)])
+            ->andFilterWhere(['like', 'oa_goods.introducer', $this->introducer]);
         return $dataProvider;
     }
 }
