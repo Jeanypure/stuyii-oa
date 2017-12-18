@@ -262,7 +262,7 @@ class OaCheckController extends Controller
      * Action of delete goods where status is '未通过'
      * @params integer  $id
      * @return mixed
-     */
+     */ 
      public function actionDelete($id){
 
          $this->findModel($id)->delete();
