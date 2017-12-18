@@ -39,7 +39,7 @@ class OaGoodsSearch extends OaGoods
      *
      * @return ActiveDataProvider
      */
-    public function search($params,$devStatus,$checkStatus)
+    public function search($params,$devStatus,$checkStatus,$unit)
     {
         //返回当前登录用户
         $user = yii::$app->user->identity->username;
@@ -91,19 +91,31 @@ class OaGoodsSearch extends OaGoods
             ;
         }
 
-        if($role[0]['item_name']=='部门主管'){
-            $query->andWhere(['in', 'oa_goods.developer', $users]);
-        }elseif($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='Wish销售'){
-            $query->andWhere(['in', 'introducer', $users]);
-        }elseif ($role[0]['item_name']=='产品开发'){
-            $query->andWhere(['in', 'oa_goods.developer', $users]);
-        }elseif($role[0]['item_name']=='产品开发组长'){
-            $query->andWhere(['in', 'oa_goods.developer', $users]);
-        }
+        /*
+         * 分模块判断
+         *
+         */
 
-//        elseif ($role[0]['item_name']=='美工'){
-//            $query->andWhere(['in', 'oa_goodsinfo .possessMan1', $users]);
-//        }
+        if($unit == '产品推荐'){
+            if($role[0]['item_name']=='部门主管'){
+                $query->andWhere(['in', 'oa_goods.developer', $users]);
+            }elseif($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='Wish销售'){
+                $query->andWhere(['in', 'introducer', $users]);
+
+            }elseif($role[0]['item_name']=='产品开发组长'){
+                $query->andWhere(['in', 'oa_goods.developer', $users]);
+            }
+        }elseif($unit == '正向开发'||$unit = '逆向开发'){
+            if($role[0]['item_name']=='部门主管'){
+                $query->andWhere(['in', 'oa_goods.developer', $users]);
+            }elseif($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='Wish销售'){
+                $query->andWhere(['in', 'introducer', $users]);
+            }elseif ($role[0]['item_name']=='产品开发'){
+                $query->andWhere(['in', 'oa_goods.developer', $users]);
+            }elseif($role[0]['item_name']=='产品开发组长'){
+                $query->andWhere(['in', 'oa_goods.developer', $users]);
+            }
+        }
 
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([

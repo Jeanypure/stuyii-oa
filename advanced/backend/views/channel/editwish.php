@@ -312,7 +312,7 @@ $('body').on('click','.down-btn',function() {
     
     //导出数据joom CSV
     $('.joom-csv').on('click',function(){
-        alert(888);
+        alert('确定导出Joom模板?');
          window.location = '/channel/export-joom?id='+$sku->infoid;
     });
     

@@ -45,7 +45,7 @@ class OaGoodsController extends Controller
     {
         $searchModel = new OaGoodsSearch();
         $model = new OaGoods();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, '', '');
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, '', '','产品推荐');
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -836,7 +836,7 @@ class OaGoodsController extends Controller
     public function actionForwardProducts()
     {
         $searchModel = new OaGoodsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, '正向认领', '');
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, '正向认领', '','正向开发');
 
         return $this->render('forwardProducts', [
             'searchModel' => $searchModel,
@@ -848,7 +848,7 @@ class OaGoodsController extends Controller
     public function actionBackwardProducts()
     {
         $searchModel = new OaGoodsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, '逆向认领', '');
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, '逆向认领', '','逆向开发');
 
         return $this->render('backwardProducts', [
             'searchModel' => $searchModel,
