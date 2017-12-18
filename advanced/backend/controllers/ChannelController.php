@@ -156,14 +156,21 @@ class ChannelController extends Controller
 
         }
         else{
+            $ebay_sql = 'select ebayName,ebaySuffix from oa_ebay_suffix  ';
+            $ebay_account = Yii::$app->db->createCommand($ebay_sql)->queryAll();
+            //封装成key-value
+            $ebay_map = [];
+            foreach ($ebay_account as $row){
+                $ebay_map[$row['ebayName']] = $row['ebaySuffix'];
+            }
             $inShippingService = $this->getShippingService('In');
             $OutShippingService = $this->getShippingService('Out');
-            return $this->render('update',[
+            return $this->render('ebay',[
                 'templates' =>$templates,
                 'infoId' => $id,
                 'inShippingService' => $inShippingService,
                 'outShippingService' => $OutShippingService,
-
+                'ebayAccount' => $ebay_map
             ]);
         }
 
@@ -408,10 +415,12 @@ class ChannelController extends Controller
     /**
      * @brief 导出ebay模板
      * @param $id
+     * @param $accounts
      */
-    public  function  actionExportEbay($id)
+    public  function  actionExportEbay($id,$accounts='')
     {
-        $sql = "oa_P_ebayTemplates {$id}";
+        $sql = "oa_P_ebayTemplates {$id},'{$accounts}'";
+        var_dump($sql);die;
         $db = yii::$app->db;
         $query = $db->createCommand($sql);
         $ret = $query->queryAll();

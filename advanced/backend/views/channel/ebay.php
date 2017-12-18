@@ -4,8 +4,11 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\bootstrap\Tabs;
+use kartik\widgets\Select2;
+
 /* @var $this yii\web\View */
 /* @var $model backend\models\Channel */
+
 
 $this->title =  '更新平台信息';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '平台信息'), 'url' => ['index']];
@@ -53,12 +56,32 @@ Modal::end();
 
 </br>
 <div class="st">
-    <p>
+    <div class="row">
+        <div class="col-sm-3">
         <?= Html::button('保存当前数据', ['class' =>' save-only btn btn-default']) ?>
+
         <?= Html::button('保存并完善', ['class' =>'save-complete btn btn-default']) ?>
-        <?= Html::button('导出刊登模板', ['class' =>'export-ebay btn btn-default']) ?>
-        <?= Html::button('导出指定账号模板', ['class' =>'export-given-ebay btn btn-default']) ?>
-    </p>
+
+        </div>
+        <div class="col-sm-2">
+        <?php
+        echo Select2::widget([
+            'name' => 'color_2',
+            'data' => $ebayAccount,
+            'maintainOrder' => true,
+            'options' => ['placeholder' => '选择一个账号 ', 'multiple' => true,'class' => 'ebay-chosen'],
+            'pluginOptions' => [
+                'tags' => true,
+            ],
+        ]);
+
+        ?>
+        </div>
+            <div class="col-sm-1">
+                <?php echo Html::button('导出所选账号模板',['class' =>'export-ebay-given btn btn-default'])    ?>
+            </div>
+
+    </div>
 </div>
 </br>
 
@@ -236,7 +259,6 @@ $form->field($templates,'InshippingMethod1',$shipping_templates)->dropDownList($
             <?= Html::button('保存当前数据', ['class' =>' save-only btn btn-default']) ?>
             <?= Html::button('保存并完善', ['class' =>'save-complete btn btn-default']) ?>
             <?= Html::button('导出刊登模板', ['class' =>'export-ebay btn btn-default']) ?>
-            <?= Html::button('导出指定账号模板', ['class' =>'export-given-ebay btn btn-default']) ?>
         </p>
     </div>
 </div>
@@ -272,7 +294,8 @@ $(".tem-page").on('change',function() {
     //更新主图值
     $('.main-page').val(new_image);
 })
-//信息保存
+
+//导出模板
 $(".export-ebay").on('click',function() {
     window.location.href='{$exportUlr}';
 });
@@ -478,6 +501,17 @@ $('.save-complete').on('click',function() {
     });
 });
 
+
+//导出所选账号模板
+$('.export-ebay-given').on('click',function() {
+    var accounts = [];
+    $('.select2-selection__choice').each(function() {
+        accounts.push($(this).attr('title'));
+    });
+    //参数传到URL中
+    names = accounts.join();
+    window.location.href='{$exportUlr}'+ '&accounts='+names;
+});
 JS;
 $this->registerJs($js);
 ?>
