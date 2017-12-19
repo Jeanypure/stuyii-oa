@@ -95,11 +95,10 @@ class OaGoodsSearch extends OaGoods
          * 分模块判断
          *
          */
+//        var_dump($unit);die;
 
         if($unit == '产品推荐'){
-            if($role[0]['item_name']=='部门主管'){
-                $query->andWhere(['in', 'oa_goods.developer', $users]);
-            }elseif($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='Wish销售'){
+            if($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='Wish销售'){
                 $query->andWhere(['in', 'introducer', $users]);
 
             }
@@ -114,6 +113,7 @@ class OaGoodsSearch extends OaGoods
                 $query->andWhere(['in', 'oa_goods.developer', $users]);
             }
         }
+
 
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
