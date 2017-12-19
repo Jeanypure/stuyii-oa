@@ -117,7 +117,13 @@ class Channel extends \yii\db\ActiveRecord
         return $this->hasOne(OaGoods::className(), ['nid' => 'goodsid']);
     }
 
-
+    /**
+     *  关联oa_tempaltes 表
+     */
+    public  function  getOa_templates()
+    {
+        return $this->hasOne(OaTemplates::className(),['infoid' =>'pid']);
+    }
 
 
 

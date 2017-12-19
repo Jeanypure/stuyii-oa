@@ -10,12 +10,9 @@ $this->title = Yii::t('app', '平台信息');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="channel-index">
-
     <p>
         <?= Html::a(Yii::t('app', '标记已完善'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
-
     </div>
 
     <?= GridView::widget([
@@ -27,9 +24,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn'],
 
             [
-                'attribute' => 'picUrl',
+                'attribute' => 'mainImage',
                 'value' =>function($model,$key, $index, $widget) {
-                    return "<img src='$model->picUrl' width='100' height='100'/>";
+                    return "<img src='{$model->oa_templates->mainPage}' width='100' height='100'/>";
                 },
                 'format' => 'raw',
             ],
