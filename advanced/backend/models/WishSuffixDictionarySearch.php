@@ -19,7 +19,7 @@ class WishSuffixDictionarySearch extends WishSuffixDictionary
     {
         return [
             [['NID'], 'integer'],
-            [['IbaySuffix'], 'safe'],
+            [['IbaySuffix','ShortName'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class WishSuffixDictionarySearch extends WishSuffixDictionary
      */
     public function search($params)
     {
-        $query = WishSuffixDictionary::find();
+        $query = WishSuffixDictionary::find()->orderBy('NID DESC');
 
         // add conditions that should always apply here
 
@@ -63,6 +63,7 @@ class WishSuffixDictionarySearch extends WishSuffixDictionary
         ]);
 
         $query->andFilterWhere(['like', 'IbaySuffix', $this->IbaySuffix]);
+        $query->andFilterWhere(['like', 'ShortName', $this->ShortName]);
 
         return $dataProvider;
     }

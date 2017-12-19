@@ -8,16 +8,36 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
+<?php
+
+$this->registerJs(
+    '$("document").ready(function(){ 
+        $("#new_country").on("pjax:end", function() {
+            $.pjax.reload({container:"#suffix"});  //Reload GridView
+        });
+    });'
+);
+?>
+
+
+
 <div class="wish-suffix-dictionary-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php yii\widgets\Pjax::begin(['id' => 'new_country']) ?>
+    <?php $form = ActiveForm::begin(['options' => ['data-pjax' => true ]]); ?>
 
-    <?= $form->field($model, 'IbaySuffix')->textInput() ?>
+<div class="row">
+    <div class="col-md-6"><?= $form->field($model, 'IbaySuffix')->textInput() ?></div>
+    <div class="col-md-6"><?= $form->field($model, 'ShortName')->textInput() ?></div>
+
+</div>
+
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? '+新增Add' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
+    <?php yii\widgets\Pjax::end() ?>
 
 </div>

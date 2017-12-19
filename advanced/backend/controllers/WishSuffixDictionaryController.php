@@ -35,12 +35,19 @@ class WishSuffixDictionaryController extends Controller
      */
     public function actionIndex()
     {
+        $model = new WishSuffixDictionary();
         $searchModel = new WishSuffixDictionarySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save())
+        {
+            $model = new WishSuffixDictionary(); //reset model
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'model' => $model,
         ]);
     }
 
