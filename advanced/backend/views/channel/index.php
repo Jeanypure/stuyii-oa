@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' =>function($model,$key, $index, $widget) {
                     return "<img src='{$model->oa_templates->mainPage}' width='100' height='100'/>";
                 },
+                'label' => '主图',
                 'format' => 'raw',
             ],
             'GoodsCode',

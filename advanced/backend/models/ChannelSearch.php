@@ -131,7 +131,6 @@ class ChannelSearch extends Channel
             'IsCharged' => $this->IsCharged,
             'DeclaredValue' => $this->DeclaredValue,
             'goodsid' => $this->goodsid,
-//            'devDatetime' => $this->devDatetime,
             'updateTime' => $this->updateTime,
             'SupplierID' => $this->SupplierID,
             'StoreID' => $this->StoreID,
