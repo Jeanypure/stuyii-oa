@@ -26,7 +26,14 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'mainImage',
                 'value' =>function($model,$key, $index, $widget) {
-                    return "<img src='{$model->oa_templates->mainPage}' width='100' height='100'/>";
+                    try{
+                        $image = $model->oa_templates->mainPage;
+                    }
+                    catch (Exception $e){
+                        $image = $model->picUrl;
+                    }
+
+                    return "<img src='{$image}' width='100' height='100'/>";
                 },
                 'label' => '主图',
                 'format' => 'raw',
