@@ -154,7 +154,7 @@ class ChannelSearch extends Channel
             ->andFilterWhere(['like', 'picUrl', $this->picUrl])
             ->andFilterWhere(['like', 'GoodsCode', $this->GoodsCode])
             ->andFilterWhere(['like', 'achieveStatus', $this->achieveStatus])
-            ->andFilterWhere(['like', 'developer', $this->developer])
+            ->andFilterWhere(['like', 'oa_goods.developer', $this->developer])
             ->andFilterWhere(['like', 'picStatus', '已完善'])
             ->andFilterWhere(['like', 'AttributeName', $this->AttributeName])
             ->andFilterWhere(['like', 'oa_goods.cate', $this->cate])
