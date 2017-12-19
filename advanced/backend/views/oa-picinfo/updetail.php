@@ -110,16 +110,26 @@ $js2 = <<<JS
     
 // 保存数据的提交按钮
     $('#save-only').on('click',function() {
-        var form = $('#sku-info');
-        form.attr('action', '/goodssku/save-only?pid={$pid}&type=pic-info');
-        form.submit();
+        $.ajax({
+            url:'/goodssku/save-only?pid={$pid}&type=pic-info',
+            type:'post',
+            data:$('#sku-info').serialize(),
+            success:function (ret) {
+              alert(ret);
+            }
+        });
     }); 
  
 // 保存并完善的提交按钮
     $('#save-complete').on('click',function() {
-        var form = $('#sku-info');
-        form.attr('action', '/goodssku/save-complete?pid={$pid}&type=pic-info');
-        form.submit();
+        $.ajax({
+            url:'/goodssku/save-complete?pid={$pid}&type=pic-info',
+            type:'post',
+            data:$('#sku-info').serialize(),
+            success:function (ret) {
+              alert(ret);
+            }
+        });
     }); 
 JS;
 $this->registerJs($js2);
