@@ -98,6 +98,8 @@ class OaGoodsSearch extends OaGoods
         if($unit == '产品推荐'){
             if($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='wish销售'){
                 $query->andWhere(['in', 'introducer', $users]);
+            }elseif ($role[0]['item_name']=='美工'){
+                $query->andWhere(['in', 'introducer', $users]);
             }
         }elseif($unit == '正向开发'||$unit = '逆向开发'){
             if($role[0]['item_name']=='部门主管'){
@@ -130,13 +132,7 @@ class OaGoodsSearch extends OaGoods
             'nid' => $this->nid,
             'createDate' => $this->createDate,
             'updateDate' => $this->updateDate,
-//            'cate' => $this->cate,
-//            'subCate' => $this->subCate,
-//            'developer' => $this->developer,
-//            'introducer' => $this->introducer,
-//            'introReason' => $this->introReason,
-//            'checkStatus' => $this->checkStatus,
-//            'approvalNote' => $this->approvalNote,
+
         ]);
         $query->andFilterWhere(['like', 'cate', $this->cate])
             ->andFilterWhere(['like', 'subCate', $this->subCate])
