@@ -137,8 +137,6 @@ class GoodsskuController extends Controller
                             $update_model->update(['sku','property1','property2','property3',
                                 'CostPrice','Weight','RetailPrice']);
 
-//                        echo "{'msg':'update successfully'}";
-
                         }
 
                     }
@@ -282,12 +280,17 @@ class GoodsskuController extends Controller
                            $goods_model->update();
                            //提交事务
                            $import_trans->commit();
+                           echo '保存成功';
                        }
                        catch (\Exception $er) {
+
                            $import_trans->rollBack();
+                           $goods_model ->picStatus = '待处理';
+                           $goods_model->updateTime =strftime('%F %T');
+                           $goods_model->update();
+                           echo '保存失败';
                        }
                     }
-                    $this->redirect(['oa-picinfo/update','id'=>$pid]);
                 }
             }
             catch (Exception  $e)
