@@ -695,10 +695,27 @@ class ChannelController extends Controller
      *编辑完成状态
      */
     public function actionWishSign($id){
+
         $completeStatus = Channel::find()->where(['pid'=>$id])->all();
-        $completeStatus[0]->completeStatus = 'Wish已完善';
+
+
+        //动态计算产品的状态
+
+        if (!empty($completeStatus[0]->completeStatus)
+            &&($completeStatus[0]->completeStatus!='Wish已完善'||$completeStatus[0]->completeStatus!='Wish已完善|eBay已完善'
+                ||$completeStatus[0]->completeStatus!='eBay已完善|Wish已完善')) {
+            $complete_status = '';
+            $status = str_replace('|Wish已完善', '', $completeStatus[0]->completeStatus);
+            $complete_status = $status . '|Wish已完善';
+            $completeStatus[0]->completeStatus = $complete_status;
+        }else{
+            $completeStatus[0]->completeStatus = 'Wish已完善';
+        }
+
         $completeStatus[0]->update(false);
-        echo 'Wish已完善';
+
+
+
 
     }
 
