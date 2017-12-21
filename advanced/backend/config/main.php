@@ -22,10 +22,10 @@ return [
             'class' => 'mdm\admin\Module',
 //            'layout' => 'left-menu',//yii2-admin的导航菜单
         ],
-        'gii' => [
-            'class' => 'yii\gii\Module',
-            'allowedIPs' => ['127.0.0.1', '192.168.0.*','::1'] // 按需调整这里
-        ],
+        //'gii' => [
+            //'class' => 'yii\gii\Module',
+            //'allowedIPs' => ['127.0.0.1', '192.168.0.*','::1'] // 按需调整这里
+        //],
 //        'debug' => [
 //            'class' => 'yii\gii\Module',
 //            'allowedIPs' => ['127.0.0.1', '192.168.0.*','::1'] // 按需调整这里
@@ -74,8 +74,13 @@ return [
         ],
 
         'urlManager' => [
-            'enablePrettyUrl' => true,
+            'enablePrettyUrl' => false,
             'showScriptName' => false,
+            /*'rules' => [
+                '<controller:(post|comment)>/<id:\d+>/<action:(create|update|delete)>' => '<controller>/<action>',
+                '<controller:(post|comment)>/<id:\d+>' => '<controller>/view',
+                '<controller:(post|comment)>' => '<controller>/index',
+            ],*/
         ],
 
 
