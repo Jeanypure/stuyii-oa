@@ -80,7 +80,6 @@ echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' 
 
             ],
         ],
-
         [
             'attributes' =>[
                 'Purchaser' =>[    //Purchaser   developer  possessMan1
