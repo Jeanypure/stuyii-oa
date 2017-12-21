@@ -50,7 +50,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
              'SupplierName',
-
              'StoreName',
             [
                 'attribute'=> 'introducer',

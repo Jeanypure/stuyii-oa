@@ -17,6 +17,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
+use kartik\helpers\Html;
 /**
  * ChannelController implements the CRUD actions for Channel model.
  */
@@ -163,8 +164,10 @@ class ChannelController extends Controller
             foreach ($ebay_account as $row){
                 $ebay_map[$row['ebayName']] = $row['ebaySuffix'];
             }
-            $inShippingService = $this->getShippingService('In');
-            $OutShippingService = $this->getShippingService('Out');
+//            $inShippingService = $this->getShippingService('In');
+            $inShippingService = [];
+//            $OutShippingService = $this->getShippingService('Out');
+            $OutShippingService = [];
             return $this->render('editEbay',[
                 'templates' =>$templates,
                 'infoId' => $id,
@@ -189,8 +192,6 @@ class ChannelController extends Controller
         $data = $_POST['OaTemplates'];
         //设置默认物流
         try {
-            $data['OutshippingMethod1']  or $data['OutshippingMethod1']=23;
-            $data['InshippingMethod1'] = $data['InshippingMethod1']?:93;
             $template->setAttributes($data,true);
             if($template->update(true)){
                 echo "保存成功";
@@ -246,8 +247,19 @@ class ChannelController extends Controller
     {
         $varData = $_POST['OaTemplatesVar'];
         $pictureKey = $_POST['picKey'];
+        $labels = json_decode($_POST['label'],true);
         $var = new OaTemplatesVar();
         $fields = $var->attributeLabels();
+        //获取动态列的表名
+        $old_labels = [];
+        foreach (current($varData) as $key=>$value){
+            if (!in_array($key,array_keys($fields))){
+                array_push($old_labels,$key);
+            }
+        }
+        //列名映射成真实列名
+        $labels_map = array_combine($old_labels,$labels);
+        //保存数据
         $row = [];
         foreach ($varData as $key=>$value)
         {
@@ -262,7 +274,7 @@ class ChannelController extends Controller
                     $row[$field] = $val;
                 }
                 else{
-                    array_push($property['columns'],[$field=>$val]);
+                    array_push($property['columns'],[$labels_map[$field]=>$val]);
                 }
             }
             $row['property'] = json_encode($property);
@@ -399,14 +411,21 @@ class ChannelController extends Controller
 
     /**
      *  返回物流名称
+     * @param $type
+     * @param site_id
+     * @return nothing
      */
-    protected function getShippingService($type)
+    public function actionShipping($type,$site_id)
     {
-        $sql = "select id, shippingName from oa_shippingService where type='{$type}'";
+        $sql = "select nid,servicesName from oa_shippingService where type='{$type}' and siteId='{$site_id}'";
         $connection = Yii::$app->db;
         $ret = $connection->createCommand($sql)->queryAll();
-        $options = ArrayHelper::map($ret, 'id','shippingName');
-        return $options;
+        foreach ($ret as $row)
+        {
+//            var_dump($row);die;
+            echo Html::tag('option',Html::encode($row['servicesName']),array('value'=>$row['nid']));
+//            echo '<option value="'.$row['nid'].'">'.$row['servicesName'].'</option>';
+        }
     }
     /**
      * @brief ebay模板导出时多余的字段维护在一个数组中

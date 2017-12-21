@@ -146,7 +146,7 @@ echo '</div>';
     <p > 站点组</p>
 </div>
 </br>
-<?= $form->field($templates,'site')->textInput(['value' => '美国站' ]); ?>
+<?= $form->field($templates,'site')->dropDownList([0=>'美国站',3=>'英国站',15=>'澳大利亚站']); ?>
 <div class="blockTitle">
     <p > 多属性</p>
 </div>
@@ -214,7 +214,7 @@ echo '</div>';
 $form->field($templates,'InshippingMethod1',$shipping_templates)->dropDownList($inShippingService,
     [
         'class' => 'col-lg-6',
-        'prompt'=>'Economy Shipping from outside US(11-23days)',
+        'prompt'=>'--境内物流选择--',
     ]
 ); ?>
 <?= $form->field($templates,'InFirstCost1',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
@@ -235,7 +235,7 @@ $form->field($templates,'InshippingMethod1',$shipping_templates)->dropDownList($
         $form->field($templates,'OutshippingMethod1',$shipping_templates)->dropDownList($outShippingService,
             [
                 'class' => 'col-lg-6',
-                'prompt'=>'Economy Shipping from China/Hong Kong/Taiwan to worldwide(11-35days)',
+                'prompt'=>'--境外物流选择--',
             ]
         ); ?>
     <?= $form->field($templates,'OutFirstCost1',$shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
@@ -303,6 +303,34 @@ $exportUlr = URL::toRoute(['export-ebay','id'=>$templates->nid]);
 
 $js  = <<< JS
 
+
+//绑定监听事件根据站点的选择来决定物流
+
+$('#oatemplates-site').change(function() {
+  loadShipping(); 
+});
+
+//站点加载出来的时候也要重新加载下物流
+loadShipping();
+function loadShipping() {
+  var select = $('#oatemplates-site option:selected').val();
+  //获取站点的值
+  var promt_in = '<option value="">--境内物流--</option>';
+  var promt_out = '<option value="">--境外物流--</option>';
+  //三个物流逐句选择
+  $.get('/channel/shipping',{type:'InFir',site_id:select},function(ret) {
+        ret = promt_in + ret;
+        $('#oatemplates-inshippingmethod1').html(ret);
+  });
+  $.get('/channel/shipping',{type:'InSec',site_id:select},function(ret) {
+        ret = promt_in + ret;
+        $('#oatemplates-inshippingmethod2').html(ret);
+  });
+  $.get('/channel/shipping',{type:'OutFir',site_id:select},function(ret) {
+        ret = promt_out + ret;
+        $('#oatemplates-outshippingmethod1').html(ret);
+  });
+}
 //主图赋值
 $('.main-page').val($('.tem-page').val());
 
