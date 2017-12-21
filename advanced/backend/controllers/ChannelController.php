@@ -564,6 +564,7 @@ class ChannelController extends Controller
         ];
         return $var;
     }
+    
     //导出数据 wish平台
     public  function actionExport($id){
 
@@ -571,6 +572,13 @@ class ChannelController extends Controller
         $sheet=0;
         $objPHPExcel->setActiveSheetIndex($sheet);
         $foos[0] = OaWishgoods::find()->where(['infoid'=>$id])->all();
+
+        $sql = ' SELECT cate FROM oa_goods WHERE nid=(SELECT goodsid FROM oa_goodsinfo WHERE pid='.$id.')';
+
+        $db = yii::$app->db;
+        $query = $db->createCommand($sql);
+        $cate = $query->queryAll();
+
         $columnNum = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P'];
         $colName = [
             'sku','selleruserid','name','inventory','price','msrp','shipping','shipping_time','main_image','extra_images',
@@ -583,12 +591,13 @@ class ChannelController extends Controller
             $objPHPExcel->getActiveSheet()->setTitle($foos[0][0]['SKU'])
                 ->setCellValue($value.$sub, $combineArr[$value]);
         }
-
+        //
         $suffixAll = WishSuffixDictionary::find()
             ->asArray()
+            ->where("ParentCategory like :cate")
+            ->orWhere("ParentCategory is null")
+            ->addParams([':cate'=>'%'.$cate[0]['cate'].'%'])
             ->all(); //返回数组对象
-
-
         foreach($suffixAll as $key=>$value){
             //价格判断
             $totalprice = ceil($foos[0][0]['price']+$foos[0][0]['shipping']);
