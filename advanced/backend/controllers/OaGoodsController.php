@@ -151,7 +151,6 @@ class OaGoodsController extends Controller
             //根据类目ID更新类目名称
             $current_model->catNid = $cate;
             $current_model->cate = $cateModel->CategoryName;
-
             $subCateNameModel = GoodsCats::find()->where(['NID' => $model->subCate])->one();
             $current_model->subCate = $subCateNameModel->CategoryName;
 
