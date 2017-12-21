@@ -18,8 +18,9 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'NID') ?>
 
     <?= $form->field($model, 'IbaySuffix') ?>
+    <?= $form->field($model, 'ShortName') ?>
     <?= $form->field($model, 'Suffix') ?>
-    <?= $form->field($model, 'MainImg') ?>
+    <?= $form->field($model, 'Rate') ?>
     <?= $form->field($model, 'MainImg') ?>
 
     <div class="form-group">

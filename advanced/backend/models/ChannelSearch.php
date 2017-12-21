@@ -14,6 +14,15 @@ class ChannelSearch extends Channel
     public $cate;
     public $subCate;
     public $introducer;
+    public $mainImage;
+
+    /**
+     * @return string
+     */
+    public function getAliasCnName(): string
+    {
+        return $this->AliasCnName;
+    }
     /**
      * @inheritdoc
      */
@@ -22,7 +31,7 @@ class ChannelSearch extends Channel
         return [
             [['pid', 'IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged', 'goodsid', 'SupplierID', 'StoreID', 'bgoodsid'], 'integer'],
             [['introducer','isVar','cate','subCate','description', 'GoodsName', 'AliasCnName', 'AliasEnName', 'PackName', 'Season', 'DictionaryName', 'SupplierName', 'StoreName',
-                'Purchaser', 'possessMan1', 'possessMan2', 'picUrl', 'GoodsCode', 'achieveStatus', 'devDatetime', 'developer', 'updateTime', 'picStatus', 'AttributeName','cate','subCat'], 'safe'],
+               'completeStatus','mainImage', 'Purchaser', 'possessMan1', 'possessMan2', 'picUrl', 'GoodsCode', 'achieveStatus', 'devDatetime', 'developer', 'updateTime', 'picStatus', 'AttributeName','cate','subCat'], 'safe'],
             [['DeclaredValue'], 'number'],
         ];
     }
@@ -40,27 +49,27 @@ class ChannelSearch extends Channel
      * Creates data provider instance with search query applied
      *
      * @param array $params
-     *
+     * @param  $model_name
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params,$model_name ='')
     {
         $query = ChannelSearch::find()->orderBy('devDatetime desc');
 
-        // add conditions that should always apply here
-
+        //如果是数据中中心模块则只返回已完善数据
+        if($model_name == 'oa-data-center'){
+            $query->where(['<>','completeStatus','']);
+        }
         $query->joinWith(['oa_goods']);
+        $query->joinWith(['oa_templates']);
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'sort' => [
                 'defaultOrder' => [
-//                    'devDatetime' => SORT_DESC,
-                    'pid' => SORT_DESC,
-                    //'title' => SORT_ASC,
                 ]
             ],
         ]);
-
 
         $dataProvider->setSort([
             'attributes' => [
@@ -120,7 +129,6 @@ class ChannelSearch extends Channel
             'IsCharged' => $this->IsCharged,
             'DeclaredValue' => $this->DeclaredValue,
             'goodsid' => $this->goodsid,
-//            'devDatetime' => $this->devDatetime,
             'updateTime' => $this->updateTime,
             'SupplierID' => $this->SupplierID,
             'StoreID' => $this->StoreID,
@@ -144,7 +152,7 @@ class ChannelSearch extends Channel
             ->andFilterWhere(['like', 'picUrl', $this->picUrl])
             ->andFilterWhere(['like', 'GoodsCode', $this->GoodsCode])
             ->andFilterWhere(['like', 'achieveStatus', $this->achieveStatus])
-            ->andFilterWhere(['like', 'developer', $this->developer])
+            ->andFilterWhere(['like', 'oa_goods.developer', $this->developer])
             ->andFilterWhere(['like', 'picStatus', '已完善'])
             ->andFilterWhere(['like', 'AttributeName', $this->AttributeName])
             ->andFilterWhere(['like', 'oa_goods.cate', $this->cate])
@@ -152,6 +160,7 @@ class ChannelSearch extends Channel
             ->andFilterWhere(['like', 'cate', $this->cate])
             ->andFilterWhere(['like', 'subCate', $this->subCate])
             ->andFilterWhere(['like', 'convert(varchar(10),devDatetime,120)', strval($this->devDatetime)])
+            ->andFilterWhere(['like', 'completeStatus', $this->completeStatus])
             ->andFilterWhere(['like', 'oa_goods.introducer', $this->introducer]);
         return $dataProvider;
     }

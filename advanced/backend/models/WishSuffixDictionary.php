@@ -40,8 +40,8 @@ class WishSuffixDictionary extends \yii\db\ActiveRecord
     {
         return [
             'NID' => 'Nid',
-            'IbaySuffix' => 'Ibay账号简称',
-            'ShortName' => '普元简称',
+            'IbaySuffix' => '卖家账号',
+            'ShortName' => '简称',
             'Suffix' => '后缀',
             'Rate' => '运费比例',
             'MainImg' => '主图名称',

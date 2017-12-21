@@ -26,14 +26,13 @@ class OaGoodsinfoSearch extends OaGoodsinfo
     public $origin1;
     public $origin2;
     public $origin3;
+    public $hopeWeight;
 
     public function rules()
     {
         return [
             [['pid','IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged'], 'integer'],
-
-            [['picStatus','isVar','vendor1','vendor2','vendor3','developer','devDatetime','updateTime','achieveStatus','GoodsCode','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName','possessMan2','possessMan1'],'safe'],
-
+            [['hopeWeight','picStatus','isVar','vendor1','vendor2','vendor3','developer','devDatetime','updateTime','achieveStatus','GoodsCode','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName','possessMan2','possessMan1'],'safe'],
 
         ];
     }
@@ -80,7 +79,6 @@ class OaGoodsinfoSearch extends OaGoodsinfo
             array_push($users, $user['userName']);
         }
 
-
         /*
          * 分模块判断
          *
@@ -88,13 +86,13 @@ class OaGoodsinfoSearch extends OaGoodsinfo
         if($unit == '产品推荐'){
             if($role[0]['item_name']=='部门主管'){
                 $query->andWhere(['in', 'oa_goods.developer', $users]);
-            }elseif($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='Wish销售'){
+            }elseif($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='wish销售'){
                 $query->andWhere(['in', 'introducer', $users]);
             }
         }elseif($unit == '正向开发'||$unit == '逆向开发'){
             if($role[0]['item_name']=='部门主管'){
                 $query->andWhere(['in', 'oa_goods.developer', $users]);
-            }elseif($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='Wish销售'){
+            }elseif($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='wish销售'){
                 $query->andWhere(['in', 'introducer', $users]);
             }elseif ($role[0]['item_name']=='产品开发'){
                 $query->andWhere(['in', 'oa_goods.developer', $users]);
@@ -104,7 +102,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
         }elseif($unit == '属性信息'){
             if($role[0]['item_name']=='部门主管'){
                 $query->andWhere(['in', 'oa_goods.developer', $users]);
-            }elseif($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='Wish销售'){
+            }elseif($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='wish销售'){
                 $query->andWhere(['in', 'introducer', $users]);
             }elseif ($role[0]['item_name']=='产品开发'){
                 $query->andWhere(['in', 'oa_goods.developer', $users]);
@@ -114,7 +112,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
         }elseif($unit == '图片信息'){
             if($role[0]['item_name']=='部门主管'){
                 $query->andWhere(['in', 'oa_goods.developer', $users]);
-            }elseif($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='Wish销售'){
+            }elseif($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='wish销售'){
                 $query->andWhere(['in', 'introducer', $users]);
             }elseif ($role[0]['item_name']=='产品开发'){
                 $query->andWhere(['in', 'oa_goods.developer', $users]);
@@ -126,8 +124,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
         }
 
         // add conditions that should always apply here
-//        $query->andWhere(['in', 'possessMan1', $users]);
- 
+
 
         // add conditions that should always apply here
 

@@ -137,8 +137,8 @@ foreach($images as $key=>$image){
 echo '</div>';
 ?>
 </br>
-<?= $form->field($templates,'location')->textInput(['value'=>'Shanghai']); ?>
-<?= $form->field($templates,'country')->textInput(['value' => 'CN' ]); ?>
+<?= $form->field($templates,'location')->textInput(); ?>
+<?= $form->field($templates,'country')->textInput(); ?>
 <?= $form->field($templates,'postCode')->textInput(); ?>
 <?= $form->field($templates,'prepareDay')->textInput(['value' => '3' ]); ?>
 

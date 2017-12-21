@@ -11,9 +11,7 @@ use yii\bootstrap\Modal;
 use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Channel */
-$this->title = Yii::t('app', 'Update {modelClass}: ', [
-        'modelClass' => 'Channel',
-    ]) . $sku->infoid;
+$this->title = '编辑模板';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Channels'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $sku->infoid, 'url' => ['view', 'id' => $sku->infoid]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
@@ -79,11 +77,11 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     </div>
     <?=$form->field($sku,'SKU')->textInput();?>
     <?php
-
+    echo $form->field($sku,'main_image')->textInput(['class'=>'main-image','style'=>'display:none']);
     echo '<div class="form-group field-oatemplates-mainpage">
          
          <label class="col-lg-1 control-label">主图</label>
-            <div class="col-lg-3"><input name="main_image" type="text" class="form-control" value="'.$sku->main_image.'">
+            <div class="col-lg-3"><input name="main_image" type="text" class="form-control tem-page" value="'.$sku->main_image.'">
             </div>
             <div class="col-lg=1"> 
                 <a target="_blank" href="'.$sku->main_image.'">
@@ -217,6 +215,19 @@ Modal::end();
 
 <?php
 $js  = <<< JS
+//主图赋值
+$('.main-image').val($('.tem-page').val());
+
+//监听主图变化事件
+$(".tem-page").on('change',function() {
+    //图片切换
+    new_image = $(this).val();
+    $(this).parents('div .form-group').find('a').attr('href',new_image);
+    $(this).parents('div .form-group').find('img').attr('src',new_image);
+    //更新主图值
+    $('.main-image').val(new_image);
+})
+
     //多属性内容写到模态框
     $('.variations-set').on('click',function(){
         $.get('{$requestUrlsku}',{id:{$sku->infoid}},function(data){
