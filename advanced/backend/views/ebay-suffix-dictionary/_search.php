@@ -15,17 +15,17 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'NID') ?>
+    <?= $form->field($model, 'nid') ?>
 
-    <?= $form->field($model, 'IbaySuffix') ?>
-    <?= $form->field($model, 'ShortName') ?>
-    <?= $form->field($model, 'Suffix') ?>
-    <?= $form->field($model, 'Rate') ?>
-    <?= $form->field($model, 'MainImg') ?>
+    <?= $form->field($model, 'ebayName') ?>
+
+    <?= $form->field($model, 'ebaySuffix') ?>
+
+    <?= $form->field($model, 'nameCode') ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+        <?= Html::submitButton('搜索', ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton('重置', ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -30,6 +30,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'NID',
             'IbaySuffix',
+            'Suffix',
+            'Rate',
+            'MainImg',
         ],
     ]) ?>
 
