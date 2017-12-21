@@ -3,16 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\WishSuffixDictionary;
-use backend\models\WishSuffixDictionarySearch;
+use backend\models\OaEbayPaypal;
+use backend\models\EbayPaypalSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * WishSuffixDictionaryController implements the CRUD actions for WishSuffixDictionary model.
+ * EbayPaypalController implements the CRUD actions for OaEbayPaypal model.
  */
-class WishSuffixDictionaryController extends Controller
+class EbayPaypalController extends Controller
 {
     /**
      * @inheritdoc
@@ -30,29 +30,22 @@ class WishSuffixDictionaryController extends Controller
     }
 
     /**
-     * Lists all WishSuffixDictionary models.
+     * Lists all OaEbayPaypal models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $model = new WishSuffixDictionary();
-        $searchModel = new WishSuffixDictionarySearch();
+        $searchModel = new EbayPaypalSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save())
-        {
-            $model = new WishSuffixDictionary(); //reset model
-        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'model' => $model,
         ]);
     }
 
     /**
-     * Displays a single WishSuffixDictionary model.
+     * Displays a single OaEbayPaypal model.
      * @param integer $id
      * @return mixed
      */
@@ -64,16 +57,16 @@ class WishSuffixDictionaryController extends Controller
     }
 
     /**
-     * Creates a new WishSuffixDictionary model.
+     * Creates a new OaEbayPaypal model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new WishSuffixDictionary();
+        $model = new OaEbayPaypal();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->NID]);
+            return $this->redirect(['view', 'id' => $model->nid]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -82,7 +75,7 @@ class WishSuffixDictionaryController extends Controller
     }
 
     /**
-     * Updates an existing WishSuffixDictionary model.
+     * Updates an existing OaEbayPaypal model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -92,7 +85,7 @@ class WishSuffixDictionaryController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->NID]);
+            return $this->redirect(['view', 'id' => $model->nid]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -101,7 +94,7 @@ class WishSuffixDictionaryController extends Controller
     }
 
     /**
-     * Deletes an existing WishSuffixDictionary model.
+     * Deletes an existing OaEbayPaypal model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -114,15 +107,15 @@ class WishSuffixDictionaryController extends Controller
     }
 
     /**
-     * Finds the WishSuffixDictionary model based on its primary key value.
+     * Finds the OaEbayPaypal model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return WishSuffixDictionary the loaded model
+     * @return OaEbayPaypal the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = WishSuffixDictionary::findOne($id)) !== null) {
+        if (($model = OaEbayPaypal::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

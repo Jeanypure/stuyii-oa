@@ -565,10 +565,9 @@ class ChannelController extends Controller
                 ->setCellValue($value.$sub, $combineArr[$value]);
         }
 
-//        $suffix = $this->actionFetchSuffix();
         $suffix = $this->actionSuffix();
 
-//判断 @# 是否需要添加 规则：新账号需要拼接 @#
+    //判断 @# 是否需要添加 规则：新账号需要拼接 @#
 
         foreach($suffix as $key=>$value){
             $sub1 = substr(substr($value,5),0,1);
@@ -656,25 +655,7 @@ class ChannelController extends Controller
     }
 
 
-    /*
-     * 拼接wish账号
-     *
-     */
-    public function actionFetchSuffix(){
 
-       $suffix = Yii::$app->db->createCommand(" 
-            SELECT  DictionaryName    from  B_Dictionary
-            WHERE CategoryID=12 AND  DictionaryName LIKE '%WIS%' AND Used=0
-            ORDER BY DictionaryName ")->queryAll();
-
-        foreach ($suffix as $val){
-            $len = strlen($val["DictionaryName"])-3;
-            $wish_suffix[]  = 'wish_'.substr($val["DictionaryName"],3,$len);
-        }
-
-        return $wish_suffix;
-
-    }
 
 
     /*
@@ -695,10 +676,27 @@ class ChannelController extends Controller
      *编辑完成状态
      */
     public function actionWishSign($id){
+
         $completeStatus = Channel::find()->where(['pid'=>$id])->all();
-        $completeStatus[0]->completeStatus = 'Wish已完善';
+
+
+        //动态计算产品的状态
+
+        if (!empty($completeStatus[0]->completeStatus)
+            &&($completeStatus[0]->completeStatus!='Wish已完善'||$completeStatus[0]->completeStatus!='Wish已完善|eBay已完善'
+                ||$completeStatus[0]->completeStatus!='eBay已完善|Wish已完善')) {
+            $complete_status = '';
+            $status = str_replace('|Wish已完善', '', $completeStatus[0]->completeStatus);
+            $complete_status = $status . '|Wish已完善';
+            $completeStatus[0]->completeStatus = $complete_status;
+        }else{
+            $completeStatus[0]->completeStatus = 'Wish已完善';
+        }
+
         $completeStatus[0]->update(false);
-        echo 'Wish已完善';
+
+
+
 
     }
 

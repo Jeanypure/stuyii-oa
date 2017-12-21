@@ -2,17 +2,17 @@
 
 namespace backend\controllers;
 
+use backend\models\EbaySuffixDictionarySearch;
 use Yii;
-use backend\models\WishSuffixDictionary;
-use backend\models\WishSuffixDictionarySearch;
 use yii\web\Controller;
+use backend\models\OaEbaySuffix;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * WishSuffixDictionaryController implements the CRUD actions for WishSuffixDictionary model.
  */
-class WishSuffixDictionaryController extends Controller
+class EbaySuffixDictionaryController extends Controller
 {
     /**
      * @inheritdoc
@@ -35,19 +35,12 @@ class WishSuffixDictionaryController extends Controller
      */
     public function actionIndex()
     {
-        $model = new WishSuffixDictionary();
-        $searchModel = new WishSuffixDictionarySearch();
+        $searchModel = new EbaySuffixDictionarySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save())
-        {
-            $model = new WishSuffixDictionary(); //reset model
-        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'model' => $model,
         ]);
     }
 
@@ -70,12 +63,13 @@ class WishSuffixDictionaryController extends Controller
      */
     public function actionCreate()
     {
-        $model = new WishSuffixDictionary();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->NID]);
+        $model = new OaEbaySuffix();
+        $post = Yii::$app->request->post();
+        //var_dump($post);exit;
+        if ($model->load($post) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->nid]);
         } else {
-            return $this->render('create', [
+            return $this->renderAjax('create', [
                 'model' => $model,
             ]);
         }
@@ -91,10 +85,12 @@ class WishSuffixDictionaryController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->NID]);
+        $post = Yii::$app->request->post();
+        //var_dump($post);exit;
+        if ($model->load($post) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->nid]);
         } else {
-            return $this->render('update', [
+            return $this->renderAjax('update', [
                 'model' => $model,
             ]);
         }
@@ -122,10 +118,10 @@ class WishSuffixDictionaryController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = WishSuffixDictionary::findOne($id)) !== null) {
+        if (($model = OaEbaySuffix::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('请求的页面不存在.');
         }
     }
 }

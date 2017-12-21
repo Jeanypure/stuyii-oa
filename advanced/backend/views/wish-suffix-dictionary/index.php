@@ -7,7 +7,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel backend\models\WishSuffixDictionarySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Wish Suffix Dictionaries';
+$this->title = 'Wish账号字典';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="wish-suffix-dictionary-index">
@@ -15,19 +15,26 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Create Wish Suffix Dictionary', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-<?php Pjax::begin(); ?>    <?= GridView::widget([
+    <!-- Render create form -->
+    <?= $this->render('_form', [
+        'model' => $model,
+    ]) ?>
+
+
+    <?php Pjax::begin(['id' => 'suffix']); ?>
+    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'NID',
+            ['class' => 'yii\grid\CheckboxColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update} {delete}'
+            ],
             'IbaySuffix',
+            'ShortName'
 
-            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
-<?php Pjax::end(); ?></div>
+    <?php Pjax::end(); ?></div>
+

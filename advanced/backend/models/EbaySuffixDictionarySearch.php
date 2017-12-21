@@ -5,12 +5,11 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\WishSuffixDictionary;
 
 /**
  * WishSuffixDictionarySearch represents the model behind the search form about `backend\models\WishSuffixDictionary`.
  */
-class WishSuffixDictionarySearch extends WishSuffixDictionary
+class EbaySuffixDictionarySearch extends OaEbaySuffix
 {
     /**
      * @inheritdoc
@@ -18,8 +17,8 @@ class WishSuffixDictionarySearch extends WishSuffixDictionary
     public function rules()
     {
         return [
-            [['NID'], 'integer'],
-            [['IbaySuffix','ShortName'], 'safe'],
+            [['nid'], 'integer'],
+            [['ebayName', 'ebaySuffix', 'nameCode'], 'safe']
         ];
     }
 
@@ -41,7 +40,7 @@ class WishSuffixDictionarySearch extends WishSuffixDictionary
      */
     public function search($params)
     {
-        $query = WishSuffixDictionary::find()->orderBy('NID DESC');
+        $query = OaEbaySuffix::find();
 
         // add conditions that should always apply here
 
@@ -59,11 +58,12 @@ class WishSuffixDictionarySearch extends WishSuffixDictionary
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'NID' => $this->NID,
+            'nid' => $this->nid,
         ]);
 
-        $query->andFilterWhere(['like', 'IbaySuffix', $this->IbaySuffix]);
-        $query->andFilterWhere(['like', 'ShortName', $this->ShortName]);
+        $query->andFilterWhere(['like', 'ebayName', $this->ebayName]);
+        $query->andFilterWhere(['like', 'ebaySuffix', $this->ebaySuffix]);
+        $query->andFilterWhere(['like', 'nameCode', $this->nameCode]);
 
         return $dataProvider;
     }
