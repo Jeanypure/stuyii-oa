@@ -21,7 +21,10 @@ $this->params['breadcrumbs'][] = $this->title;
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
         ['class' => 'yii\grid\CheckboxColumn'],
-        ['class' => 'yii\grid\ActionColumn'],
+        [
+            'class' => 'yii\grid\ActionColumn',
+            'template' => '{view} {update}',
+        ],
 
         [
             'attribute' => 'mainImage',
