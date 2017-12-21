@@ -23,11 +23,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'NID',
-            'IbaySuffix',
-
             ['class' => 'yii\grid\ActionColumn'],
+
+            'IbaySuffix',
+            'Suffix',
+            'Rate',
+            'MainImg',
+
         ],
     ]); ?>
 <?php Pjax::end(); ?></div>

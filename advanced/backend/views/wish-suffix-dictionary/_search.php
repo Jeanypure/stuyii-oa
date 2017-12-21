@@ -18,6 +18,9 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'NID') ?>
 
     <?= $form->field($model, 'IbaySuffix') ?>
+    <?= $form->field($model, 'Suffix') ?>
+    <?= $form->field($model, 'MainImg') ?>
+    <?= $form->field($model, 'MainImg') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

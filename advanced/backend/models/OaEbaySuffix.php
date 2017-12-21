@@ -28,6 +28,8 @@ class OaEbaySuffix extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['ebayName'], 'required'],
+            [['ebayName'], 'unique'],
             [['ebayName', 'ebaySuffix', 'nameCode'], 'string'],
         ];
     }
@@ -39,9 +41,9 @@ class OaEbaySuffix extends \yii\db\ActiveRecord
     {
         return [
             'nid' => 'Nid',
-            'ebayName' => 'Ebay Name',
-            'ebaySuffix' => 'Ebay Suffix',
-            'nameCode' => 'Name Code',
+            'ebayName' => 'Ebay账号',
+            'ebaySuffix' => 'Ebay账号简称',
+            'nameCode' => 'Ebay编码',
         ];
     }
 }

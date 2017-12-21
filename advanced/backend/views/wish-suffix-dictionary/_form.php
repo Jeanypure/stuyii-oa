@@ -13,6 +13,9 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'IbaySuffix')->textInput() ?>
+    <?= $form->field($model, 'Suffix')->textInput() ?>
+    <?= $form->field($model, 'MainImg')->textInput() ?>
+    <?= $form->field($model, 'MainImg')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
