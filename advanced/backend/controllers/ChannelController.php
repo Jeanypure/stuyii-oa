@@ -133,6 +133,7 @@ class ChannelController extends Controller
             'query' => Wishgoodssku::find()->where(['pid'=>$id]),
             'pagination' => [
                 'pageSize' => 200,
+
             ],
         ]);
         return $this->renderAjax('variations',[
@@ -148,21 +149,28 @@ class ChannelController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdateEbay($id=45)
+    public function actionUpdateEbay($id)
     {
         $templates = OaTemplates::find()->where(['infoid' =>$id])->one();
         if(Yii::$app->request->isPost){
 
         }
         else{
+            $ebay_sql = 'select ebayName,ebaySuffix from oa_ebay_suffix  ';
+            $ebay_account = Yii::$app->db->createCommand($ebay_sql)->queryAll();
+            //封装成key-value
+            $ebay_map = [];
+            foreach ($ebay_account as $row){
+                $ebay_map[$row['ebayName']] = $row['ebaySuffix'];
+            }
             $inShippingService = $this->getShippingService('In');
             $OutShippingService = $this->getShippingService('Out');
-            return $this->render('update',[
+            return $this->render('editEbay',[
                 'templates' =>$templates,
                 'infoId' => $id,
                 'inShippingService' => $inShippingService,
                 'outShippingService' => $OutShippingService,
-
+                'ebayAccount' => $ebay_map
             ]);
         }
 
@@ -196,8 +204,6 @@ class ChannelController extends Controller
         }
 
     }
-
-
 
     /**
      * ebay 完善模板
@@ -402,14 +408,18 @@ class ChannelController extends Controller
         $options = ArrayHelper::map($ret, 'id','shippingName');
         return $options;
     }
-
+    /**
+     * @brief ebay模板导出时多余的字段维护在一个数组中
+     */
+    private $extra_fields = ['nameCode','specifics'];//因其他需要返回的字段
     /**
      * @brief 导出ebay模板
      * @param $id
+     * @param $accounts
      */
-    public  function  actionExportEbay($id=45)
+    public  function  actionExportEbay($id,$accounts='')
     {
-        $sql = "oa_P_ebayTemplates {$id}";
+        $sql = "oa_P_ebayTemplates {$id},'{$accounts}'";
         $db = yii::$app->db;
         $query = $db->createCommand($sql);
         $ret = $query->queryAll();
@@ -425,33 +435,24 @@ class ChannelController extends Controller
         $fileName = "eBay模板-".date("d-m-Y-His").".xls";
         header('Content-Disposition: attachment;filename='.$fileName .' ');
         header('Cache-Control: max-age=0');
+
+
         //获取列名&设置image字段
-        $tabFields = [];
-        $image = '';
-
-        $templates = OaTemplates::find()->where(['infoid'=>45])->one();
         $firstRow = $ret[0];
-        $tabFields = array_keys($firstRow);
-        $mainPage = $templates->mainPage;
-        $image .= $mainPage."\r\n";
-        $extraPage = json_decode($templates->extraPage,true)['images'];
-        foreach ($extraPage as $ima){
-            $image .= $ima."\r\n";
-        }
-
+        //过滤掉多余字段
+        $tabFields = array_filter(array_keys($firstRow),function($item){return !in_array($item,$this->extra_fields);});
         // 设置变体
-        $checkSql = "select count(*) from oa_templates as ots left join 
-                oa_templatesvar as otr on ots.nid=otr.tid where ots.infoid=45";
-        $flag = $db->createCommand($checkSql)->queryAll();
-        if($flag<=1){
-            $var =[];
-        }
-        else {
+        $checkSql = "select isnull(count(*),0) as skuNumber from oa_templates as ots left join 
+                oa_templatesvar as otr on ots.nid=otr.tid where otr.tid={$id}";
+        $flag = $db->createCommand($checkSql)->queryone();
+        $count = intval($flag['skuNumber']);
+        if($count>1){
             $findSql = "select *,otr.sku as varSku,otr.quantity as varQuantity from oa_templates as ots left join 
-                    oa_templatesvar as otr on ots.nid=otr.tid where ots.infoid=45";
+                oa_templatesvar as otr on ots.nid=otr.tid where otr.tid={$id}";
             $allRows = $db->createCommand($findSql)->queryAll();
             $picKey = json_decode($allRows[0]['property'],true)['pictureKey'];
             $columns = json_decode($allRows[0]['property'],true)['columns'];
+            $extraPage = json_decode($allRows[0]['extraPage'],true)['images'];
             $picCount = count($extraPage);
 
             //设置属性名
@@ -460,45 +461,7 @@ class ChannelController extends Controller
                 $map = ['name'=>array_keys($col)[0],'value' =>array_values($col)[0]];
                 array_push($variationSpecificsSet['NameValueList'],$map);
             }
-
-            //设置图片&//设置变体
-            $pictures = [];
-            $variation = [];
-            foreach ($allRows as $row){
-                $variationSpecificsSet = ['NameValueList' =>[]];
-                $columns = json_decode($row['property'],true)['columns'];
-                $value = ['value'=>''];
-                foreach ($columns as $col){
-                    if(array_keys($col)[0] == $picKey){
-                        $value['value'] = $col[$picKey];
-                        break;
-                    }
-                }
-                foreach ($columns as $col){
-                    $map = ['name'=>array_keys($col)[0],'value' =>array_values($col)[0]];
-                    array_push($variationSpecificsSet['NameValueList'],$map);
-                }
-                $pic = ['VariationSpecificPictureSet'=>['PictureURL'=>[$row['imageUrl']]],'Value'=>$value['value']];
-                array_push($pictures,$pic);
-                $var = [
-                    'SKU'=>$row['varSku'],
-                    'Quantity'=>$row['varQuantity'],
-                    'StartPrice'=>$row['retailPrice'],
-                    'VariationSpecifics'=>$variationSpecificsSet,
-
-                ];
-                array_push($variation,$var);
-            }
-
-            $var = [
-                'assoc_pic_key'=>$picKey,
-                'assoc_pic_count'=>$picCount,
-                'Variation'=>$variation,
-                'Pictures'=>$pictures,
-                'VariationSpecificsSet'=>$variationSpecificsSet
-            ];
         }
-
 
 
 
@@ -509,14 +472,78 @@ class ChannelController extends Controller
 
         //写入单元格值
         foreach ($ret as $rowNum => $row) {
-            $row['PictureURL'] = $image;
-            $row['Variation'] = json_encode($var);
+
+            if($count>1){
+                $var = $this->getVariations($count,$allRows,$picKey,$picCount,$row['nameCode']);
+                $row['Variation'] = json_encode($var);
+            }
+            //specifics 重新赋值
+            $specifics = json_decode($row['specifics'],true)['specifics'];
+            foreach ($specifics as $index=>$map){
+                $key = array_keys($map)[0];
+                $value = array_values($map)[0];
+                $row['Specifics'.strval($index+1)] = $key.':'.$value;
+            }
             foreach($tabFields as $num => $name){
                 $objPHPExcel->getActiveSheet()->setCellValue(PHPExcelTools::stringFromColumnIndex($num).($rowNum + 2),$row[$name]);
             }
         }
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
+    }
+
+
+    /**
+     * @brief 封装多属性的内部方法
+     * @param $count, sku计数
+     * @param $allRows,
+     * @param $picKey,
+     * @param $picCount
+     * @param $accountName
+     * @return array $var
+     */
+    private  function  getVariations($count,$allRows,$picKey,$picCount,$accountName)
+    {
+        if($count<=1){
+            return false;
+        }
+        //设置图片&//设置变体
+        $pictures = [];
+        $variation = [];
+        foreach ($allRows as $row){
+            $variationSpecificsSet = ['NameValueList' =>[]];
+            $columns = json_decode($row['property'],true)['columns'];
+            $value = ['value'=>''];
+            foreach ($columns as $col){
+                if(array_keys($col)[0] == $picKey){
+                    $value['value'] = $col[$picKey];
+                    break;
+                }
+            }
+            foreach ($columns as $col){
+                $map = ['name'=>array_keys($col)[0],'value' =>array_values($col)[0]];
+                array_push($variationSpecificsSet['NameValueList'],$map);
+            }
+            $pic = ['VariationSpecificPictureSet'=>['PictureURL'=>[$row['imageUrl']]],'Value'=>$value['value']];
+            array_push($pictures,$pic);
+            $var = [
+                'SKU'=>$row['varSku'].'@#'.$accountName,
+                'Quantity'=>$row['varQuantity'],
+                'StartPrice'=>$row['retailPrice'],
+                'VariationSpecifics'=>$variationSpecificsSet,
+
+            ];
+            array_push($variation,$var);
+        }
+
+        $var = [
+            'assoc_pic_key'=>$picKey,
+            'assoc_pic_count'=>$picCount,
+            'Variation'=>$variation,
+            'Pictures'=>$pictures,
+            'VariationSpecificsSet'=>$variationSpecificsSet
+        ];
+        return $var;
     }
     //导出数据 wish平台
     public  function actionExport($id){
@@ -525,27 +552,6 @@ class ChannelController extends Controller
         $sheet=0;
         $objPHPExcel->setActiveSheetIndex($sheet);
         $foos[0] = OaWishgoods::find()->where(['infoid'=>$id])->all();
-        $variants = Wishgoodssku::find()->where(['pid'=>$id])->all();
-        $variation = [];
-        $varitem = [];
-        if(!isset($variants)||empty($variants)){
-            return;
-        }
-
-        foreach($variants as $key=>$value){
-            $varitem['sku'] = $value['sku'];
-            $varitem['color'] = $value['color'];
-            $varitem['size'] = $value['size'];
-            $varitem['inventory'] = $value['inventory'];
-            $varitem['price'] = $value['price'];
-            $varitem['shipping'] = $value['shipping'];
-            $varitem['msrp'] = $value['msrp'];
-            $varitem['shipping_time'] = $value['shipping_time'];
-            $varitem['main_image'] = $value['linkurl'];
-            $variation[] = $varitem;
-        }
-
-        $strvariant = json_encode($variation,true);
         $columnNum = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P'];
         $colName = [
             'sku','selleruserid','name','inventory','price','msrp','shipping','shipping_time','main_image','extra_images',
@@ -562,11 +568,25 @@ class ChannelController extends Controller
 //        $suffix = $this->actionFetchSuffix();
         $suffix = $this->actionSuffix();
 
-
+//判断 @# 是否需要添加 规则：新账号需要拼接 @#
 
         foreach($suffix as $key=>$value){
+            $sub1 = substr(substr($value,5),0,1);
+            if($sub1=='E'){      //新账号
+                $su = $this->sub_zhanghao($value,'_','-');
+                $sub = '@#'.$su;
+
+            }
+            else{
+                $sub = '';
+            }
+
+
+            $strvariant = $this->actionVariationWish($id,$sub);
+
+
             $row = $key+2;
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$row,$foos[0][0]['SKU']);
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$row,$foos[0][0]['SKU'].$sub);
             $objPHPExcel->getActiveSheet()->setCellValue('B'.$row,$value);
             $objPHPExcel->getActiveSheet()->setCellValue('C'.$row,$foos[0][0]['title']);
             $objPHPExcel->getActiveSheet()->setCellValue('D'.$row,$foos[0][0]['inventory']);
@@ -577,12 +597,13 @@ class ChannelController extends Controller
             $objPHPExcel->getActiveSheet()->setCellValue('I'.$row,$foos[0][0]['main_image']);
             $objPHPExcel->getActiveSheet()->setCellValue('J'.$row,$foos[0][0]['extra_images']);
             $objPHPExcel->getActiveSheet()->setCellValue('K'.$row,$strvariant);
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$row,'landing_page_url');
+            $objPHPExcel->getActiveSheet()->setCellValue('L'.$row,'');
             $objPHPExcel->getActiveSheet()->setCellValue('M'.$row,$foos[0][0]['tags']);
             $objPHPExcel->getActiveSheet()->setCellValue('N'.$row,$foos[0][0]['description']);
             $objPHPExcel->getActiveSheet()->setCellValue('O'.$row,'');
             $objPHPExcel->getActiveSheet()->setCellValue('P'.$row,'');
         }
+
 
         header('Content-Type: application/vnd.ms-excel');
         $filename = 'Wish模版'.$foos[0][0]['SKU'].date("d-m-Y-His").".xls";
@@ -592,9 +613,51 @@ class ChannelController extends Controller
         $objWriter->save('php://output');
     }
 
+    /*
+     * 处理多属性
+     * @param $id int 商品ID
+     */
+    function actionVariationWish($id,$sub){
+
+        $variants = Wishgoodssku::find()->where(['pid'=>$id])->all();
+        $variation = [];
+        $varitem = [];
+        if(!isset($variants)||empty($variants)){
+            return;
+        }
+
+        foreach($variants as $key=>$value){
+            $varitem['sku'] = $value['sku'].$sub;
+            $varitem['color'] = $value['color'];
+            $varitem['size'] = $value['size'];
+            $varitem['inventory'] = $value['inventory'];
+            $varitem['price'] = $value['price'];
+            $varitem['shipping'] = $value['shipping'];
+            $varitem['msrp'] = $value['msrp'];
+            $varitem['shipping_time'] = $value['shipping_time'];
+            $varitem['main_image'] = $value['linkurl'];
+            $variation[] = $varitem;
+        }
+
+        $strvariant = json_encode($variation,true);
+        return $strvariant;
+    }
+
+    //截取wish_E100-swordyee  中间的 E100
+    public function sub_zhanghao($selleruserid,$mark1,$mark2){
+
+        $st =stripos($selleruserid,$mark1);
+        $ed =stripos($selleruserid,$mark2);
+        if(($st==false||$ed==false)||$st>=$ed)
+            return 0;
+        $kw=substr($selleruserid,($st+1),($ed-$st-1));
+        return $kw;
+
+    }
+
 
     /*
-     * 拼接 wish账号
+     * 拼接wish账号
      *
      */
     public function actionFetchSuffix(){
@@ -613,8 +676,10 @@ class ChannelController extends Controller
 
     }
 
+
     /*
      * 处理wish账号,默认是表中所有的账号
+     *
      */
 
     public function actionSuffix(){
@@ -636,8 +701,6 @@ class ChannelController extends Controller
         echo 'Wish已完善';
 
     }
-
-
 
     /**
      * 导出CSV文件

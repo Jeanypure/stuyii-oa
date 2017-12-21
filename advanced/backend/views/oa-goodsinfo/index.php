@@ -143,6 +143,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'IsCharged',
                 'width' => '100px',
             ],
+            'isVar',
 
 
         ],

@@ -51,7 +51,7 @@ class OaPicinfoController extends Controller
     {
         $searchModel = new OaGoodsinfoSearch();
         $condition = ['<>','picStatus',''];
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$condition);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$condition,'图片信息');
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

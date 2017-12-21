@@ -74,7 +74,6 @@ $skuForm = ActiveForm::begin([
         'gridSettings'=>[
             'panel'=>[
                 'type'=>GridView::TYPE_PRIMARY,
-                'footer'=>true,
                 'after'=>
                     Html::input('text','rowNum','',['class' => 'x-row','placeholder'=>'行数','size'=>'8']).' '.
                     Html::button('新增行', ['id'=>'add-row','type'=>'button', 'class'=>'btn kv-batch-create']) . ' ' .
@@ -89,7 +88,7 @@ $skuForm = ActiveForm::begin([
                     Html::input('text','shipping_time','',['class' => 'shipping_time-replace','placeholder'=>'运输时间','size'=>'8']).' '.
                     Html::button('运输时间', ['id'=>'shipping_time-set','type'=>'button','class'=>'btn']).' '.
                     Html::button('删除行', ['id'=>'delete-row','type'=>'button', 'class'=>'btn btn-danger kv-batch-delete']).'  '.
-                Html::button('保存', ['id'=>'save-sku','type'=>'button','class'=>'btn btn-info'])
+                    Html::button('保存', ['id'=>'save-sku','type'=>'button','class'=>'btn btn-info'])
             ]
         ]
 

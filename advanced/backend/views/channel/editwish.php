@@ -11,9 +11,7 @@ use yii\bootstrap\Modal;
 use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Channel */
-$this->title = Yii::t('app', 'Update {modelClass}: ', [
-        'modelClass' => 'Channel',
-    ]) . $sku->infoid;
+$this->title = '编辑模板';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Channels'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $sku->infoid, 'url' => ['view', 'id' => $sku->infoid]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
@@ -312,7 +310,7 @@ $('body').on('click','.down-btn',function() {
     
     //导出数据joom CSV
     $('.joom-csv').on('click',function(){
-        alert(888);
+        alert('确定导出Joom模板?');
          window.location = '/channel/export-joom?id='+$sku->infoid;
     });
     

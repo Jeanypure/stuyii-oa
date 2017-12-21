@@ -57,7 +57,7 @@ class Channel extends \yii\db\ActiveRecord
     {
         return [
             [['IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged', 'goodsid', 'SupplierID', 'StoreID', 'bgoodsid'], 'integer'],
-            [['completeStatus','description', 'GoodsName', 'AliasCnName', 'AliasEnName', 'PackName', 'Season', 'DictionaryName', 'SupplierName', 'StoreName', 'Purchaser', 'possessMan1', 'possessMan2', 'picUrl', 'GoodsCode', 'achieveStatus', 'developer', 'picStatus', 'AttributeName','completeStatus'], 'string'],
+            [['isVar','description', 'GoodsName', 'AliasCnName', 'AliasEnName', 'PackName', 'Season', 'DictionaryName', 'SupplierName', 'StoreName', 'Purchaser', 'possessMan1', 'possessMan2', 'picUrl', 'GoodsCode', 'achieveStatus', 'developer', 'picStatus', 'AttributeName','completeStatus'], 'string'],
             [['DeclaredValue'], 'number'],
             [['devDatetime', 'updateTime'], 'safe'],
         ];
@@ -103,6 +103,7 @@ class Channel extends \yii\db\ActiveRecord
             'completeStatus' => Yii::t('app', '完成状况'),
             'cate' => Yii::t('app', '主类目'),
             'subCate' => Yii::t('app', '子类目'),
+            'isVar' => Yii::t('app', '是否多属性'),
         ];
     }
 
@@ -116,7 +117,13 @@ class Channel extends \yii\db\ActiveRecord
         return $this->hasOne(OaGoods::className(), ['nid' => 'goodsid']);
     }
 
-
+    /**
+     *  关联oa_tempaltes 表
+     */
+    public  function  getOa_templates()
+    {
+        return $this->hasOne(OaTemplates::className(),['infoid' =>'pid']);
+    }
 
 
 

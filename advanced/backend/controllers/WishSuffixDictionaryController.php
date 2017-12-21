@@ -3,16 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\DataCenter;
-use backend\models\DataCenterSearch;
+use backend\models\WishSuffixDictionary;
+use backend\models\WishSuffixDictionarySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * DataCenterController implements the CRUD actions for DataCenter model.
+ * WishSuffixDictionaryController implements the CRUD actions for WishSuffixDictionary model.
  */
-class DataCenterController extends Controller
+class WishSuffixDictionaryController extends Controller
 {
     /**
      * @inheritdoc
@@ -30,12 +30,12 @@ class DataCenterController extends Controller
     }
 
     /**
-     * Lists all DataCenter models.
+     * Lists all WishSuffixDictionary models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new DataCenterSearch();
+        $searchModel = new WishSuffixDictionarySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +45,7 @@ class DataCenterController extends Controller
     }
 
     /**
-     * Displays a single DataCenter model.
+     * Displays a single WishSuffixDictionary model.
      * @param integer $id
      * @return mixed
      */
@@ -57,13 +57,13 @@ class DataCenterController extends Controller
     }
 
     /**
-     * Creates a new DataCenter model.
+     * Creates a new WishSuffixDictionary model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new DataCenter();
+        $model = new WishSuffixDictionary();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->NID]);
@@ -75,7 +75,7 @@ class DataCenterController extends Controller
     }
 
     /**
-     * Updates an existing DataCenter model.
+     * Updates an existing WishSuffixDictionary model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -94,7 +94,7 @@ class DataCenterController extends Controller
     }
 
     /**
-     * Deletes an existing DataCenter model.
+     * Deletes an existing WishSuffixDictionary model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -107,15 +107,15 @@ class DataCenterController extends Controller
     }
 
     /**
-     * Finds the DataCenter model based on its primary key value.
+     * Finds the WishSuffixDictionary model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return DataCenter the loaded model
+     * @return WishSuffixDictionary the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = DataCenter::findOne($id)) !== null) {
+        if (($model = WishSuffixDictionary::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

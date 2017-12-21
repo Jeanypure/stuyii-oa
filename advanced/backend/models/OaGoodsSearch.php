@@ -39,10 +39,18 @@ class OaGoodsSearch extends OaGoods
      *
      * @return ActiveDataProvider
      */
-    public function search($params,$devStatus,$checkStatus)
+    public function search($params,$devStatus,$checkStatus,$unit)
     {
         //返回当前登录用户
         $user = yii::$app->user->identity->username;
+
+        //根据角色 过滤
+        $role_sql = yii::$app->db->createCommand("SELECT t2.item_name FROM [user] t1,[auth_assignment] t2 
+                    WHERE  t1.id=t2.user_id and
+                    username='$user'
+                    ");
+        $role = $role_sql
+            ->queryAll();
 
         // 返回当前用户管辖下的用户
         $sql = "oa_P_users '{$user}'";
@@ -53,12 +61,15 @@ class OaGoodsSearch extends OaGoods
         foreach ($result as $user) {
             array_push($users, $user['userName']);
         }
+
+
         //产品审批状态
         if(!empty($checkStatus)){
             $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])
                 ->where(['checkStatus'=>$checkStatus])
                 ->andWhere(['<>','checkStatus','已作废'])
                 ->andWhere(['in', 'developer', $users])
+
             ;
         }
         //产品认领状态
@@ -66,7 +77,6 @@ class OaGoodsSearch extends OaGoods
             $query = OaGoods::find()->orderBy(['nid' => SORT_DESC])
                 ->where(['devStatus'=>$devStatus])
                 ->andWhere(['<>','checkStatus','已作废'])
-                ->andWhere(['in', 'developer', $users])
             ;
         }
 
@@ -79,6 +89,31 @@ class OaGoodsSearch extends OaGoods
                 ->andWhere(['=','checkStatus','未认领'])
             ;
         }
+
+        /*
+         * 分模块判断
+         *
+         */
+
+        if($unit == '产品推荐'){
+            if($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='wish销售'){
+                $query->andWhere(['in', 'introducer', $users]);
+            }elseif ($role[0]['item_name']=='美工'){
+                $query->andWhere(['in', 'introducer', $users]);
+            }
+        }elseif($unit == '正向开发'||$unit = '逆向开发'){
+            if($role[0]['item_name']=='部门主管'){
+                $query->andWhere(['in', 'oa_goods.developer', $users]);
+            }elseif($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='wish销售'){
+                $query->andWhere(['in', 'introducer', $users]);
+            }elseif ($role[0]['item_name']=='产品开发'){
+                $query->andWhere(['in', 'oa_goods.developer', $users]);
+            }elseif($role[0]['item_name']=='产品开发组长'){
+                $query->andWhere(['in', 'oa_goods.developer', $users]);
+            }
+        }
+
+
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -95,16 +130,9 @@ class OaGoodsSearch extends OaGoods
         // grid filtering conditions
         $query->andFilterWhere([
             'nid' => $this->nid,
-//            'hopeRate' => $this->hopeRate,
             'createDate' => $this->createDate,
             'updateDate' => $this->updateDate,
-            'cate' => $this->cate,
-            'subCate' => $this->subCate,
-            'developer' => $this->developer,
-            'introducer' => $this->introducer,
-            'introReason' => $this->introReason,
-            'checkStatus' => $this->checkStatus,
-            'approvalNote' => $this->approvalNote,
+
         ]);
         $query->andFilterWhere(['like', 'cate', $this->cate])
             ->andFilterWhere(['like', 'subCate', $this->subCate])

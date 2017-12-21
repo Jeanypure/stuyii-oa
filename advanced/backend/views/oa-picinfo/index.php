@@ -220,6 +220,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
             ],
             'possessMan1',
+            'isVar',
         ],
 
 

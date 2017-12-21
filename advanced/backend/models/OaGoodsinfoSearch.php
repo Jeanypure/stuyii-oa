@@ -32,9 +32,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
     {
         return [
             [['pid','IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged'], 'integer'],
-
-            [['hopeWeight','picStatus','vendor1','vendor2','vendor3','developer','devDatetime','updateTime','achieveStatus','GoodsCode','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName','possessMan2','possessMan1'],'safe'],
-
+            [['hopeWeight','picStatus','isVar','vendor1','vendor2','vendor3','developer','devDatetime','updateTime','achieveStatus','GoodsCode','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName','possessMan2','possessMan1'],'safe'],
 
         ];
     }
@@ -56,13 +54,77 @@ class OaGoodsinfoSearch extends OaGoodsinfo
      *
      * @return ActiveDataProvider
      */
-    public function search($params,$condition = [])
+    public function search($params,$condition = [],$unit)
     {
 
 
         $query = OaGoodsinfo::find()->joinWith('oa_goods')->orderBy(['pid' => SORT_DESC])->where($condition);
+        //返回当前登录用户
+        $user = yii::$app->user->identity->username;
+        //根据角色 过滤
+        $role_sql = yii::$app->db->createCommand("SELECT t2.item_name FROM [user] t1,[auth_assignment] t2 
+                    WHERE  t1.id=t2.user_id and
+                    username='$user'
+                    ");
+        $role = $role_sql
+            ->queryAll();
 
-//        $query->joinWith('oa_goods');
+        // 返回当前用户管辖下的用户
+        $sql = "oa_P_users '{$user}'";
+        $connection = Yii::$app->db;
+        $command = $connection->createCommand($sql);
+        $result = $command->queryAll();
+        $users = [];
+        foreach ($result as $user) {
+            array_push($users, $user['userName']);
+        }
+
+        /*
+         * 分模块判断
+         *
+         */
+        if($unit == '产品推荐'){
+            if($role[0]['item_name']=='部门主管'){
+                $query->andWhere(['in', 'oa_goods.developer', $users]);
+            }elseif($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='wish销售'){
+                $query->andWhere(['in', 'introducer', $users]);
+            }
+        }elseif($unit == '正向开发'||$unit == '逆向开发'){
+            if($role[0]['item_name']=='部门主管'){
+                $query->andWhere(['in', 'oa_goods.developer', $users]);
+            }elseif($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='wish销售'){
+                $query->andWhere(['in', 'introducer', $users]);
+            }elseif ($role[0]['item_name']=='产品开发'){
+                $query->andWhere(['in', 'oa_goods.developer', $users]);
+            }elseif($role[0]['item_name']=='产品开发组长'){
+                $query->andWhere(['in', 'oa_goods.developer', $users]);
+            }
+        }elseif($unit == '属性信息'){
+            if($role[0]['item_name']=='部门主管'){
+                $query->andWhere(['in', 'oa_goods.developer', $users]);
+            }elseif($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='wish销售'){
+                $query->andWhere(['in', 'introducer', $users]);
+            }elseif ($role[0]['item_name']=='产品开发'){
+                $query->andWhere(['in', 'oa_goods.developer', $users]);
+            }elseif($role[0]['item_name']=='产品开发组长'){
+                $query->andWhere(['in', 'oa_goods.developer', $users]);
+            }
+        }elseif($unit == '图片信息'){
+            if($role[0]['item_name']=='部门主管'){
+                $query->andWhere(['in', 'oa_goods.developer', $users]);
+            }elseif($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='wish销售'){
+                $query->andWhere(['in', 'introducer', $users]);
+            }elseif ($role[0]['item_name']=='产品开发'){
+                $query->andWhere(['in', 'oa_goods.developer', $users]);
+            }elseif($role[0]['item_name']=='产品开发组长'){
+                $query->andWhere(['in', 'oa_goods.developer', $users]);
+            }elseif ($role[0]['item_name']=='美工'){
+                $query->andWhere(['in', 'possessMan1', $users]);
+            }
+        }
+
+        // add conditions that should always apply here
+
 
         // add conditions that should always apply here
 
@@ -80,9 +142,9 @@ class OaGoodsinfoSearch extends OaGoodsinfo
 //                /* 其它字段不要动 */
 //                /* 下面这段是加入的 */
 //                /*=============*/
-//                'vendor1' => [
-//                    'asc' => ['oa_goods.vendor1' => SORT_ASC],
-//                    'desc' => ['oa_goods.vendor1' => SORT_DESC],
+//                'oa_goods.developer' => [
+//                    'asc' => ['oa_goods.developer' => SORT_ASC],
+//                    'desc' => ['oa_goods.developer' => SORT_DESC],
 //                    'label' => '供应商连接1'
 //                ],
 //                /*=============*/
@@ -119,6 +181,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
             'vendor1' => $this->vendor1,
             'possessMan1' => $this->possessMan1,
             'picStatus' => $this->picStatus,
+            'isVar' => $this->isVar,
 
 
 
@@ -127,7 +190,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
         $query->andFilterWhere(['like', 'description', $this->description]);
         $query->andFilterWhere(['like', 'AliasCnName', $this->AliasCnName]);
         $query->andFilterWhere(['like', 'vendor1', $this->vendor1]);
-        $query->andFilterWhere(['like', 'oa_goodsinfo.developer', $this->developer]);
+        $query->andFilterWhere(['like', 'oa_goods.developer', $this->developer]);
 
         return $dataProvider;
     }

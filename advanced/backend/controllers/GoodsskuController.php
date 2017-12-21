@@ -94,6 +94,17 @@ class GoodsskuController extends Controller
                 if($type == 'goods-info')
                 {
                     $skuRows = $request->post()['Goodssku'];
+
+                    //根据SKU行数来判断是否是多属性
+                    $count = count($skuRows);
+                    $info = OaGoodsinfo::find()->where(['pid'=>$pid])->one();
+                    if($count>1){
+                        $info->isVar = '是';
+                    }
+                    else{
+                        $info->isVar = '否';
+                    }
+                    $info->save(false);
                     foreach ($skuRows as $row_key=>$row_value)
                     {
                         $row_value['pid'] = intval($pid); //pid传进来
@@ -125,8 +136,6 @@ class GoodsskuController extends Controller
                             $update_model->RetailPrice = $row_value['RetailPrice'];
                             $update_model->update(['sku','property1','property2','property3',
                                 'CostPrice','Weight','RetailPrice']);
-
-//                        echo "{'msg':'update successfully'}";
 
                         }
 
@@ -177,6 +186,15 @@ class GoodsskuController extends Controller
                 if($type=='goods-info')
                 {
                     $skuRows = $request->post()['Goodssku'];
+                    $count = count($skuRows);
+                    $info = OaGoodsinfo::find()->where(['pid'=>$pid])->one();
+                    if($count>1){
+                        $info->isVar = '是';
+                    }
+                    else{
+                        $info->isVar = '否';
+                    }
+                    $info->save(false);
                     foreach ($skuRows as $row_key=>$row_value)
                     {
                         $row_value['pid'] = intval($pid); //pid传进来
@@ -262,12 +280,17 @@ class GoodsskuController extends Controller
                            $goods_model->update();
                            //提交事务
                            $import_trans->commit();
+                           echo '保存成功';
                        }
                        catch (\Exception $er) {
+
                            $import_trans->rollBack();
+                           $goods_model ->picStatus = '待处理';
+                           $goods_model->updateTime =strftime('%F %T');
+                           $goods_model->update();
+                           echo '保存失败';
                        }
                     }
-                    $this->redirect(['oa-picinfo/update','id'=>$pid]);
                 }
             }
             catch (Exception  $e)

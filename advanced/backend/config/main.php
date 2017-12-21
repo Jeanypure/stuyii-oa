@@ -26,10 +26,10 @@ return [
             'class' => 'yii\gii\Module',
             'allowedIPs' => ['127.0.0.1', '192.168.0.*','::1'] // 按需调整这里
         ],
-        'debug' => [
-            'class' => 'yii\gii\Module',
-            'allowedIPs' => ['127.0.0.1', '192.168.0.*','::1'] // 按需调整这里
-        ],
+//        'debug' => [
+//            'class' => 'yii\gii\Module',
+//            'allowedIPs' => ['127.0.0.1', '192.168.0.*','::1'] // 按需调整这里
+//        ],
 
     ],
     'aliases' => [

@@ -4,8 +4,11 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\bootstrap\Tabs;
+use kartik\widgets\Select2;
+
 /* @var $this yii\web\View */
 /* @var $model backend\models\Channel */
+
 
 $this->title =  '更新平台信息';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '平台信息'), 'url' => ['index']];
@@ -51,20 +54,34 @@ Modal::end();
     ],
 ]);?>
 
-<!--<div class="channel-update">-->
-<!---->
-<!--    <ul class="nav nav-tabs">-->
-<!--        <li role="presentation" class="active"><a href="#">eBay</a></li>-->
-<!--        <li role="presentation"><a href="#">Wish</a></li>-->
-<!--    </ul>-->
-<!--</div>-->
 </br>
 <div class="st">
-    <p>
+    <div class="row">
+        <div class="col-sm-3">
         <?= Html::button('保存当前数据', ['class' =>' save-only btn btn-default']) ?>
+
         <?= Html::button('保存并完善', ['class' =>'save-complete btn btn-default']) ?>
-        <?= Html::button('导出刊登模板', ['class' =>'export-ebay btn btn-default']) ?>
-    </p>
+
+        </div>
+        <div class="col-sm-2">
+        <?php
+        echo Select2::widget([
+            'name' => 'color_2',
+            'data' => $ebayAccount,
+            'maintainOrder' => true,
+            'options' => ['placeholder' => '选择一个账号 ', 'multiple' => true,'class' => 'ebay-chosen'],
+            'pluginOptions' => [
+                'tags' => true,
+            ],
+        ]);
+
+        ?>
+        </div>
+            <div class="col-sm-1">
+                <?php echo Html::button('导出所选账号模板',['class' =>'export-ebay-given btn btn-default'])    ?>
+            </div>
+
+    </div>
 </div>
 </br>
 
@@ -85,15 +102,14 @@ Modal::end();
 </br>
 <?= $form->field($templates,'sku')->textInput()?>
 <?php
-$mainPage = "https://www.tupianku.com/view/full/10023/$templates->sku-_0_.jpg";
- echo $form->field($templates,'mainPage')->textInput(['class'=>'main-page','style'=>'display:none']);
+echo $form->field($templates,'mainPage')->textInput(['class'=>'main-page','style'=>'display:none']);
 echo '<div class="form-group field-oatemplates-mainpage">
     <label class="col-lg-1 control-label"></label>
-    <div class="col-lg-3"><input type="text" class="form-control tem-page" value="https://www.tupianku.com/view/full/10023/'.$templates->sku.'-_0_.jpg"></div>
+    <div class="col-lg-3"><input type="text" class="form-control tem-page" value="'.$templates->mainPage.'"></div>
 
     <div class="col-lg=1"> 
-    <a target="_blank" href="https://www.tupianku.com/view/full/10023/'.$templates->sku.'-_0_.jpg">
-    <img src="https://www.tupianku.com/view/full/10023/'.$templates->sku.'-_0_.jpg" width="50" height="50">
+    <a target="_blank" href="'.$templates->mainPage.'">
+    <img src="'.$templates->mainPage.'" width="50" height="50">
     </a>
     </div>
 </div>'
@@ -121,8 +137,8 @@ foreach($images as $key=>$image){
 echo '</div>';
 ?>
 </br>
-<?= $form->field($templates,'location')->textInput(['value'=>'ShangHai']); ?>
-<?= $form->field($templates,'country')->textInput(['value' => 'CN' ]); ?>
+<?= $form->field($templates,'location')->textInput(); ?>
+<?= $form->field($templates,'country')->textInput(); ?>
 <?= $form->field($templates,'postCode')->textInput(); ?>
 <?= $form->field($templates,'prepareDay')->textInput(['value' => '3' ]); ?>
 
@@ -239,11 +255,32 @@ $form->field($templates,'InshippingMethod1',$shipping_templates)->dropDownList($
 <br>
     <hr>
     <div class="st">
-        <p>
-            <?= Html::button('保存当前数据', ['class' =>' save-only btn btn-default']) ?>
-            <?= Html::button('保存并完善', ['class' =>'save-complete btn btn-default']) ?>
-            <?= Html::button('导出刊登模板', ['class' =>'export-ebay btn btn-default']) ?>
-        </p>
+        <div class="row">
+            <div class="col-sm-3">
+                <?= Html::button('保存当前数据', ['class' =>' save-only btn btn-default']) ?>
+
+                <?= Html::button('保存并完善', ['class' =>'save-complete btn btn-default']) ?>
+
+            </div>
+            <div class="col-sm-2">
+                <?php
+                echo Select2::widget([
+                    'name' => 'color_2',
+                    'data' => $ebayAccount,
+                    'maintainOrder' => true,
+                    'options' => ['placeholder' => '选择一个账号 ', 'multiple' => true,'class' => 'ebay-chosen'],
+                    'pluginOptions' => [
+                        'tags' => true,
+                    ],
+                ]);
+
+                ?>
+            </div>
+            <div class="col-sm-1">
+                <?php echo Html::button('导出所选账号模板',['class' =>'export-ebay-given btn btn-default'])    ?>
+            </div>
+
+        </div>
     </div>
 </div>
 
@@ -265,6 +302,7 @@ $form->field($templates,'InshippingMethod1',$shipping_templates)->dropDownList($
 $exportUlr = URL::toRoute(['export-ebay','id'=>$templates->nid]);
 
 $js  = <<< JS
+
 //主图赋值
 $('.main-page').val($('.tem-page').val());
 
@@ -277,10 +315,13 @@ $(".tem-page").on('change',function() {
     //更新主图值
     $('.main-page').val(new_image);
 })
-//信息保存
+
+//导出模板
 $(".export-ebay").on('click',function() {
     window.location.href='{$exportUlr}';
 });
+
+
 //如果图片地址不改变就直接用原始数据
     function allImags() {
         var images = new Array();
@@ -293,7 +334,6 @@ $(".export-ebay").on('click',function() {
 
 
 // 生成图片序列
-
 function serialize() {
     i=0;
     $(".serial").each(function() {
@@ -301,6 +341,7 @@ function serialize() {
         $(this).text("#" + i);
     });
 }
+
 
 //增加图片
 function addImages() {
@@ -331,8 +372,8 @@ function addImages() {
     }
 }
 
-//增加属性的按钮
 
+//增加属性的按钮
 $('.add-specifics').on('click',function() {
     var key = '<tr><th><input  type="text" name="specificsKey"></th>';
     var value = '<td><input type="text" size="40" name="specficsValue"> ';
@@ -357,6 +398,7 @@ $('.add-specifics').on('click',function() {
     }
 allSpecifics();
 
+
 // 属性变化事件,及时刷新JSON事件。
 $('.specifics-tab').on('change','input[size="40"]',function() {
     allSpecifics();
@@ -366,6 +408,7 @@ $('.specifics-tab').on('change','input[size="40"]',function() {
 $('.specifics-tab').on('change','input[name="specificsKey"]',function() {
     allSpecifics();
 });
+
 
 //绑定上移事件
 $('body').on('click','.up-btn',function() {
@@ -384,6 +427,7 @@ $('body').on('click','.up-btn',function() {
     }
     return false;
 });
+
 
 //绑定下移事件
 $('body').on('click','.down-btn',function() {
@@ -409,6 +453,8 @@ $('body').on('click','.add-images',function() {
     addImages();
     return false;
     });
+    
+    
 //删除附加图
 $('body').on('click','.remove-image',function() {
     $(this).closest('div .form-group').remove();
@@ -435,7 +481,6 @@ $('body').on('click','.all-images',function() {
     });
     $('#oatemplates-extrapage').val(JSON.stringify({'images':images}));
 });
-
 
 
 // 多属性设置模态框
@@ -478,6 +523,16 @@ $('.save-complete').on('click',function() {
 });
 
 
+//导出所选账号模板
+$('.export-ebay-given').on('click',function() {
+    var accounts = [];
+    $('.select2-selection__choice').each(function() {
+        accounts.push($(this).attr('title'));
+    });
+    //参数传到URL中
+    names = accounts.join();
+    window.location.href='{$exportUlr}'+ '&accounts='+names;
+});
 JS;
 $this->registerJs($js);
 ?>

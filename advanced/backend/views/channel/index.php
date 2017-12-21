@@ -10,12 +10,9 @@ $this->title = Yii::t('app', '平台信息');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="channel-index">
-
     <p>
         <?= Html::a(Yii::t('app', '标记已完善'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
-
     </div>
 
     <?= GridView::widget([
@@ -27,10 +24,18 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn'],
 
             [
-                'attribute' => 'picUrl',
+                'attribute' => 'mainImage',
                 'value' =>function($model,$key, $index, $widget) {
-                    return "<img src='$model->picUrl' width='100' height='100'/>";
+                    try{
+                        $image = $model->oa_templates->mainPage;
+                    }
+                    catch (Exception $e){
+                        $image = $model->picUrl;
+                    }
+
+                    return "<img src='{$image}' width='100' height='100'/>";
                 },
+                'label' => '主图',
                 'format' => 'raw',
             ],
             'GoodsCode',
@@ -45,6 +50,11 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
              'SupplierName',
+            [
+                'attribute'=> 'introducer',
+                'value'=>'oa_goods.introducer',
+                'label'=>'推荐人'
+            ],
              'StoreName',
             [
                 'attribute'=> 'introducer',
@@ -53,10 +63,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'developer',
              'Purchaser',
              'possessMan1',
-             'devDatetime',
+            [
+                'attribute' => 'devDatetime',
+                'value' => function ($model) {
+                    return substr(strval($model->devDatetime),0,20);
+                },
+            ],
             'completeStatus',
             'DictionaryName',
-
+            'isVar',
 
         ],
     ]); ?>
