@@ -8,8 +8,8 @@ use Yii;
  * This is the model class for table "oa_ebay_paypal".
  *
  * @property integer $nid
- * @property string $ebayName
- * @property string $palpayName
+ * @property integer $ebayId
+ * @property integer $paypalId
  * @property string $mapType
  */
 class OaEbayPaypal extends \yii\db\ActiveRecord
@@ -28,7 +28,8 @@ class OaEbayPaypal extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ebayName', 'palpayName', 'mapType'], 'string'],
+            [['ebayId', 'paypalId'], 'integer'],
+            [['mapType'], 'string'],
         ];
     }
 
@@ -39,8 +40,8 @@ class OaEbayPaypal extends \yii\db\ActiveRecord
     {
         return [
             'nid' => 'Nid',
-            'ebayName' => 'Ebay Name',
-            'palpayName' => 'Palpay Name',
+            'ebayId' => 'Ebay ID',
+            'paypalId' => 'Paypal ID',
             'mapType' => 'Map Type',
         ];
     }

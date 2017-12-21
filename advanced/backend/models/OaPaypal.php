@@ -5,21 +5,19 @@ namespace backend\models;
 use Yii;
 
 /**
- * This is the model class for table "oa_ebay_suffix".
+ * This is the model class for table "oa_paypal".
  *
  * @property integer $nid
- * @property string $ebayName
- * @property string $ebaySuffix
- * @property string $nameCode
+ * @property string $paypalName
  */
-class OaEbaySuffix extends \yii\db\ActiveRecord
+class OaPaypal extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'oa_ebay_suffix';
+        return 'oa_paypal';
     }
 
     /**
@@ -28,7 +26,7 @@ class OaEbaySuffix extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ebayName', 'ebaySuffix', 'nameCode'], 'string'],
+            [['paypalName'], 'string'],
         ];
     }
 
@@ -39,9 +37,7 @@ class OaEbaySuffix extends \yii\db\ActiveRecord
     {
         return [
             'nid' => 'Nid',
-            'ebayName' => 'Ebay Name',
-            'ebaySuffix' => 'Ebay Suffix',
-            'nameCode' => 'Name Code',
+            'paypalName' => 'Paypal Name',
         ];
     }
 }
