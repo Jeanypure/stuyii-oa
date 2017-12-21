@@ -565,28 +565,31 @@ class ChannelController extends Controller
                 ->setCellValue($value.$sub, $combineArr[$value]);
         }
 
-        $suffix = $this->actionSuffix();
+        $suffixAll = WishSuffixDictionary::find()
+            ->asArray()
+            ->all(); //返回数组对象
 
-    //判断 @# 是否需要添加 规则：新账号需要拼接 @#
 
-        foreach($suffix as $key=>$value){
-            $sub1 = substr(substr($value,5),0,1);
-            if($sub1=='E'){      //新账号
-                $su = $this->sub_zhanghao($value,'_','-');
-                $sub = '@#'.$su;
+        foreach($suffixAll as $key=>$value){
+            //价格判断
+            $totalprice = ceil($foos[0][0]['price']+$foos[0][0]['shipping']);
+            if($totalprice<=2){
+                $foos[0][0]['price'] = 1;
+                $foos[0][0]['shipping'] = 1;
+            }elseif(2< $totalprice  &&  $totalprice<3){
+                $foos[0][0]['price'] = 2;
+                $foos[0][0]['shipping'] = 1;
+            }else{
+                $foos[0][0]['shipping'] = ceil($totalprice*$value['Rate']);
+                $foos[0][0]['price'] = ceil($totalprice - $foos[0][0]['shipping']);
 
             }
-            else{
-                $sub = '';
-            }
 
-
-            $strvariant = $this->actionVariationWish($id,$sub);
-
-
+            $strvariant = $this->actionVariationWish($id,$value['Suffix'],$value['Rate']);
             $row = $key+2;
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$row,$foos[0][0]['SKU'].$sub);
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.$row,$value);
+            $foos[0][0]['main_image'] = 'https://www.tupianku.com/view/full/10023/'.$foos[0][0]['SKU'].'-_'.$value['MainImg'].'_.jpg' ;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$row,$foos[0][0]['SKU'].$value['Suffix']);
+            $objPHPExcel->getActiveSheet()->setCellValue('B'.$row,$value['IbaySuffix']);
             $objPHPExcel->getActiveSheet()->setCellValue('C'.$row,$foos[0][0]['title']);
             $objPHPExcel->getActiveSheet()->setCellValue('D'.$row,$foos[0][0]['inventory']);
             $objPHPExcel->getActiveSheet()->setCellValue('E'.$row,$foos[0][0]['price']);
@@ -603,7 +606,6 @@ class ChannelController extends Controller
             $objPHPExcel->getActiveSheet()->setCellValue('P'.$row,'');
         }
 
-
         header('Content-Type: application/vnd.ms-excel');
         $filename = 'Wish模版'.$foos[0][0]['SKU'].date("d-m-Y-His").".xls";
         header('Content-Disposition: attachment;filename='.$filename .' ');
@@ -612,11 +614,12 @@ class ChannelController extends Controller
         $objWriter->save('php://output');
     }
 
+
     /*
      * 处理多属性
      * @param $id int 商品ID
      */
-    function actionVariationWish($id,$sub){
+    function actionVariationWish($id,$sub,$rate){
 
         $variants = Wishgoodssku::find()->where(['pid'=>$id])->all();
         $variation = [];
@@ -625,7 +628,23 @@ class ChannelController extends Controller
             return;
         }
 
+
         foreach($variants as $key=>$value){
+
+            //价格判断
+            $totalprice = ceil($value['price']+$value['shipping']);
+            if($totalprice<=2){
+                $value['price'] = 1;
+                $value['shipping'] = 1;
+            }elseif(2< $totalprice  &&  $totalprice<3){
+                $value['price'] = 2;
+                $value['shipping'] = 1;
+            }else{
+                $value['shipping'] = ceil($totalprice*$rate);
+                $value['price'] = ceil($totalprice -$value['shipping']);
+
+            }
+
             $varitem['sku'] = $value['sku'].$sub;
             $varitem['color'] = $value['color'];
             $varitem['size'] = $value['size'];
@@ -658,19 +677,7 @@ class ChannelController extends Controller
 
 
 
-    /*
-     * 处理wish账号,默认是表中所有的账号
-     *
-     */
 
-    public function actionSuffix(){
-
-        $suffixAll = WishSuffixDictionary::find()
-                ->asArray()
-                ->all(); //返回数组对象
-        $suffix = array_column($suffixAll, 'IbaySuffix');
-        return $suffix;
-    }
 
     /*
      *编辑完成状态
