@@ -247,8 +247,19 @@ class ChannelController extends Controller
     {
         $varData = $_POST['OaTemplatesVar'];
         $pictureKey = $_POST['picKey'];
+        $labels = json_decode($_POST['label'],true);
         $var = new OaTemplatesVar();
         $fields = $var->attributeLabels();
+        //获取动态列的表名
+        $old_labels = [];
+        foreach (current($varData) as $key=>$value){
+            if (!in_array($key,array_keys($fields))){
+                array_push($old_labels,$key);
+            }
+        }
+        //列名映射成真实列名
+        $labels_map = array_combine($old_labels,$labels);
+        //保存数据
         $row = [];
         foreach ($varData as $key=>$value)
         {
@@ -263,7 +274,7 @@ class ChannelController extends Controller
                     $row[$field] = $val;
                 }
                 else{
-                    array_push($property['columns'],[$field=>$val]);
+                    array_push($property['columns'],[$labels_map[$field]=>$val]);
                 }
             }
             $row['property'] = json_encode($property);
