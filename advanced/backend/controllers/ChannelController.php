@@ -565,10 +565,9 @@ class ChannelController extends Controller
                 ->setCellValue($value.$sub, $combineArr[$value]);
         }
 
-//        $suffix = $this->actionFetchSuffix();
         $suffix = $this->actionSuffix();
 
-//判断 @# 是否需要添加 规则：新账号需要拼接 @#
+    //判断 @# 是否需要添加 规则：新账号需要拼接 @#
 
         foreach($suffix as $key=>$value){
             $sub1 = substr(substr($value,5),0,1);
@@ -656,25 +655,7 @@ class ChannelController extends Controller
     }
 
 
-    /*
-     * 拼接wish账号
-     *
-     */
-    public function actionFetchSuffix(){
 
-       $suffix = Yii::$app->db->createCommand(" 
-            SELECT  DictionaryName    from  B_Dictionary
-            WHERE CategoryID=12 AND  DictionaryName LIKE '%WIS%' AND Used=0
-            ORDER BY DictionaryName ")->queryAll();
-
-        foreach ($suffix as $val){
-            $len = strlen($val["DictionaryName"])-3;
-            $wish_suffix[]  = 'wish_'.substr($val["DictionaryName"],3,$len);
-        }
-
-        return $wish_suffix;
-
-    }
 
 
     /*
