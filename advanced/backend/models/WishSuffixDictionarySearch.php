@@ -19,7 +19,8 @@ class WishSuffixDictionarySearch extends WishSuffixDictionary
     {
         return [
             [['NID'], 'integer'],
-            [['IbaySuffix','ShortName'], 'safe'],
+            [['Rate'], 'number'],
+            [['IbaySuffix', 'ShortName', 'MainImg', 'Suffix'], 'safe'],
         ];
     }
 
@@ -64,6 +65,10 @@ class WishSuffixDictionarySearch extends WishSuffixDictionary
 
         $query->andFilterWhere(['like', 'IbaySuffix', $this->IbaySuffix]);
         $query->andFilterWhere(['like', 'ShortName', $this->ShortName]);
+        $query->andFilterWhere(['like', 'Suffix', $this->Suffix]);
+        $query->andFilterWhere(['like', 'Rate', $this->Rate]);
+        $query->andFilterWhere(['like', 'MainImg', $this->MainImg]);
+
 
         return $dataProvider;
     }

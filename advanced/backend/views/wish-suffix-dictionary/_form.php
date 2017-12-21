@@ -29,10 +29,11 @@ $this->registerJs(
 <div class="row">
     <div class="col-md-6"><?= $form->field($model, 'IbaySuffix')->textInput() ?></div>
     <div class="col-md-6"><?= $form->field($model, 'ShortName')->textInput() ?></div>
+    <div class="col-md-6"><?= $form->field($model, 'Suffix')->textInput() ?></div>
+    <div class="col-md-6"><?= $form->field($model, 'Rate')->textInput() ?></div>
+    <div class="col-md-6"><?= $form->field($model, 'MainImg')->textInput() ?></div>
 
 </div>
-
-
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? '+新增Add' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>

@@ -15,13 +15,7 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'nid') ?>
-
-    <?= $form->field($model, 'ebayName') ?>
-
-    <?= $form->field($model, 'palpayName') ?>
-
-    <?= $form->field($model, 'mapType') ?>
+    <?= $form->field($model, 'paypalName') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

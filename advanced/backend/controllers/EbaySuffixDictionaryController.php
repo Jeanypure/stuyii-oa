@@ -51,7 +51,7 @@ class EbaySuffixDictionaryController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
+        return $this->renderAjax('view', [
             'model' => $this->findModel($id),
         ]);
     }
@@ -67,7 +67,7 @@ class EbaySuffixDictionaryController extends Controller
         $post = Yii::$app->request->post();
         //var_dump($post);exit;
         if ($model->load($post) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->nid]);
+            return $this->redirect(['index']);
         } else {
             return $this->renderAjax('create', [
                 'model' => $model,
@@ -88,7 +88,7 @@ class EbaySuffixDictionaryController extends Controller
         $post = Yii::$app->request->post();
         //var_dump($post);exit;
         if ($model->load($post) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->nid]);
+            return $this->redirect(['index']);
         } else {
             return $this->renderAjax('update', [
                 'model' => $model,
@@ -123,5 +123,22 @@ class EbaySuffixDictionaryController extends Controller
         } else {
             throw new NotFoundHttpException('请求的页面不存在.');
         }
+    }
+
+    /**
+     * 添加、编辑是进行异步验证
+     * @return array
+     * @throws NotFoundHttpException
+     */
+    public function actionValidateForm () {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $id = Yii::$app->request->get('id');
+        if($id){
+            $model = $this->findModel($id);
+        }else{
+            $model = new OaEbaySuffix();
+        }
+        $model->load(Yii::$app->request->post());
+        return \yii\widgets\ActiveForm::validate($model);
     }
 }

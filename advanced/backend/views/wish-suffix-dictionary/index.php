@@ -27,13 +27,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            ['class' => 'yii\grid\CheckboxColumn'],
-            ['class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {update} {delete}'
-            ],
-            'IbaySuffix',
-            'ShortName'
+            ['class' => 'yii\grid\ActionColumn'],
 
+            'IbaySuffix',
+            'ShortName',
+            'Suffix',
+            'Rate',
+            'MainImg',
         ],
     ]); ?>
     <?php Pjax::end(); ?></div>

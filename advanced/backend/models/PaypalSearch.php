@@ -5,12 +5,11 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\OaEbayPaypal;
 
 /**
  * EbayPaypalSearch represents the model behind the search form about `backend\models\OaEbayPaypal`.
  */
-class EbayPaypalSearch extends OaEbayPaypal
+class PaypalSearch extends OaPaypal
 {
     /**
      * @inheritdoc
@@ -19,7 +18,7 @@ class EbayPaypalSearch extends OaEbayPaypal
     {
         return [
             [['nid'], 'integer'],
-            [['ebayName', 'palpayName', 'mapType'], 'safe'],
+            [['paypalName'], 'safe'],
         ];
     }
 
@@ -41,7 +40,7 @@ class EbayPaypalSearch extends OaEbayPaypal
      */
     public function search($params)
     {
-        $query = OaEbayPaypal::find();
+        $query = OaPaypal::find();
 
         // add conditions that should always apply here
 
@@ -62,9 +61,7 @@ class EbayPaypalSearch extends OaEbayPaypal
             'nid' => $this->nid,
         ]);
 
-        $query->andFilterWhere(['like', 'ebayName', $this->ebayName])
-            ->andFilterWhere(['like', 'palpayName', $this->palpayName])
-            ->andFilterWhere(['like', 'mapType', $this->mapType]);
+        $query->andFilterWhere(['like', 'paypalName', $this->paypalName]);
 
         return $dataProvider;
     }

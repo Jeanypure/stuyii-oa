@@ -10,7 +10,13 @@ use yii\widgets\ActiveForm;
 
 <div class="wish-suffix-dictionary-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php
+    $id = $model->isNewRecord ? 0 : $model->nid;
+    $form = ActiveForm::begin([
+        'id' => 'form-id',
+        'enableAjaxValidation' => true,
+        'validationUrl' => \yii\helpers\Url::to(['validate-form', 'id' => $id]),
+    ]); ?>
 
     <?= $form->field($model, 'ebayName')->textInput() ?>
 

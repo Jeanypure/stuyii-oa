@@ -6,9 +6,9 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\OaEbayPaypal */
 
-$this->title = 'Create Oa Ebay Paypal';
-$this->params['breadcrumbs'][] = ['label' => 'Oa Ebay Paypals', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+//$this->title = 'Create Oa Ebay Paypal';
+//$this->params['breadcrumbs'][] = ['label' => 'Oa Ebay Paypals', 'url' => ['index']];
+//$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="oa-ebay-paypal-create">
 

@@ -2,9 +2,9 @@
 
 namespace backend\controllers;
 
+use backend\models\OaPaypal;
+use backend\models\PaypalSearch;
 use Yii;
-use backend\models\OaEbayPaypal;
-use backend\models\EbayPaypalSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * EbayPaypalController implements the CRUD actions for OaEbayPaypal model.
  */
-class EbayPaypalController extends Controller
+class PaypalController extends Controller
 {
     /**
      * @inheritdoc
@@ -35,7 +35,7 @@ class EbayPaypalController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new EbayPaypalSearch();
+        $searchModel = new PaypalSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -51,7 +51,7 @@ class EbayPaypalController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
+        return $this->renderAjax('view', [
             'model' => $this->findModel($id),
         ]);
     }
@@ -63,12 +63,12 @@ class EbayPaypalController extends Controller
      */
     public function actionCreate()
     {
-        $model = new OaEbayPaypal();
+        $model = new OaPaypal();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->nid]);
+            return $this->redirect(['index']);
         } else {
-            return $this->render('create', [
+            return $this->renderAjax('create', [
                 'model' => $model,
             ]);
         }
@@ -85,9 +85,9 @@ class EbayPaypalController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->nid]);
+            return $this->redirect(['index']);
         } else {
-            return $this->render('update', [
+            return $this->renderAjax('update', [
                 'model' => $model,
             ]);
         }
@@ -115,7 +115,7 @@ class EbayPaypalController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = OaEbayPaypal::findOne($id)) !== null) {
+        if (($model = OaPaypal::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

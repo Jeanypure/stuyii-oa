@@ -27,7 +27,8 @@ class WishSuffixDictionary extends \yii\db\ActiveRecord
     {
         return [
             [['IbaySuffix'], 'required'],
-            [['IbaySuffix','ShortName'], 'string'],
+            [['IbaySuffix', 'ShortName', 'MainImg', 'Suffix'], 'string'],
+            [['Rate'], 'number'],
             [['IbaySuffix'], 'unique'],
         ];
     }
@@ -38,8 +39,12 @@ class WishSuffixDictionary extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
+            'NID' => 'Nid',
             'IbaySuffix' => '卖家账号',
             'ShortName' => '简称',
+            'Suffix' => '后缀',
+            'Rate' => '运费比例',
+            'MainImg' => '主图名称',
         ];
     }
 }

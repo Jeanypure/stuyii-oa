@@ -37,7 +37,7 @@ class OaPaypal extends \yii\db\ActiveRecord
     {
         return [
             'nid' => 'Nid',
-            'paypalName' => 'Paypal Name',
+            'paypalName' => 'Paypal账号',
         ];
     }
 }
