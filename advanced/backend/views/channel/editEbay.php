@@ -55,8 +55,9 @@ Modal::end();
 ]);?>
 
 </br>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
 <div class="st">
-    <div class="row">
+    <div class="row top">
         <div class="col-sm-3">
         <?= Html::button('保存当前数据', ['class' =>' save-only btn btn-default']) ?>
 
@@ -64,21 +65,17 @@ Modal::end();
 
         </div>
         <div class="col-sm-2">
+            <select class="selectpicker ebay-chosen-up" multiple data-actions-box="true" title="--所有账号--">
         <?php
-        echo Select2::widget([
-            'name' => 'color_2',
-            'data' => $ebayAccount,
-            'maintainOrder' => true,
-            'options' => ['placeholder' => '选择一个账号 ', 'multiple' => true,'class' => 'ebay-chosen'],
-            'pluginOptions' => [
-                'tags' => true,
-            ],
-        ]);
+        foreach ($ebayAccount as $account=>$suffix) {
 
+            echo '<option class="ebay-select" value="'.$account.'">'.$suffix.'</option>';
+        }
         ?>
+            </select>
         </div>
             <div class="col-sm-1">
-                <?php echo Html::button('导出所选账号模板',['class' =>'export-ebay-given btn btn-default'])    ?>
+                <?php echo Html::button('导出所选账号模板',['class' =>'top-export-ebay-given btn btn-default'])    ?>
             </div>
 
     </div>
@@ -255,7 +252,7 @@ $form->field($templates,'InshippingMethod1',$shipping_templates)->dropDownList($
 <br>
     <hr>
     <div class="st">
-        <div class="row">
+        <div class="row bottom">
             <div class="col-sm-3">
                 <?= Html::button('保存当前数据', ['class' =>' save-only btn btn-default']) ?>
 
@@ -263,21 +260,17 @@ $form->field($templates,'InshippingMethod1',$shipping_templates)->dropDownList($
 
             </div>
             <div class="col-sm-2">
-                <?php
-                echo Select2::widget([
-                    'name' => 'color_2',
-                    'data' => $ebayAccount,
-                    'maintainOrder' => true,
-                    'options' => ['placeholder' => '选择一个账号 ', 'multiple' => true,'class' => 'ebay-chosen'],
-                    'pluginOptions' => [
-                        'tags' => true,
-                    ],
-                ]);
+                <select class="selectpicker ebay-chosen-down" multiple data-actions-box="true" title="--所有账号--">
+                    <?php
+                    foreach ($ebayAccount as $account=>$suffix) {
 
-                ?>
+                        echo '<option class="ebay-select" value="'.$account.'">'.$suffix.'</option>';
+                    }
+                    ?>
+                </select>
             </div>
             <div class="col-sm-1">
-                <?php echo Html::button('导出所选账号模板',['class' =>'export-ebay-given btn btn-default'])    ?>
+                <?php echo Html::button('导出所选账号模板',['class' =>'bottom-export-ebay-given btn btn-default'])    ?>
             </div>
 
         </div>
@@ -551,20 +544,24 @@ $('.save-complete').on('click',function() {
 });
 
 
-//导出所选账号模板
-$('.export-ebay-given').on('click',function() {
-    var accounts = [];
-    $('.select2-selection__choice').each(function() {
-        accounts.push($(this).attr('title'));
-    });
-    //参数传到URL中
-    names = accounts.join();
-    window.location.href='{$exportUlr}'+ '&accounts='+names;
+//顶部导出所选账号模板
+$('.top-export-ebay-given').on('click',function() {
+    names = $('.top').find('.selectpicker').val();
+    alert(names); 
+    // window.location.href='{$exportUlr}'+ '&accounts='+names;
+});
+
+//底部导出所选账号模板
+$('.bottom-export-ebay-given').on('click',function() {
+    names = $('.bottom').find('.selectpicker').val();
+    alert(names); 
+    // window.location.href='{$exportUlr}'+ '&accounts='+names;
 });
 JS;
 $this->registerJs($js);
 ?>
 
+<!--<script src="http://58.246.226.254:8090/Public/js/bootstrap-select.min.js"></script>-->
 
 <style>
     @media (min-width: 768px) {
@@ -574,3 +571,8 @@ $this->registerJs($js);
         }
     }
 </style>
+
+<link rel="stylesheet" href="../css/bootstrap-select.min.css">
+<script src="../plugins/jquery/1.12.3/jquery.js"></script>
+<script src="../plugins/bootstrap-select/bootstrap-select.min.js"></script>
+

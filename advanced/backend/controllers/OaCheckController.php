@@ -454,7 +454,7 @@ class OaCheckController extends Controller
             }
 
         }
-        return $code;
+        return $code.'-test';
 
 
     }
