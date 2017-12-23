@@ -69,7 +69,7 @@ Modal::end();
         <?php
         foreach ($ebayAccount as $account=>$suffix) {
 
-            echo '<option class="ebay-select" value="'.$account.'">'.$suffix.'</option>';
+            echo '<option class="ebay-select" value="'.$suffix.'">'.$suffix.'</option>';
         }
         ?>
             </select>
@@ -159,6 +159,7 @@ echo '</div>';
 <div>
 <?= $form->field($templates,'listedCate')->textInput(); ?>
 <?= $form->field($templates,'listedSubcate')->textInput(); ?>
+<?= $form->field($templates,'IbayTemplate')->textInput(); ?>
 <?= $form->field($templates,'title')->textInput(); ?>
 <?= $form->field($templates,'subTitle')->textInput(); ?>
 <?= $form->field($templates,'description')->textarea(['rows'=>6]); ?>
@@ -264,7 +265,7 @@ $form->field($templates,'InshippingMethod1',$shipping_templates)->dropDownList($
                     <?php
                     foreach ($ebayAccount as $account=>$suffix) {
 
-                        echo '<option class="ebay-select" value="'.$account.'">'.$suffix.'</option>';
+                        echo '<option class="ebay-select" value="'.$suffix.'">'.$suffix.'</option>';
                     }
                     ?>
                 </select>
@@ -547,15 +548,13 @@ $('.save-complete').on('click',function() {
 //顶部导出所选账号模板
 $('.top-export-ebay-given').on('click',function() {
     names = $('.top').find('.selectpicker').val();
-    alert(names); 
-    // window.location.href='{$exportUlr}'+ '&accounts='+names;
+    window.location.href='{$exportUlr}'+ '&accounts='+names;
 });
 
 //底部导出所选账号模板
 $('.bottom-export-ebay-given').on('click',function() {
     names = $('.bottom').find('.selectpicker').val();
-    alert(names); 
-    // window.location.href='{$exportUlr}'+ '&accounts='+names;
+    window.location.href='{$exportUlr}'+ '&accounts='+names;
 });
 JS;
 $this->registerJs($js);
