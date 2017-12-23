@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => '主图',
                 'format' => 'raw',
             ],
-            'GoodsCode',
+             'GoodsCode',
              'GoodsName',
             [
                 'attribute'=> 'cate',
@@ -55,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute'=> 'introducer',
                 'value'=>'oa_goods.introducer'
             ],
-            'developer',
+             'developer',
              'Purchaser',
              'possessMan1',
             [

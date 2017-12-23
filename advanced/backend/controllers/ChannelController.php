@@ -564,7 +564,7 @@ class ChannelController extends Controller
         ];
         return $var;
     }
-    
+
     //导出数据 wish平台
     public  function actionExport($id){
 
@@ -591,7 +591,6 @@ class ChannelController extends Controller
             $objPHPExcel->getActiveSheet()->setTitle($foos[0][0]['SKU'])
                 ->setCellValue($value.$sub, $combineArr[$value]);
         }
-        //
         $suffixAll = WishSuffixDictionary::find()
             ->asArray()
             ->where("ParentCategory like :cate")
@@ -702,18 +701,12 @@ class ChannelController extends Controller
     }
 
 
-
-
-
-
-
     /*
      *编辑完成状态
      */
     public function actionWishSign($id){
 
         $completeStatus = Channel::find()->where(['pid'=>$id])->all();
-
 
         //动态计算产品的状态
 
