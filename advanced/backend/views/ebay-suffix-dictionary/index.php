@@ -76,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <script>
     window.onload = function (ev) {
         $('.index-create').on('click', function () {
-            var url = '?r=ebay-suffix-dictionary/create';
+            var url = '/ebay-suffix-dictionary/create';
             $.get(url, function (msg) {
                 bootbox.dialog({
                     message: msg,
@@ -92,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
         });
         $('.index-update').on('click', function () {
             var id = $(this).data('id');
-            var url = '?r=ebay-suffix-dictionary/update&id=' + id;
+            var url = '/ebay-suffix-dictionary/update/?id=' + id;
             $.get(url, function (msg) {
                 bootbox.dialog({
                     message: msg,
@@ -108,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
         });
         $('.index-view').on('click', function () {
             var id = $(this).data('id');
-            var url = '?r=ebay-suffix-dictionary/view&id=' + id;
+            var url = '/ebay-suffix-dictionary/view/?id=' + id;
             $.get(url, function (msg) {
                 bootbox.dialog({
                     message: msg,
