@@ -15,6 +15,7 @@ use Yii;
  */
 class OaShippingService extends \yii\db\ActiveRecord
 {
+    public $Name;
     /**
      * @inheritdoc
      */
@@ -45,6 +46,12 @@ class OaShippingService extends \yii\db\ActiveRecord
             'type' => '属性',
             'siteId' => '国家',
             'ibayShipping' => 'Ibay识别运输方式',
+            'Name' => '国家名称',
         ];
+    }
+
+    public function getCountry()
+    {
+        return $this->hasOne(OaEbayCountry::className(), ['code' => 'siteId']);
     }
 }

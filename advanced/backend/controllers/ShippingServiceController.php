@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\OaEbayCountry;
 use Yii;
 use backend\models\OaShippingService;
 use backend\models\ShippingServiceSearch;
@@ -51,8 +52,11 @@ class ShippingServiceController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
+        $model = $this->findModel($id);
+        $model->siteId = OaEbayCountry::findOne(['code' => $model->siteId])['Name'];
+        $model->type = Yii::$app->params['typeList'][$model->type];
+        return $this->renderAjax('view', [
+            'model' => $model,
         ]);
     }
 
@@ -66,9 +70,9 @@ class ShippingServiceController extends Controller
         $model = new OaShippingService();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->nid]);
+            return $this->redirect(['index']);
         } else {
-            return $this->render('create', [
+            return $this->renderAjax('create', [
                 'model' => $model,
             ]);
         }
@@ -85,9 +89,9 @@ class ShippingServiceController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->nid]);
+            return $this->redirect(['index']);
         } else {
-            return $this->render('update', [
+            return $this->renderAjax('update', [
                 'model' => $model,
             ]);
         }

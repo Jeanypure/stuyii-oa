@@ -19,7 +19,7 @@ class ShippingServiceSearch extends OaShippingService
     {
         return [
             [['nid', 'siteId'], 'integer'],
-            [['servicesName', 'type', 'ibayShipping'], 'safe'],
+            [['servicesName', 'ibayShipping', 'Name'], 'safe'],
         ];
     }
 
@@ -41,12 +41,41 @@ class ShippingServiceSearch extends OaShippingService
      */
     public function search($params)
     {
-        $query = OaShippingService::find();
+        $query = OaShippingService::find()->joinWith('country');
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+        ]);
+
+        $dataProvider->setSort([
+            'defaultOrder' => [
+                //'capital' => SORT_DESC,
+                'nid' => SORT_DESC,
+            ],
+            'attributes' => [
+                'nid' => [
+                    'asc' => ['oa_shippingService.nid' => SORT_ASC],
+                    'desc' => ['oa_shippingService.nid' => SORT_DESC],
+                ],
+                'servicesName' => [
+                    'asc' => ['servicesName' => SORT_ASC],
+                    'desc' => ['servicesName' => SORT_DESC],
+                ],
+                'type' => [
+                    'asc' => ['type' => SORT_ASC],
+                    'desc' => ['type' => SORT_DESC],
+                ],
+                'ibayShipping' => [
+                    'asc' => ['ibayShipping' => SORT_ASC],
+                    'desc' => ['ibayShipping' => SORT_DESC],
+                ],
+                'Name' => [
+                    'asc' => ['Name' => SORT_ASC],
+                    'desc' => ['Name' => SORT_DESC],
+                ],
+            ]
         ]);
 
         $this->load($params);
@@ -64,7 +93,8 @@ class ShippingServiceSearch extends OaShippingService
         ]);
 
         $query->andFilterWhere(['like', 'servicesName', $this->servicesName])
-            ->andFilterWhere(['like', 'type', $this->type])
+            //->andFilterWhere(['like', 'type', $this->type])
+            ->andFilterWhere(['like', 'oa_ebay_country.Name', $this->Name])
             ->andFilterWhere(['like', 'ibayShipping', $this->ibayShipping]);
 
         return $dataProvider;

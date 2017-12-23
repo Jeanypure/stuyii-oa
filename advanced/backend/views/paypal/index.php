@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\EbayPaypalSearch */
@@ -16,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('添加PayPal账号', "javascript:void(0);", ['class' => 'index-create btn btn-primary']) ?>
+        <?= Html::a('添加PayPal账号', "javascript:void(0);", ['data-href' => Url::to(['create']), 'class' => 'index-create btn btn-primary']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -30,10 +31,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{view} {update} {delete}',
                 'buttons' => [
                     'view' => function ($url, $model, $key) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', 'javascript:void(0);', ['class' => 'index-view', 'data-id' => $model['nid']]);
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', 'javascript:void(0);',
+                            ['data-href' => Url::to(['view', 'id' => $model['nid']]), 'class' => 'index-view', 'data-id' => $model['nid']]);
                     },
                     'update' => function ($url, $model, $key) {
-                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', 'javascript:void(0);', ['class' => 'index-update', 'data-id' => $model['nid']]);
+                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', 'javascript:void(0);',
+                            ['data-href' => Url::to(['update', 'id' => $model['nid']]), 'class' => 'index-update', 'data-id' => $model['nid']]);
                     },
                 ]
             ],
@@ -45,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <script>
     window.onload = function () {
         $('.index-create').on('click', function () {
-            var url = '?r=paypal/create';
+            var url = $(this).data('href');
             $.get(url, function (msg) {
                 bootbox.dialog({
                     message: msg,
@@ -61,8 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
         });
 
         $('.index-update').on('click', function () {
-            var id = $(this).data('id');
-            var url = '?r=paypal/update&id=' + id;
+            var url = $(this).data('href');
             $.get(url, function (msg) {
                 bootbox.dialog({
                     message: msg,
@@ -77,8 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
             })
         });
         $('.index-view').on('click', function () {
-            var id = $(this).data('id');
-            var url = '?r=paypal/view&id=' + id;
+            var url = $(this).data('href');
             $.get(url, function (msg) {
                 bootbox.dialog({
                     message: msg,
