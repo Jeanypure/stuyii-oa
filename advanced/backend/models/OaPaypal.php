@@ -27,6 +27,7 @@ class OaPaypal extends \yii\db\ActiveRecord
     {
         return [
             [['paypalName'], 'string'],
+            [['usedNum'], 'integer'],
         ];
     }
 
@@ -38,6 +39,7 @@ class OaPaypal extends \yii\db\ActiveRecord
         return [
             'nid' => 'Nid',
             'paypalName' => 'Paypal账号',
+            'usedNum' => '关联数量',
         ];
     }
 }

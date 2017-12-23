@@ -46,6 +46,29 @@ $this->params['breadcrumbs'][] = $this->title;
             'ebayName',
             'ebaySuffix',
             'nameCode',
+            [
+                'attribute' => 'highEbayPaypal',
+                'value' => function($model){
+                    $id = $model->nid;
+                    $arr = \backend\models\OaEbayPaypal::find()->joinWith('payPal')->andWhere(['ebayId' => $id, 'maptype' => 'high'])->asArray()->one();
+                    //var_dump($arr);exit;
+                    if($arr){
+                        return $arr['payPal']['paypalName'];
+                    }
+                },
+                //'payPal.paypalName',
+            ],
+            [
+                'attribute' => 'lowEbayPaypal',
+                'value' => function($model){
+                    $id = $model->nid;
+                    $arr = \backend\models\OaEbayPaypal::find()->joinWith('payPal')->andWhere(['ebayId' => $id, 'maptype' => 'low'])->asArray()->one();
+                    //var_dump($arr);exit;
+                    if($arr){
+                        return $arr['payPal']['paypalName'];
+                    }
+                },
+            ],
         ],
     ]); ?>
     <?php Pjax::end(); ?>
