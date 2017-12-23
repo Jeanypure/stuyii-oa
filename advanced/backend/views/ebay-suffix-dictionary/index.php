@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\WishSuffixDictionarySearch */
@@ -15,11 +16,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
         <?php //echo Html::a('添加ebay账号', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('添加ebay账号', "javascript:void(0);", ['title' => 'create', 'data-toggle' => 'modal', 'data-target' => '#index-modal', 'class' => 'index-create btn btn-primary']) ?>
-
+        <?= Html::a('添加ebay账号', "javascript:void(0);", ['title' => 'create', 'data-toggle' => 'modal', 'data-target' => '#index-modal',
+            'data-href' => Url::to(['create']), 'class' => 'index-create btn btn-primary']) ?>
     </p>
     <?php Pjax::begin(); ?>
     <?= GridView::widget([
@@ -35,10 +35,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{view} {update} {delete}',
                 'buttons' => [
                     'view' => function ($url, $model, $key) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', 'javascript:void(0);', ['class' => 'index-view', 'data-id' => $model['nid']]);
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', 'javascript:void(0);',
+                            ['data-href' => Url::to(['view', 'id' => $model['nid']]), 'class' => 'index-view']);
                     },
                     'update' => function ($url, $model, $key) {
-                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', 'javascript:void(0);', ['class' => 'index-update', 'data-id' => $model['nid']]);
+                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', 'javascript:void(0);',
+                            ['data-href' => Url::to(['update', 'id' => $model['nid']]), 'class' => 'index-update']);
                     },
                 ]
             ],
@@ -76,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <script>
     window.onload = function (ev) {
         $('.index-create').on('click', function () {
-            var url = '/ebay-suffix-dictionary/create';
+            var url = $(this).data('href');
             $.get(url, function (msg) {
                 bootbox.dialog({
                     message: msg,
@@ -91,8 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
             })
         });
         $('.index-update').on('click', function () {
-            var id = $(this).data('id');
-            var url = '/ebay-suffix-dictionary/update/?id=' + id;
+            var url = $(this).data('href');
             $.get(url, function (msg) {
                 bootbox.dialog({
                     message: msg,
@@ -107,8 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
             })
         });
         $('.index-view').on('click', function () {
-            var id = $(this).data('id');
-            var url = '/ebay-suffix-dictionary/view/?id=' + id;
+            var url = $(this).data('href');
             $.get(url, function (msg) {
                 bootbox.dialog({
                     message: msg,

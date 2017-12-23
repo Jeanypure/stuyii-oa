@@ -56,8 +56,13 @@ class EbaySuffixDictionaryController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $arr1 = OaEbayPaypal::find()->joinWith('payPal')->andWhere(['ebayId' => $id, 'maptype' => 'high'])->asArray()->one();
+        $arr2 = OaEbayPaypal::find()->joinWith('payPal')->andWhere(['ebayId' => $id, 'maptype' => 'low'])->asArray()->one();
+        if($arr1) $model->highEbayPaypal = $arr1['payPal']['paypalName'];
+        if($arr2) $model->lowEbayPaypal = $arr2['payPal']['paypalName'];
         return $this->renderAjax('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 
