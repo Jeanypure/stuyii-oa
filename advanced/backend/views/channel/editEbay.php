@@ -548,12 +548,18 @@ $('.save-complete').on('click',function() {
 //顶部导出所选账号模板
 $('.top-export-ebay-given').on('click',function() {
     names = $('.top').find('.selectpicker').val();
+    if(!names){
+        names = '';
+    }
     window.location.href='{$exportUlr}'+ '&accounts='+names;
 });
 
 //底部导出所选账号模板
 $('.bottom-export-ebay-given').on('click',function() {
     names = $('.bottom').find('.selectpicker').val();
+    if(!names){
+        names = '';
+    }
     window.location.href='{$exportUlr}'+ '&accounts='+names;
 });
 JS;

@@ -15,7 +15,7 @@ use Yii;
  * @property integer $SupplierName
  * @property string $description
  */
-//class OaGoodsinfo extends \yii\db\ActiveRecord
+
 class OaGoodsinfo extends GoodsCats
 {
 
