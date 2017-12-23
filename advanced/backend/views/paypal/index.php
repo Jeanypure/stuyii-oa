@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\EbayPaypalSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '添加Paypals账号';
+$this->title = '添加PayPal账号';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="oa-ebay-paypal-index">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('添加Paypals账号', "javascript:void(0);", ['class' => 'index-create btn btn-primary']) ?>
+        <?= Html::a('添加PayPal账号', "javascript:void(0);", ['class' => 'index-create btn btn-primary']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -38,6 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]
             ],
             'paypalName',
+            'usedNum',
         ],
     ]); ?>
 </div>
@@ -48,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
             $.get(url, function (msg) {
                 bootbox.dialog({
                     message: msg,
-                    title: "添加Paypal账号",
+                    title: "添加PayPal账号",
                     buttons: {
                         cancel: {
                             label: "取消",
@@ -65,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
             $.get(url, function (msg) {
                 bootbox.dialog({
                     message: msg,
-                    title: "编辑Paypal账号",
+                    title: "编辑PayPal账号",
                     buttons: {
                         cancel: {
                             label: "取消",
@@ -81,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
             $.get(url, function (msg) {
                 bootbox.dialog({
                     message: msg,
-                    title: "Paypal账号详情",
+                    title: "PayPal账号详情",
                     buttons: {
                         cancel: {
                             label: "取消",

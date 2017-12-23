@@ -14,6 +14,10 @@ use Yii;
  */
 class OaEbaySuffix extends \yii\db\ActiveRecord
 {
+    public $paypalName;
+    public $mapType;
+    public $highEbayPaypal;
+    public $lowEbayPaypal;
     /**
      * @inheritdoc
      */
@@ -44,6 +48,19 @@ class OaEbaySuffix extends \yii\db\ActiveRecord
             'ebayName' => 'Ebay账号',
             'ebaySuffix' => 'Ebay账号简称',
             'nameCode' => 'Ebay编码',
+            'highEbayPaypal' => '大额PayPal',
+            'lowEbayPaypal' => '小额PayPal',
         ];
     }
+
+    public function getEbayPayPal(){
+        return $this->hasMany(OaEbayPaypal::className(), ['ebayId' => 'nid']);
+    }
+    public function getPayPal(){
+        return $this->hasMany(OaPaypal::className(), ['nid' => 'paypalId'])
+            ->via('ebayPayPal');
+    }
+
+
+
 }
