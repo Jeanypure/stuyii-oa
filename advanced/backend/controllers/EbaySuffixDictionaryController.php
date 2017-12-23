@@ -3,7 +3,12 @@
 namespace backend\controllers;
 
 use backend\models\EbaySuffixDictionarySearch;
+use backend\models\OaEbayPaypal;
+use backend\models\OaPaypal;
 use Yii;
+use yii\db\Exception;
+use yii\db\Expression;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use backend\models\OaEbaySuffix;
 use yii\web\NotFoundHttpException;
@@ -51,8 +56,13 @@ class EbaySuffixDictionaryController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $arr1 = OaEbayPaypal::find()->joinWith('payPal')->andWhere(['ebayId' => $id, 'maptype' => 'high'])->asArray()->one();
+        $arr2 = OaEbayPaypal::find()->joinWith('payPal')->andWhere(['ebayId' => $id, 'maptype' => 'low'])->asArray()->one();
+        if($arr1) $model->highEbayPaypal = $arr1['payPal']['paypalName'];
+        if($arr2) $model->lowEbayPaypal = $arr2['payPal']['paypalName'];
         return $this->renderAjax('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 
@@ -64,11 +74,46 @@ class EbaySuffixDictionaryController extends Controller
     public function actionCreate()
     {
         $model = new OaEbaySuffix();
-        $post = Yii::$app->request->post();
-        //var_dump($post);exit;
-        if ($model->load($post) && $model->save()) {
+        $request = Yii::$app->request;
+        if ($request->isPost) {
+            $post = $request->post('OaEbaySuffix');
+            //var_dump($post);exit;
+            $transaction = OaEbaySuffix::getDb()->beginTransaction();
+            try {
+                $model->attributes = $post;
+                $model->save();
+                //var_dump($post);exit;
+                //保存大额账号
+                if (isset($post['highEbayPaypal']) and $post['highEbayPaypal']) {
+                    $ebayPaypal = new OaEbayPaypal();
+                    $ebayPaypal->ebayId = $model->nid;
+                    $ebayPaypal->paypalId = $post['highEbayPaypal'];
+                    $ebayPaypal->mapType = 'high';
+                    $ebayPaypal->save();
+                    //增加PayPal账号绑定数量
+                    OaPaypal::updateAll(['usedNum' => new Expression('COALESCE("employee_num",0)+1')], ['nid' => $post['highEbayPaypal']]);
+                }
+                //保存小额账号
+                if (isset($post['lowEbayPaypal']) and $post['lowEbayPaypal']) {
+                    $ebayPaypal = new OaEbayPaypal();
+                    $ebayPaypal->ebayId = $model->nid;
+                    $ebayPaypal->paypalId = $post['lowEbayPaypal'];
+                    $ebayPaypal->mapType = 'low';
+                    $ebayPaypal->save();
+                    //增加PayPal账号绑定数量
+                    OaPaypal::updateAll(['usedNum' => new Expression('COALESCE("employee_num",0)+1')], ['nid' => $post['highEbayPaypal']]);
+                }
+                $transaction->commit();
+            } catch (Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            } catch (\Throwable $e) {
+                $transaction->rollBack();
+                throw $e;
+            }
             return $this->redirect(['index']);
-        } else {
+        }
+        if ($request->isGet) {
             return $this->renderAjax('create', [
                 'model' => $model,
             ]);
@@ -84,12 +129,83 @@ class EbaySuffixDictionaryController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $request = Yii::$app->request;
+        if ($request->isPost) {
+            $post = $request->post('OaEbaySuffix');
+            //var_dump($post);exit;
+            $transaction = OaEbaySuffix::getDb()->beginTransaction();
+            try {
+                $model->attributes = $post;
+                $model->save();
+                //var_dump($post);exit;
+                //保存大额账号
+                if (isset($post['highEbayPaypal']) and $post['highEbayPaypal']) {
+                    $ebayPaypal = OaEbayPaypal::findOne(['ebayId' => $id, 'mapType' => 'high']);
+                    //判断该账号是否有高额账号
+                    if ($ebayPaypal) {
+                        if ($ebayPaypal['paypalId'] != $post['highEbayPaypal']) {
+                            //减少原有关联PayPal账号使用量
+                            OaPaypal::updateAll(['usedNum' => 'IF(usedNum<1,0,usedNum-1)'], ['nid' => $ebayPaypal['paypalId']]);
+                            //更新新的关联关系
+                            $ebayPaypal->paypalId = $post['highEbayPaypal'];
+                            $ebayPaypal->save();
+                            //增加新的关联PayPal账号使用量
+                            OaPaypal::updateAll(['usedNum' => new Expression('COALESCE("usedNum",0)+1')], ['nid' => $post['highEbayPaypal']]);
 
-        $post = Yii::$app->request->post();
-        //var_dump($post);exit;
-        if ($model->load($post) && $model->save()) {
+                        }
+                    } else {
+                        $ebayPaypalModel = new OaEbayPaypal();
+                        $ebayPaypalModel->ebayId = $id;
+                        $ebayPaypalModel->paypalId = $post['highEbayPaypal'];
+                        $ebayPaypalModel->mapType = 'high';
+                        $ebayPaypalModel->save();
+                        //增加新的PayPal账号使用量
+                        OaPaypal::updateAll(['usedNum' => new Expression('COALESCE("usedNum",0)+1')], ['nid' => $post['highEbayPaypal']]);
+
+                    }
+                }
+                //保存小额账号
+                if (isset($post['lowEbayPaypal']) and $post['lowEbayPaypal']) {
+                    $ebayPaypalLow = OaEbayPaypal::findOne(['ebayId' => $id, 'mapType' => 'low']);
+                    //判断该账号是否有低额账号
+                    if ($ebayPaypalLow) {
+                        if ($ebayPaypalLow['paypalId'] != $post['lowEbayPaypal']) {
+                            //减少原有关联PayPal账号使用量
+                            OaPaypal::updateAll(['usedNum' => 'IF(usedNum<1,0,usedNum-1)'], ['nid' => $ebayPaypalLow['paypalId']]);
+                            //$query = OaPaypal::updateAll(['usedNum' => new Expression('IF([usedNum]<1,0,COALESCE("usedNum",0)-1)')], ['nid' => $ebayPaypalLow['paypalId']]);
+                            //更新新的关联关系
+                            $ebayPaypalLow->paypalId = $post['lowEbayPaypal'];
+                            $ebayPaypalLow->save();
+                            //增加新的关联PayPal账号使用量
+                            OaPaypal::updateAll(['usedNum' => new Expression('COALESCE("usedNum",0)+1')], ['nid' => $post['lowEbayPaypal']]);
+
+                        }
+                    } else {
+                        $ebayPaypalLowModel = new OaEbayPaypal();
+                        $ebayPaypalLowModel->ebayId = $id;
+                        $ebayPaypalLowModel->paypalId = $post['lowEbayPaypal'];
+                        $ebayPaypalLowModel->mapType = 'high';
+                        $ebayPaypalLowModel->save();
+                        //增加新的PayPal账号使用量
+                        OaPaypal::updateAll(['usedNum' => new Expression('COALESCE("usedNum",0)+1')], ['nid' => $post['lowEbayPaypal']]);
+
+                    }
+                }
+                $transaction->commit();
+            } catch (Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            } catch (\Throwable $e) {
+                $transaction->rollBack();
+                throw $e;
+            }
             return $this->redirect(['index']);
-        } else {
+        }
+        if ($request->isGet) {
+            //初始化PayPal账号值
+            $model->highEbayPaypal = ArrayHelper::getColumn(OaEbayPaypal::findAll(['ebayId' => $id, 'mapType' => 'high']), 'paypalId');
+            //var_dump($model->highEbayPaypal);exit;
+            $model->lowEbayPaypal = ArrayHelper::getColumn(OaEbayPaypal::findAll(['ebayId' => $id, 'mapType' => 'low']), 'paypalId');
             return $this->renderAjax('update', [
                 'model' => $model,
             ]);
@@ -104,8 +220,32 @@ class EbaySuffixDictionaryController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        //var_dump($id);exit;
+        $transaction = OaEbaySuffix::getDb()->beginTransaction();
+        try {
+            //判断该账号是否有高额账号
+            $ebayPaypal = OaEbayPaypal::findOne(['ebayId' => $id, 'mapType' => 'high']);
+            if ($ebayPaypal) {
+                //减少关联PayPal账号使用量
+                OaPaypal::updateAll(['usedNum' => 'IF(usedNum<1,0,usedNum-1)'], ['nid' => $ebayPaypal['paypalId']]);
+            }
 
+            //判断该账号是否有低额账号
+            $ebayPaypalLow = OaEbayPaypal::findOne(['ebayId' => $id, 'mapType' => 'low']);
+            if ($ebayPaypalLow) {
+                //减少关联PayPal账号使用量
+                OaPaypal::updateAll(['usedNum' => 'IF(usedNum<1,0,usedNum-1)'], ['nid' => $ebayPaypalLow['paypalId']]);
+            }
+
+            $this->findModel($id)->delete();
+            $transaction->commit();
+        } catch (Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
         return $this->redirect(['index']);
     }
 
@@ -113,7 +253,7 @@ class EbaySuffixDictionaryController extends Controller
      * Finds the WishSuffixDictionary model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return WishSuffixDictionary the loaded model
+     * @return WishSuffixDictionary the loaded model || NotFoundHttpException
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
@@ -130,12 +270,13 @@ class EbaySuffixDictionaryController extends Controller
      * @return array
      * @throws NotFoundHttpException
      */
-    public function actionValidateForm () {
+    public function actionValidateForm()
+    {
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $id = Yii::$app->request->get('id');
-        if($id){
+        if ($id) {
             $model = $this->findModel($id);
-        }else{
+        } else {
             $model = new OaEbaySuffix();
         }
         $model->load(Yii::$app->request->post());

@@ -2,31 +2,27 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use yii\widgets\Pjax;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\WishSuffixDictionarySearch */
+/* @var $searchModel backend\models\ShippingServiceSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Ebay账号字典';
+$this->title = '运输方式';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="wish-suffix-dictionary-index">
+<div class="oa-shipping-service-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
     <p>
-        <?php //echo Html::a('添加ebay账号', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('添加ebay账号', "javascript:void(0);", ['title' => 'create', 'data-toggle' => 'modal', 'data-target' => '#index-modal',
-            'data-href' => Url::to(['create']), 'class' => 'index-create btn btn-primary']) ?>
+        <?= Html::a('添加', 'javascript:void(0);', ['data-href' => Url::to(['create']), 'class' => 'index-create btn btn-success']) ?>
     </p>
-    <?php Pjax::begin(); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\CheckboxColumn'],
             ['class' => 'yii\grid\SerialColumn'],
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -43,38 +39,25 @@ $this->params['breadcrumbs'][] = $this->title;
                             ['data-href' => Url::to(['update', 'id' => $model['nid']]), 'class' => 'index-update']);
                     },
                 ]
+
             ],
-            //'nid',
-            'ebayName',
-            'ebaySuffix',
-            'nameCode',
+            'servicesName',
             [
-                'attribute' => 'highEbayPaypal',
+                'attribute' => 'type',
                 'value' => function($model){
-                    $id = $model->nid;
-                    $arr = \backend\models\OaEbayPaypal::find()->joinWith('payPal')->andWhere(['ebayId' => $id, 'maptype' => 'high'])->asArray()->one();
-                    //var_dump($arr);exit;
-                    if($arr){
-                        return $arr['payPal']['paypalName'];
-                    }
-                },
-                //'payPal.paypalName',
-            ],
-            [
-                'attribute' => 'lowEbayPaypal',
-                'value' => function($model){
-                    $id = $model->nid;
-                    $arr = \backend\models\OaEbayPaypal::find()->joinWith('payPal')->andWhere(['ebayId' => $id, 'maptype' => 'low'])->asArray()->one();
-                    //var_dump($arr);exit;
-                    if($arr){
-                        return $arr['payPal']['paypalName'];
-                    }
+        //var_dump($model);exit;
+                    return Yii::$app->params['typeList'][$model->type];
                 },
             ],
+            [
+                'attribute' => 'Name',
+                'value' => 'country.Name',
+            ],
+            'ibayShipping',
         ],
     ]); ?>
-    <?php Pjax::end(); ?>
 </div>
+
 <script>
     window.onload = function (ev) {
         $('.index-create').on('click', function () {
@@ -124,4 +107,3 @@ $this->params['breadcrumbs'][] = $this->title;
         });
     }
 </script>
-

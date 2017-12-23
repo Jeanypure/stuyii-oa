@@ -442,16 +442,21 @@ class ChannelController extends Controller
         $db = yii::$app->db;
         $query = $db->createCommand($sql);
         $ret = $query->queryAll();
+        $code_sql = "select ofo.goodsCode from oa_templates as ots 
+                      LEFT  JOIN oa_goodsinfo as ofo 
+                      on ots.infoid=ofo.pid where ots.nid=$id";
         if(empty($ret)){
             return;
         }
+        $code_ret = $db->createCommand($code_sql)->queryOne();
+        $goods_code = $code_ret['goodsCode'];
         $objPHPExcel = new \PHPExcel();
         $sheetNumber= 0;
         $objPHPExcel->setActiveSheetIndex($sheetNumber);
         $sheetName = 'ebay模板';
         $objPHPExcel->getActiveSheet()->setTitle($sheetName);
         header('Content-Type: application/vnd.ms-excel');
-        $fileName = "eBay模板-".date("d-m-Y-His").".xls";
+        $fileName = $goods_code."-eBay模板-".date("d-m-Y-His").".xls";
         header('Content-Disposition: attachment;filename='.$fileName .' ');
         header('Cache-Control: max-age=0');
 

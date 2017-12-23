@@ -45,4 +45,7 @@ class OaEbayPaypal extends \yii\db\ActiveRecord
             'mapType' => 'Map Type',
         ];
     }
+    public function getPayPal(){
+        return $this->hasOne(OaPaypal::className(), ['nid' => 'paypalId']);
+    }
 }

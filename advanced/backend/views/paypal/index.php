@@ -2,12 +2,13 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\EbayPaypalSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '添加Paypals账号';
+$this->title = '添加PayPal账号';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="oa-ebay-paypal-index">
@@ -16,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('添加Paypals账号', "javascript:void(0);", ['class' => 'index-create btn btn-primary']) ?>
+        <?= Html::a('添加PayPal账号', "javascript:void(0);", ['data-href' => Url::to(['create']), 'class' => 'index-create btn btn-primary']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -30,25 +31,28 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{view} {update} {delete}',
                 'buttons' => [
                     'view' => function ($url, $model, $key) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', 'javascript:void(0);', ['class' => 'index-view', 'data-id' => $model['nid']]);
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', 'javascript:void(0);',
+                            ['data-href' => Url::to(['view', 'id' => $model['nid']]), 'class' => 'index-view', 'data-id' => $model['nid']]);
                     },
                     'update' => function ($url, $model, $key) {
-                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', 'javascript:void(0);', ['class' => 'index-update', 'data-id' => $model['nid']]);
+                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', 'javascript:void(0);',
+                            ['data-href' => Url::to(['update', 'id' => $model['nid']]), 'class' => 'index-update', 'data-id' => $model['nid']]);
                     },
                 ]
             ],
             'paypalName',
+            'usedNum',
         ],
     ]); ?>
 </div>
 <script>
     window.onload = function () {
         $('.index-create').on('click', function () {
-            var url = '?r=paypal/create';
+            var url = $(this).data('href');
             $.get(url, function (msg) {
                 bootbox.dialog({
                     message: msg,
-                    title: "添加Paypal账号",
+                    title: "添加PayPal账号",
                     buttons: {
                         cancel: {
                             label: "取消",
@@ -60,12 +64,11 @@ $this->params['breadcrumbs'][] = $this->title;
         });
 
         $('.index-update').on('click', function () {
-            var id = $(this).data('id');
-            var url = '?r=paypal/update&id=' + id;
+            var url = $(this).data('href');
             $.get(url, function (msg) {
                 bootbox.dialog({
                     message: msg,
-                    title: "编辑Paypal账号",
+                    title: "编辑PayPal账号",
                     buttons: {
                         cancel: {
                             label: "取消",
@@ -76,12 +79,11 @@ $this->params['breadcrumbs'][] = $this->title;
             })
         });
         $('.index-view').on('click', function () {
-            var id = $(this).data('id');
-            var url = '?r=paypal/view&id=' + id;
+            var url = $(this).data('href');
             $.get(url, function (msg) {
                 bootbox.dialog({
                     message: msg,
-                    title: "Paypal账号详情",
+                    title: "PayPal账号详情",
                     buttons: {
                         cancel: {
                             label: "取消",
