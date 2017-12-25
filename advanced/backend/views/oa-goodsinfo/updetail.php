@@ -318,10 +318,10 @@ echo TabularForm::widget([
                     'data-id' => $key,
                     'class' => 'data-view',
                 ];
-                return Html::a('<span  class="glyphicon glyphicon-eye-open"></span>', 'goodssku/delete', $options);
+                return Html::a('<span  class="glyphicon glyphicon-eye-open"></span>', Url::to(['goodssku/delete']), $options);
             },
             'delete' => function ($url, $model, $key) {
-                $url ='/goodssku/delete?id='.$key;
+                $url =Url::to(['delete', 'id' => $key]);
                 $options = [
                     'title' => '删除',
                     'aria-label' => '删除',
@@ -376,14 +376,15 @@ echo TabularForm::widget([
                 Html::button('价格确定', ['id'=>'RetailPrice-set','type'=>'button','class'=>'btn']).' '.
 //                '<div class="row">'.
                 Html::button('一键生成SKU', ['id'=>'sku-set','type'=>'button','class'=>'btn btn-success']).' '.
-                Html::button('保存当前数据', ['id'=>'save-only','type'=>'button','class'=>'btn btn-info']).' '.
-                Html::button('保存并完善', ['id'=>'save-complete','type'=>'button','class'=>'btn btn-primary']).' '.
+                Html::button('保存当前数据', ['id'=>'save-only','type'=>'button','class'=>'btn btn-info',
+                    'data-href' => Url::to(['goodssku/save-only', 'pid' => $pid, 'type' => 'goods-info'])]).' '.
+                Html::button('保存并完善', ['id'=>'save-complete','type'=>'button','class'=>'btn btn-primary',
+                    'data-href' => Url::to(['goodssku/save-complete', 'pid' => $pid, 'type' => 'goods-info'])]).' '.
                 Html::button('导入普源', ['id'=>'data-input','type'=>'button','class'=>'btn btn-warning']).' '.
                 Html::button('删除行', ['id'=>'delete-row','type'=>'button', 'class'=>'btn btn-danger kv-batch-delete'])
 //                '</div>'
         ]
     ]
-
 ]);
 
 ActiveForm::end();
@@ -441,7 +442,7 @@ $js2 = <<<JS
                 var pid = $(this).val();
                 $(this).closest('tr').remove();
                 $.ajax({
-                    url:'/goodssku/delete',
+                    url:"<?= Url::to('delete')?>",
                     type:'post',
                     data: {id:pid},
                     success:function(res) {
@@ -631,7 +632,7 @@ $js2 = <<<JS
         $.ajax({
                 cache: true,
                 type: "POST",
-                url:'/goodssku/save-complete?pid={$pid}&type=goods-info',
+                url:$('#save-complete').data('href'),
                 data:$('#sku-info').serialize(),
                 // async: false,    
                 

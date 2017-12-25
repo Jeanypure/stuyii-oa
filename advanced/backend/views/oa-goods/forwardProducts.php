@@ -70,7 +70,7 @@ $('.forward-update').on('click',  function () {
 //创建框
 $('.forward-create').on('click',  function () {
         $('.modal-body').children('div').remove();
-        $.get('{$createUrl}',
+        $.get("{$createUrl}",
             function (data) {
                 $('.modal-body').html(data);
             }
@@ -82,7 +82,7 @@ $('.approve').on('click',function(){
      var id = $(this).closest('tr').data('key');
   krajeeDialog.confirm("确定提交审核?", function (result) {
         if (result) {
-           $.get('/oa-goods/approve?id='+id,{type:'forward-products'},
+           $.get("<?= Url::to(['oa-goods/approve'])?>", {id:id,type:'forward-products'},
                function(msg){
                   alter(msg); 
                }               
@@ -99,7 +99,7 @@ $('.approve').on('click',function(){
     var ids = $("#oa-check").yiiGridView("getSelectedRows"); 
     if(ids.length == 0) return false;
      $.ajax({
-           url:"/oa-goods/approve-lots",
+           url:"<?= Url::to(['oa-goods/approve-lots'])?>",
            type:"post",
            data:{'id':ids,'type':'forward-products'},
            dataType:"json",
