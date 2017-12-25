@@ -20,7 +20,7 @@ class EbaySuffixDictionarySearch extends OaEbaySuffix
     {
         return [
             [['nid'], 'integer'],
-            [['ebayName', 'ebaySuffix', 'nameCode', 'paypalName', 'mapType', 'highEbayPaypal', 'lowEbayPaypal'], 'safe']
+            [['ebayName', 'ebaySuffix', 'nameCode', 'mainImg' , 'mapType', 'highEbayPaypal', 'lowEbayPaypal'], 'safe']
         ];
     }
 
@@ -43,10 +43,10 @@ class EbaySuffixDictionarySearch extends OaEbaySuffix
     public function search($params)
     {
         $query = OaEbaySuffix::find()
-            ->select("oa_ebay_suffix.nid,min(oa_ebay_suffix.ebayName) as ebayName,min(oa_ebay_suffix.nameCode) as nameCode,min(oa_ebay_suffix.ebaySuffix) as ebaySuffix,min(oa_paypal.paypalName) as paypalName")
+            ->select("oa_ebay_suffix.nid,min(oa_ebay_suffix.ebayName) as ebayName,min(oa_ebay_suffix.nameCode) as nameCode,min(oa_ebay_suffix.ebaySuffix) as ebaySuffix,max(oa_ebay_suffix.mainImg) as mainImg,min(oa_paypal.paypalName) as paypalName")
             ->joinWith('ebayPayPal')
             ->joinWith('payPal')
-            ->groupBy('oa_ebay_suffix.nid');
+            ->groupBy('oa_ebay_suffix.nid,ebayName,nameCode,ebaySuffix,mainImg');
             //->groupBy('oa_ebay_suffix.nid,oa_ebay_suffix.ebayName,oa_ebay_suffix.nameCode,oa_ebay_suffix.ebaySuffix');
             //->select('*');
         //var_dump($query->asArray()->all());exit;
@@ -77,14 +77,18 @@ class EbaySuffixDictionarySearch extends OaEbaySuffix
                     'asc' => ['ebaySuffix' => SORT_ASC],
                     'desc' => ['ebaySuffix' => SORT_DESC],
                 ],
-                'highEbayPaypal' => [
+                'mainImg' => [
+                    'asc' => ['mainImg' => SORT_ASC],
+                    'desc' => ['mainImg' => SORT_DESC],
+                ],
+                /*'highEbayPaypal' => [
                     'asc' => ['oa_paypal.paypalName' => SORT_ASC],
                     'desc' => ['oa_paypal.paypalName' => SORT_DESC],
                 ],
                 'lowEbayPaypal' => [
                     'asc' => ['oa_paypal.paypalName' => SORT_ASC],
                     'desc' => ['oa_paypal.paypalName' => SORT_DESC],
-                ],
+                ],*/
             ]
         ]);
 
@@ -104,6 +108,7 @@ class EbaySuffixDictionarySearch extends OaEbaySuffix
         $query->andFilterWhere(['like', 'ebayName', $this->ebayName]);
         $query->andFilterWhere(['like', 'ebaySuffix', $this->ebaySuffix]);
         $query->andFilterWhere(['like', 'nameCode', $this->nameCode]);
+        $query->andFilterWhere(['like', 'mainImg', $this->mainImg]);
         //var_dump($this->highEbayPaypal);exit;
         if($this->highEbayPaypal){
             $query->andFilterWhere(['and', ['like', 'oa_paypal.paypalName', $this->highEbayPaypal],['oa_ebay_paypal.mapType' => 'high']]);

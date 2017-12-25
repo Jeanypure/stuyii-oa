@@ -20,6 +20,7 @@ use yii\widgets\DetailView;
             'ebayName',
             'ebaySuffix',
             'nameCode',
+            'mainImg',
             'highEbayPaypal',
             'highEbayPaypal'
         ],
