@@ -8,7 +8,6 @@
 
 use yii\helpers\Html;
 use kartik\form\ActiveForm;
-
 //use yii\bootstrap\ActiveForm;
 use kartik\builder\Form;
 use kartik\builder\FormGrid;
@@ -25,7 +24,26 @@ $this->params['breadcrumbs'][] = '更新数据';
 $bannedNames = explode(',',$info->DictionaryName);
 $catNid = $goodsItem->catNid;
 $subCate = $goodsItem->subCate;
+if(empty($info->requiredKeywords)){
+    $required_kws = [];
+    for($i=0;$i<=5;$i++){
+        array_push($required_kws,'');
+    }
+}
+else {
+    $required_kws = json_decode($info->requiredKeywords);
+}
 
+if(empty($info->randomKeywords)){
+    $random_kws = [];
+    for($i=0;$i<=9;$i++){
+        array_push($random_kws,'');
+    }
+}
+
+else{
+    $random_kws = json_decode($info->randomKeywords);
+}
 $JS = <<<JS
 
 //选中默认主类目
@@ -155,11 +173,70 @@ echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' 
 
 </div>
 <br>
-    <?= $form->field($info,'headKeywords')->textInput(['size'=>10,'placeholder' => '-1个单词--']); ?>
-    <?= $form->field($info,'requiredKeywords')->textInput(['placeholder' => '-1个单词--']); ?>
-    <?= $form->field($info,'randomKeywords')->textInput(['placeholder' => '-1个单词--']); ?>
-    <?= $form->field($info,'tailKeywords')->textInput(['placeholder' => '--1个单词--']); ?>
+    <?= $form->field($info,'headKeywords',['labelOptions' => ['style' => 'margin-left:3%']])->textInput(['style'=>"width:200px;margin-left:3%;",'placeholder' => '--一个关键词--'])->label('最前关键词<span style = "color:red">*</span>'); ?>
+    <?= $form->field($info,'requiredKeywords')->textInput(['style'=>"width:200px;display:none;",'placeholder' => '-1个单词--'])->label(false); ?>
+    <?= $form->field($info,'randomKeywords')->textInput(['style'=>"width:200px;display:none;",'placeholder' => '-1个单词--'])->label(false); ?>
+    <br>
+    <div style="margin-left:3%;margin-right: 55%">
+        <div><label class="control-label">必选关键词<span style = "color:red">*</span></label><span style="margin-left:1%" class="required-kw"></span></div>
+        <div style="font-size:6px">
+        <span><label style = "color:red">说明：</label>物品名/材质/特征等。如T-Shirt(物品名)/V-neck(特征)/Cotton(材质)</span>
+        </div>
+    <table class="table table-bordered table-responsive">
+    <tbody>
+    <?php
+    echo '<tr>
+        <th scope="row">必填</th>
+        <td><input value="'.$required_kws[0].'" class="required-kw-in" type="text" class=""></td>
+        <td><input value="'.$required_kws[1].'" class="required-kw-in" type="text" class=""></td>
+        <td><input value="'.$required_kws[2].'" class="required-kw-in" type="text" class=""></td>
+    </tr>
+    <tr>
+        <th scope="row">选填</th>
+        <td><input value="'.$required_kws[3].'" class="required-kw-in" type="text" class=""></td>
+        <td><input value="'.$required_kws[4].'" class="required-kw-in" type="text" class=""></td>
+        <td><input value="'.$required_kws[5].'" class="required-kw-in" type="text" class=""></td>
+    </tr>'
+    ?>
+    </tbody>
+    </table>
+    </div>
 
+        <br>
+<div style="margin-left:3%;margin-right: 35%">
+        <label class="control-label">随机关键词<span style = "color:red">*</span></label><span style="margin-left:1%" class="random-kw"></span>
+    <div style="font-size:6px">
+        <span><label style = "color:red">说明：</label>形容词/品类热词等。如Fashion/Elegant/Hot/DIY/Casual…</span>
+    </div>
+        <table class="table table-bordered table-responsive">
+            <tbody>
+            <?php
+            echo
+            '<tr>
+                <th scope="row">必填</th>
+                <td><input value="'.$random_kws[0].'" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[1].'" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[2].'" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[3].'" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[4].'" class="random-kw-in" type="text" class=""></td>
+            </tr>
+            <tr>
+                <th scope="row">选填</th>
+                <td><input value="'.$random_kws[5].'"   class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[6].'" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[7].'" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[8].'"  class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[9].'" class="random-kw-in" type="text" class=""></td>
+            </tr>'
+            ?>
+            </tbody>
+        </table>
+    </div>
+
+<br>
+    <?= $form->field($info,'tailKeywords',['labelOptions' => ['style' => 'margin-left:3%']])->textInput(['style'=>"width:200px;margin-left:3%;",'placeholder' => '--最多一个关键词--']); ?>
+
+<br>
 <div class="row">
     <div class="col-sm-4">
 <?= $form->field($info,'AttributeName',['labelOptions' => ['label' => '特殊属性必填']])->dropDownList([ ''=>'','液体商品'=>'液体商品','带电商品'=>'带电商品','带磁商品'=>'带磁商品','粉末商品'=>'粉末商品'],
@@ -429,6 +506,108 @@ $inputUrl = Url::toRoute(['input']);
 
 
 $js2 = <<<JS
+//样式处理开始
+
+    $("label[for='oagoodsinfo-headkeywords']").after('<span style="margin-left:1%"class="head-kw"></span><div style="font-size:6px;margin-left:3%">'+
+        '<span><label style = "color:red">说明：</label>性别定位/多个一卖等。如Women/Men/Girl/Baby/Kids/1PC/2PC/5PC/4 Colors/5Pcs Set…</span></div>');
+    
+    $("label[for='oagoodsinfo-tailkeywords']").after('<span style="margin-left:1%"class="tail-kw"></span><div style="font-size:6px;margin-left:3%">'+
+        '<span><label style = "color:red">说明：</label>附加说明词。如Randomly/S-3XL/2ml/(Color: Nude)/Big Size…</span></div>');
+//样式处理结束
+
+//开始关键词处理过程
+    //页面初始化之后开始加载字符个数
+    function headCount() {
+        kw = $('#oagoodsinfo-headkeywords').val();
+        if(!kw){
+            len_kw = 0;
+        }
+        else{
+            len_kw = kw.length;
+       }
+       $(".head-kw").html('<span style = "color:red">' +String(len_kw) +'</span>个字符');      
+
+    }
+    
+    function tailCount() {
+        kw = $('#oagoodsinfo-tailkeywords').val();
+        if(!kw){
+            len_kw = 0;
+        }
+        else{
+            len_kw = kw.length;
+       }
+       $(".tail-kw").html('<span style = "color:red">' +String(len_kw) +'</span>个字符');      
+
+    }
+   
+    function requiredCount() {
+        kw_count = 0;
+        kw_length = 0;
+        keywords = [];
+        $('.required-kw-in').each(function() {
+            kw = $(this).val();
+            if(!kw){
+                len_kw = 0;
+                keywords.push('');   
+                
+            }
+            else{
+                len_kw = kw.length;
+                kw_count += 1;
+                keywords.push(kw);
+            }
+            kw_length  = kw_length + len_kw;
+        });
+        $(".required-kw").html('<span style = "color:red;margin-left:1%">' +String(kw_count) +'</span>个单词；<span style = "color:red">' +String(kw_length) +'</span>个字符');
+        $('#oagoodsinfo-requiredkeywords').val(JSON.stringify(keywords));
+    }
+    
+    function randomCount() {
+        kw_count = 0;
+        kw_length = 0;
+        keywords = [];
+        $('.random-kw-in').each(function() {
+            kw = $(this).val();
+            if(!kw){
+                len_kw = 0;
+                keywords.push('');   
+            }
+            else{
+                len_kw = kw.length;
+                kw_count += 1;
+                keywords.push(kw);      
+            }
+            kw_length  = kw_length + len_kw;
+        });
+        $(".random-kw").html('<span style = "color:red;margin-left:1%">' +String(kw_count) +'</span>个单词；<span style = "color:red">' +String(kw_length) +'</span>个字符');
+        $('#oagoodsinfo-randomkeywords').val(JSON.stringify(keywords));
+    }
+     headCount();
+     requiredCount();
+     randomCount();
+     tailCount();
+    //监听最前关键词的变化
+   
+    $('#oagoodsinfo-headkeywords').on('change',function() {
+        headCount();
+   });
+    
+    //监听必选关键词的变化过程
+    $('.required-kw-in').on('change',function() {
+        requiredCount();
+    });
+    
+    //监听随机关键词的变化过程
+    $('.random-kw-in').on('change',function() {
+        randomCount()
+    });
+    
+    //监听最后关键词的变化过程
+    $('#oagoodsinfo-tailkeywords').on('change',function() {
+        tailCount();
+   });
+//结束关键词处理过程
 //能删除新增空行的删除行
     $('#delete-row').on('click', function() {
         $("input[name='selection[]']:checkbox:checked").each(function(){
