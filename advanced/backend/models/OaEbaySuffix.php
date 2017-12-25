@@ -45,9 +45,9 @@ class OaEbaySuffix extends \yii\db\ActiveRecord
     {
         return [
             'nid' => 'Nid',
-            'ebayName' => 'Ebay账号',
-            'ebaySuffix' => 'Ebay账号简称',
-            'nameCode' => 'Ebay编码',
+            'ebayName' => 'eBay账号',
+            'ebaySuffix' => 'eBay账号简称',
+            'nameCode' => 'eBay编码',
             'mainImg' => '主图',
             'ibayTemplate' => '刊登风格',
             'highEbayPaypal' => '大额PayPal',
