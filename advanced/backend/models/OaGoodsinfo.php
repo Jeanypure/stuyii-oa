@@ -15,7 +15,7 @@ use Yii;
  * @property integer $SupplierName
  * @property string $description
  */
-//class OaGoodsinfo extends \yii\db\ActiveRecord
+
 class OaGoodsinfo extends GoodsCats
 {
 
@@ -34,7 +34,7 @@ class OaGoodsinfo extends GoodsCats
     {
         return [
             [['IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged','goodsid'], 'integer'],
-            [['isVar','completeStatus','picStatus','updateTime','developer','devDatetime','GoodsCode','achieveStatus','description','SupplierName','Season','StoreName','PackName','DictionaryName','GoodsName'], 'string'],
+            [['headKeywords','requiredKeywords','randomKeywords','tailKeywords','isVar','completeStatus','picStatus','updateTime','developer','devDatetime','GoodsCode','achieveStatus','description','SupplierName','Season','StoreName','PackName','DictionaryName','GoodsName'], 'string'],
             [['StoreName','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description',], 'required'],
             [['completeStatus','DictionaryName','vendor1'],'safe'],
         ];
@@ -70,6 +70,11 @@ class OaGoodsinfo extends GoodsCats
             'possessMan1' => '美工',
             'vendor1' => '供应商链接1',
             'isVar' => '是否多属性',
+            'headKeywords' => '最前关键词',
+            'requiredKeywords' => '必选关键词',
+            'randomKeywords' => '随机关键词',
+            'tailKeywords' => '最后关键词',
+
 
 
         ];

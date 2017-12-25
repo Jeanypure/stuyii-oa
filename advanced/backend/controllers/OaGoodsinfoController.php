@@ -203,21 +203,17 @@ class OaGoodsinfoController extends Controller
             $current_model->catNid = $cateModel->CategoryParentID;
             $current_model->cate = $cateModel->CategoryParentName;
             $current_model->subCate = $cateModel->CategoryName;
-
             $current_model->vendor1 = $updata['OaGoods']['vendor1'];
             $current_model->vendor2 = $updata['OaGoods']['vendor2'];
             $current_model->vendor3 = $updata['OaGoods']['vendor3'];
             $current_model->origin1 = $updata['OaGoods']['origin1'];
             $current_model->origin2 = $updata['OaGoods']['origin2'];
             $current_model->origin3= $updata['OaGoods']['origin3'];
-
             $current_model->developer= $updata['OaGoodsinfo']['developer'];
-
             $current_model->update(false);
             $this->redirect(['oa-goodsinfo/update','id'=>$id]);
 
         }else{
-
             $data = $this->actionSelectParam();
             $dataProvider = new ActiveDataProvider([
                 'query' => Goodssku::find()->where(['pid'=>$id]),
@@ -225,7 +221,6 @@ class OaGoodsinfoController extends Controller
                     'pageSize' => 150,
                 ],
             ]);
-
             return $this->render('updetail',[
                 'info'=>$info,
                 'pid' =>$id,

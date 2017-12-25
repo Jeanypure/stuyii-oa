@@ -49,6 +49,7 @@ use Yii;
  * @property string $OutFirstCost2
  * @property string $OutSuccessorCost2
  * @property string $OutShiptoCountry2
+ * @property string $IbayTemplate
  */
 class OaTemplates extends \yii\db\ActiveRecord
 {
@@ -67,7 +68,7 @@ class OaTemplates extends \yii\db\ActiveRecord
     {
         return [
             [['infoid','goodsid', 'prepareDay', 'quantity'], 'integer'],
-            [['specifics','sku','mainPage','extraPage','location', 'country', 'postCode', 'site', 'listedCate', 'listedSubcate', 'title', 'subTitle', 'description', 'UPC', 'EAN', 'Brand', 'MPN', 'Color', 'Type', 'Material', 'IntendedUse', 'unit', 'bundleListing', 'shape', 'features', 'regionManufacture', 'reserveField', 'InshippingMethod1', 'InshippingMethod2', 'OutshippingMethod1', 'OutShiptoCountry1', 'OutshippingMethod2', 'OutShiptoCountry2'], 'string'],
+            [['IbayTemplate','specifics','sku','mainPage','extraPage','location', 'country', 'postCode', 'site', 'listedCate', 'listedSubcate', 'title', 'subTitle', 'description', 'UPC', 'EAN', 'Brand', 'MPN', 'Color', 'Type', 'Material', 'IntendedUse', 'unit', 'bundleListing', 'shape', 'features', 'regionManufacture', 'reserveField', 'InshippingMethod1', 'InshippingMethod2', 'OutshippingMethod1', 'OutShiptoCountry1', 'OutshippingMethod2', 'OutShiptoCountry2'], 'string'],
             [['nowPrice', 'InFirstCost1', 'InSuccessorCost1', 'InFirstCost2', 'InSuccessorCost2', 'OutFirstCost1', 'OutSuccessorCost1', 'OutFirstCost2', 'OutSuccessorCost2'], 'number'],
         ];
     }
@@ -125,6 +126,7 @@ class OaTemplates extends \yii\db\ActiveRecord
             'OutSuccessorCost2' => '续件运费',
             'OutShiptoCountry2' => '可运送至国家',
             'specifics' => '物品属性',
+            'IbayTemplate' => '刊登风格',
         ];
     }
 

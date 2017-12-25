@@ -16,12 +16,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
         <?php //echo Html::a('添加ebay账号', ['create'], ['class' => 'btn btn-success']) ?>
         <?= Html::a('添加ebay账号', "javascript:void(0);", ['title' => 'create', 'data-toggle' => 'modal', 'data-target' => '#index-modal',
             'data-href' => Url::to(['create']), 'class' => 'index-create btn btn-primary']) ?>
-
     </p>
     <?php Pjax::begin(); ?>
     <?= GridView::widget([
