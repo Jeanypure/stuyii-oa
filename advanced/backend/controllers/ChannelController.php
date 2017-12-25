@@ -593,9 +593,25 @@ class ChannelController extends Controller
 
         $head = $words[0]['headKeywords'];
         $tail = $words[0]['tailKeywords'];
-        $need = json_decode($words[0]['randomKeywords']);
+        $need = json_decode($words[0]['requiredKeywords']);
+        $random= json_decode($words[0]['randomKeywords']);
         shuffle($need);
-        var_dump($need);die;
+        shuffle($random);
+        $need_str = implode(' ',$need);
+//        print_r($random); die;
+        $random_arr1 = array_pop($random);
+//        var_dump($random_arr1); die;
+        print_r($random);
+        die;
+
+        $random_str2 = implode(' ',$random);
+        $foos[0][0]['title'] = trim($head.' '.$random_str1 .$need_str.' '.$random_str2.' '.$tail);
+        $length = mb_strlen($foos[0][0]['title']);
+//        echo mb_strlen($foos[0][0]['title']);
+        if($length>110 ){
+
+        }
+        var_dump($foos[0][0]['title']);die;
         $columnNum = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P'];
         $colName = [
             'sku','selleruserid','name','inventory','price','msrp','shipping','shipping_time','main_image','extra_images',
