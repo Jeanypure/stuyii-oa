@@ -155,7 +155,7 @@ echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' 
 
 </div>
 <br>
-    <?= $form->field($info,'headKeywords')->textInput(['class'=>'dsfs','placeholder' => '-1个单词--']); ?>
+    <?= $form->field($info,'headKeywords')->textInput(['size'=>10,'placeholder' => '-1个单词--']); ?>
     <?= $form->field($info,'requiredKeywords')->textInput(['placeholder' => '-1个单词--']); ?>
     <?= $form->field($info,'randomKeywords')->textInput(['placeholder' => '-1个单词--']); ?>
     <?= $form->field($info,'tailKeywords')->textInput(['placeholder' => '--1个单词--']); ?>
