@@ -133,7 +133,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     </br>
     <?= $form->field($sku, 'title')->textInput(); ?>
     <?= $form->field($sku, 'tags')->textInput(['class' => 'tags-input'])->hint('键词不能超过10个'); ?>
-    <?= $form->field($sku, 'description')->textarea(['rows' => 6]); ?>
+    <?= $form->field($sku, 'description', ['template' => "{label}\n<div class=\"col-lg-5\">{input}</div>\n<div class=\"col-lg-9\">{error}</div>"])->textarea(['rows' => 12, 'cols' => 4]); ?>
     <?= $form->field($sku, 'inventory')->textInput(); ?>
     <?= $form->field($sku, 'price')->textInput(); ?>
     <?= $form->field($sku, 'msrp')->textInput(); ?>
