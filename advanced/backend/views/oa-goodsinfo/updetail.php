@@ -173,15 +173,11 @@ echo FormGrid::widget([ // continuation fields to row above without labels
 </div>
 
 <br>
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 <?= $form->field($info, 'headKeywords', [])->textInput(['style' => 'width:100', 'placeholder' => '-1个单词--']); ?>
 <?= $form->field($info, 'requiredKeywords', [])->textInput(['style' => 'width:100', 'placeholder' => '-1个单词--']); ?>
 <?= $form->field($info, 'randomKeywords', [])->textInput(['style' => 'width:100', 'placeholder' => '-1个单词--']); ?>
 <?= $form->field($info, 'tailKeywords', [])->textInput(['style' => 'width:100', 'placeholder' => '--1个单词--']); ?>
-=======
->>>>>>> 845d180bb801d5d71aceac6df4c09f6458f47123
+
     <?= $form->field($info,'headKeywords',['labelOptions' => ['style' => 'margin-left:3%']])->textInput(['style'=>"width:200px;margin-left:3%;",'placeholder' => '--一个关键词--'])->label('最前关键词<span style = "color:red">*</span>'); ?>
     <?= $form->field($info,'requiredKeywords')->textInput(['style'=>"width:200px;display:none;",'placeholder' => '-1个单词--'])->label(false); ?>
     <?= $form->field($info,'randomKeywords')->textInput(['style'=>"width:200px;display:none;",'placeholder' => '-1个单词--'])->label(false); ?>

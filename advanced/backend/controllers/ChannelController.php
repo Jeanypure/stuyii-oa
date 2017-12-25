@@ -1,7 +1,5 @@
 <?php
-
 namespace backend\controllers;
-
 use backend\models\OaGoodsinfo;
 use backend\unitools\PHPExcelTools;
 use Yii;
@@ -403,7 +401,7 @@ class ChannelController extends Controller
         if (($model = Channel::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new \NotFoundHttpException('The requested page does not exist.');
         }
     }
 
@@ -576,7 +574,6 @@ class ChannelController extends Controller
 
     //导出数据 wish平台
     public  function actionExport($id){
-
         $objPHPExcel = new \PHPExcel();
         $sheet=0;
         $objPHPExcel->setActiveSheetIndex($sheet);
@@ -589,33 +586,18 @@ class ChannelController extends Controller
         $sql2 = ' SELECT headKeywords,requiredKeywords,randomKeywords,tailKeywords FROM oa_goodsinfo WHERE pid='.$id;
         $query = $db->createCommand($sql2);
         $words = $query->queryAll();
-//        'headKeywords' => string 'head' (length=4)
-//  'requiredKeywords' => string '["fe","","","","",""]' (length=21)
-//  'randomKeywords' => string '["fe","faewf","f","ef","faewf","feawfaw","aewf","","fewf","f"]' (length=62)
-//  'tailKeywords' => string 'tail' (length=4)
-//        var_dump($words[0]['headKeywords']);die;
 
         $head = $words[0]['headKeywords'];
         $tail = $words[0]['tailKeywords'];
-        $need = json_decode($words[0]['requiredKeywords']);
-        $random= json_decode($words[0]['randomKeywords']);
-        shuffle($need);
-        shuffle($random);
-        $need_str = implode(' ',$need);
-//        print_r($random); die;
-        $random_arr1 = array_pop($random);
-//        var_dump($random_arr1); die;
-        print_r($random);
-        die;
-
-        $random_str2 = implode(' ',$random);
-        $foos[0][0]['title'] = trim($head.' '.$random_str1 .$need_str.' '.$random_str2.' '.$tail);
-        $length = mb_strlen($foos[0][0]['title']);
-//        echo mb_strlen($foos[0][0]['title']);
-        if($length>110 ){
-
+        $needinit = json_decode($words[0]['requiredKeywords']);
+        $randominit= json_decode($words[0]['randomKeywords']);
+        foreach($randominit as $value){
+           $random[] = $value.' ';
         }
-        var_dump($foos[0][0]['title']);die;
+        foreach($needinit as $value){
+           $need[] = $value.' ';
+        }
+
         $columnNum = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P'];
         $colName = [
             'sku','selleruserid','name','inventory','price','msrp','shipping','shipping_time','main_image','extra_images',
@@ -635,6 +617,36 @@ class ChannelController extends Controller
             ->addParams([':cate'=>'%'.$cate[0]['cate'].'%'])
             ->all(); //返回数组对象
         foreach($suffixAll as $key=>$value){
+            //标题关键字
+            shuffle($random);
+            $random_str1 = array_slice($random,0,1);
+            $random_result = array_diff($random,$random_str1);
+
+            shuffle($random);
+            $random_arr = array_slice($random_result,0,4);
+            $random_str2 =  implode(' ',$random_arr);
+            shuffle($need);
+            $need_str1 = implode(' ',$need);
+            $foos[0][0]['title'] = trim($head.' '.$random_str1[0] .' '.$need_str1.' '.$random_str2.' '.$tail);
+//            $length = strlen($foos[0][0]['title']);
+//            if($length>110 ){
+//                $random_str1 = array_pop($random);
+//                shuffle($random);
+//                $random_str2 = array_pop($random);
+//                shuffle($random);
+//                $random_str3 = array_pop($random);
+//                shuffle($random);
+//                $random_str4 = array_pop($random);
+//                shuffle($random);
+//                $foos[0][0]['title'] = trim($head.' '.$random_str1 .' '.$need_str1.' '.$random_str2.' '.$random_str3.' '.$random_str4.' '.$tail);
+//                $length = mb_strlen($foos[0][0]['title']);
+//                if($length>110){
+//                    $foos[0][0]['title'] = trim($head.' '.$random_str1 .' '.$need_str1.' '.$random_str2.' '.$random_str3.' '.$tail);
+//                }
+//
+//            }
+
+
             //价格判断
             $totalprice = ceil($foos[0][0]['price']+$foos[0][0]['shipping']);
             if($totalprice<=2){
@@ -648,7 +660,6 @@ class ChannelController extends Controller
                 $foos[0][0]['price'] = ceil($totalprice - $foos[0][0]['shipping']);
 
             }
-//            shuffle($array)
             $strvariant = $this->actionVariationWish($id,$value['Suffix'],$value['Rate']);
             $row = $key+2;
             $foos[0][0]['main_image'] = 'https://www.tupianku.com/view/full/10023/'.$foos[0][0]['SKU'].'-_'.$value['MainImg'].'_.jpg' ;
@@ -670,14 +681,21 @@ class ChannelController extends Controller
             $objPHPExcel->getActiveSheet()->setCellValue('P'.$row,'');
         }
 
-//        header('Content-Type: application/vnd.ms-excel');
-//        $filename = $foos[0][0]['SKU'].'-Wish模版'.date("d-m-Y-His").".xls";
-//        header('Content-Disposition: attachment;filename='.$filename .' ');
-//        header('Cache-Control: max-age=0');
-//        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-//        $objWriter->save('php://output');
+        header('Content-Type: application/vnd.ms-excel');
+        $filename = $foos[0][0]['SKU'].'-Wish模版'.date("d-m-Y-His").".xls";
+        header('Content-Disposition: attachment;filename='.$filename .' ');
+        header('Cache-Control: max-age=0');
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
     }
+    /*
+    *生成随机标题和关键字
+     *
+    */
 
+    public function TitleAndName(){
+
+    }
 
     /*
      * 处理多属性
