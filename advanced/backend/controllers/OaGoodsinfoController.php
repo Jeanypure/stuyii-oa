@@ -106,7 +106,6 @@ class OaGoodsinfoController extends Controller
  *
 */
 
-
     public function actionUpdate($id)
     {
         $updata = $_POST;

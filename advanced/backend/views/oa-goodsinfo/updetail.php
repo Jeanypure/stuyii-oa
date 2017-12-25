@@ -152,13 +152,13 @@ echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' 
     <div class="col-sm-1">
         <strong>关键词：</strong>
     </div>
-
 </div>
+
 <br>
-    <?= $form->field($info,'headKeywords')->textInput(['class'=>'dsfs','placeholder' => '-1个单词--']); ?>
-    <?= $form->field($info,'requiredKeywords')->textInput(['placeholder' => '-1个单词--']); ?>
-    <?= $form->field($info,'randomKeywords')->textInput(['placeholder' => '-1个单词--']); ?>
-    <?= $form->field($info,'tailKeywords')->textInput(['placeholder' => '--1个单词--']); ?>
+    <?= $form->field($info,'headKeywords',[])->textInput(['style'=>'width:100','placeholder' => '-1个单词--']); ?>
+    <?= $form->field($info,'requiredKeywords',[])->textInput(['style'=>'width:100','placeholder' => '-1个单词--']); ?>
+    <?= $form->field($info,'randomKeywords',[])->textInput(['style'=>'width:100','placeholder' => '-1个单词--']); ?>
+    <?= $form->field($info,'tailKeywords',[])->textInput(['style'=>'width:100','placeholder' => '--1个单词--']); ?>
 
 <div class="row">
     <div class="col-sm-4">
@@ -612,9 +612,17 @@ $js2 = <<<JS
     
 // 保存数据的提交按钮
     $('#save-only').on('click',function() {
-        var form = $('#sku-info');
-        form.attr('action', '/goodssku/save-only?pid={$pid}&type=goods-info');
-        form.submit();
+          $.ajax({
+                cache: true,
+                type: "POST",
+                url:'/goodssku/save-only?pid={$pid}&type=goods-info',
+                data:$('#sku-info').serialize(),
+                // async: false,    
+                
+                success: function(data) {
+                    alert(data);
+                }
+            });
     }); 
  
 
