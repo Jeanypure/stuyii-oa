@@ -7,7 +7,9 @@
  */
 
 use yii\helpers\Html;
-use kartik\widgets\ActiveForm;
+use kartik\form\ActiveForm;
+
+//use yii\bootstrap\ActiveForm;
 use kartik\builder\Form;
 use kartik\builder\FormGrid;
 use kartik\grid\GridView;
@@ -45,7 +47,8 @@ echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' 
 ?>
 
 <?php
-    $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_VERTICAL]);
+    $form = ActiveForm::begin([]);
+
     echo FormGrid::widget([ // continuation fields to row above without labels
     'model'=> $info,
     'form'=>$form,
@@ -140,33 +143,45 @@ echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' 
             ],
         ],
 
-        [
-
-            'attributes' =>[
-                'AttributeName' =>[
-                    'label'=>'特殊属性必填',
-                    'items'=>[ ''=>'','液体商品'=>'液体商品','带电商品'=>'带电商品','带磁商品'=>'带磁商品','粉末商品'=>'粉末商品'],
-                    'type'=>Form::INPUT_DROPDOWN_LIST,
-                ],
-                'StoreName' =>[
-                    'label'=>"<span style = 'color:red'>*仓库</span>",
-                    'items'=>$result,
-                    'type'=>Form::INPUT_DROPDOWN_LIST,
-                ],
-                'Season' =>[
-                    'label'=>'季节',
-                    'items'=>[ ''=>'','春季'=>'春季','夏季'=>'夏季','秋季'=>'秋季','冬季'=>'冬季','春秋'=>'春秋','秋冬'=>'秋冬'],
-                    'type'=>Form::INPUT_DROPDOWN_LIST,
-                ],
-            ],
-        ],
     ],
 
 ]);
 
-
 ?>
+<div class="row">
+    <div class="col-sm-1">
+        <strong>关键词：</strong>
+    </div>
 
+</div>
+<br>
+    <?= $form->field($info,'headKeywords')->textInput(['class'=>'dsfs','placeholder' => '-1个单词--']); ?>
+    <?= $form->field($info,'requiredKeywords')->textInput(['placeholder' => '-1个单词--']); ?>
+    <?= $form->field($info,'randomKeywords')->textInput(['placeholder' => '-1个单词--']); ?>
+    <?= $form->field($info,'tailKeywords')->textInput(['placeholder' => '--1个单词--']); ?>
+
+<div class="row">
+    <div class="col-sm-4">
+<?= $form->field($info,'AttributeName',['labelOptions' => ['label' => '特殊属性必填']])->dropDownList([ ''=>'','液体商品'=>'液体商品','带电商品'=>'带电商品','带磁商品'=>'带磁商品','粉末商品'=>'粉末商品'],
+    [
+        'prompt'=>'--请选择属性--',
+
+    ]) ?>
+    </div>
+    <div class="col-sm-4">
+        <?= $form->field($info,'StoreName',['labelOptions' => ['label' => "<span style = 'color:red'>*仓库</span>"]])->dropDownList($result,
+            [
+                'prompt'=>'--请选择属性--',
+
+            ]) ?>
+    </div>
+    <div class="col-sm-4">
+        <?= $form->field($info,'Season',['labelOptions' => ['label' => '季节']])->dropDownList([  ''=>'','春季'=>'春季','夏季'=>'夏季','秋季'=>'秋季','冬季'=>'冬季','春秋'=>'春秋','秋冬'=>'秋冬'],
+            [
+                'prompt'=>'--请选择季节--',
+
+            ]) ?>
+</div>
 <?php
 //Tagging support Multiple (maintain the order of selection)
 echo '<label class="control-label">禁售平台</label>';
@@ -207,7 +222,7 @@ echo Select2::widget([
     <div class="col-sm-6">
 <?= $form->field($goodsItem,'subCate')->dropDownList($goodsItem->getCatList($goodsItem->catNid),
     [
-        'prompt'=>'--请选择子类--',
+        'prompt'=>'--特殊属性--',
 
     ]) ?>
     </div>
