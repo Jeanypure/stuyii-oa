@@ -28,7 +28,7 @@ use yii\helpers\ArrayHelper;
             'prompt'=>'--请选择父类--',
             'onchange'=>'           
             $.get("'.yii::$app->urlManager->createUrl('oa-goods/category').
-                '?typeid=1&pid="+$(this).val(),function(data){
+                '&typeid=1&pid="+$(this).val(),function(data){
 
                 var str="";
               $("select#oagoods-subcate").children("option").remove();

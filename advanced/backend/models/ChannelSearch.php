@@ -19,7 +19,8 @@ class ChannelSearch extends Channel
     /**
      * @return string
      */
-    public function getAliasCnName(): string
+    //public function getAliasCnName(): string
+    public function getAliasCnName()
     {
         return $this->AliasCnName;
     }

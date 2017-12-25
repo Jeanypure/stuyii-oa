@@ -47,7 +47,7 @@ $js = <<<JS
     var self = $(this);
     if(ids.length == 0) return false;
      $.ajax({
-           url:"/oa-goods/delete-lots",
+           url:"<?= Url::to(['oa-goods/delete-lots'])?>",
            type:"post",
            data:{id:ids},
            success:function(res){
@@ -1265,7 +1265,7 @@ class CenterFormatter {
                     var data = $.csv.toObjects(csvdata);
                     console.log(csvdata);
                     $.ajax({
-                        url: '/oa-goods/import',
+                        url: "<?= Url::to(['oa-goods/import'])?>",
                         type: 'post',
                         data: {
                             data:JSON.stringify({'data': data})

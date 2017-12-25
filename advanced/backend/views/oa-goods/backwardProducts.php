@@ -78,7 +78,7 @@ $('.approve').on('click',function(){
      var id = $(this).closest('tr').data('key');
         krajeeDialog.confirm("确定提交审核?", function (result) {
         if (result) {
-           $.get('/oa-goods/approve?id='+id,{'type':'backward-products'},
+           $.get("<?=Url::toRoute('approve')?>", {'id':id,'type':'backward-products'},
                function(msg){
                   alter(msg); 
                }               
@@ -95,7 +95,7 @@ $('.approve-lots').on('click',function() {
     var ids = $("#oa-check").yiiGridView("getSelectedRows");    
     if(ids.length == 0) return false;
      $.ajax({
-           url:"/oa-goods/approve-lots",
+           url:"<?=Url::toRoute('approve-lots')?>",
            type:"post",
            data:{'id':ids,'type':'backward-products'},
            dataType:"json",
