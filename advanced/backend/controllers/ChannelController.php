@@ -577,13 +577,25 @@ class ChannelController extends Controller
         $sheet=0;
         $objPHPExcel->setActiveSheetIndex($sheet);
         $foos[0] = OaWishgoods::find()->where(['infoid'=>$id])->all();
-
         $sql = ' SELECT cate FROM oa_goods WHERE nid=(SELECT goodsid FROM oa_goodsinfo WHERE pid='.$id.')';
-
         $db = yii::$app->db;
         $query = $db->createCommand($sql);
         $cate = $query->queryAll();
 
+        $sql2 = ' SELECT headKeywords,requiredKeywords,randomKeywords,tailKeywords FROM oa_goodsinfo WHERE pid='.$id;
+        $query = $db->createCommand($sql2);
+        $words = $query->queryAll();
+//        'headKeywords' => string 'head' (length=4)
+//  'requiredKeywords' => string '["fe","","","","",""]' (length=21)
+//  'randomKeywords' => string '["fe","faewf","f","ef","faewf","feawfaw","aewf","","fewf","f"]' (length=62)
+//  'tailKeywords' => string 'tail' (length=4)
+//        var_dump($words[0]['headKeywords']);die;
+
+        $head = $words[0]['headKeywords'];
+        $tail = $words[0]['tailKeywords'];
+        $need = json_decode($words[0]['randomKeywords']);
+        shuffle($need);
+        var_dump($need);die;
         $columnNum = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P'];
         $colName = [
             'sku','selleruserid','name','inventory','price','msrp','shipping','shipping_time','main_image','extra_images',
@@ -638,12 +650,12 @@ class ChannelController extends Controller
             $objPHPExcel->getActiveSheet()->setCellValue('P'.$row,'');
         }
 
-        header('Content-Type: application/vnd.ms-excel');
-        $filename = $foos[0][0]['SKU'].'-Wish模版'.date("d-m-Y-His").".xls";
-        header('Content-Disposition: attachment;filename='.$filename .' ');
-        header('Cache-Control: max-age=0');
-        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-        $objWriter->save('php://output');
+//        header('Content-Type: application/vnd.ms-excel');
+//        $filename = $foos[0][0]['SKU'].'-Wish模版'.date("d-m-Y-His").".xls";
+//        header('Content-Disposition: attachment;filename='.$filename .' ');
+//        header('Cache-Control: max-age=0');
+//        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+//        $objWriter->save('php://output');
     }
 
 
