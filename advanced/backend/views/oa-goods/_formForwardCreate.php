@@ -26,6 +26,7 @@ $('#create-to-check').on('click',function() {
 JS;
 $this->registerJs($js);
 
+$getSubCateUrl = Url::toRoute(['oa-goods/forward-create','typeid'=>1, ]);
 
 
 ?>
@@ -50,7 +51,7 @@ $this->registerJs($js);
             'onchange'=>'
            
 //            $("select#oaforwardgoods-subcate").html("");
-            $.get("'.yii::$app->urlManager->createUrl('oa-goods/forward-create').'?typeid=1&pid="+$(this).val(),function(data){
+            $.get("'.$getSubCateUrl.'&pid="+$(this).val(),function(data){
                var str="";
               $("select#oaforwardgoods-subcate").children("option").remove();
               $.each(data,function(k,v){
