@@ -23,6 +23,8 @@ $('#create-to-check').on('click',function() {
 
 JS;
 $this->registerJs($js);
+
+$getSubCateUrl = Url::toRoute(['oa-goods/forward-create','typeid'=>1, ]);
 ?>
 
 <div class="oa-goods-form">
@@ -42,7 +44,7 @@ $this->registerJs($js);
             'prompt'=>'--请选择父类--',
             'onchange'=>'
            
-            $.get("'.yii::$app->urlManager->createUrl('oa-goods/forward-create').'?typeid=1&pid="+$(this).val(),function(data){
+            $.get("'.$getSubCateUrl.'&pid="+$(this).val(),function(data){
                 var str="";
               $("select#oaforwardgoods-subcate").children("option").remove();
               $.each(data,function(k,v){

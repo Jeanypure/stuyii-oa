@@ -16,6 +16,7 @@ class AppAsset extends AssetBundle
     ];
     public $js = [
         'plugins/bootbox/bootbox.min.js',
+        'plugins/app.min.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

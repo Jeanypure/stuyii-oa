@@ -36,7 +36,7 @@ Modal::end();
     'items' => [
         [
             'label' => 'Wish',
-            'url' => '/channel/update?id='.$templates->infoid,
+            'url' => Url::to(['update', 'id' => $templates->infoid]),
 
             'headerOptions' => ["id" => 'tab1'],
             'options' => ['id' => 'article'],
@@ -44,7 +44,7 @@ Modal::end();
         ],
         [
             'label' => 'eBay',
-            'url' => '/channel/update-ebay?id='.$templates->infoid,
+            'url' => Url::to(['update-ebay', 'id' => $templates->infoid]),
             'headerOptions' => ["id" => 'tab1'],
             'options' => ['id' => 'topic'],
             'active' => true,
@@ -94,7 +94,7 @@ Modal::end();
 ?>
 
 <div class="blockTitle">
-    <p >基本信息</p>
+    <span>基本信息</span>
 </div>
 </br>
 <?= $form->field($templates,'sku')->textInput()?>
@@ -140,12 +140,12 @@ echo '</div>';
 <?= $form->field($templates,'prepareDay')->textInput(['value' => '3' ]); ?>
 
 <div class="blockTitle">
-    <p > 站点组</p>
+    <span> 站点组</span>
 </div>
 </br>
 <?= $form->field($templates,'site')->dropDownList([0=>'美国站',3=>'英国站',15=>'澳大利亚站']); ?>
 <div class="blockTitle">
-    <p > 多属性</p>
+    <span> 多属性</span>
 </div>
 </br>
 <div>
@@ -153,7 +153,7 @@ echo '</div>';
     </div>
 </br>
 <div class="blockTitle">
-    <p > 主信息</p>
+    <span> 主信息</span>
 </div>
 </br>
 <div>
@@ -170,7 +170,7 @@ echo '</div>';
 </div>
 
 <div class="blockTitle">
-    <p >物品属性</p>
+    <span>物品属性</span>
 </div>
 </br>
 <div>
@@ -200,7 +200,7 @@ echo '</div>';
 </div>
 </br>
 <div class="blockTitle">
-    <p >物流设置</p>
+    <span>物流设置</span>
 
 </div>
 </br
@@ -290,10 +290,17 @@ $form->field($templates,'InshippingMethod1',$shipping_templates)->dropDownList($
         padding: 2px 12px;
         margin-left: -5px;
     }
+    .blockTitle span{
+        margin-top: 20px;
+        font-weight: bold;
+    }
 </style>
 
 <?php
 $exportUlr = URL::toRoute(['export-ebay','id'=>$templates->nid]);
+$shippingUlr = URL::toRoute(['shipping']);
+$saveUrl = Url::to(['ebay-save', 'id' => $templates->nid]);
+$completeUrl = Url::to(['ebay-complete', 'id' => $templates->nid]);
 
 $js  = <<< JS
 
@@ -312,15 +319,15 @@ function loadShipping() {
   var promt_in = '<option value="">--境内物流--</option>';
   var promt_out = '<option value="">--境外物流--</option>';
   //三个物流逐句选择
-  $.get('/channel/shipping',{type:'InFir',site_id:select},function(ret) {
+  $.get("{$shippingUlr}",{type:'InFir',site_id:select},function(ret) {
         ret = promt_in + ret;
         $('#oatemplates-inshippingmethod1').html(ret);
   });
-  $.get('/channel/shipping',{type:'InSec',site_id:select},function(ret) {
+  $.get("{$shippingUlr}",{type:'InSec',site_id:select},function(ret) {
         ret = promt_in + ret;
         $('#oatemplates-inshippingmethod2').html(ret);
   });
-  $.get('/channel/shipping',{type:'OutFir',site_id:select},function(ret) {
+  $.get("{$shippingUlr}",{type:'OutFir',site_id:select},function(ret) {
         ret = promt_out + ret;
         $('#oatemplates-outshippingmethod1').html(ret);
   });
@@ -519,7 +526,7 @@ $(".var-btn").click(function() {
 //保存按钮
 $('.save-only').on('click',function() {
     $.ajax({
-        url:'/channel/ebay-save?id={$templates->nid}',
+        url:'{$saveUrl}',
         type:'post',
         data:$('#msg-form').serialize(),
         success:function(ret) {
@@ -533,7 +540,7 @@ $('.save-complete').on('click',function() {
     $(this).attr('disabled','disabled');
     var button = $(this);
     $.ajax({
-        url:'/channel/ebay-complete?id={$templates->nid}&infoId={$infoId}',
+        url:'{$completeUrl}&infoId={$infoId}',
         type:'post',
         data:$('#msg-form').serialize(),
         success:function(ret) {

@@ -5,10 +5,12 @@
  * Date: 2017-11-07
  * Time: 11:09
  */
+
 use kartik\widgets\ActiveForm;
 use yii\bootstrap\Tabs;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
+
 /* @var $this yii\web\View */
 /* @var $model backend\models\Channel */
 $this->title = '编辑模板';
@@ -19,26 +21,26 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 <div class="channel-update-form">
 
     <?php
-        $form = ActiveForm::begin([
+    $form = ActiveForm::begin([
 
-            'action'=>['/channel/update'],
-            'method'=>'post',
-            'id'=>'all-info',
-            'options' => ['class'=>'form-horizontal'],
-            'enableAjaxValidation'=>false,
-                'fieldConfig'=>[
-                'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-9\">{error}</div>",
-                'labelOptions' => ['class' => 'col-lg-1 control-label'],
+        'action' => ['/channel/update'],
+        'method' => 'post',
+        'id' => 'all-info',
+        'options' => ['class' => 'form-horizontal'],
+        'enableAjaxValidation' => false,
+        'fieldConfig' => [
+            'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-9\">{error}</div>",
+            'labelOptions' => ['class' => 'col-lg-1 control-label'],
 
-            ]
-        ]);
+        ]
+    ]);
 
     echo Tabs::widget([
 
         'items' => [
             [
                 'label' => 'Wish',
-                'url' => '/channel/update?id='.$sku->infoid,
+                'url' => Url::to(['update', 'id' => $sku->infoid]),
 
                 'headerOptions' => ["id" => 'tab1'],
                 'options' => ['id' => 'article'],
@@ -46,7 +48,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
             ],
             [
                 'label' => 'eBay',
-                'url' => '/channel/update-ebay?id='.$sku->infoid,
+                'url' => Url::to(['update-ebay', 'id' => $sku->infoid]),
                 'headerOptions' => ["id" => 'tab1'],
                 'options' => ['id' => 'topic'],
             ],
@@ -72,72 +74,80 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
         </botton>
     </div>
     <div class="blockTitle">
-        <p >基本信息</p>
-
+        <span>基本信息</span>
     </div>
-    <?=$form->field($sku,'SKU')->textInput();?>
+    <?= $form->field($sku, 'SKU')->textInput(); ?>
     <?php
-    echo $form->field($sku,'main_image')->textInput(['class'=>'main-image','style'=>'display:none']);
+    echo $form->field($sku, 'main_image')->hiddenInput(['class' => 'main-image']);
+    //echo $form->field($sku,'main_image')->textInput(['class'=>'main-image','style'=>'display:none']);
     echo '<div class="form-group field-oatemplates-mainpage">
          
-         <label class="col-lg-1 control-label">主图</label>
-            <div class="col-lg-3"><input name="main_image" type="text" class="form-control tem-page" value="'.$sku->main_image.'">
+         <label class="col-lg-1 control-label"></label>
+            <div class="col-lg-3"><input name="main_image" type="text" class="form-control tem-page" value="' . $sku->main_image . '">
             </div>
             <div class="col-lg=1"> 
-                <a target="_blank" href="'.$sku->main_image.'">
-                <img src="'.$sku->main_image.'" width="80" height="80">
+                <a target="_blank" href="' . $sku->main_image . '">
+                <img src="' . $sku->main_image . '" width="80" height="80">
                 </a>
             </div>
         </div>';
 
     ?>
+
+    <div class="form-group all-images">
+        <label class="col-lg-1 control-label">附加图</label>
+    </div>
+
     <?php
-        echo '<div class="images">';
+    $form->field($sku, 'extra_images')->hiddenInput();
 
-            foreach ($extra_images as $key=>$value){
-
-            echo '<div class="form-group all-images">
-                    <label class="col-lg-1"></label>
-                    <strong class="serial">#'.($key+1).'</strong>
-                    <div class="col-lg-3">
-                        <input name="extra_images[]" type="text" class="form-control extra-images" value="'.$value.'">
-                    </div>
-                    <div class="col-lg=1">
-                    <button  class="btn add-images">增加</button>
-                    <button  class="btn btn-error remove-image">删除</button>
-                    <button class="btn up-btn btn-error">上移动</button>
-                    <button class="btn down-btn btn-error">下移动</button>
-                    <a target="_blank" href="'.$value.'">
+    echo '<div class="images">';
+        foreach ($extra_images as $key=>$value){
+        echo '
+        <div class="form-group all-images">
+            <label class="col-lg-1"></label>
+            <strong class="serial">#'.($key+1).'</strong>
+            <div class="col-lg-3">
+                <input name="extra_images[]" type="text" class="form-control extra-images" value="'.$value.'">
+            </div>
+            <div class="col-lg=1">
+                <button class="btn add-images">增加</button>
+                <button class="btn btn-error remove-image">删除</button>
+                <button class="btn up-btn btn-error">上移动</button>
+                <button class="btn down-btn btn-error">下移动</button>
+                <a target="_blank" href="'.$value.'">
                     <img src="'.$value.'" width="50" height="50"/>
-                    </a>
-                    </div>
-                 </div>';
+                </a>
+            </div>
+        </div>
+        ';
         }
-        echo '</div>';
+        echo '
+    </div>
+    ';
     ?>
 
     <div class="blockTitle">
-        <p > 主信息 </p>
+        <span> 主信息 </span>
     </div>
     </br>
-    <?= $form->field($sku,'title')->textInput(); ?>
-    <?= $form->field($sku,'tags')->textInput(['class'=>'tags-input'])->hint('键词不能超过10个'); ?>
-    <?= $form->field($sku,'description')->textarea(['rows'=>6]); ?>
-    <?= $form->field($sku,'inventory')->textInput(); ?>
-    <?= $form->field($sku,'price')->textInput(); ?>
-    <?= $form->field($sku,'msrp')->textInput(); ?>
-    <?= $form->field($sku,'shipping')->textInput(); ?>
-    <?= $form->field($sku,'shippingtime')->textInput(); ?>
+    <?= $form->field($sku, 'title')->textInput(); ?>
+    <?= $form->field($sku, 'tags')->textInput(['class' => 'tags-input'])->hint('键词不能超过10个'); ?>
+    <?= $form->field($sku, 'description')->textarea(['rows' => 6]); ?>
+    <?= $form->field($sku, 'inventory')->textInput(); ?>
+    <?= $form->field($sku, 'price')->textInput(); ?>
+    <?= $form->field($sku, 'msrp')->textInput(); ?>
+    <?= $form->field($sku, 'shipping')->textInput(); ?>
+    <?= $form->field($sku, 'shippingtime')->textInput(); ?>
 
 
     <div class="blockTitle">
-        <p> 多属性(Varations)设置</p>
+        <span> 多属性(Varations)设置</span>
     </div>
-</br>
+    </br>
     <div class="form-group">
-        <a  data-toggle="modal" data-target="#edit-sku" class=" var-btn btn btn-default variations-set">设置多属性</a>
+        <a data-toggle="modal" data-target="#edit-sku" class=" var-btn btn btn-default variations-set">设置多属性</a>
     </div>
-
 
 
 </div>
@@ -156,7 +166,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
         导出joom(csv)
     </botton>
 </div>
-<?php  ActiveForm::end();?>
+<?php ActiveForm::end(); ?>
 
 
 <?php
@@ -164,16 +174,15 @@ Modal::begin([
     'id' => 'edit-sku',
     'header' => '<h4 class="modal-title">多属性</h4>',
     'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
-    'options'=>[
-        'data-backdrop'=>'static',//点击空白处不关闭弹窗
-        'data-keyboard'=>false,
+    'options' => [
+        'data-backdrop' => 'static',//点击空白处不关闭弹窗
+        'data-keyboard' => false,
     ],
     'size' => "modal-xl"
 ]);
 
 
 $requestUrlsku = Url::toRoute(['variations']);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
-
 
 
 Modal::end();
@@ -186,7 +195,6 @@ Modal::end();
 </script>
 
 <style>
-
     .blockTitle {
         font-size: 16px;
         background-color: #f7f7f7;
@@ -198,8 +206,10 @@ Modal::end();
     .channel-update-form {
         margin-left: 20px;
     }
-
-
+    .blockTitle span{
+        margin-top: 20px;
+        font-weight: bold;
+    }
 </style>
 
 <style>
@@ -212,9 +222,12 @@ Modal::end();
 </style>
 
 
-
 <?php
-$js  = <<< JS
+$updateUrl = Url::to(['update', 'id' => $sku->infoid]);
+$exportUrl = Url::to(['export', 'id' => $sku->infoid]);
+$joomUrl = Url::to(['export-joom', 'id' => $sku->infoid]);
+$wishUrl = Url::to(['wish-sign', 'id' => $sku->infoid]);
+$js = <<< JS
 //主图赋值
 $('.main-image').val($('.tem-page').val());
 
@@ -308,7 +321,7 @@ $('body').on('click','.down-btn',function() {
     $('.update-info').on('click',function(){
         $.ajax({
             type:'POST',
-            url:'/channel/update?id='+$sku->infoid,
+            url: "{$updateUrl}",
             data:$('#all-info').serialize(),
             success: function(res){
                 alert(res);
@@ -318,20 +331,20 @@ $('body').on('click','.down-btn',function() {
 
   //导出数据到ibay 
     $('.export').on('click',function(){
-          window.location = '/channel/export?id='+$sku->infoid;
+          window.location = '{$exportUrl}';
     });
     
     //导出数据joom CSV
     $('.joom-csv').on('click',function(){
         alert('确定导出Joom模板?');
-         window.location = '/channel/export-joom?id='+$sku->infoid;
+         window.location = '{$joomUrl}';
     });
     
     //标记wish已完成
     $('.wish-sign').on('click',function(){
         $.ajax({
             type:"POST",
-            url:'/channel/wish-sign?id='+$sku->infoid,
+            url:'{$wishUrl}',
             success:function(res) {
                 alert(res);
               
@@ -366,6 +379,7 @@ $this->registerJs($js);
         background-color: whitesmoke;
         border-color: transparent;
     }
+
     .panel-primary {
         border-color: transparent;
     }
