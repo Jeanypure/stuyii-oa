@@ -615,7 +615,6 @@ echo FormGrid::widget([ // continuation fields to row above without labels
         /*var form = $('#sku-info');
         form.attr('action', $(this).data('href'));
         form.submit();*/
-
           $.ajax({
                 cache: true,
                 type: "POST",

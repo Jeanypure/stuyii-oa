@@ -137,7 +137,7 @@ echo '</div>';
 <?= $form->field($templates,'location')->textInput(); ?>
 <?= $form->field($templates,'country')->textInput(); ?>
 <?= $form->field($templates,'postCode')->textInput(); ?>
-<?= $form->field($templates,'prepareDay')->textInput(['value' => '3' ]); ?>
+<?= $form->field($templates,'prepareDay')->textInput(['value' => '10' ]); ?>
 
 <div class="blockTitle">
     <span> 站点组</span>

@@ -551,7 +551,7 @@ class ChannelController extends Controller
             $pic = ['VariationSpecificPictureSet'=>['PictureURL'=>[$row['imageUrl']]],'Value'=>$value['value']];
             array_push($pictures,$pic);
             $var = [
-                'SKU'=>$row['varSku'].'@#'.$accountName,
+                'SKU'=>$row['varSku'].$accountName,
                 'Quantity'=>$row['varQuantity'],
                 'StartPrice'=>$row['retailPrice'],
                 'VariationSpecifics'=>$variationSpecificsSet,
