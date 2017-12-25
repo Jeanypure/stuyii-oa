@@ -616,7 +616,7 @@ class ChannelController extends Controller
                 $foos[0][0]['price'] = ceil($totalprice - $foos[0][0]['shipping']);
 
             }
-
+//            shuffle($array)
             $strvariant = $this->actionVariationWish($id,$value['Suffix'],$value['Rate']);
             $row = $key+2;
             $foos[0][0]['main_image'] = 'https://www.tupianku.com/view/full/10023/'.$foos[0][0]['SKU'].'-_'.$value['MainImg'].'_.jpg' ;
