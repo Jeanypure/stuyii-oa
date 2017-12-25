@@ -639,7 +639,7 @@ class ChannelController extends Controller
         }
 
         header('Content-Type: application/vnd.ms-excel');
-        $filename = 'Wish模版'.$foos[0][0]['SKU'].date("d-m-Y-His").".xls";
+        $filename = $foos[0][0]['SKU'].'-Wish模版'.date("d-m-Y-His").".xls";
         header('Content-Disposition: attachment;filename='.$filename .' ');
         header('Cache-Control: max-age=0');
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
@@ -668,7 +668,7 @@ class ChannelController extends Controller
             if($totalprice<=2){
                 $value['price'] = 1;
                 $value['shipping'] = 1;
-            }elseif(2< $totalprice  &&  $totalprice<3){
+        }elseif(2< $totalprice  &&  $totalprice<=3){
                 $value['price'] = 2;
                 $value['shipping'] = 1;
             }else{
@@ -793,7 +793,7 @@ class ChannelController extends Controller
         }
         $data = $joomRes;
         $header_data = array_keys($joomRes[0]);
-        $file_name = $joomRes[0]['Parent Unique ID'].'Joom-CSV';
+        $file_name = $joomRes[0]['Parent Unique ID'].'-Joom模板csv';
         $this->actionExportCsv($data,$header_data,$file_name);
 
     }

@@ -66,10 +66,10 @@ class ChannelSearch extends Channel
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => [
-                'defaultOrder' => [
-                ]
-            ],
+//            'sort' => [
+//                'defaultOrder' => [
+//                ]
+//            ],
         ]);
 
         $dataProvider->setSort([
@@ -98,12 +98,6 @@ class ChannelSearch extends Channel
                     'desc' => ['oa_goods.subCate' => SORT_DESC],
                     'label' => '子分类'
                 ],
-                'introducer'=> [
-                    'asc' => ['oa_goods.introducer' => SORT_ASC],
-                    'desc' => ['oa_goods.introducer' => SORT_DESC],
-                    'label' => '推荐人'
-                ],
-                /*=============*/
                 'introducer'=> [
                     'asc' => ['oa_goods.introducer' => SORT_ASC],
                     'desc' => ['oa_goods.introducer' => SORT_DESC],
@@ -158,8 +152,6 @@ class ChannelSearch extends Channel
             ->andFilterWhere(['like', 'AttributeName', $this->AttributeName])
             ->andFilterWhere(['like', 'oa_goods.cate', $this->cate])
             ->andFilterWhere(['like', 'oa_goods.subCate', $this->subCate])
-            ->andFilterWhere(['like', 'cate', $this->cate])
-            ->andFilterWhere(['like', 'subCate', $this->subCate])
             ->andFilterWhere(['like', 'convert(varchar(10),devDatetime,120)', strval($this->devDatetime)])
             ->andFilterWhere(['like', 'completeStatus', $this->completeStatus])
             ->andFilterWhere(['like', 'oa_goods.introducer', $this->introducer]);

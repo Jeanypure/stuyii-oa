@@ -48,6 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'ebayName',
             'ebaySuffix',
             'nameCode',
+            'mainImg',
             [
                 'attribute' => 'highEbayPaypal',
                 'value' => function($model){
