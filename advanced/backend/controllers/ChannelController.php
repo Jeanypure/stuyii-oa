@@ -608,7 +608,7 @@ class ChannelController extends Controller
             if($totalprice<=2){
                 $foos[0][0]['price'] = 1;
                 $foos[0][0]['shipping'] = 1;
-            }elseif(2< $totalprice  &&  $totalprice<3){
+            }elseif(2< $totalprice  &&  $totalprice<=3){
                 $foos[0][0]['price'] = 2;
                 $foos[0][0]['shipping'] = 1;
             }else{
