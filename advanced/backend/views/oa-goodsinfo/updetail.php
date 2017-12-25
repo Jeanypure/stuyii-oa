@@ -173,6 +173,15 @@ echo FormGrid::widget([ // continuation fields to row above without labels
 </div>
 
 <br>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<?= $form->field($info, 'headKeywords', [])->textInput(['style' => 'width:100', 'placeholder' => '-1个单词--']); ?>
+<?= $form->field($info, 'requiredKeywords', [])->textInput(['style' => 'width:100', 'placeholder' => '-1个单词--']); ?>
+<?= $form->field($info, 'randomKeywords', [])->textInput(['style' => 'width:100', 'placeholder' => '-1个单词--']); ?>
+<?= $form->field($info, 'tailKeywords', [])->textInput(['style' => 'width:100', 'placeholder' => '--1个单词--']); ?>
+=======
+>>>>>>> 845d180bb801d5d71aceac6df4c09f6458f47123
     <?= $form->field($info,'headKeywords',['labelOptions' => ['style' => 'margin-left:3%']])->textInput(['style'=>"width:200px;margin-left:3%;",'placeholder' => '--一个关键词--'])->label('最前关键词<span style = "color:red">*</span>'); ?>
     <?= $form->field($info,'requiredKeywords')->textInput(['style'=>"width:200px;display:none;",'placeholder' => '-1个单词--'])->label(false); ?>
     <?= $form->field($info,'randomKeywords')->textInput(['style'=>"width:200px;display:none;",'placeholder' => '-1个单词--'])->label(false); ?>
@@ -235,6 +244,11 @@ echo FormGrid::widget([ // continuation fields to row above without labels
 
 <br>
     <?= $form->field($info,'tailKeywords',['labelOptions' => ['style' => 'margin-left:3%']])->textInput(['style'=>"width:200px;margin-left:3%;",'placeholder' => '--最多一个关键词--']); ?>
+<<<<<<< HEAD
+=======
+>>>>>>> f398f9568c2e884bad924756d650d10a3faad418
+
+>>>>>>> 845d180bb801d5d71aceac6df4c09f6458f47123
 <br>
 <div class="row">
     <div class="col-sm-4">
@@ -607,7 +621,6 @@ $js2 = <<<JS
         tailCount();
    });
 //结束关键词处理过程
-
 //能删除新增空行的删除行
     $('#delete-row').on('click', function() {
         $("input[name='selection[]']:checkbox:checked").each(function(){

@@ -161,7 +161,7 @@ echo '</div>';
 <?= $form->field($templates,'listedSubcate')->textInput(); ?>
 <?= $form->field($templates,'title')->textInput(); ?>
 <?= $form->field($templates,'subTitle')->textInput(); ?>
-<?= $form->field($templates,'description')->textarea(['rows'=>6]); ?>
+<?= $form->field($templates,'description', ['template' => "{label}\n<div class=\"col-lg-5\">{input}</div>\n<div class=\"col-lg-9\">{error}</div>"])->textarea(['rows'=>12]); ?>
 <?= $form->field($templates,'quantity')->textInput(); ?>
 <?= $form->field($templates,'nowPrice')->textInput(); ?>
 <?= $form->field($templates,'UPC')->textInput(['value' => 'Does not apply']); ?>

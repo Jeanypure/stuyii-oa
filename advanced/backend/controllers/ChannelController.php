@@ -442,6 +442,10 @@ class ChannelController extends Controller
         $db = yii::$app->db;
         $query = $db->createCommand($sql);
         $ret = $query->queryAll();
+        //获取并整理标题
+
+        //var_dump($id);exit;
+        //var_dump($ret[0]['Title']);exit;
         $code_sql = "select ofo.goodsCode from oa_templates as ots 
                       LEFT  JOIN oa_goodsinfo as ofo 
                       on ots.infoid=ofo.pid where ots.nid=$id";
