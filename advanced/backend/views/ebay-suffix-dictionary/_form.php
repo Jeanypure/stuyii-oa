@@ -26,6 +26,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'mainImg')->textInput() ?>
 
+    <?= $form->field($model, 'ibayTemplate')->textInput() ?>
+
     <?= $form->field($model, 'highEbayPaypal')->widget(\kartik\select2\Select2::classname(), [
         'data' => \yii\helpers\ArrayHelper::map(\backend\models\OaPaypal::find()->all(),'nid','paypalName'),
         'options' => [/*'multiple' => true, */'placeholder' => '请选择'],
