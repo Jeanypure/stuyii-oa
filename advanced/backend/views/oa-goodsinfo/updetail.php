@@ -206,7 +206,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
         </table>
     </div>
     <br>
-    <div class='all-random'  style="display:none;float:right;margin-right: 10%"><textarea id="all-random" style="width:200px;height:300px;">这里写关键词</textarea></div>
+<!--    <div class='all-random'  style="display:none;float:right;margin-right: 10%"><textarea id="all-random" style="width:200px;height:300px;">这里写关键词</textarea></div>-->
 
     <div style="margin-left:3%;margin-right: 30%">
         <label class="control-label">随机关键词<span style = "color:red">*</span></label><span style="margin-left:1%" class="random-kw"></span>
@@ -233,7 +233,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
                 <td><input value="'.$random_kws[7].'" class="random-kw-in" type="text" class=""></td>
                 <td><input value="'.$random_kws[8].'"  class="random-kw-in" type="text" class=""></td>
                 <td><input value="'.$random_kws[9].'" class="random-kw-in" type="text" class=""></td>
-                <td><button type="button" class="random-paste">批量设置</button></td>
+                <td><a class = "random-paste btn btn-success" data-toggle="modal" data-target = "#kw-modal">批量设置</a></td>
             </tr>'
             ?>
             </tbody>
@@ -444,9 +444,20 @@ echo FormGrid::widget([ // continuation fields to row above without labels
 
     <?php
     Modal::begin([
+        'id' => 'kw-modal',
+        'header' => '<h4 class="modal-title">批量增加关键词</h4>',
+        'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
+//        'size' => Modal::SIZE_,
+        'options' => [
+            'data-backdrop' => 'static',//点击空白处不关闭弹窗
+            'data-keyboard' => false,
+        ],
+    ]);
+    Modal::end();
+    Modal::begin([
         'id' => 'edit-sku',
         'header' => '<h4 class="modal-title">编辑SKU</h4>',
-
+//        'body' => '<textarea id="all-required" style="width:200px;height:300px;">这里写内容</textarea>',
         'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
         'size' => Modal::SIZE_LARGE,
         'options' => [
@@ -454,8 +465,6 @@ echo FormGrid::widget([ // continuation fields to row above without labels
             'data-keyboard' => false,
         ],
     ]);
-
-
     $requestUrl = Url::toRoute(['/goodssku/create', 'id' => $info->pid]);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
     $requestUrl2 = Url::toRoute(['/goodssku/update']);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
     $inputUrl = Url::toRoute(['input']);
@@ -467,10 +476,11 @@ echo FormGrid::widget([ // continuation fields to row above without labels
 
     $(".required-paste").on('click',function() {
         // $('.all-required').css('display','');    
-        $('.all-required').toggle();   
+        // $('.all-required').toggle();   
     });
     $(".random-paste").on('click',function() {
-        $('.all-random').toggle();     
+        // $('.all-random').toggle(); 
+            $('.modal-body').html('<textarea id="all-random" style="width:200px;height:300px;">这里写内容</textarea>');
     });
     requird_ele = $("#all-required");
     random_ele = $("#all-random");
