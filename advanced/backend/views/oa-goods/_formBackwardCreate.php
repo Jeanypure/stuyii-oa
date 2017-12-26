@@ -14,7 +14,7 @@ $js = <<<JS
 //创建提交审核事件
 $('#create-to-check').on('click',function() {
     var form = $('#create-form');
-        form.attr('action', '/oa-goods/backward-create?type=check');
+        form.attr('action', form.data('href'));
         form.submit();
 });
 
@@ -33,6 +33,7 @@ $getSubCateUrl = Url::toRoute(['oa-goods/forward-create','typeid'=>1, ]);
         [
             'id' => 'create-form',
             'method' => 'post',
+            'options' => ['data-href' => Url::to(['oa-goods/forward-create', 'type' => 'check'])],
         ]
     ); ?>
 

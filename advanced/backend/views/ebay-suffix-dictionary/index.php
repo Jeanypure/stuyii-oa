@@ -9,7 +9,7 @@ use yii\helpers\Url;
 /* @var $searchModel backend\models\WishSuffixDictionarySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Ebay账号字典';
+$this->title = 'eBay账号字典';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="wish-suffix-dictionary-index">
@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
     <p>
         <?php //echo Html::a('添加ebay账号', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('添加ebay账号', "javascript:void(0);", ['title' => 'create', 'data-toggle' => 'modal', 'data-target' => '#index-modal',
+        <?= Html::a('添加eBay账号', "javascript:void(0);", ['title' => 'create', 'data-toggle' => 'modal', 'data-target' => '#index-modal',
             'data-href' => Url::to(['create']), 'class' => 'index-create btn btn-primary']) ?>
     </p>
     <?php Pjax::begin(); ?>
@@ -48,6 +48,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'ebayName',
             'ebaySuffix',
             'nameCode',
+            'mainImg',
+            'ibayTemplate',
             [
                 'attribute' => 'highEbayPaypal',
                 'value' => function($model){
@@ -82,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
             $.get(url, function (msg) {
                 bootbox.dialog({
                     message: msg,
-                    title: "添加Ebay账号",
+                    title: "添加eBay账号",
                     buttons: {
                         cancel: {
                             label: "取消",
@@ -97,7 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
             $.get(url, function (msg) {
                 bootbox.dialog({
                     message: msg,
-                    title: "编辑Ebay账号",
+                    title: "编辑eBay账号",
                     buttons: {
                         cancel: {
                             label: "取消",
@@ -112,7 +114,7 @@ $this->params['breadcrumbs'][] = $this->title;
             $.get(url, function (msg) {
                 bootbox.dialog({
                     message: msg,
-                    title: "Ebay账号详情",
+                    title: "eBay账号详情",
                     buttons: {
                         cancel: {
                             label: "取消",

@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\OaGoods */
@@ -55,8 +56,8 @@ $this->registerJs($JS);
             [
                 'prompt'=>'--请选择父类--',
                 'onchange'=>'           
-            $.get("'.yii::$app->urlManager->createUrl('oa-goods/category').
-                    '?typeid=1&pid="+$(this).val(),function(data){
+            $.get("'.Url::to(['oa-goods/category', 'typeid' => 1]).
+                    '&typeid=1&pid="+$(this).val(),function(data){
                 var str="";
               $("select#oagoods-subcate").children("option").remove();
               $.each(data,function(k,v){

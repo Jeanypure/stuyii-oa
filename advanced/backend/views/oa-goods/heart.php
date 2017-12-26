@@ -1,6 +1,7 @@
 <?php
 
 use yii\bootstrap\Dropdown;
+use \yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\OaGoods */
@@ -12,8 +13,8 @@ use yii\bootstrap\Dropdown;
     <?php
     echo Dropdown::widget([
         'items' => [
-            ['label' => '正向开发', 'url' => 'forward/?id='.$model->nid],
-            ['label' => '逆向开发', 'url' => 'backward/?id='.$model->nid],
+            ['label' => '正向开发', 'url' => Url::to(['forward', 'id' => $model->nid])],
+            ['label' => '逆向开发', 'url' => Url::to(['backward', 'id' => $model->nid])],
         ],
     ]);
     ?>

@@ -82,7 +82,6 @@ class GoodsskuController extends Controller
 
     public function actionSaveOnly($pid,$type)
     {
-
         $request = Yii::$app->request;
         $model = new Goodssku();
         if($request->isPost)
@@ -115,13 +114,9 @@ class GoodsskuController extends Controller
                             $_model = clone $model;
                             //配合rules 进行安全检查;需要改变的数据都要声明下类型。
                             $_model ->setAttributes($row_value,true); //逐行入库
-                            if($_model->save()){
-                                echo "{'msg':'Done'}";
-                            }
+                            $_model->save();
+                            echo "新增成功";
 
-                            else {
-                                echo "{'msg:'Fail'}";
-                            }
                         }
                         //更新行
                         else
@@ -134,8 +129,8 @@ class GoodsskuController extends Controller
                             $update_model->CostPrice = $row_value['CostPrice'];
                             $update_model->Weight = $row_value['Weight'];
                             $update_model->RetailPrice = $row_value['RetailPrice'];
-                            $update_model->update(['sku','property1','property2','property3',
-                                'CostPrice','Weight','RetailPrice']);
+                            $update_model->update(false);
+                            echo "保存完成";
 
                         }
 
@@ -233,7 +228,10 @@ class GoodsskuController extends Controller
                         $arc = $arc_model->ruleValue;
                         $pur = $pur_model->ruleValue;
                         $goods_model ->achieveStatus = '已完善';
-                        $goods_model ->picStatus = '待处理';
+                        if($goods_model ->picStatus==''){
+                           $goods_model ->picStatus = '待处理';
+                        }
+
                         $goods_model->updateTime =strftime('%F %T');
                         $goods_model->possessMan1 = $arc;
                         $goods_model->Purchaser = $pur;

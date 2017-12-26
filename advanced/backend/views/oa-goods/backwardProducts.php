@@ -26,6 +26,8 @@ Modal::end();
 $viewUrl = Url::toRoute('forward-view');
 $updateUrl = Url::toRoute('backward-update');
 $createUrl = Url::toRoute('backward-create');
+$approve = Url::toRoute('approve');
+$approveLots = Url::toRoute('approve-lots');
 $js = <<<JS
 
 
@@ -78,7 +80,7 @@ $('.approve').on('click',function(){
      var id = $(this).closest('tr').data('key');
         krajeeDialog.confirm("确定提交审核?", function (result) {
         if (result) {
-           $.get('/oa-goods/approve?id='+id,{'type':'backward-products'},
+           $.get("{$approve}", {'id':id,'type':'backward-products'},
                function(msg){
                   alter(msg); 
                }               
@@ -95,7 +97,7 @@ $('.approve-lots').on('click',function() {
     var ids = $("#oa-check").yiiGridView("getSelectedRows");    
     if(ids.length == 0) return false;
      $.ajax({
-           url:"/oa-goods/approve-lots",
+           url:"{$approveLots}",
            type:"post",
            data:{'id':ids,'type':'backward-products'},
            dataType:"json",

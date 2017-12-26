@@ -67,7 +67,7 @@ $this->registerJs($JS);
                 'prompt'=>'--父类--',
                 'onchange'=>'           
             $.get("'.yii::$app->urlManager->createUrl('oa-goods/category').
-                    '?id=1&typeid=1&pid="+$(this).val(),function(data){
+                    '&id=1&typeid=1&pid="+$(this).val(),function(data){
                 var str="";
               $("select#oaforwardgoods-subcate").children("option").remove();
               $.each(data,function(k,v){
