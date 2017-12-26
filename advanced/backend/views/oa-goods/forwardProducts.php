@@ -28,7 +28,8 @@ Modal::end();
 $viewUrl = Url::toRoute('forward-view');
 $updateUrl = Url::toRoute('forward-update');
 $createUrl = Url::toRoute('forward-create');
-//$approve = Url::toRoute('approve');
+$approve = Url::toRoute('approve');
+$approveLots = Url::toRoute('approve-lots');
 
 $js = <<<JS
 $('.glyphicon-eye-open').addClass('icon-cell');
@@ -82,7 +83,7 @@ $('.approve').on('click',function(){
      var id = $(this).closest('tr').data('key');
   krajeeDialog.confirm("确定提交审核?", function (result) {
         if (result) {
-           $.get("<?= Url::to(['oa-goods/approve'])?>", {id:id,type:'forward-products'},
+           $.get("{$approve}", {id:id,type:'forward-products'},
                function(msg){
                   alter(msg); 
                }               
@@ -99,7 +100,7 @@ $('.approve').on('click',function(){
     var ids = $("#oa-check").yiiGridView("getSelectedRows"); 
     if(ids.length == 0) return false;
      $.ajax({
-           url:"<?= Url::to(['oa-goods/approve-lots'])?>",
+           url:"{$approveLots}",
            type:"post",
            data:{'id':ids,'type':'forward-products'},
            dataType:"json",

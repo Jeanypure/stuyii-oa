@@ -58,7 +58,7 @@ echo Html::label("<legend class='text-info'><small>基本信息</small></legend>
 
 echo '</br>';
 
-echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' width='120px' height='120px'></a></div></br>";
+echo "<div style='margin-left: 8px'><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' width='120px' height='120px'></a></div></br>";
 
 ?>
 
@@ -69,12 +69,13 @@ $form = ActiveForm::begin([
 echo FormGrid::widget([ // continuation fields to row above without labels
     'model' => $info,
     'form' => $form,
+    //'options' => ['style' => 'margin-left: 25px'],
     'rows' => [
         [
             'attributes' => [
                 'picUrl' => [
                     'label' => "商品图片链接",
-                    'options' => ['class' => 'picUrl', 'style' => "width:50%"],
+                    'options' => ['class' => 'picUrl', 'style' => "margin-left: 7px;width:50%"],
                 ],
             ],
         ],
@@ -85,7 +86,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
                     'items' => [1 => 'Group 2'],
                     'type' => Form::INPUT_TEXT,
                     'readonly' => true,
-                    'options' => ['class' => 'GoodsCode col-sm-6'],
+                    'options' => ['class' => 'GoodsCode col-sm-6', 'style' => "margin-left: 7px"],
                 ],
                 'GoodsName' => [
                     'label' => "<span style = 'color:red'>*商品名称</span>",
@@ -108,9 +109,9 @@ echo FormGrid::widget([ // continuation fields to row above without labels
         [
             'attributes' => [
                 'Purchaser' => [    //Purchaser   developer  possessMan1
-                    'label' => '采购',
+                    'label' => Html::label('采购',['style' => "margin-left: 10px"]),
                     'type' => Form::INPUT_TEXT,
-
+                    'options' => ['style' => "margin-left: 7px"],
                 ],
                 'developer' => [
                     'label' => '业绩归属人1',
@@ -132,6 +133,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
                     'label' => '规格',
                     'items' => $packname,
                     'type' => Form::INPUT_DROPDOWN_LIST,
+                    'options' => ['style' => "margin-left: 7px"],
                 ],
                 'AttributeName' => [
                     'label' => '特殊属性必填',
@@ -156,7 +158,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
                     'label' => "<span style = 'color:red'>*描述</span>",
                     'items' => [1 => 'Group 2'],
                     'type' => Form::INPUT_TEXTAREA,
-                    'options' => ['rows' => '12']
+                    'options' => ['rows' => '12','style' => "margin-left: 7px"]
                 ],
             ],
         ],
@@ -165,7 +167,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
 <br>
 
 
-<div class="col-sm-1"><strong>关键词：</strong></div>
+<div class="col-xs-" style="margin-left: 5px"><strong>关键词：</strong></div>
 <br>
 <br>
 <?= $form->field($info, 'headKeywords', ['labelOptions' => ['style' => 'margin-left:3%']])->textInput(['style' => "width:200px;margin-left:3%;", 'placeholder' => '--一个关键词--'])->label('最前关键词<span style = "color:red">*</span>'); ?>
@@ -234,7 +236,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
 <?= $form->field($info, 'tailKeywords', ['labelOptions' => ['style' => 'margin-left:3%']])->textInput(['style' => "width:200px;margin-left:3%;", 'placeholder' => '--最多一个关键词--']); ?>
 
 <br>
-<div class="row" style="margin-left: 10px">
+<div class="row" style="margin-left: 8px">
     <div class="row">
         <div class="col-sm-4">
             <?php echo '<label class="control-label">禁售平台</label>';
@@ -309,8 +311,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
         ]
     ]); ?>
 
-    <?php
-    echo Html::submitButton($info->isNewRecord ? '创建' : '更新', ['class' => $info->isNewRecord ? 'btn btn-success' : 'btn btn-info']);
+    <?php echo Html::submitButton($info->isNewRecord ? '创建' : '更新', ['class' => $info->isNewRecord ? 'btn btn-success' : 'btn btn-info']);
     ActiveForm::end();
     echo "<br>";
     ?>
