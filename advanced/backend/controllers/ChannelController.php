@@ -98,7 +98,6 @@ class ChannelController extends Controller
         if (!$sku) {
             throw new NotFoundHttpException("The product was not found.");
         }
-
         if ($sku[0]->load(Yii::$app->request->post())) {
             $dataPost = $_POST;
             $sku[0]['main_image'] = $dataPost['main_image'];
@@ -108,6 +107,10 @@ class ChannelController extends Controller
 
             }
             $sku[0]['extra_images'] = rtrim($sku[0]['extra_images'], "\n");
+            //处理关键字
+            $sku[0]['requiredKeywords'] = json_encode($dataPost['required_kws']);
+            $sku[0]['randomKeywords'] = json_encode($dataPost['random_kws']);
+
             $sku[0]->update(false);
             echo '更新成功！';
 

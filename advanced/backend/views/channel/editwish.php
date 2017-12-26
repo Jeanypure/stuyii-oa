@@ -183,15 +183,15 @@ if (empty($sku->randomKeywords)) {
                 <?php
                 echo '<tr>
         <th scope="row">必填</th>
-        <td><input value="'.$required_kws[0].'" class="required-kw-in" type="text" class=""></td>
-        <td><input value="'.$required_kws[1].'" class="required-kw-in" type="text" class=""></td>
-        <td><input value="'.$required_kws[2].'" class="required-kw-in" type="text" class=""></td>
+        <td><input value="'.$required_kws[0].'" name="required_kws[0]" class="required-kw-in" type="text" class=""></td>
+        <td><input value="'.$required_kws[1].'" name="required_kws[1]" class="required-kw-in" type="text" class=""></td>
+        <td><input value="'.$required_kws[2].'" name="required_kws[2]" class="required-kw-in" type="text" class=""></td>
     </tr>
     <tr>
         <th scope="row">选填</th>
-        <td><input value="'.$required_kws[3].'" class="required-kw-in" type="text" class=""></td>
-        <td><input value="'.$required_kws[4].'" class="required-kw-in" type="text" class=""></td>
-        <td><input value="'.$required_kws[5].'" class="required-kw-in" type="text" class=""></td>
+        <td><input value="'.$required_kws[3].'" name="required_kws[3]" class="required-kw-in" type="text" class=""></td>
+        <td><input value="'.$required_kws[4].'" name="required_kws[4]" class="required-kw-in" type="text" class=""></td>
+        <td><input value="'.$required_kws[5].'" name="required_kws[5]" class="required-kw-in" type="text" class=""></td>
         <td><button type="button" class="required-paste">批量设置</button></td>
     </tr>'
                 ?>
@@ -212,19 +212,19 @@ if (empty($sku->randomKeywords)) {
                 echo
                     '<tr>
                 <th scope="row">必填</th>
-                <td><input value="'.$random_kws[0].'" class="random-kw-in" type="text" class=""></td>
-                <td><input value="'.$random_kws[1].'" class="random-kw-in" type="text" class=""></td>
-                <td><input value="'.$random_kws[2].'" class="random-kw-in" type="text" class=""></td>
-                <td><input value="'.$random_kws[3].'" class="random-kw-in" type="text" class=""></td>
-                <td><input value="'.$random_kws[4].'" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[0].'" name="random_kws[0]" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[1].'" name="random_kws[1]" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[2].'" name="random_kws[2]" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[3].'" name="random_kws[3]" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[4].'" name="random_kws[4]" class="random-kw-in" type="text" class=""></td>
             </tr>
             <tr>
                 <th scope="row">选填</th>
-                <td><input value="'.$random_kws[5].'"   class="random-kw-in" type="text" class=""></td>
-                <td><input value="'.$random_kws[6].'" class="random-kw-in" type="text" class=""></td>
-                <td><input value="'.$random_kws[7].'" class="random-kw-in" type="text" class=""></td>
-                <td><input value="'.$random_kws[8].'"  class="random-kw-in" type="text" class=""></td>
-                <td><input value="'.$random_kws[9].'" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[5].'" name="random_kws[5]" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[6].'" name="random_kws[6]" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[7].'" name="random_kws[7]" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[8].'" name="random_kws[8]" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[9].'" name="random_kws[9]" class="random-kw-in" type="text" class=""></td>
                 <td><button type="button" class="random-paste">批量设置</button></td>
             </tr>'
                 ?>
