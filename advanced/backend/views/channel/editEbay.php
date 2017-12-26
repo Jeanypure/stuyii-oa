@@ -159,7 +159,6 @@ echo '</div>';
 <div>
 <?= $form->field($templates,'listedCate')->textInput(); ?>
 <?= $form->field($templates,'listedSubcate')->textInput(); ?>
-<?= $form->field($templates,'IbayTemplate')->textInput(); ?>
 <?= $form->field($templates,'title')->textInput(); ?>
 <?= $form->field($templates,'subTitle')->textInput(); ?>
 <?= $form->field($templates,'description', ['template' => "{label}\n<div class=\"col-lg-5\">{input}</div>\n<div class=\"col-lg-9\">{error}</div>"])->textarea(['rows'=>12]); ?>

@@ -1,7 +1,5 @@
 <?php
-
 namespace backend\controllers;
-
 use backend\models\OaGoodsinfo;
 use backend\unitools\PHPExcelTools;
 use Yii;
@@ -392,7 +390,7 @@ class ChannelController extends Controller
         if (($model = Channel::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new \NotFoundHttpException('The requested page does not exist.');
         }
     }
 
@@ -585,15 +583,28 @@ class ChannelController extends Controller
         $objPHPExcel = new \PHPExcel();
         $sheet = 0;
         $objPHPExcel->setActiveSheetIndex($sheet);
-        $foos[0] = OaWishgoods::find()->where(['infoid' => $id])->all();
-
-        $sql = ' SELECT cate FROM oa_goods WHERE nid=(SELECT goodsid FROM oa_goodsinfo WHERE pid=' . $id . ')';
-
+        $foos[0] = OaWishgoods::find()->where(['infoid'=>$id])->all();
+        $sql = ' SELECT cate FROM oa_goods WHERE nid=(SELECT goodsid FROM oa_goodsinfo WHERE pid='.$id.')';
         $db = yii::$app->db;
         $query = $db->createCommand($sql);
         $cate = $query->queryAll();
 
-        $columnNum = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'];
+        $sql2 = ' SELECT headKeywords,requiredKeywords,randomKeywords,tailKeywords FROM oa_goodsinfo WHERE pid='.$id;
+        $query = $db->createCommand($sql2);
+        $words = $query->queryAll();
+
+        $head = $words[0]['headKeywords'];
+        $tail = $words[0]['tailKeywords'];
+        $needinit = json_decode($words[0]['requiredKeywords']);
+        $randominit= json_decode($words[0]['randomKeywords']);
+        foreach($randominit as $value){
+           $random[] = $value.' ';
+        }
+        foreach($needinit as $value){
+           $need[] = $value.' ';
+        }
+
+        $columnNum = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P'];
         $colName = [
             'sku', 'selleruserid', 'name', 'inventory', 'price', 'msrp', 'shipping', 'shipping_time', 'main_image', 'extra_images',
             'variants', 'landing_page_url', 'tags', 'description', 'brand', 'upc'];
@@ -611,7 +622,38 @@ class ChannelController extends Controller
             ->orWhere("ParentCategory is null")
             ->addParams([':cate' => '%' . $cate[0]['cate'] . '%'])
             ->all(); //返回数组对象
-        foreach ($suffixAll as $key => $value) {
+        foreach($suffixAll as $key=>$value){
+            //标题关键字
+            shuffle($random);
+            $random_str1 = array_slice($random,0,1);
+            $random_result = array_diff($random,$random_str1);
+
+            shuffle($random);
+            $random_arr = array_slice($random_result,0,4);
+            $random_str2 =  implode(' ',$random_arr);
+            shuffle($need);
+            $need_str1 = implode(' ',$need);
+            $foos[0][0]['title'] = trim($head.' '.$random_str1[0] .' '.$need_str1.' '.$random_str2.' '.$tail);
+//            $length = strlen($foos[0][0]['title']);
+//            if($length>110 ){
+//                $random_str1 = array_pop($random);
+//                shuffle($random);
+//                $random_str2 = array_pop($random);
+//                shuffle($random);
+//                $random_str3 = array_pop($random);
+//                shuffle($random);
+//                $random_str4 = array_pop($random);
+//                shuffle($random);
+//                $foos[0][0]['title'] = trim($head.' '.$random_str1 .' '.$need_str1.' '.$random_str2.' '.$random_str3.' '.$random_str4.' '.$tail);
+//                $length = mb_strlen($foos[0][0]['title']);
+//                if($length>110){
+//                    $foos[0][0]['title'] = trim($head.' '.$random_str1 .' '.$need_str1.' '.$random_str2.' '.$random_str3.' '.$tail);
+//                }
+//
+//            }
+
+
+
             //价格判断
             $totalprice = ceil($foos[0][0]['price'] + $foos[0][0]['shipping']);
             if ($totalprice <= 2) {
@@ -625,26 +667,26 @@ class ChannelController extends Controller
                 $foos[0][0]['price'] = ceil($totalprice - $foos[0][0]['shipping']);
 
             }
+            $strvariant = $this->actionVariationWish($id,$value['Suffix'],$value['Rate']);
+            $row = $key+2;
+            $foos[0][0]['main_image'] = 'https://www.tupianku.com/view/full/10023/'.$foos[0][0]['SKU'].'-_'.$value['MainImg'].'_.jpg' ;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$row,$foos[0][0]['SKU'].$value['Suffix']);
+            $objPHPExcel->getActiveSheet()->setCellValue('B'.$row,$value['IbaySuffix']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C'.$row,$foos[0][0]['title']);
+            $objPHPExcel->getActiveSheet()->setCellValue('D'.$row,$foos[0][0]['inventory']);
+            $objPHPExcel->getActiveSheet()->setCellValue('E'.$row,$foos[0][0]['price']);
+            $objPHPExcel->getActiveSheet()->setCellValue('F'.$row,$foos[0][0]['msrp']);
+            $objPHPExcel->getActiveSheet()->setCellValue('G'.$row,$foos[0][0]['shipping']);
+            $objPHPExcel->getActiveSheet()->setCellValue('H'.$row,'7-21');
+            $objPHPExcel->getActiveSheet()->setCellValue('I'.$row,$foos[0][0]['main_image']);
+            $objPHPExcel->getActiveSheet()->setCellValue('J'.$row,$foos[0][0]['extra_images']);
+            $objPHPExcel->getActiveSheet()->setCellValue('K'.$row,$strvariant);
+            $objPHPExcel->getActiveSheet()->setCellValue('L'.$row,'');
+            $objPHPExcel->getActiveSheet()->setCellValue('M'.$row,$foos[0][0]['tags']);
+            $objPHPExcel->getActiveSheet()->setCellValue('N'.$row,$foos[0][0]['description']);
+            $objPHPExcel->getActiveSheet()->setCellValue('O'.$row,'');
+            $objPHPExcel->getActiveSheet()->setCellValue('P'.$row,'');
 
-            $strvariant = $this->actionVariationWish($id, $value['Suffix'], $value['Rate']);
-            $row = $key + 2;
-            $foos[0][0]['main_image'] = 'https://www.tupianku.com/view/full/10023/' . $foos[0][0]['SKU'] . '-_' . $value['MainImg'] . '_.jpg';
-            $objPHPExcel->getActiveSheet()->setCellValue('A' . $row, $foos[0][0]['SKU'] . $value['Suffix']);
-            $objPHPExcel->getActiveSheet()->setCellValue('B' . $row, $value['IbaySuffix']);
-            $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $foos[0][0]['title']);
-            $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $foos[0][0]['inventory']);
-            $objPHPExcel->getActiveSheet()->setCellValue('E' . $row, $foos[0][0]['price']);
-            $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $foos[0][0]['msrp']);
-            $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $foos[0][0]['shipping']);
-            $objPHPExcel->getActiveSheet()->setCellValue('H' . $row, '7-21');
-            $objPHPExcel->getActiveSheet()->setCellValue('I' . $row, $foos[0][0]['main_image']);
-            $objPHPExcel->getActiveSheet()->setCellValue('J' . $row, $foos[0][0]['extra_images']);
-            $objPHPExcel->getActiveSheet()->setCellValue('K' . $row, $strvariant);
-            $objPHPExcel->getActiveSheet()->setCellValue('L' . $row, '');
-            $objPHPExcel->getActiveSheet()->setCellValue('M' . $row, $foos[0][0]['tags']);
-            $objPHPExcel->getActiveSheet()->setCellValue('N' . $row, $foos[0][0]['description']);
-            $objPHPExcel->getActiveSheet()->setCellValue('O' . $row, '');
-            $objPHPExcel->getActiveSheet()->setCellValue('P' . $row, '');
         }
 
         header('Content-Type: application/vnd.ms-excel');
@@ -654,7 +696,14 @@ class ChannelController extends Controller
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
     }
+    /*
+    *生成随机标题和关键字
+     *
+    */
 
+    public function TitleAndName(){
+
+    }
 
     /*
      * 处理多属性
