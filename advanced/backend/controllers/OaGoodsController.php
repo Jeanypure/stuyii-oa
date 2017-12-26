@@ -886,7 +886,7 @@ class OaGoodsController extends Controller
         $model->checkStatus = '待审批';
         $model->update(false);
         if ($model->save(false)) {
-            return $this->redirect($type);
+            return $this->redirect([$type]);
         } else {
             return "{'msg':'fail'}";
         }

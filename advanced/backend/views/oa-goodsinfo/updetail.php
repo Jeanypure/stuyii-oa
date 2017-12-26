@@ -515,11 +515,6 @@ $js2 = <<<JS
         $('.all-required').removeAttr('hidden');    
     });
     
-    $("#all-required").on('change',function(){
-        kws = $(this).val();
-        kw_list = kws.split('/n');
-        console.log(kw_list);
-    });
 //样式处理开始
     $("label[for='oagoodsinfo-headkeywords']").after('<span style="margin-left:1%"class="head-kw"></span><div style="font-size:6px;margin-left:3%">'+
         '<span><label style = "color:red">说明：</label>性别定位/多个一卖等。如Women/Men/Girl/Baby/Kids/1PC/2PC/5PC/4 Colors/5Pcs Set…</span></div>');
@@ -611,6 +606,7 @@ $js2 = <<<JS
     $('.required-kw-in').on('change',function() {
         requiredCount();
     });
+    
     //监听随机关键词的变化过程
     $('.random-kw-in').on('change',function() {
         randomCount()
@@ -852,6 +848,11 @@ Modal::end();
     function removeTd(ele) {
         ele.closest('tr').remove();
     };
+    $("#all-required").on('change',function(){
+        kws = $(this).val();
+        kws = kws.replace(/\n/g,',');
+        console.log(kws);
+    });
 </script>
 
 <style>
