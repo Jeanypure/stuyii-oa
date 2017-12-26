@@ -418,22 +418,7 @@ class ChannelController extends Controller
      */
     private $extra_fields = ['nameCode', 'specifics'];//因其他需要返回的字段
 
-    /*
-     * eBay Title
-     */
-    public function actionTitles($id,$table){
-//        SELECT top 10 * FROM oa_templates WHERE infoid=721
-//        $sql2 = ' SELECT headKeywords,requiredKeywords,randomKeywords,tailKeywords FROM oa_templates WHERE infoid='.$id;
-        $sql2 = ' SELECT headKeywords,requiredKeywords,randomKeywords,tailKeywords FROM '.$table.' WHERE infoid='.$id;
-        $db = yii::$app->db;
-        $query = $db->createCommand($sql2);
-        $words = $query->queryAll();
-        $data['head'] = $words[0]['headKeywords'];
-        $data['tail'] = $words[0]['tailKeywords'];
-        $data['need'] = json_decode($words[0]['requiredKeywords']);
-        $data['random']= json_decode($words[0]['randomKeywords']);
-        return $data;
-    }
+
 
 
     /**
@@ -443,20 +428,11 @@ class ChannelController extends Controller
      */
     public function actionExportEbay($id, $accounts = '')
     {
+
         $sql = "oa_P_ebayTemplates {$id},'{$accounts}'";
         $db = yii::$app->db;
         $query = $db->createCommand($sql);
         $ret = $query->queryAll();
-
-        var_dump($ret);die;
-
-        //eBay Title
-
-       $data =  $this->actionNameTags($id,'oa_templates');
-       $name = $this->actionNonOrder($data,'eBay');
-//        var_dump($name);die;
-        $ret[0]['Title'] = $name;
-
         $code_sql = "select ofo.goodsCode from oa_templates as ots 
                       LEFT  JOIN oa_goodsinfo as ofo 
                       on ots.infoid=ofo.pid where ots.nid=$id";
@@ -510,13 +486,16 @@ class ChannelController extends Controller
             $objPHPExcel->getActiveSheet()->setCellValue(PHPExcelTools::stringFromColumnIndex($num) . '1', $name);
         }
 
+        $data =  $this->actionNameTags($id,'oa_templates');
         //写入单元格值
         foreach ($ret as $rowNum => $row) {
-
             if ($count > 1) {
                 $var = $this->getVariations($count, $allRows, $picKey, $picCount, $row['nameCode']);
                 $row['Variation'] = json_encode($var);
             }
+            //Title
+            $name = $this->actionNonOrder($data,'eBay');
+            $row['Title'] = $name;
             //specifics 重新赋值
             $specifics = json_decode($row['specifics'], true)['specifics'];
             foreach ($specifics as $index => $map) {
@@ -524,6 +503,7 @@ class ChannelController extends Controller
                 $value = array_values($map)[0];
                 $row['Specifics' . strval($index + 1)] = $key . ':' . $value;
             }
+
             foreach ($tabFields as $num => $name) {
                 $objPHPExcel->getActiveSheet()->setCellValue(PHPExcelTools::stringFromColumnIndex($num) . ($rowNum + 2), $row[$name]);
             }
@@ -618,41 +598,13 @@ class ChannelController extends Controller
             ->addParams([':cate' => '%' . $cate[0]['cate'] . '%'])
             ->all(); //
 
-       $data =  $this->actionNameTags($id,'oa_wishgoods');
+        $data =  $this->actionNameTags($id,'oa_wishgoods');
 
-        $head = $data['head'];
-        $tail = $data['tail'];
-        $need = $data['need'];
-        $random = $data['random'];
+
 
         foreach($suffixAll as $key=>$value){
             //标题关键字
-            shuffle($random);
-            $random_str1 = array_slice($random,0,1);
-            $random_result = array_diff($random,$random_str1);
-            shuffle($random_result);
-            $random_arr = array_slice($random_result,0,4);
-            $random_str2 =  implode(' ',$random_arr);
-            shuffle($need);
-            $need_str1 = implode(' ',$need);
-            $name = trim($head.' '.$random_str1[0].' '.$need_str1.' '.$random_str2.' '.$tail);
-            $nameLen = strlen($name);
-
-            //while 直到小于110
-            while($nameLen > 110){
-                array_pop($random);
-                shuffle($random);
-                $random_str1 = array_slice($random,0,1);
-                $random_result = array_diff($random,$random_str1);
-                $random_arr = array_slice($random_result,0,4);
-                shuffle($random_result);
-                array_pop($random_result);
-                $random_str2 =  implode(' ',$random_arr);
-                shuffle($need);
-                $need_str1 = implode(' ',$need);
-                $name = $head.' '.$random_str1[0].' '.$need_str1.' '.$random_str2.' '.$tail;
-                $nameLen = strlen($name);
-            }
+            $name = $this->actionNonOrder($data,'Wish');
             //价格判断
             $totalprice = ceil($foos[0][0]['price'] + $foos[0][0]['shipping']);
             if ($totalprice <= 2) {
@@ -704,7 +656,12 @@ class ChannelController extends Controller
 
     public function actionNameTags($id,$table){
 
-        $sql2 = ' SELECT headKeywords,requiredKeywords,randomKeywords,tailKeywords FROM '.$table.' WHERE infoid='.$id;
+        if($table=='oa_wishgoods') {
+            $sql2 = ' SELECT headKeywords,requiredKeywords,randomKeywords,tailKeywords FROM ' . $table . ' WHERE infoid=' . $id;
+        }
+        if($table=='oa_templates') {
+            $sql2 = ' SELECT headKeywords,requiredKeywords,randomKeywords,tailKeywords FROM ' . $table . ' WHERE nid=' . $id;
+        }
         $db = yii::$app->db;
         $query = $db->createCommand($sql2);
         $words = $query->queryAll();
@@ -722,7 +679,6 @@ class ChannelController extends Controller
     /*
      * 乱序数组
      */
-
     public  function actionNonOrder($data,$div){
 
         $head = $data['head'];
@@ -732,9 +688,9 @@ class ChannelController extends Controller
         if(empty($random)||empty($need)){
             return;
         }
-
         //标题关键字
         shuffle($random);
+
         $random_str1 = array_slice($random,0,1);
         $random_result = array_diff($random,$random_str1);
         shuffle($random_result);
@@ -748,7 +704,7 @@ class ChannelController extends Controller
             $max_length = 80;
 
         }
-        elseif($div =='Wish'){
+        if($div == 'Wish'){
             $max_length = 110;
         }
 
