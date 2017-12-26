@@ -627,7 +627,6 @@ class ChannelController extends Controller
             shuffle($random);
             $random_str1 = array_slice($random,0,1);
             $random_result = array_diff($random,$random_str1);
-
             shuffle($random);
             $random_arr = array_slice($random_result,0,4);
             $random_str2 =  implode(' ',$random_arr);
@@ -636,11 +635,6 @@ class ChannelController extends Controller
             $foos[0][0]['title'] = trim($head.' '.$random_str1[0] .' '.$need_str1.' '.$random_str2.' '.$tail);
 //            $length = strlen($foos[0][0]['title']);
 //            if($length>110 ){
-//                $random_str1 = array_pop($random);
-//                shuffle($random);
-//                $random_str2 = array_pop($random);
-//                shuffle($random);
-//                $random_str3 = array_pop($random);
 //                shuffle($random);
 //                $random_str4 = array_pop($random);
 //                shuffle($random);
