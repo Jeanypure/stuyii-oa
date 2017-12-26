@@ -166,18 +166,18 @@ echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' 
 ]);
 
 ?>
-<div class="row">
+<div class="keywords">
     <div class="col-sm-1">
         <strong>关键词：</strong>
     </div>
 
-</div>
+    <div class='all-required' hidden="hidden" style="float:right;margin-right:20%"><textarea id="all-required" style="width:200px;height:300px;">这里写内容</textarea></div>
 <br>
     <?= $form->field($info,'headKeywords',['labelOptions' => ['style' => 'margin-left:3%']])->textInput(['style'=>"width:200px;margin-left:3%;",'placeholder' => '--一个关键词--'])->label('最前关键词<span style = "color:red">*</span>'); ?>
-    <?= $form->field($info,'requiredKeywords')->textInput(['style'=>"width:200px;display:none;",'placeholder' => '-1个单词--'])->label(false); ?>
-    <?= $form->field($info,'randomKeywords')->textInput(['style'=>"width:200px;display:none;",'placeholder' => '-1个单词--'])->label(false); ?>
+    <?= $form->field($info,'requiredKeywords')->textInput(['style'=>"width:200px;display:none;",'placeholder' => ''])->label(false); ?>
+    <?= $form->field($info,'randomKeywords')->textInput(['style'=>"width:200px;display:none;",'placeholder' => ''])->label(false); ?>
     <br>
-    <div style="margin-left:3%;margin-right: 55%">
+    <div style="margin-left:3%;margin-right: 50%">
         <div><label class="control-label">必选关键词<span style = "color:red">*</span></label><span style="margin-left:1%" class="required-kw"></span></div>
         <div style="font-size:6px">
         <span><label style = "color:red">说明：</label>物品名/材质/特征等。如T-Shirt(物品名)/V-neck(特征)/Cotton(材质)</span>
@@ -196,12 +196,12 @@ echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' 
         <td><input value="'.$required_kws[3].'" class="required-kw-in" type="text" class=""></td>
         <td><input value="'.$required_kws[4].'" class="required-kw-in" type="text" class=""></td>
         <td><input value="'.$required_kws[5].'" class="required-kw-in" type="text" class=""></td>
+        <td><button type="button" class="required-paste">批量设置</button></td>
     </tr>'
     ?>
     </tbody>
     </table>
-    </div>
-
+        </div>
         <br>
 <div style="margin-left:3%;margin-right: 35%">
         <label class="control-label">随机关键词<span style = "color:red">*</span></label><span style="margin-left:1%" class="random-kw"></span>
@@ -232,10 +232,11 @@ echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' 
             </tbody>
         </table>
     </div>
+</div>
+
 
 <br>
     <?= $form->field($info,'tailKeywords',['labelOptions' => ['style' => 'margin-left:3%']])->textInput(['style'=>"width:200px;margin-left:3%;",'placeholder' => '--最多一个关键词--']); ?>
-
 <br>
 <div class="row">
     <div class="col-sm-4">
@@ -258,6 +259,7 @@ echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' 
                 'prompt'=>'--请选择季节--',
 
             ]) ?>
+</div>
 </div>
 <?php
 //Tagging support Multiple (maintain the order of selection)
@@ -506,8 +508,14 @@ $inputUrl = Url::toRoute(['input']);
 
 
 $js2 = <<<JS
-//样式处理开始
 
+//批量设置关键词
+
+    $(".required-paste").on('click',function() {
+        $('.all-required').removeAttr('hidden');    
+    });
+    
+//样式处理开始
     $("label[for='oagoodsinfo-headkeywords']").after('<span style="margin-left:1%"class="head-kw"></span><div style="font-size:6px;margin-left:3%">'+
         '<span><label style = "color:red">说明：</label>性别定位/多个一卖等。如Women/Men/Girl/Baby/Kids/1PC/2PC/5PC/4 Colors/5Pcs Set…</span></div>');
     
@@ -587,8 +595,9 @@ $js2 = <<<JS
      requiredCount();
      randomCount();
      tailCount();
+     
     //监听最前关键词的变化
-   
+  
     $('#oagoodsinfo-headkeywords').on('change',function() {
         headCount();
    });
@@ -833,11 +842,17 @@ JS;
 $this->registerJs($js2);
 Modal::end();
 ?>
+
 <script>
     //新增行的删除事件
     function removeTd(ele) {
         ele.closest('tr').remove();
     };
+    $("#all-required").on('change',function(){
+        kws = $(this).val();
+        kws = kws.replace(/\n/g,',');
+        console.log(kws);
+    });
 </script>
 
 <style>
@@ -846,4 +861,5 @@ Modal::end();
         display: block;
         margin:auto;
     }
+
 </style>

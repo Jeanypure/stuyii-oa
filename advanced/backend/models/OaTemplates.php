@@ -68,7 +68,7 @@ class OaTemplates extends \yii\db\ActiveRecord
     {
         return [
             [['infoid','goodsid', 'prepareDay', 'quantity'], 'integer'],
-            [['IbayTemplate','specifics','sku','mainPage','extraPage','location', 'country', 'postCode', 'site', 'listedCate', 'listedSubcate', 'title', 'subTitle', 'description', 'UPC', 'EAN', 'Brand', 'MPN', 'Color', 'Type', 'Material', 'IntendedUse', 'unit', 'bundleListing', 'shape', 'features', 'regionManufacture', 'reserveField', 'InshippingMethod1', 'InshippingMethod2', 'OutshippingMethod1', 'OutShiptoCountry1', 'OutshippingMethod2', 'OutShiptoCountry2'], 'string'],
+            [['headKeywords','requiredKeywords','randomKeywords','tailKeywords','IbayTemplate','specifics','sku','mainPage','extraPage','location', 'country', 'postCode', 'site', 'listedCate', 'listedSubcate', 'title', 'subTitle', 'description', 'UPC', 'EAN', 'Brand', 'MPN', 'Color', 'Type', 'Material', 'IntendedUse', 'unit', 'bundleListing', 'shape', 'features', 'regionManufacture', 'reserveField', 'InshippingMethod1', 'InshippingMethod2', 'OutshippingMethod1', 'OutShiptoCountry1', 'OutshippingMethod2', 'OutShiptoCountry2'], 'string'],
             [['nowPrice', 'InFirstCost1', 'InSuccessorCost1', 'InFirstCost2', 'InSuccessorCost2', 'OutFirstCost1', 'OutSuccessorCost1', 'OutFirstCost2', 'OutSuccessorCost2'], 'number'],
         ];
     }
@@ -127,6 +127,10 @@ class OaTemplates extends \yii\db\ActiveRecord
             'OutShiptoCountry2' => '可运送至国家',
             'specifics' => '物品属性',
             'IbayTemplate' => '刊登风格',
+            'headKeywords' => '最前关键词',
+            'requiredKeywords' => '最前关键词',
+            'randomKeywords' => '最前关键词',
+            'tailKeywords' => '最前关键词',
         ];
     }
 
