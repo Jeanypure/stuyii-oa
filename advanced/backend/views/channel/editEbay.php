@@ -16,7 +16,26 @@ $shipping_templates = [
     "template"=>"<div > {label} </div><div class='col-lg-6'>{input}</div>{hint}{error}",
     'labelOptions' => ['class' => 'col-lg-2 control-label']
                 ];
+if(empty($info->requiredKeywords)){
+    $required_kws = [];
+    for($i=0;$i<=5;$i++){
+        array_push($required_kws,'');
+    }
+}
+else {
+    $required_kws = json_decode($info->requiredKeywords);
+}
 
+if(empty($info->randomKeywords)){
+    $random_kws = [];
+    for($i=0;$i<=9;$i++){
+        array_push($random_kws,'');
+    }
+}
+
+else{
+    $random_kws = json_decode($info->randomKeywords);
+}
 
 $templatesVarUrl = Url::toRoute('templates-var'); // 多属性连接
 
@@ -162,6 +181,84 @@ echo '</div>';
 <?= $form->field($templates,'IbayTemplate')->textInput(); ?>
 <?= $form->field($templates,'title')->textInput(); ?>
 <?= $form->field($templates,'subTitle')->textInput(); ?>
+    <div class="keywords">
+        <div class="col-sm-1">
+            <strong>关键词：</strong>
+        </div>
+
+        <div class='all-required' hidden="hidden" style="float:right;margin-right:20%"><textarea id="all-required" style="width:200px;height:300px;">这里写内容</textarea></div>
+        <br>
+        <?= $form->field($templates,'headKeywords',['labelOptions' => ['style' => 'margin-left:3%']])->textInput(['style'=>"width:200px;margin-left:3%;",'placeholder' => '--一个关键词--'])->label('最前关键词<span style = "color:red">*</span>'); ?>
+        <?= $form->field($templates,'requiredKeywords')->textInput(['style'=>"width:200px;display:none;",'placeholder' => ''])->label(false); ?>
+        <?= $form->field($templates,'randomKeywords')->textInput(['style'=>"width:200px;display:none;",'placeholder' => ''])->label(false); ?>
+        <br>
+        <div style="margin-left:3%;margin-right: 50%">
+            <div><label class="control-label">必选关键词<span style = "color:red">*</span></label><span style="margin-left:1%" class="required-kw"></span></div>
+            <div style="font-size:6px">
+                <span><label style = "color:red">说明：</label>物品名/材质/特征等。如T-Shirt(物品名)/V-neck(特征)/Cotton(材质)</span>
+            </div>
+            <table class="table table-bordered table-responsive">
+                <tbody>
+                <?php
+                echo '<tr>
+        <th scope="row">必填</th>
+        <td><input value="'.$required_kws[0].'" class="required-kw-in" type="text" class=""></td>
+        <td><input value="'.$required_kws[1].'" class="required-kw-in" type="text" class=""></td>
+        <td><input value="'.$required_kws[2].'" class="required-kw-in" type="text" class=""></td>
+    </tr>
+    <tr>
+        <th scope="row">选填</th>
+        <td><input value="'.$required_kws[3].'" class="required-kw-in" type="text" class=""></td>
+        <td><input value="'.$required_kws[4].'" class="required-kw-in" type="text" class=""></td>
+        <td><input value="'.$required_kws[5].'" class="required-kw-in" type="text" class=""></td>
+        <td><button type="button" class="required-paste">批量设置</button></td>
+    </tr>'
+                ?>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <div class='all-random' hidden="hidden" style="float:right;margin-right: 10%"><textarea id="all-random" style="width:200px;height:300px;">这里写关键词</textarea></div>
+
+        <div style="margin-left:3%;margin-right: 30%">
+            <label class="control-label">随机关键词<span style = "color:red">*</span></label><span style="margin-left:1%" class="random-kw"></span>
+
+            <div style="font-size:6px">
+                <span><label style = "color:red">说明：</label>形容词/品类热词等。如Fashion/Elegant/Hot/DIY/Casual…</span>
+            </div>
+            <table class="table table-bordered table-responsive">
+                <tbody>
+                <?php
+                echo
+                    '<tr>
+                <th scope="row">必填</th>
+                <td><input value="'.$random_kws[0].'" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[1].'" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[2].'" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[3].'" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[4].'" class="random-kw-in" type="text" class=""></td>
+            </tr>
+            <tr>
+                <th scope="row">选填</th>
+                <td><input value="'.$random_kws[5].'"   class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[6].'" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[7].'" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[8].'"  class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[9].'" class="random-kw-in" type="text" class=""></td>
+                <td><button type="button" class="random-paste">批量设置</button></td>
+            </tr>'
+                ?>
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <br>
+    <?= $form->field($templates,'tailKeywords',['labelOptions' => ['style' => 'margin-left:3%']])->textInput(['style'=>"width:200px;margin-left:3%;",'placeholder' => '--最多一个关键词--']); ?>
+
 <?= $form->field($templates,'description')->textarea(['rows'=>6]); ?>
 <?= $form->field($templates,'quantity')->textInput(); ?>
 <?= $form->field($templates,'nowPrice')->textInput(); ?>
