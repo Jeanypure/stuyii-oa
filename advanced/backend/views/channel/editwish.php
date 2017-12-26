@@ -490,10 +490,10 @@ $('.extra-images').change(function() {
         console.log(kw_list);
     });
 //样式处理开始
-    $("label[for='oagoodsinfo-headkeywords']").after('<span style="margin-left:1%"class="head-kw"></span><div style="font-size:6px;margin-left:3%">'+
+    $("label[for='oawishgoods-headkeywords']").after('<span style="margin-left:1%"class="head-kw"></span><div style="font-size:6px;margin-left:3%">'+
         '<span><label style = "color:red">说明：</label>性别定位/多个一卖等。如Women/Men/Girl/Baby/Kids/1PC/2PC/5PC/4 Colors/5Pcs Set…</span></div>');
     
-    $("label[for='oagoodsinfo-tailkeywords']").after('<span style="margin-left:1%"class="tail-kw"></span><div style="font-size:6px;margin-left:3%">'+
+    $("label[for='oawishgoods-tailkeywords']").after('<span style="margin-left:1%"class="tail-kw"></span><div style="font-size:6px;margin-left:3%">'+
         '<span><label style = "color:red">说明：</label>附加说明词。如Randomly/S-3XL/2ml/(Color: Nude)/Big Size…</span></div>');
 //样式处理结束
 
@@ -506,7 +506,7 @@ $('.extra-images').change(function() {
      
     //监听最前关键词的变化
   
-    $('#oagoodsinfo-headkeywords').on('change',function() {
+    $('#oawishgoods-headkeywords').on('change',function() {
         headCount();
    });
     
@@ -520,7 +520,7 @@ $('.extra-images').change(function() {
     });
     
     //监听最后关键词的变化过程
-    $('#oagoodsinfo-tailkeywords').on('change',function() {
+    $('#oawishgoods-tailkeywords').on('change',function() {
         tailCount();
    });
 //结束关键词处理过程
@@ -534,7 +534,7 @@ $this->registerJs($js);
 
     //页面初始化之后开始加载字符个数
     function headCount() {
-        kw = $('#oagoodsinfo-headkeywords').val();
+        kw = $('#oawishgoods-headkeywords').val();
         if (!kw) {
             len_kw = 0;
         }
@@ -546,7 +546,7 @@ $this->registerJs($js);
     }
 
     function tailCount() {
-        kw = $('#oagoodsinfo-tailkeywords').val();
+        kw = $('#oawishgoods-tailkeywords').val();
         if (!kw) {
             len_kw = 0;
         }
@@ -573,7 +573,7 @@ $this->registerJs($js);
             kw_length = kw_length + len_kw;
         });
         $(".random-kw").html('<span style = "color:red;margin-left:1%">' + String(kw_count) + '</span>个单词；<span style = "color:red">' + String(kw_length) + '</span>个字符');
-        $('#oagoodsinfo-randomkeywords').val(JSON.stringify(keywords));
+        $('#oawishgoods-randomkeywords').val(JSON.stringify(keywords));
     }
     function requiredCount() {
         kw_count = 0;
@@ -593,7 +593,7 @@ $this->registerJs($js);
             kw_length = kw_length + len_kw;
         });
         $(".required-kw").html('<span style = "color:red;margin-left:1%">' + String(kw_count) + '</span>个单词；<span style = "color:red">' + String(kw_length) + '</span>个字符');
-        $('#oagoodsinfo-requiredkeywords').val(JSON.stringify(keywords));
+        $('#oawishgoods-requiredkeywords').val(JSON.stringify(keywords));
     }
 
     function listenOnTextInput(ele, name) {
