@@ -203,8 +203,11 @@ echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' 
     </table>
         </div>
         <br>
-<div style="margin-left:3%;margin-right: 35%">
-        <label class="control-label">随机关键词<span style = "color:red">*</span></label><span style="margin-left:1%" class="random-kw"></span>
+    <div class='all-random' hidden="hidden" style="float:right;margin-right: 10%"><textarea id="all-random" style="width:200px;height:300px;">这里写关键词</textarea></div>
+
+    <div style="margin-left:3%;margin-right: 30%">
+    <label class="control-label">随机关键词<span style = "color:red">*</span></label><span style="margin-left:1%" class="random-kw"></span>
+
     <div style="font-size:6px">
         <span><label style = "color:red">说明：</label>形容词/品类热词等。如Fashion/Elegant/Hot/DIY/Casual…</span>
     </div>
@@ -227,11 +230,14 @@ echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' 
                 <td><input value="'.$random_kws[7].'" class="random-kw-in" type="text" class=""></td>
                 <td><input value="'.$random_kws[8].'"  class="random-kw-in" type="text" class=""></td>
                 <td><input value="'.$random_kws[9].'" class="random-kw-in" type="text" class=""></td>
+                <td><button type="button" class="random-paste">批量设置</button></td>
             </tr>'
             ?>
             </tbody>
         </table>
-    </div>
+
+</div>
+
 </div>
 
 
@@ -514,6 +520,15 @@ $js2 = <<<JS
     $(".required-paste").on('click',function() {
         $('.all-required').removeAttr('hidden');    
     });
+    $(".random-paste").on('click',function() {
+        $('.all-random').removeAttr('hidden');    
+    });
+    requird_ele = $("#all-required");
+    random_ele = $("#all-random");
+    listenOnTextInput(requird_ele,'required');
+    requiredCount();
+    listenOnTextInput(random_ele,'random');
+    randomCount();
     
 //样式处理开始
     $("label[for='oagoodsinfo-headkeywords']").after('<span style="margin-left:1%"class="head-kw"></span><div style="font-size:6px;margin-left:3%">'+
@@ -524,73 +539,7 @@ $js2 = <<<JS
 //样式处理结束
 
 //开始关键词处理过程
-    //页面初始化之后开始加载字符个数
-    function headCount() {
-        kw = $('#oagoodsinfo-headkeywords').val();
-        if(!kw){
-            len_kw = 0;
-        }
-        else{
-            len_kw = kw.length;
-       }
-       $(".head-kw").html('<span style = "color:red">' +String(len_kw) +'</span>个字符');      
-
-    }
-    
-    function tailCount() {
-        kw = $('#oagoodsinfo-tailkeywords').val();
-        if(!kw){
-            len_kw = 0;
-        }
-        else{
-            len_kw = kw.length;
-       }
-       $(".tail-kw").html('<span style = "color:red">' +String(len_kw) +'</span>个字符');      
-
-    }
-   
-    function requiredCount() {
-        kw_count = 0;
-        kw_length = 0;
-        keywords = [];
-        $('.required-kw-in').each(function() {
-            kw = $(this).val();
-            if(!kw){
-                len_kw = 0;
-                keywords.push('');   
-                
-            }
-            else{
-                len_kw = kw.length;
-                kw_count += 1;
-                keywords.push(kw);
-            }
-            kw_length  = kw_length + len_kw;
-        });
-        $(".required-kw").html('<span style = "color:red;margin-left:1%">' +String(kw_count) +'</span>个单词；<span style = "color:red">' +String(kw_length) +'</span>个字符');
-        $('#oagoodsinfo-requiredkeywords').val(JSON.stringify(keywords));
-    }
-    
-    function randomCount() {
-        kw_count = 0;
-        kw_length = 0;
-        keywords = [];
-        $('.random-kw-in').each(function() {
-            kw = $(this).val();
-            if(!kw){
-                len_kw = 0;
-                keywords.push('');   
-            }
-            else{
-                len_kw = kw.length;
-                kw_count += 1;
-                keywords.push(kw);      
-            }
-            kw_length  = kw_length + len_kw;
-        });
-        $(".random-kw").html('<span style = "color:red;margin-left:1%">' +String(kw_count) +'</span>个单词；<span style = "color:red">' +String(kw_length) +'</span>个字符');
-        $('#oagoodsinfo-randomkeywords').val(JSON.stringify(keywords));
-    }
+ 
      headCount();
      requiredCount();
      randomCount();
@@ -848,11 +797,106 @@ Modal::end();
     function removeTd(ele) {
         ele.closest('tr').remove();
     };
-    $("#all-required").on('change',function(){
-        kws = $(this).val();
-        kws = kws.replace(/\n/g,',');
-        console.log(kws);
-    });
+    //页面初始化之后开始加载字符个数
+    function headCount() {
+        kw = $('#oagoodsinfo-headkeywords').val();
+        if(!kw){
+            len_kw = 0;
+        }
+        else{
+            len_kw = kw.length;
+        }
+        $(".head-kw").html('<span style = "color:red">' +String(len_kw) +'</span>个字符');
+
+    }
+
+    function tailCount() {
+        kw = $('#oagoodsinfo-tailkeywords').val();
+        if(!kw){
+            len_kw = 0;
+        }
+        else{
+            len_kw = kw.length;
+        }
+        $(".tail-kw").html('<span style = "color:red">' +String(len_kw) +'</span>个字符');
+
+    }
+
+
+
+    function randomCount() {
+        kw_count = 0;
+        kw_length = 0;
+        keywords = [];
+        $('.random-kw-in').each(function() {
+            kw = $(this).val();
+            if(!kw){
+                len_kw = 0;
+                keywords.push('');
+            }
+            else{
+                len_kw = kw.length;
+                kw_count += 1;
+                keywords.push(kw);
+            }
+            kw_length  = kw_length + len_kw;
+        });
+        $(".random-kw").html('<span style = "color:red;margin-left:1%">' +String(kw_count) +'</span>个单词；<span style = "color:red">' +String(kw_length) +'</span>个字符');
+        $('#oagoodsinfo-randomkeywords').val(JSON.stringify(keywords));
+    }
+
+    function requiredCount() {
+        kw_count = 0;
+        kw_length = 0;
+        keywords = [];
+        $('.required-kw-in').each(function() {
+            kw = $(this).val();
+            if(!kw){
+                len_kw = 0;
+                keywords.push('');
+
+            }
+            else{
+                len_kw = kw.length;
+                kw_count += 1;
+                keywords.push(kw);
+            }
+            kw_length  = kw_length + len_kw;
+        });
+        $(".required-kw").html('<span style = "color:red;margin-left:1%">' +String(kw_count) +'</span>个单词；<span style = "color:red">' +String(kw_length) +'</span>个字符');
+        $('#oagoodsinfo-requiredkeywords').val(JSON.stringify(keywords));
+    }
+
+    function listenOnTextInput(ele,name) {
+        ele.on('change',function(){
+            kws = $(this).val();
+            kw_list = kws.split('\n');
+            if(name=='required'){
+                $.each(kw_list,function (index,value) {
+                    $('.required-kw-in').each(function (pos) {
+                        if(index == pos){
+                            $(this).val(value);
+                        }
+                    })
+                });
+                requiredCount();
+                ele.attr('hidden','hidden');
+            }
+            if(name=='random'){
+                $.each(kw_list,function (index,value) {
+                    $('.random-kw-in').each(function (pos) {
+                        if(index == pos){
+                            $(this).val(value);
+                        }
+                    })
+                });
+                randomCount();
+                ele.attr('hidden','hidden');
+            }
+
+        });
+    }
+
 </script>
 
 <style>
