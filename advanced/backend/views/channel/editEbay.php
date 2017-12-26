@@ -16,7 +16,26 @@ $shipping_templates = [
     "template"=>"<div > {label} </div><div class='col-lg-6'>{input}</div>{hint}{error}",
     'labelOptions' => ['class' => 'col-lg-2 control-label']
                 ];
+if(empty($templates->requiredKeywords)){
+    $required_kws = [];
+    for($i=0;$i<=5;$i++){
+        array_push($required_kws,'');
+    }
+}
+else {
+    $required_kws = json_decode($templates->requiredKeywords);
+}
 
+if(empty($templates->randomKeywords)){
+    $random_kws = [];
+    for($i=0;$i<=9;$i++){
+        array_push($random_kws,'');
+    }
+}
+
+else{
+    $random_kws = json_decode($templates->randomKeywords);
+}
 
 $templatesVarUrl = Url::toRoute('templates-var'); // 多属性连接
 
@@ -161,13 +180,87 @@ echo '</div>';
 <?= $form->field($templates,'listedSubcate')->textInput(); ?>
 <?= $form->field($templates,'title')->textInput(); ?>
 <?= $form->field($templates,'subTitle')->textInput(); ?>
+    <?= $form->field($templates,'requiredKeywords')->textInput(['style'=>"display:none;",'placeholder' => ''])->label(false); ?>
+    <?= $form->field($templates,'randomKeywords')->textInput(['style'=>"display:none;",'placeholder' => ''])->label(false); ?>
+
+    <div class="keywords">
+        <div class="col-sm-1">
+            <strong>关键词：</strong>
+        </div>
+        <div class='all-required'  style="display: none;float:right;margin-right:10%"><textarea id="all-required" style="width:200px;height:300px;">这里写内容</textarea></div>
+        <br>
+        <?= $form->field($templates,'headKeywords',['labelOptions' => ['style' => 'margin-left:3%']])->textInput(['style'=>"width:200px;margin-left:3%;",'placeholder' => '--一个关键词--'])->label('最前关键词<span style = "color:red">*</span>'); ?>
+        <br>
+        <div style="margin-left:3%;margin-right: 50%">
+
+            <div><label class="control-label">必选关键词<span style = "color:red">*</span></label><span style="margin-left:1%" class="required-kw"></span></div>
+            <div style="font-size:6px">
+                <span><label style = "color:red">说明：</label>物品名/材质/特征等。如T-Shirt(物品名)/V-neck(特征)/Cotton(材质)</span>
+            </div>
+            <table class="table table-bordered table-responsive">
+                <tbody>
+                <?php
+                echo '<tr>
+        <th scope="row">必填</th>
+        <td><input value="'.$required_kws[0].'" class="required-kw-in" type="text" class=""></td>
+        <td><input value="'.$required_kws[1].'" class="required-kw-in" type="text" class=""></td>
+        <td><input value="'.$required_kws[2].'" class="required-kw-in" type="text" class=""></td>
+    </tr>
+    <tr>
+        <th scope="row">选填</th>
+        <td><input value="'.$required_kws[3].'" class="required-kw-in" type="text" class=""></td>
+        <td><input value="'.$required_kws[4].'" class="required-kw-in" type="text" class=""></td>
+        <td><input value="'.$required_kws[5].'" class="required-kw-in" type="text" class=""></td>
+        <td><button type="button" class="required-paste">批量设置</button></td>
+    </tr>'
+                ?>
+                </tbody>
+            </table>
+        </div>
+        <div class='all-random'  style="display: none;float:right;margin-right: 10%"><textarea id="all-random" style="width:200px;height:300px;">这里写关键词</textarea></div>
+
+        <div style="margin-left:3%;margin-right: 30%">
+            <label class="control-label">随机关键词<span style = "color:red">*</span></label><span style="margin-left:1%" class="random-kw"></span>
+
+            <div style="font-size:6px">
+                <span><label style = "color:red">说明：</label>形容词/品类热词等。如Fashion/Elegant/Hot/DIY/Casual…</span>
+            </div>
+            <table class="table table-bordered table-responsive">
+                <tbody>
+                <?php
+                echo
+                    '<tr>
+                <th scope="row">必填</th>
+                <td><input value="'.$random_kws[0].'" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[1].'" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[2].'" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[3].'" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[4].'" class="random-kw-in" type="text" class=""></td>
+            </tr>
+            <tr>
+                <th scope="row">选填</th>
+                <td><input value="'.$random_kws[5].'"   class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[6].'" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[7].'" class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[8].'"  class="random-kw-in" type="text" class=""></td>
+                <td><input value="'.$random_kws[9].'" class="random-kw-in" type="text" class=""></td>
+                <td><button type="button" class="random-paste">批量设置</button></td>
+            </tr>'
+                ?>
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+    <br>
+    <?= $form->field($templates,'tailKeywords',['labelOptions' => ['style' => 'margin-left:3%']])->textInput(['style'=>"width:200px;margin-left:3%;",'placeholder' => '--最多一个关键词--']); ?>
 <?= $form->field($templates,'description', ['template' => "{label}\n<div class=\"col-lg-5\">{input}</div>\n<div class=\"col-lg-9\">{error}</div>"])->textarea(['rows'=>12]); ?>
 <?= $form->field($templates,'quantity')->textInput(); ?>
 <?= $form->field($templates,'nowPrice')->textInput(); ?>
 <?= $form->field($templates,'UPC')->textInput(['value' => 'Does not apply']); ?>
 <?= $form->field($templates,'EAN')->textInput(['value' => 'Does not apply']); ?>
 </div>
-
 <div class="blockTitle">
     <span>物品属性</span>
 </div>
@@ -302,7 +395,57 @@ $saveUrl = Url::to(['ebay-save', 'id' => $templates->nid]);
 $completeUrl = Url::to(['ebay-complete', 'id' => $templates->nid]);
 
 $js  = <<< JS
+//批量设置关键词
 
+    $(".required-paste").on('click',function() {
+        // $('.all-required').css('display','');    
+        $('.all-required').toggle();   
+    });
+    $(".random-paste").on('click',function() {
+        $('.all-random').toggle();     
+    });
+    requird_ele = $("#all-required");
+    random_ele = $("#all-random");
+    listenOnTextInput(requird_ele,'required');
+    requiredCount();
+    listenOnTextInput(random_ele,'random');
+    randomCount();
+   
+//样式处理开始
+    $("label[for='oagoodsinfo-headkeywords']").after('<span style="margin-left:1%"class="head-kw"></span><div style="font-size:6px;margin-left:3%">'+
+        '<span><label style = "color:red">说明：</label>性别定位/多个一卖等。如Women/Men/Girl/Baby/Kids/1PC/2PC/5PC/4 Colors/5Pcs Set…</span></div>');
+    
+    $("label[for='oagoodsinfo-tailkeywords']").after('<span style="margin-left:1%"class="tail-kw"></span><div style="font-size:6px;margin-left:3%">'+
+        '<span><label style = "color:red">说明：</label>附加说明词。如Randomly/S-3XL/2ml/(Color: Nude)/Big Size…</span></div>');
+//样式处理结束
+
+//开始关键词处理过程
+ 
+     headCount();
+     requiredCount();
+     randomCount();
+     tailCount();
+     
+    //监听最前关键词的变化
+  
+    $('#oagoodsinfo-headkeywords').on('change',function() {
+        headCount();
+   });
+    
+    //监听必选关键词的变化过程
+    $('.required-kw-in').on('change',function() {
+        requiredCount();
+    });
+    //监听随机关键词的变化过程
+    $('.random-kw-in').on('change',function() {
+        randomCount()
+    });
+    
+    //监听最后关键词的变化过程
+    $('#oagoodsinfo-tailkeywords').on('change',function() {
+        tailCount();
+   });
+//结束关键词处理过程
 
 //绑定监听事件根据站点的选择来决定物流
 
@@ -369,7 +512,6 @@ function serialize() {
         $(this).text("#" + i);
     });
 }
-
 
 //增加图片
 function addImages() {
@@ -571,9 +713,113 @@ $('.bottom-export-ebay-given').on('click',function() {
 JS;
 $this->registerJs($js);
 ?>
-
 <!--<script src="http://58.246.226.254:8090/Public/js/bootstrap-select.min.js"></script>-->
+<script>
+    //新增行的删除事件
+    function removeTd(ele) {
+        ele.closest('tr').remove();
+    };
 
+    //页面初始化之后开始加载字符个数
+    function headCount() {
+        kw = $('#oagoodsinfo-headkeywords').val();
+        if (!kw) {
+            len_kw = 0;
+        }
+        else {
+            len_kw = kw.length;
+        }
+        $(".head-kw").html('<span style = "color:red">' + String(len_kw) + '</span>个字符');
+
+    }
+
+    function tailCount() {
+        kw = $('#oagoodsinfo-tailkeywords').val();
+        if (!kw) {
+            len_kw = 0;
+        }
+        else {
+            len_kw = kw.length;
+        }
+        $(".tail-kw").html('<span style = "color:red">' + String(len_kw) + '</span>个字符');
+
+    }
+
+
+    function randomCount() {
+        kw_count = 0;
+        kw_length = 0;
+        keywords = [];
+        $('.random-kw-in').each(function () {
+            kw = $(this).val();
+            if (!kw) {
+                len_kw = 0;
+                keywords.push('');
+            }
+            else {
+                len_kw = kw.length;
+                kw_count += 1;
+                keywords.push(kw);
+            }
+            kw_length = kw_length + len_kw;
+        });
+        $(".random-kw").html('<span style = "color:red;margin-left:1%">' + String(kw_count) + '</span>个单词；<span style = "color:red">' + String(kw_length) + '</span>个字符');
+        $('#oatemplates-randomkeywords').val(JSON.stringify(keywords));
+    }
+
+    function requiredCount() {
+        kw_count = 0;
+        kw_length = 0;
+        keywords = [];
+        $('.required-kw-in').each(function () {
+            kw = $(this).val();
+            if (!kw) {
+                len_kw = 0;
+                keywords.push('');
+
+            }
+            else {
+                len_kw = kw.length;
+                kw_count += 1;
+                keywords.push(kw);
+            }
+            kw_length = kw_length + len_kw;
+        });
+        $(".required-kw").html('<span style = "color:red;margin-left:1%">' + String(kw_count) + '</span>个单词；<span style = "color:red">' + String(kw_length) + '</span>个字符');
+        $('#oatemplates-requiredkeywords').val(JSON.stringify(keywords));
+    }
+
+    function listenOnTextInput(ele, name) {
+        ele.on('change', function () {
+            kws = $(this).val();
+            kw_list = kws.split('\n');
+            if (name == 'required') {
+                $.each(kw_list, function (index, value) {
+                    $('.required-kw-in').each(function (pos) {
+                        if (index == pos) {
+                            $(this).val(value);
+                        }
+                    })
+                });
+                requiredCount();
+                $('.required-paste').trigger('click');
+            }
+            if (name == 'random') {
+                $.each(kw_list, function (index, value) {
+                    $('.random-kw-in').each(function (pos) {
+                        if (index == pos) {
+                            $(this).val(value);
+                        }
+                    })
+                });
+                randomCount();
+                $('.random-paste').trigger('click');
+            }
+
+        });
+    }
+
+</script>
 <style>
     @media (min-width: 768px) {
         .modal-xl {

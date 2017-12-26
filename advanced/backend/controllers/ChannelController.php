@@ -191,7 +191,7 @@ class ChannelController extends Controller
         //设置默认物流
         try {
             $template->setAttributes($data, true);
-            if ($template->update(true)) {
+            if ($template->save(false)) {
                 echo "保存成功";
             } else {
                 echo "保存失败";

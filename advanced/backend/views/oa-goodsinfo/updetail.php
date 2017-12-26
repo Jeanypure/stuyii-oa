@@ -16,32 +16,30 @@ use kartik\widgets\Select2;
 use kartik\builder\TabularForm;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
+
 $this->title = '编辑: ' . $info->GoodsCode;
 $this->params['breadcrumbs'][] = ['label' => '更新产品', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $info->GoodsCode, 'url' => ['view', 'id' => $info->pid]];
 $this->params['breadcrumbs'][] = '更新数据';
 
-$bannedNames = explode(',',$info->DictionaryName);
+$bannedNames = explode(',', $info->DictionaryName);
 $catNid = $goodsItem->catNid;
 $subCate = $goodsItem->subCate;
-if(empty($info->requiredKeywords)){
+if (empty($info->requiredKeywords)) {
     $required_kws = [];
-    for($i=0;$i<=5;$i++){
-        array_push($required_kws,'');
+    for ($i = 0; $i <= 5; $i++) {
+        array_push($required_kws, '');
     }
-}
-else {
+} else {
     $required_kws = json_decode($info->requiredKeywords);
 }
 
-if(empty($info->randomKeywords)){
+if (empty($info->randomKeywords)) {
     $random_kws = [];
-    for($i=0;$i<=9;$i++){
-        array_push($random_kws,'');
+    for ($i = 0; $i <= 9; $i++) {
+        array_push($random_kws, '');
     }
-}
-
-else{
+} else {
     $random_kws = json_decode($info->randomKeywords);
 }
 $JS = <<<JS
@@ -60,7 +58,7 @@ echo Html::label("<legend class='text-info'><small>基本信息</small></legend>
 
 echo '</br>';
 
-echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' width='120px' height='120px'></a></div></br>";
+echo "<div style='margin-left: 8px'><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' width='120px' height='120px'></a></div></br>";
 
 ?>
 
@@ -68,110 +66,115 @@ echo "<div><a href= '$info->picUrl'  target='_blank' ><img  src='$info->picUrl' 
 $form = ActiveForm::begin([]);
 
 echo FormGrid::widget([ // continuation fields to row above without labels
-    'model'=> $info,
-    'form'=>$form,
-    'rows' =>[
+    'model' => $info,
+    'form' => $form,
+    //'options' => ['style' => 'margin-left: 25px'],
+    'rows' => [
         [
-            'attributes' =>[
-                'picUrl' =>[
-                    'label'=>"商品图片链接",
-                    'options'=> ['class'=>'picUrl'],
-                ],
-
-            ],
-
-        ],
-        [
-            'attributes' =>[
-                'GoodsCode' =>[
-                    'label'=>'商品编码',
-                    'items'=>[ 1=>'Group 2'],
-                    'type'=>Form::INPUT_TEXT,
-                    'readonly'=>true,
-                    'options'=> ['class'=>'GoodsCode'],
-                ],
-                'GoodsName' =>[
-                    'label'=>"<span style = 'color:red'>*商品名称</span>",
-                    'items'=>[ 1=>'Group 2'],
-                    'type'=>Form::INPUT_TEXT,
-                    'options'=> ['class'=>'GoodsName'],
-                ],
-
-
-
-            ],
-        ],
-        [
-            'attributes' =>[
-                'Purchaser' =>[    //Purchaser   developer  possessMan1
-                    'label'=>'采购',
-                    'type'=>Form::INPUT_TEXT,
-
-                ],
-                'developer' =>[
-                    'label'=>'业绩归属人1',
-                    'type'=>Form::INPUT_TEXT,
-                ],
-                'possessMan1' =>[
-                    'label'=>'责任归属人1',
-                    'type'=>Form::INPUT_TEXT,
-                ],
-
-
-            ],
-        ],
-        [
-            'attributes' =>[
-                'AliasCnName' =>[
-                    'label'=>"<span style = 'color:red'>*中文申报名</span>",
-                    'items'=>[ 1=>'Group 2'],
-                    'type'=>Form::INPUT_TEXT,
-                ],
-                'AliasEnName' =>[
-                    'label'=>"<span style = 'color:red'>*英文申报名</span>",
-                    'items'=>[ 1=>'Group 2'],
-                    'type'=>Form::INPUT_TEXT,
+            'attributes' => [
+                'picUrl' => [
+                    'label' => "商品图片链接",
+                    'options' => ['class' => 'picUrl', 'style' => "margin-left: 7px;width:50%"],
                 ],
             ],
         ],
         [
-            'attributes' =>[
-                'SupplierName' =>[
-                    'label'=>"<span style = 'color:red'>*供应商名称</span>",
-                    'type'=>Form::INPUT_TEXT,
+            'attributes' => [
+                'GoodsCode' => [
+                    'label' => '商品编码',
+                    'items' => [1 => 'Group 2'],
+                    'type' => Form::INPUT_TEXT,
+                    'readonly' => true,
+                    'options' => ['class' => 'GoodsCode col-sm-6', 'style' => "margin-left: 7px"],
                 ],
-                'PackName' =>[
-
-                    'label'=>'规格',
-                    'items'=>$packname,
-
-                    'type'=>Form::INPUT_DROPDOWN_LIST,
-
+                'GoodsName' => [
+                    'label' => "<span style = 'color:red'>*商品名称</span>",
+                    'items' => [1 => 'Group 2'],
+                    'type' => Form::INPUT_TEXT,
+                    'options' => ['class' => 'GoodsName'],
+                ],
+                'AliasCnName' => [
+                    'label' => "<span style = 'color:red'>*中文申报名</span>",
+                    'items' => [1 => 'Group 2'],
+                    'type' => Form::INPUT_TEXT,
+                ],
+                'AliasEnName' => [
+                    'label' => "<span style = 'color:red'>*英文申报名</span>",
+                    'items' => [1 => 'Group 2'],
+                    'type' => Form::INPUT_TEXT,
                 ],
             ],
         ],
         [
-            'attributes' =>[
-                'description' =>[
-                    'label'=>"<span style = 'color:red'>*描述</span>",
-                    'items'=>[ 1=>'Group 2'],
-                    'type'=>Form::INPUT_TEXTAREA,
-                    'options'=>['rows'=>'6']
+            'attributes' => [
+                'Purchaser' => [    //Purchaser   developer  possessMan1
+                    'label' => Html::label('采购', ['style' => "margin-left: 10px"]),
+                    'type' => Form::INPUT_TEXT,
+                    'options' => ['style' => "margin-left: 7px"],
+                ],
+                'developer' => [
+                    'label' => '业绩归属人1',
+                    'type' => Form::INPUT_TEXT,
+                ],
+                'possessMan1' => [
+                    'label' => '责任归属人1',
+                    'type' => Form::INPUT_TEXT,
+                ],
+                'SupplierName' => [
+                    'label' => "<span style = 'color:red'>*供应商名称</span>",
+                    'type' => Form::INPUT_TEXT,
                 ],
             ],
         ],
+        [
+            'attributes' => [
+                'PackName' => [
+                    'label' => '规格',
+                    'items' => $packname,
+                    'type' => Form::INPUT_DROPDOWN_LIST,
+                    'options' => ['style' => "margin-left: 7px"],
+                ],
+                'AttributeName' => [
+                    'label' => '特殊属性必填',
+                    'items' => [ ''=>'','液体商品'=>'液体商品','带电商品'=>'带电商品','带磁商品'=>'带磁商品','粉末商品'=>'粉末商品'],
+                    'type' => Form::INPUT_DROPDOWN_LIST,
+                ],
+                'StoreName' => [
+                    'label' => "<span style = 'color:red'>*仓库</span>",
+                    'items' => $result,
+                    'type' => Form::INPUT_DROPDOWN_LIST,
+                ],
+                'Season' => [
+                    'label' => '季节',
+                    'items' => [  ''=>'','春季'=>'春季','夏季'=>'夏季','秋季'=>'秋季','冬季'=>'冬季','春秋'=>'春秋','秋冬'=>'秋冬'],
+                    'type' => Form::INPUT_DROPDOWN_LIST,
+                ],
 
+            ],
+        ],
+        [
+            'attributes' => [
+                'description' => [
+                    'label' => "<span style = 'color:red'>*描述</span>",
+                    'items' => [1 => 'Group 2'],
+                    'type' => Form::INPUT_TEXTAREA,
+                    'options' => ['rows' => '12', 'style' => "margin-left: 7px"]
+                ],
+            ],
+        ],
     ],
 
 ]);
 
 ?>
+
+
 <div class="keywords">
     <div class="col-sm-1">
         <strong>关键词：</strong>
     </div>
 
-    <div class='all-required' hidden="hidden" style="float:right;margin-right:20%"><textarea id="all-required" style="width:200px;height:300px;">这里写内容</textarea></div>
+    <div class='all-required' style="display:none;float:right;margin-right:20%"><textarea id="all-required" style="width:200px;height:300px;">这里写内容</textarea></div>
     <br>
     <?= $form->field($info,'headKeywords',['labelOptions' => ['style' => 'margin-left:3%']])->textInput(['style'=>"width:200px;margin-left:3%;",'placeholder' => '--一个关键词--'])->label('最前关键词<span style = "color:red">*</span>'); ?>
     <?= $form->field($info,'requiredKeywords')->textInput(['style'=>"width:200px;display:none;",'placeholder' => ''])->label(false); ?>
@@ -203,8 +206,11 @@ echo FormGrid::widget([ // continuation fields to row above without labels
         </table>
     </div>
     <br>
-    <div style="margin-left:3%;margin-right: 35%">
+    <div class='all-random'  style="display:none;float:right;margin-right: 10%"><textarea id="all-random" style="width:200px;height:300px;">这里写关键词</textarea></div>
+
+    <div style="margin-left:3%;margin-right: 30%">
         <label class="control-label">随机关键词<span style = "color:red">*</span></label><span style="margin-left:1%" class="random-kw"></span>
+
         <div style="font-size:6px">
             <span><label style = "color:red">说明：</label>形容词/品类热词等。如Fashion/Elegant/Hot/DIY/Casual…</span>
         </div>
@@ -227,294 +233,252 @@ echo FormGrid::widget([ // continuation fields to row above without labels
                 <td><input value="'.$random_kws[7].'" class="random-kw-in" type="text" class=""></td>
                 <td><input value="'.$random_kws[8].'"  class="random-kw-in" type="text" class=""></td>
                 <td><input value="'.$random_kws[9].'" class="random-kw-in" type="text" class=""></td>
+                <td><button type="button" class="random-paste">批量设置</button></td>
             </tr>'
             ?>
             </tbody>
         </table>
+
     </div>
+    <?= $form->field($info,'tailKeywords',['labelOptions' => ['style' => 'margin-left:3%']])->textInput(['style'=>"width:200px;margin-left:3%;",'placeholder' => '--最多一个关键词--'])->label('最后关键词<span style = "color:red">*</span>'); ?>
+
 </div>
 
 
-<br>
-<?= $form->field($info,'tailKeywords',['labelOptions' => ['style' => 'margin-left:3%']])->textInput(['style'=>"width:200px;margin-left:3%;",'placeholder' => '--最多一个关键词--']); ?>
-<br>
-<div class="row">
-    <div class="col-sm-4">
-        <?= $form->field($info,'AttributeName',['labelOptions' => ['label' => '特殊属性必填']])->dropDownList([ ''=>'','液体商品'=>'液体商品','带电商品'=>'带电商品','带磁商品'=>'带磁商品','粉末商品'=>'粉末商品'],
-            [
-                'prompt'=>'--请选择属性--',
-
-            ]) ?>
-    </div>
-    <div class="col-sm-4">
-        <?= $form->field($info,'StoreName',['labelOptions' => ['label' => "<span style = 'color:red'>*仓库</span>"]])->dropDownList($result,
-            [
-                'prompt'=>'--请选择属性--',
-
-            ]) ?>
-    </div>
-    <div class="col-sm-4">
-        <?= $form->field($info,'Season',['labelOptions' => ['label' => '季节']])->dropDownList([  ''=>'','春季'=>'春季','夏季'=>'夏季','秋季'=>'秋季','冬季'=>'冬季','春秋'=>'春秋','秋冬'=>'秋冬'],
-            [
-                'prompt'=>'--请选择季节--',
-
-            ]) ?>
-    </div>
-</div>
-<?php
-//Tagging support Multiple (maintain the order of selection)
-echo '<label class="control-label">禁售平台</label>';
-
-echo Select2::widget([
-    'name' => 'DictionaryName',
-    'id' => 'dictionary-name',
-    'value' => $bannedNames,
-    'data' => $lock,
-    'maintainOrder' => true,
-    'options' => ['placeholder' => '--可多选--', 'multiple' => true],
-    'pluginOptions' => [
-        'tags' => true,
-        'maximumInputLength' => 5
-    ],
-]);
-
-
-?>
-
-<div class="row">
-    <div class="col-sm-6">
-        <?= $form->field($goodsItem,'cate')->dropDownList($goodsItem->getCatList(0),
-            [
-                'prompt'=>'--请选择父类--',
-                'onchange'=>'           
+<div class="row" style="margin-left: 8px">
+    <div class="row">
+        <div class="col-sm-4">
+            <?php echo '<label class="control-label">禁售平台</label>';
+            echo Select2::widget([
+                'name' => 'DictionaryName',
+                'id' => 'dictionary-name',
+                'value' => $bannedNames,
+                'data' => $lock,
+                'maintainOrder' => true,
+                'options' => ['placeholder' => '--可多选--', 'multiple' => true],
+                'pluginOptions' => [
+                    'tags' => true,
+                    'maximumInputLength' => 5
+                ],
+            ]); ?>
+        </div>
+        <div class="col-sm-4">
+            <?= $form->field($goodsItem, 'cate')->dropDownList($goodsItem->getCatList(0),
+                ['prompt' => '--请选择父类--', 'onchange' => '           
             $("select#oagoods-subcate").children("option").remove();
-            $.get("'.yii::$app->urlManager->createUrl('oa-goodsinfo/category').
-                    '?typeid=1&pid="+$(this).val(),function(data){
+            $.get("' . Url::to(['oa-goodsinfo/category', 'typeid' => 1]) .
+                    '&pid="+$(this).val(),function(data){
                 var str=""; 
               $.each(data,function(k,v){
                     str+="<option value="+v+">"+v+"</option>";
                     });
                 $("select#oagoods-subcate").html(str);
             });',
-            ]) ?>
+                ]) ?>
+        </div>
+        <div class="col-sm-4">
+            <?= $form->field($goodsItem, 'subCate')->dropDownList($goodsItem->getCatList($goodsItem->catNid), ['prompt' => '--特殊属性--',]) ?>
+        </div>
     </div>
-    <div class="col-sm-6">
-        <?= $form->field($goodsItem,'subCate')->dropDownList($goodsItem->getCatList($goodsItem->catNid),
+
+    <?php
+    echo FormGrid::widget([
+        'model' => $goodsItem,
+        'form' => $form,
+        'rows' => [
             [
-                'prompt'=>'--特殊属性--',
-
-            ]) ?>
-    </div>
-</div>
-
-<?php
-echo FormGrid::widget([
-    'model'=> $goodsItem,
-    'form'=>$form,
-    'rows' =>[
-
-        [
-            'attributes' =>[
-                'vendor1' =>[
-                    'label'=>'供应商链接1',
-
-
-                ],
-                'vendor2' =>[
-                    'label'=>'供应商链接2',
-                    'type'=>Form::INPUT_TEXT,
-
-
-                ],
-                'vendor3' =>[
-                    'label'=>'供应商链接3',
-                    'type'=>Form::INPUT_TEXT,
-
+                'attributes' => [
+                    'vendor1' => [
+                        'label' => '供应商链接1',
+                    ],
+                    'vendor2' => [
+                        'label' => '供应商链接2',
+                        'type' => Form::INPUT_TEXT,
+                    ],
+                    'vendor3' => [
+                        'label' => '供应商链接3',
+                        'type' => Form::INPUT_TEXT,
+                    ],
                 ],
             ],
-
-        ],
-        [
-            'attributes' =>[
-                'origin1' =>[
-                    'label'=>'平台链接1',
-                    'type'=>Form::INPUT_TEXT,
-                    'inputTemplate'=> '<a>{input}</a>',
-                ],
-                'origin2' =>[
-                    'label'=>'平台链接2',
-                    'type'=>Form::INPUT_TEXT,
-
-
-                ],
-                'origin3' =>[
-                    'label'=>'平台链接3',
-                    'type'=>Form::INPUT_TEXT,
+            [
+                'attributes' => [
+                    'origin1' => [
+                        'label' => '平台链接1',
+                        'type' => Form::INPUT_TEXT,
+                        'inputTemplate' => '<a>{input}</a>',
+                    ],
+                    'origin2' => [
+                        'label' => '平台链接2',
+                        'type' => Form::INPUT_TEXT,
+                    ],
+                    'origin3' => [
+                        'label' => '平台链接3',
+                        'type' => Form::INPUT_TEXT,
+                    ],
                 ],
             ],
-        ],
-
-    ]
-
-]);
-
-
-?>
-
-<?php
-echo Html::submitButton($info->isNewRecord ? '创建' : '更新', ['class' => $info->isNewRecord ? 'btn btn-success' : 'btn btn-info']);
-ActiveForm::end();
-echo "<br>";
-?>
-
-
-
-
-<?php $skuForm = ActiveForm::begin(['id'=>'sku-info','method'=>'post',]);
-?>
-
-<?php
-echo Html::label("<legend class='text-info'><small>SKU信息</small></legend>");
-?>
-
-
-<?php
-
-echo TabularForm::widget([
-    'dataProvider' => $dataProvider,
-    'id' => 'sku-table',
-    'form'=>$skuForm,
-    'actionColumn'=>[
-        'class' => '\kartik\grid\ActionColumn',
-        'template' =>'{delete}',
-        'buttons' => [
-            'view' => function ($url, $model, $key) {
-                $options = [
-                    'title' => '查看',
-                    'aria-label' => '查看',
-                    'data-toggle' => 'modal',
-                    'data-target' => '#view-modal',
-                    'data-id' => $key,
-                    'class' => 'data-view',
-                ];
-                return Html::a('<span  class="glyphicon glyphicon-eye-open"></span>', 'goodssku/delete', $options);
-            },
-            'delete' => function ($url, $model, $key) {
-                $url ='/goodssku/delete?id='.$key;
-                $options = [
-                    'title' => '删除',
-                    'aria-label' => '删除',
-                    'data-id' => $key,
-                ];
-                return Html::a('<span  class="glyphicon glyphicon-trash"></span>',$url, $options);
-            },
-            'width' => '60px'
-        ],
-    ],
-    'attributes'=>[
-
-        'sku'=>['label'=>'SKU', 'type'=>TabularForm::INPUT_TEXT,
-            'options'=>['class'=>'sku'],
-        ],
-        'property1'=>['label'=>'款式1','type'=>TabularForm::INPUT_TEXT,
-            'options'=>['class'=>'property1'],
-        ],
-        'property2'=>['label'=>'款式2', 'type'=>TabularForm::INPUT_TEXT,
-            'options'=>['class'=>'property2']
-        ],
-        'property3'=>['label'=>'款式3', 'type'=>TabularForm::INPUT_TEXT,
-            'options'=>['class'=>'property3']
-        ],
-        'CostPrice'=>['label'=>'成本价', 'type'=>TabularForm::INPUT_TEXT,
-            'options'=>['class'=>'CostPrice'],
-        ],
-        'Weight'=>['label'=>'重量', 'type'=>TabularForm::INPUT_TEXT,
-            'options'=>['class'=>'Weight']],
-        'RetailPrice'=>['label'=>'零售价', 'type'=>TabularForm::INPUT_TEXT,
-            'options'=>['class'=>'RetailPrice'],
-        ],
-
-    ],
-
-    // configure other gridview settings
-    'gridSettings'=>[
-        'panel'=>[
-            'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i> 管理SKU</h3>',
-            'type'=>GridView::TYPE_PRIMARY,
-
-            'footer'=>true,
-            'after'=>
-                Html::input('text','rowNum','',['class' => 'x-row','placeholder'=>'行数']).' '.
-                Html::button('新增行', ['id'=>'add-row','type'=>'button', 'class'=>'btn kv-batch-create']) . ' ' .
-
-                Html::input('text','CostPrice','',['class' => 'CostPrice-replace','placeholder'=>'成本价￥']).' '.
-                Html::button('成本确定', ['id'=>'CostPrice-set','type'=>'button','class'=>'btn']).' '.
-                Html::input('text','Weight','',['class' => 'Weight-replace','placeholder'=>'重量g']).' '.
-                Html::button('重量确定', ['id'=>'Weight-set','type'=>'button','class'=>'btn']).' '.
-                Html::input('text','RetailPrice','',['class' => 'RetailPrice-replace','placeholder'=>'零售价$']).' '.
-                Html::button('价格确定', ['id'=>'RetailPrice-set','type'=>'button','class'=>'btn']).' '.
-//                '<div class="row">'.
-                Html::button('一键生成SKU', ['id'=>'sku-set','type'=>'button','class'=>'btn btn-success']).' '.
-                Html::button('保存当前数据', ['id'=>'save-only','type'=>'button','class'=>'btn btn-info']).' '.
-                Html::button('保存并完善', ['id'=>'save-complete','type'=>'button','class'=>'btn btn-primary']).' '.
-                Html::button('导入普源', ['id'=>'data-input','type'=>'button','class'=>'btn btn-warning']).' '.
-                Html::button('删除行', ['id'=>'delete-row','type'=>'button', 'class'=>'btn btn-danger kv-batch-delete'])
-//                '</div>'
         ]
-    ]
+    ]);
 
-]);
+    ?>
 
-ActiveForm::end();
-?>
+    <?php echo Html::submitButton($info->isNewRecord ? '创建' : '更新', ['class' => $info->isNewRecord ? 'btn btn-success' : 'btn btn-info']);
+    ActiveForm::end();
+    echo "<br>";
+    ?>
+
+    <?php
+    echo Html::label("<legend class='text-info'><small>SKU信息</small></legend>");
+    ?>
+
+    <?php $skuForm = ActiveForm::begin(['id' => 'sku-info', 'method' => 'post',]);
+    ?>
+
+    <?php
+
+    echo TabularForm::widget([
+        'dataProvider' => $dataProvider,
+        'id' => 'sku-table',
+        'form' => $skuForm,
+        'actionColumn' => [
+            'class' => '\kartik\grid\ActionColumn',
+            'template' => '{delete}',
+            'buttons' => [
+                'view' => function ($url, $model, $key) {
+                    $options = [
+                        'title' => '查看',
+                        'aria-label' => '查看',
+                        'data-toggle' => 'modal',
+                        'data-target' => '#view-modal',
+                        'data-id' => $key,
+                        'class' => 'data-view',
+                    ];
+                    return Html::a('<span  class="glyphicon glyphicon-eye-open"></span>', 'goodssku/delete', $options);
+                },
+                'delete' => function ($url, $model, $key) {
+                    $url = '/goodssku/delete?id=' . $key;
+                    $options = [
+                        'title' => '删除',
+                        'aria-label' => '删除',
+                        'data-id' => $key,
+                    ];
+                    return Html::a('<span  class="glyphicon glyphicon-trash"></span>', $url, $options);
+                },
+                'width' => '60px'
+            ],
+        ],
+        'attributes' => [
+
+            'sku' => ['label' => 'SKU', 'type' => TabularForm::INPUT_TEXT,
+                'options' => ['class' => 'sku'],
+            ],
+            'property1' => ['label' => '款式1', 'type' => TabularForm::INPUT_TEXT,
+                'options' => ['class' => 'property1'],
+            ],
+            'property2' => ['label' => '款式2', 'type' => TabularForm::INPUT_TEXT,
+                'options' => ['class' => 'property2']
+            ],
+            'property3' => ['label' => '款式3', 'type' => TabularForm::INPUT_TEXT,
+                'options' => ['class' => 'property3']
+            ],
+            'CostPrice' => ['label' => '成本价', 'type' => TabularForm::INPUT_TEXT,
+                'options' => ['class' => 'CostPrice'],
+            ],
+            'Weight' => ['label' => '重量', 'type' => TabularForm::INPUT_TEXT,
+                'options' => ['class' => 'Weight']],
+            'RetailPrice' => ['label' => '零售价', 'type' => TabularForm::INPUT_TEXT,
+                'options' => ['class' => 'RetailPrice'],
+            ],
+
+        ],
+
+        // configure other gridview settings
+        'gridSettings' => [
+            'panel' => [
+                'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i> 管理SKU</h3>',
+                'type' => GridView::TYPE_PRIMARY,
+
+                'footer' => true,
+                'after' =>
+                    Html::input('text', 'rowNum', '', ['class' => 'x-row', 'placeholder' => '行数']) . ' ' .
+                    Html::button('新增行', ['id' => 'add-row', 'type' => 'button', 'class' => 'btn kv-batch-create']) . ' ' .
+
+                    Html::input('text', 'CostPrice', '', ['class' => 'CostPrice-replace', 'placeholder' => '成本价￥']) . ' ' .
+                    Html::button('成本确定', ['id' => 'CostPrice-set', 'type' => 'button', 'class' => 'btn']) . ' ' .
+                    Html::input('text', 'Weight', '', ['class' => 'Weight-replace', 'placeholder' => '重量g']) . ' ' .
+                    Html::button('重量确定', ['id' => 'Weight-set', 'type' => 'button', 'class' => 'btn']) . ' ' .
+                    Html::input('text', 'RetailPrice', '', ['class' => 'RetailPrice-replace', 'placeholder' => '零售价$']) . ' ' .
+                    Html::button('价格确定', ['id' => 'RetailPrice-set', 'type' => 'button', 'class' => 'btn']) . ' ' .
+//                '<div class="row">'.
+                    Html::button('一键生成SKU', ['id' => 'sku-set', 'type' => 'button', 'class' => 'btn btn-success']) . ' ' .
+                    Html::button('保存当前数据', ['id' => 'save-only', 'type' => 'button', 'class' => 'btn btn-info']) . ' ' .
+                    Html::button('保存并完善', ['id' => 'save-complete', 'type' => 'button', 'class' => 'btn btn-primary']) . ' ' .
+                    Html::button('导入普源', ['id' => 'data-input', 'type' => 'button', 'class' => 'btn btn-warning']) . ' ' .
+                    Html::button('删除行', ['id' => 'delete-row', 'type' => 'button', 'class' => 'btn btn-danger kv-batch-delete'])
+//                '</div>'
+            ]
+        ]
+
+    ]);
+
+    ActiveForm::end();
+    ?>
 
 
+    <?php
+    Modal::begin([
+        'id' => 'create-modal',
+        'class' => 'add-sku',
+        'header' => '<h4 class="modal-title">新增SKU</h4>',
+        'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
+        'size' => Modal::SIZE_LARGE,
+        'options' => [
+            'data-backdrop' => 'static',//点击空白处不关闭弹窗
+            'data-keyboard' => false,
+        ],
+    ]);
+    Modal::end();
+
+    ?>
+
+    <?php
+    Modal::begin([
+        'id' => 'edit-sku',
+        'header' => '<h4 class="modal-title">编辑SKU</h4>',
+
+        'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
+        'size' => Modal::SIZE_LARGE,
+        'options' => [
+            'data-backdrop' => 'static',//点击空白处不关闭弹窗
+            'data-keyboard' => false,
+        ],
+    ]);
 
 
-<?php
-Modal::begin([
-    'id' => 'create-modal',
-    'class' => 'add-sku',
-    'header' => '<h4 class="modal-title">新增SKU</h4>',
-    'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
-    'size'=>Modal::SIZE_LARGE,
-    'options'=>[
-        'data-backdrop'=>'static',//点击空白处不关闭弹窗
-        'data-keyboard'=>false,
-    ],
-]);
-Modal::end();
-
-?>
-
-<?php
-Modal::begin([
-    'id' => 'edit-sku',
-    'header' => '<h4 class="modal-title">编辑SKU</h4>',
-
-    'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
-    'size'=>Modal::SIZE_LARGE,
-    'options'=>[
-        'data-backdrop'=>'static',//点击空白处不关闭弹窗
-        'data-keyboard'=>false,
-    ],
-]);
+    $requestUrl = Url::toRoute(['/goodssku/create', 'id' => $info->pid]);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
+    $requestUrl2 = Url::toRoute(['/goodssku/update']);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
+    $inputUrl = Url::toRoute(['input']);
 
 
-$requestUrl = Url::toRoute(['/goodssku/create','id'=>$info->pid]);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
-$requestUrl2 = Url::toRoute(['/goodssku/update']);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
-$inputUrl = Url::toRoute(['input']);
-
-
-
-$js2 = <<<JS
+    $js2 = <<<JS
 
 //批量设置关键词
 
     $(".required-paste").on('click',function() {
-        $('.all-required').removeAttr('hidden');    
+        // $('.all-required').css('display','');    
+        $('.all-required').toggle();   
     });
-    
+    $(".random-paste").on('click',function() {
+        $('.all-random').toggle();     
+    });
+    requird_ele = $("#all-required");
+    random_ele = $("#all-random");
+    listenOnTextInput(requird_ele,'required');
+    requiredCount();
+    listenOnTextInput(random_ele,'random');
+    randomCount();
+   
 //样式处理开始
     $("label[for='oagoodsinfo-headkeywords']").after('<span style="margin-left:1%"class="head-kw"></span><div style="font-size:6px;margin-left:3%">'+
         '<span><label style = "color:red">说明：</label>性别定位/多个一卖等。如Women/Men/Girl/Baby/Kids/1PC/2PC/5PC/4 Colors/5Pcs Set…</span></div>');
@@ -524,73 +488,7 @@ $js2 = <<<JS
 //样式处理结束
 
 //开始关键词处理过程
-    //页面初始化之后开始加载字符个数
-    function headCount() {
-        kw = $('#oagoodsinfo-headkeywords').val();
-        if(!kw){
-            len_kw = 0;
-        }
-        else{
-            len_kw = kw.length;
-       }
-       $(".head-kw").html('<span style = "color:red">' +String(len_kw) +'</span>个字符');      
-
-    }
-    
-    function tailCount() {
-        kw = $('#oagoodsinfo-tailkeywords').val();
-        if(!kw){
-            len_kw = 0;
-        }
-        else{
-            len_kw = kw.length;
-       }
-       $(".tail-kw").html('<span style = "color:red">' +String(len_kw) +'</span>个字符');      
-
-    }
-   
-    function requiredCount() {
-        kw_count = 0;
-        kw_length = 0;
-        keywords = [];
-        $('.required-kw-in').each(function() {
-            kw = $(this).val();
-            if(!kw){
-                len_kw = 0;
-                keywords.push('');   
-                
-            }
-            else{
-                len_kw = kw.length;
-                kw_count += 1;
-                keywords.push(kw);
-            }
-            kw_length  = kw_length + len_kw;
-        });
-        $(".required-kw").html('<span style = "color:red;margin-left:1%">' +String(kw_count) +'</span>个单词；<span style = "color:red">' +String(kw_length) +'</span>个字符');
-        $('#oagoodsinfo-requiredkeywords').val(JSON.stringify(keywords));
-    }
-    
-    function randomCount() {
-        kw_count = 0;
-        kw_length = 0;
-        keywords = [];
-        $('.random-kw-in').each(function() {
-            kw = $(this).val();
-            if(!kw){
-                len_kw = 0;
-                keywords.push('');   
-            }
-            else{
-                len_kw = kw.length;
-                kw_count += 1;
-                keywords.push(kw);      
-            }
-            kw_length  = kw_length + len_kw;
-        });
-        $(".random-kw").html('<span style = "color:red;margin-left:1%">' +String(kw_count) +'</span>个单词；<span style = "color:red">' +String(kw_length) +'</span>个字符');
-        $('#oagoodsinfo-randomkeywords').val(JSON.stringify(keywords));
-    }
+ 
      headCount();
      requiredCount();
      randomCount();
@@ -606,7 +504,6 @@ $js2 = <<<JS
     $('.required-kw-in').on('change',function() {
         requiredCount();
     });
-    
     //监听随机关键词的变化过程
     $('.random-kw-in').on('change',function() {
         randomCount()
@@ -839,27 +736,129 @@ $js2 = <<<JS
     });
 
 JS;
-$this->registerJs($js2);
-Modal::end();
-?>
+    $this->registerJs($js2);
+    Modal::end();
+    ?>
 
-<script>
-    //新增行的删除事件
-    function removeTd(ele) {
-        ele.closest('tr').remove();
-    };
-    $("#all-required").on('change',function(){
-        kws = $(this).val();
-        kws = kws.replace(/\n/g,',');
-        console.log(kws);
-    });
-</script>
+    <script>
+        //新增行的删除事件
+        function removeTd(ele) {
+            ele.closest('tr').remove();
+        };
 
-<style>
-    .align-center {
-        clear: both;
-        display: block;
-        margin:auto;
-    }
+        //页面初始化之后开始加载字符个数
+        function headCount() {
+            kw = $('#oagoodsinfo-headkeywords').val();
+            if (!kw) {
+                len_kw = 0;
+            }
+            else {
+                len_kw = kw.length;
+            }
+            $(".head-kw").html('<span style = "color:red">' + String(len_kw) + '</span>个字符');
 
-</style>
+        }
+
+        function tailCount() {
+            kw = $('#oagoodsinfo-tailkeywords').val();
+            if (!kw) {
+                len_kw = 0;
+            }
+            else {
+                len_kw = kw.length;
+            }
+            $(".tail-kw").html('<span style = "color:red">' + String(len_kw) + '</span>个字符');
+
+        }
+
+
+        function randomCount() {
+            kw_count = 0;
+            kw_length = 0;
+            keywords = [];
+            $('.random-kw-in').each(function () {
+                kw = $(this).val();
+                if (!kw) {
+                    len_kw = 0;
+                    keywords.push('');
+                }
+                else {
+                    len_kw = kw.length;
+                    kw_count += 1;
+                    keywords.push(kw);
+                }
+                kw_length = kw_length + len_kw;
+            });
+            $(".random-kw").html('<span style = "color:red;margin-left:1%">' + String(kw_count) + '</span>个单词；<span style = "color:red">' + String(kw_length) + '</span>个字符');
+            $('#oagoodsinfo-randomkeywords').val(JSON.stringify(keywords));
+        }
+
+        function requiredCount() {
+            kw_count = 0;
+            kw_length = 0;
+            keywords = [];
+            $('.required-kw-in').each(function () {
+                kw = $(this).val();
+                if (!kw) {
+                    len_kw = 0;
+                    keywords.push('');
+
+                }
+                else {
+                    len_kw = kw.length;
+                    kw_count += 1;
+                    keywords.push(kw);
+                }
+                kw_length = kw_length + len_kw;
+            });
+            $(".required-kw").html('<span style = "color:red;margin-left:1%">' + String(kw_count) + '</span>个单词；<span style = "color:red">' + String(kw_length) + '</span>个字符');
+            $('#oagoodsinfo-requiredkeywords').val(JSON.stringify(keywords));
+        }
+
+        function listenOnTextInput(ele, name) {
+            ele.on('change', function () {
+                kws = $(this).val();
+                kw_list = kws.split('\n');
+                if (name == 'required') {
+                    $.each(kw_list, function (index, value) {
+                        $('.required-kw-in').each(function (pos) {
+                            if (index == pos) {
+                                $(this).val(value);
+                            }
+                        })
+                    });
+                    requiredCount();
+                    $('.required-paste').trigger('click');
+                }
+                if (name == 'random') {
+                    $.each(kw_list, function (index, value) {
+                        $('.random-kw-in').each(function (pos) {
+                            if (index == pos) {
+                                $(this).val(value);
+                            }
+                        })
+                    });
+                    randomCount();
+                    $('.random-paste').trigger('click');
+                }
+
+            });
+        }
+
+    </script>
+
+    <script>
+        //新增行的删除事件
+        function removeTd(ele) {
+            ele.closest('tr').remove();
+        };
+    </script>
+
+    <style>
+        .align-center {
+            clear: both;
+            display: block;
+            margin: auto;
+        }
+
+    </style>

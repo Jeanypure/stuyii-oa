@@ -130,7 +130,7 @@ class OaTemplates extends \yii\db\ActiveRecord
             'headKeywords' => '最前关键词',
             'requiredKeywords' => '最前关键词',
             'randomKeywords' => '最前关键词',
-            'tailKeywords' => '最前关键词',
+            'tailKeywords' => '最后关键词',
         ];
     }
 
