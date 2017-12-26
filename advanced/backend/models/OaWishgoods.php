@@ -37,7 +37,7 @@ class OaWishgoods extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['SKU', 'title', 'description', 'shippingtime', 'tags', 'main_image','extra_images'], 'string'],
+            [['SKU', 'title', 'description', 'shippingtime', 'tags', 'main_image','extra_images', 'headKeywords', 'requiredKeywords', 'randomKeywords', 'tailKeywords'], 'string'],
             [['inventory', 'goodsid', 'infoid'], 'integer'],
             [['price', 'msrp', 'shipping'], 'number'],
         ];

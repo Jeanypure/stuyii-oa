@@ -98,7 +98,6 @@ class ChannelController extends Controller
         if (!$sku) {
             throw new NotFoundHttpException("The product was not found.");
         }
-
         if ($sku[0]->load(Yii::$app->request->post())) {
             $dataPost = $_POST;
             $sku[0]['main_image'] = $dataPost['main_image'];
