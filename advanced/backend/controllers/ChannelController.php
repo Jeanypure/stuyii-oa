@@ -499,7 +499,7 @@ class ChannelController extends Controller
             $names = '';
             while(true){
                 $title = $this->actionNonOrder($data,'eBay');
-                if(!in_array($title,$title_list)||!empty($title)){
+                if(!in_array($title,$title_list)||empty($title)){
                     $name = $title;
                     array_push($title_list,$title);
                     break;
