@@ -24,7 +24,7 @@ $attributes  = [
     'quantity'=>
         [
             'type'=>TabularForm::INPUT_TEXT,
-            'options'=>['class'=>'quantity','value' => 5],
+            'options'=>['class'=>'quantity'],
 
         ],
     'retailPrice'=>
@@ -288,7 +288,7 @@ $('#add-row').click(function() {
         var fieldsMap = {
             'SKU':'sku',
             '数量':'quantity',
-            '价格':'reailPrice',
+            '价格':'retailPrice',
             '图片地址':'imageUrl',
             '图片':'image',
             'UPC':'UPC',
@@ -309,7 +309,7 @@ $('#add-row').click(function() {
                 }  
             }
         });
-        // var inputFields = ['sku','quantity','reailPrice','imageUrl','image','property1','property2','property3','UPC','EAN'];
+        // var inputFields = ['sku','quantity','retailPrice','imageUrl','image','property1','property2','property3','UPC','EAN'];
         for(var i=3; i< inputFields.length + 3; i++){
             if(inputFields[i-3] == 'imageUrl'){
                 var fun = " var new_image = $(this).val();;$(this).parents('tr').find('img').attr('src',new_image); ";
@@ -426,20 +426,25 @@ $('th').attr('class',"kv-align-top");
 $('#save-only').click(function() {
     //动态的保存列名到label中
     var labels = [];
-    $('.radio-inline').each(function() {
-        labels.push($(this).text());
+    $('.radio-inline').each(function(index,ele) {
+        if($.inArray($(this).text(),labels)<0){
+            labels.push($(this).text());
+        }
+        
     });
     $('.label-input').val(JSON.stringify(labels));
     //获取选中的图片关联选项
     var picKey = $('.assoc_pic_key').find("input[name='picKey']:checked").val();
     //ajax 提交方式
    var varForm = $('#var-form').serialize();
+   // console.log(varForm);
    $.ajax({
        type: "POST",
        url: '/channel/var-save?id={$tid}',
         // dataType:'json',
        data:varForm,
        success: function(data) {
+           console.log(data);
            alert(data);
        }
    });
