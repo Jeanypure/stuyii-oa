@@ -30,6 +30,7 @@ $updateUrl = Url::toRoute('forward-update');
 $createUrl = Url::toRoute('forward-create');
 $approve = Url::toRoute('approve');
 $approveLots = Url::toRoute('approve-lots');
+$deleteUrl = Url::toRoute('delete');
 
 $js = <<<JS
 $('.glyphicon-eye-open').addClass('icon-cell');
@@ -51,7 +52,7 @@ $('.forward-delete').on('click',  function () {
         
         if (result) {
             id = $(self).closest('tr').data('key');
-            $.post('delete',{id:id,type:'forward-products'},function() {
+            $.post('{$deleteUrl}',{id:id,type:'forward-products'},function() {
             });
             }
             });

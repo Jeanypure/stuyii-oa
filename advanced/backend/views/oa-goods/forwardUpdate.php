@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = '更新';
 
 $catNid = $model->catNid;
 $subCate = $model->subCate;
-$updateCheckUrl = Url::toRoute('forward-update-check');
+$updateCheckUrl = Url::toRoute(['forward-update-check', 'id' => $model->nid]);
 $checkStatus = $model->checkStatus;
 $requireTemplates = ["template" => "<span style='color:red'>*{label}:</span>\n<div >{input}</div>\n{error}"];
 
@@ -30,7 +30,7 @@ $("option:contains({$subCate})").attr("selected",true);
 $("#update-check-btn").on('click',function() {
     // alert('{$updateCheckUrl}');
     var form = $("#update-form");
-    form.attr('action','{$updateCheckUrl}?id={$model->nid}');
+    form.attr('action','{$updateCheckUrl}');
     form.submit();
 });
 

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Created by PhpStorm.
  * User: Administrator
@@ -721,9 +721,20 @@ echo FormGrid::widget([ // continuation fields to row above without labels
     
 // 保存数据的提交按钮
     $('#save-only').on('click',function() {
-        var form = $('#sku-info');
+        /*var form = $('#sku-info');
         form.attr('action', $('#save-only').data('href'));
-        form.submit();
+        form.submit();*/
+        $.ajax({
+                cache: true,
+                type: "POST",
+                url: $('#save-only').data('href'),
+                data:$('#sku-info').serialize(),
+                // async: false,    
+                
+                success: function(data) {
+                    alert(data);
+                }
+            });
     }); 
  
 
