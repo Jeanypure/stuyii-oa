@@ -166,7 +166,7 @@ if (empty($sku->randomKeywords)) {
 
             <div class="col-sm-1" style='margin-left:3%'><strong>关键词：</strong></div>
             <br>
-            <?= $form->field($sku,'headKeywords',['labelOptions' => ['style' => 'margin-left:4%']])->textInput(['style'=>"width:200px",'placeholder' => '--一个关键词--'])->label('最前关键词<span style = "color:red">*</span>'); ?>
+            <?= $form->field($sku,'headKeywords',['labelOptions' => ['style' => 'margin-left:4%']])->textInput(['style'=>"width:200px;margin-left:40%",'placeholder' => '--一个关键词--'])->label('最前关键词<span style = "color:red">*</span>'); ?>
             <?= $form->field($sku,'requiredKeywords')->hiddenInput()->label(false); ?>
             <?= $form->field($sku,'randomKeywords')->hiddenInput()->label(false); ?>
         </div>
@@ -234,7 +234,7 @@ if (empty($sku->randomKeywords)) {
             </table>
         </div>
     </div>
-    <?= $form->field($sku,'tailKeywords',['labelOptions' => ['style' => 'margin-left:4%']])->textInput(['style'=>"width:200px",'placeholder' => '--最多一个关键词--'])->label('最后关键词<span style = "color:red">*</span>'); ?>
+    <?= $form->field($sku,'tailKeywords',['labelOptions' => ['style' => 'margin-left:4%']])->textInput(['style'=>"width:200px;margin-left:40%",'placeholder' => '--最多一个关键词--'])->label('最后关键词<span style = "color:red">*</span>'); ?>
     <?= $form->field($sku, 'description', ['template' => "{label}\n<div class=\"col-lg-5\">{input}</div>\n<div class=\"col-lg-9\">{error}</div>"])->textarea(['rows' => 12, 'cols' => 4]); ?>
     <?= $form->field($sku, 'inventory')->textInput(); ?>
     <?= $form->field($sku, 'price')->textInput(); ?>
