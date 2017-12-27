@@ -28,6 +28,7 @@ $updateUrl = Url::toRoute('backward-update');
 $createUrl = Url::toRoute('backward-create');
 $approve = Url::toRoute('approve');
 $approveLots = Url::toRoute('approve-lots');
+$deleteUrl = Url::toRoute('delete');
 $js = <<<JS
 
 
@@ -50,7 +51,7 @@ $('.backward-delete').on('click',  function () {
         
         if (result) {
             id = $(self).closest('tr').data('key');
-            $.post('delete',{id:id,type:'backward-products'},function() {
+            $.post('{$deleteUrl}',{id:id,type:'backward-products'},function() {
             });
             }
             });
@@ -58,7 +59,7 @@ $('.backward-delete').on('click',  function () {
 //更新框
 $('.backward-update').on('click',  function () {
         $('.modal-body').children('div').remove();
-        $.get('{$updateUrl}',  { id: $(this).closest('tr').data('key') },
+        $.get('{$updateUrl}',  {id: $(this).closest('tr').data('key') },
             function (data) {
                 $('.modal-body').html(data);
             }

@@ -33,7 +33,7 @@ $getSubCateUrl = Url::toRoute(['oa-goods/forward-create','typeid'=>1, ]);
         [
             'id' => 'create-form',
             'method' => 'post',
-            'options' => ['data-href' => Url::to(['oa-goods/forward-create', 'type' => 'check'])],
+            'options' => ['data-href' => Url::to(['oa-goods/backward-create', 'type' => 'check'])],
         ]
     ); ?>
 

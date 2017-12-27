@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Created by PhpStorm.
  * User: Administrator
@@ -174,7 +174,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
         <strong>关键词：</strong>
     </div>
 
-    <div class='all-required' style="display:none;float:right;margin-right:20%"><textarea id="all-required" style="width:200px;height:300px;">这里写内容</textarea></div>
+<!--    <div class='all-required' style="display:none;float:right;margin-right:20%"><textarea id="all-required" style="width:200px;height:300px;">这里写内容</textarea></div>-->
     <br>
     <?= $form->field($info,'headKeywords',['labelOptions' => ['style' => 'margin-left:3%']])->textInput(['style'=>"width:200px;margin-left:3%;",'placeholder' => '--一个关键词--'])->label('最前关键词<span style = "color:red">*</span>'); ?>
     <?= $form->field($info,'requiredKeywords')->textInput(['style'=>"width:200px;display:none;",'placeholder' => ''])->label(false); ?>
@@ -199,16 +199,14 @@ echo FormGrid::widget([ // continuation fields to row above without labels
         <td><input value="'.$required_kws[3].'" class="required-kw-in" type="text" class=""></td>
         <td><input value="'.$required_kws[4].'" class="required-kw-in" type="text" class=""></td>
         <td><input value="'.$required_kws[5].'" class="required-kw-in" type="text" class=""></td>
-        <td><button type="button" class="required-paste">批量设置</button></td>
+        <td><button class = "required-paste btn btn-success" data-toggle="modal" data-target = "#required-modal">批量设置</button></td>
     </tr>'
             ?>
             </tbody>
         </table>
     </div>
     <br>
-<!--    <div class='all-random'  style="display:none;float:right;margin-right: 10%"><textarea id="all-random" style="width:200px;height:300px;">这里写关键词</textarea></div>-->
-
-    <div style="margin-left:3%;margin-right: 30%">
+    <div style="margin-left:3%;margin-right: 25%">
         <label class="control-label">随机关键词<span style = "color:red">*</span></label><span style="margin-left:1%" class="random-kw"></span>
 
         <div style="font-size:6px">
@@ -233,7 +231,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
                 <td><input value="'.$random_kws[7].'" class="random-kw-in" type="text" class=""></td>
                 <td><input value="'.$random_kws[8].'"  class="random-kw-in" type="text" class=""></td>
                 <td><input value="'.$random_kws[9].'" class="random-kw-in" type="text" class=""></td>
-                <td><a class = "random-paste btn btn-success" data-toggle="modal" data-target = "#kw-modal">批量设置</a></td>
+                <td><button class = "random-paste btn btn-success" data-toggle="modal" data-target = "#random-modal">批量设置</button></td>
             </tr>'
             ?>
             </tbody>
@@ -412,8 +410,10 @@ echo FormGrid::widget([ // continuation fields to row above without labels
                     Html::button('价格确定', ['id' => 'RetailPrice-set', 'type' => 'button', 'class' => 'btn']) . ' ' .
 //                '<div class="row">'.
                     Html::button('一键生成SKU', ['id' => 'sku-set', 'type' => 'button', 'class' => 'btn btn-success']) . ' ' .
-                    Html::button('保存当前数据', ['id' => 'save-only', 'type' => 'button', 'class' => 'btn btn-info']) . ' ' .
-                    Html::button('保存并完善', ['id' => 'save-complete', 'type' => 'button', 'class' => 'btn btn-primary']) . ' ' .
+                    Html::button('保存当前数据', ['id' => 'save-only', 'type' => 'button', 'class' => 'btn btn-info',
+                        'data-href' => Url::to(['/goodssku/save-only', 'pid' => $pid, 'type'=> 'goods-info'])]) . ' ' .
+                    Html::button('保存并完善', ['id' => 'save-complete', 'type' => 'button', 'class' => 'btn btn-primary',
+                        'data-href' => Url::to(['/goodssku/save-complete', 'pid' => $pid, 'type'=> 'goods-info'])]) . ' ' .
                     Html::button('导入普源', ['id' => 'data-input', 'type' => 'button', 'class' => 'btn btn-warning']) . ' ' .
                     Html::button('删除行', ['id' => 'delete-row', 'type' => 'button', 'class' => 'btn btn-danger kv-batch-delete'])
 //                '</div>'
@@ -444,10 +444,20 @@ echo FormGrid::widget([ // continuation fields to row above without labels
 
     <?php
     Modal::begin([
-        'id' => 'kw-modal',
+        'id' => 'random-modal',
         'header' => '<h4 class="modal-title">批量增加关键词</h4>',
         'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
-//        'size' => Modal::SIZE_,
+        'options' => [
+            'data-backdrop' => 'static',//点击空白处不关闭弹窗
+            'data-keyboard' => false,
+        ],
+    ]);
+    Modal::end();
+
+    Modal::begin([
+        'id' => 'required-modal',
+        'header' => '<h4 class="modal-title">批量增加关键词</h4>',
+        'footer' => '<a href="#" class="required-close btn btn-primary" data-dismiss="modal">关闭</a>',
         'options' => [
             'data-backdrop' => 'static',//点击空白处不关闭弹窗
             'data-keyboard' => false,
@@ -457,7 +467,6 @@ echo FormGrid::widget([ // continuation fields to row above without labels
     Modal::begin([
         'id' => 'edit-sku',
         'header' => '<h4 class="modal-title">编辑SKU</h4>',
-//        'body' => '<textarea id="all-required" style="width:200px;height:300px;">这里写内容</textarea>',
         'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
         'size' => Modal::SIZE_LARGE,
         'options' => [
@@ -465,29 +474,32 @@ echo FormGrid::widget([ // continuation fields to row above without labels
             'data-keyboard' => false,
         ],
     ]);
+    Modal::end();
     $requestUrl = Url::toRoute(['/goodssku/create', 'id' => $info->pid]);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
     $requestUrl2 = Url::toRoute(['/goodssku/update']);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
     $inputUrl = Url::toRoute(['input']);
+    $deleteUrl = Url::toRoute(['/goodssku/delete']);
 
 
     $js2 = <<<JS
 
 //批量设置关键词
-
-    $(".required-paste").on('click',function() {
-        // $('.all-required').css('display','');    
-        // $('.all-required').toggle();   
-    });
     $(".random-paste").on('click',function() {
-        // $('.all-random').toggle(); 
-            $('.modal-body').html('<textarea id="all-random" style="width:200px;height:300px;">这里写内容</textarea>');
+            if($("#all-kws").length==0){
+                $('#random-modal').find('.modal-body').html('<textarea placeholder="--多个随机关键词--" id="all-kws" style="margin-left:7%;border-style:none;width:500px;height:100px;"></textarea>');
+            }
+            //重新监听事件                                                                                        
+            var random_ele = $("#all-random");
+            listenOnTextInput(random_ele,'random');
+        });
+    $(".required-paste").on('click',function() {
+        if($("#required-kws").length==0){
+           $('#required-modal').find('.modal-body').html('<textarea placeholder="--多个必选关键词--" id="required-kws" style="margin-left:7%;border-style:none;width:500px;height:100px;"></textarea>'); 
+        }
+        requird_ele = $("#all-required");
+        listenOnTextInput(requird_ele,'required');
     });
-    requird_ele = $("#all-required");
-    random_ele = $("#all-random");
-    listenOnTextInput(requird_ele,'required');
-    requiredCount();
-    listenOnTextInput(random_ele,'random');
-    randomCount();
+ 
    
 //样式处理开始
     $("label[for='oagoodsinfo-headkeywords']").after('<span style="margin-left:1%"class="head-kw"></span><div style="font-size:6px;margin-left:3%">'+
@@ -524,6 +536,8 @@ echo FormGrid::widget([ // continuation fields to row above without labels
         tailCount();
    });
 //结束关键词处理过程
+
+
 //能删除新增空行的删除行
     $('#delete-row').on('click', function() {
         $("input[name='selection[]']:checkbox:checked").each(function(){
@@ -536,7 +550,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
                 var pid = $(this).val();
                 $(this).closest('tr').remove();
                 $.ajax({
-                    url:'/goodssku/delete',
+                    url:'{$deleteUrl}',
                     type:'post',
                     data: {id:pid},
                     success:function(res) {
@@ -707,9 +721,20 @@ echo FormGrid::widget([ // continuation fields to row above without labels
     
 // 保存数据的提交按钮
     $('#save-only').on('click',function() {
-        var form = $('#sku-info');
-        form.attr('action', '/goodssku/save-only?pid={$pid}&type=goods-info');
-        form.submit();
+        /*var form = $('#sku-info');
+        form.attr('action', $('#save-only').data('href'));
+        form.submit();*/
+        $.ajax({
+                cache: true,
+                type: "POST",
+                url: $('#save-only').data('href'),
+                data:$('#sku-info').serialize(),
+                // async: false,    
+                
+                success: function(data) {
+                    alert(data);
+                }
+            });
     }); 
  
 
@@ -718,7 +743,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
         $.ajax({
                 cache: true,
                 type: "POST",
-                url:'/goodssku/save-complete?pid={$pid}&type=goods-info',
+                url: $('#save-complete').data('href'),
                 data:$('#sku-info').serialize(),
                 // async: false,    
                 
@@ -747,7 +772,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
 
 JS;
     $this->registerJs($js2);
-    Modal::end();
+
     ?>
 
     <script>
@@ -799,7 +824,7 @@ JS;
                 }
                 kw_length = kw_length + len_kw;
             });
-            $(".random-kw").html('<span style = "color:red;margin-left:1%">' + String(kw_count) + '</span>个单词；<span style = "color:red">' + String(kw_length) + '</span>个字符');
+            $(".random-kw").html('<span style = "color:red;margin-left:1%">' + String(kw_count) + '</span>个关键词；<span style = "color:red">' + String(kw_length) + '</span>个字符');
             $('#oagoodsinfo-randomkeywords').val(JSON.stringify(keywords));
         }
 
@@ -821,15 +846,17 @@ JS;
                 }
                 kw_length = kw_length + len_kw;
             });
-            $(".required-kw").html('<span style = "color:red;margin-left:1%">' + String(kw_count) + '</span>个单词；<span style = "color:red">' + String(kw_length) + '</span>个字符');
+            $(".required-kw").html('<span style = "color:red;margin-left:1%">' + String(kw_count) + '</span>个关键词；<span style = "color:red">' + String(kw_length) + '</span>个字符');
             $('#oagoodsinfo-requiredkeywords').val(JSON.stringify(keywords));
         }
 
         function listenOnTextInput(ele, name) {
-            ele.on('change', function () {
-                kws = $(this).val();
-                kw_list = kws.split('\n');
+            $('body').on('change',ele,function () {
+
                 if (name == 'required') {
+                    var kws = $("#required-kws").val();
+                    //alert(kws);return;
+                    var  kw_list = kws.split('\n');
                     $.each(kw_list, function (index, value) {
                         $('.required-kw-in').each(function (pos) {
                             if (index == pos) {
@@ -838,9 +865,10 @@ JS;
                         })
                     });
                     requiredCount();
-                    $('.required-paste').trigger('click');
                 }
                 if (name == 'random') {
+                    kws = $("#all-kws").val();
+                    kw_list = kws.split('\n');
                     $.each(kw_list, function (index, value) {
                         $('.random-kw-in').each(function (pos) {
                             if (index == pos) {
@@ -849,7 +877,6 @@ JS;
                         })
                     });
                     randomCount();
-                    $('.random-paste').trigger('click');
                 }
 
             });
@@ -870,5 +897,7 @@ JS;
             display: block;
             margin: auto;
         }
+
+
 
     </style>
