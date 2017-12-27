@@ -272,8 +272,7 @@ class ChannelController extends Controller
             if (strpos($key, 'New') === false) {
                 //update
                 $ret = $this->findVar($key);
-                $ret->setAttributes($row, $safeOnly = false);
-                $ret->save(false);
+                $ret->setAttributes($row);
             } else {
                 //create
                 $model = new OaTemplatesVar();
@@ -683,49 +682,59 @@ class ChannelController extends Controller
      */
     public  function actionNonOrder($data,$div){
 
-        $head = $data['head'];
-        $tail = $data['tail'];
-        $need = $data['need'];
-        $random = $data['random'];
-        if(empty($random)||empty($need)){
-            return;
-        }
-        //标题关键字
-        shuffle($random);
-
-        $random_str1 = array_slice($random,0,1);
-        $random_result = array_diff($random,$random_str1);
-        shuffle($random_result);
-        $random_arr = array_slice($random_result,0,4);
-        $random_str2 =  implode(' ',$random_arr);
-        shuffle($need);
-        $need_str1 = implode(' ',$need);
-        $name = trim($head.' '.$random_str1[0].' '.$need_str1.' '.$random_str2.' '.$tail);
-        $nameLen = strlen($name);
         if($div == 'eBay'){
             $max_length = 80;
-
         }
         if($div == 'Wish'){
             $max_length = 110;
         }
 
-        //while 直到小于110
-        while($nameLen > $max_length){
-            array_pop($random);
-            shuffle($random);
-            $random_str1 = array_slice($random,0,1);
-            $random_result = array_diff($random,$random_str1);
-            $random_arr = array_slice($random_result,0,4);
-            shuffle($random_result);
-            array_pop($random_result);
-            $random_str2 =  implode(' ',$random_arr);
-            shuffle($need);
-            $need_str1 = implode(' ',$need);
-            $name = $head.' '.$random_str1[0].' '.$need_str1.' '.$random_str2.' '.$tail;
-            $nameLen = strlen($name);
+        $head = $data['head'];
+        $tail = $data['tail'];
+        $need = array_filter($data['need']);
+        $random = array_filter($data['random']);
+        if(empty($random)||empty($need)){
+            return;
         }
-        return $name;
+        //标题关键字
+        shuffle($random);
+        $random_str1 = array_slice($random,0,1);
+        $random_result = array_diff($random,$random_str1);
+        shuffle($random_result);
+        $random_arr = array_slice($random_result,0,4);
+        $random_str2 =  trim(implode(' ',$random_arr));
+        shuffle($need);
+        $need_str1 = trim(implode(' ',$need));
+        $name = trim($head.' '.$random_str1[0].' '.$need_str1.' '.$random_str2.' '.$tail);
+        $nameLen = strlen($name);
+
+        //判断固定部分的长度
+        $fix = trim($head.' '.$need_str1.' '.$tail);
+        $fixLen = strlen($fix);
+        if($fixLen > $max_length){
+            return $fix;
+        }else {
+            while ($nameLen > $max_length) {
+
+                $random_str1 = array_slice($random, 0, 1);
+                $random_result = array_diff($random, $random_str1);
+                $random_arr = array_slice($random_result, 0, 4);
+                shuffle($random_result);
+                array_pop($random_result);
+                $random_str2 = implode(' ', $random_arr);
+                shuffle($need);
+                $need_str1 = implode(' ', $need);
+                $name = $head . ' ' . $random_str1[0] . ' ' . $need_str1 . ' ' . $random_str2 . ' ' . $tail;
+                $nameLen = strlen($name);
+
+            }
+
+            return $name;
+        }
+
+
+
+
     }
 
     /*

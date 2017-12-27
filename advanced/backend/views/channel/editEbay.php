@@ -47,6 +47,27 @@ Modal::begin([
 ]);
 //echo
 Modal::end();
+    Modal::begin([
+        'id' => 'random-modal',
+        'header' => '<h4 class="modal-title">批量增加关键词</h4>',
+        'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
+        'options' => [
+            'data-backdrop' => 'static',//点击空白处不关闭弹窗
+            'data-keyboard' => false,
+        ],
+    ]);
+    Modal::end();
+
+    Modal::begin([
+        'id' => 'required-modal',
+        'header' => '<h4 class="modal-title">批量增加关键词</h4>',
+        'footer' => '<a href="#" class="required-close btn btn-primary" data-dismiss="modal">关闭</a>',
+        'options' => [
+            'data-backdrop' => 'static',//点击空白处不关闭弹窗
+            'data-keyboard' => false,
+        ],
+    ]);
+    Modal::end();
 ?>
 <?=
 Tabs::widget([
