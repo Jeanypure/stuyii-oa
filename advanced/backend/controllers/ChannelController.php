@@ -841,9 +841,9 @@ class ChannelController extends Controller
     public function actionExportCsv($data = [], $header_data = [], $file_name = '')
     {
 
-//        header('Content-Type: application/vnd.ms-excel');
-//        header('Content-Disposition: attachment;filename=' . $file_name . '.csv');
-//        header('Cache-Control: max-age=0');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename=' . $file_name . '.csv');
+        header('Cache-Control: max-age=0');
         $fp = fopen('php://output', 'a');
         if (!empty($header_data)) {
             foreach ($header_data as $key => $value) {
