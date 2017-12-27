@@ -273,6 +273,7 @@ class ChannelController extends Controller
                 //update
                 $ret = $this->findVar($key);
                 $ret->setAttributes($row);
+                $ret->save(false);
             } else {
                 //create
                 $model = new OaTemplatesVar();
