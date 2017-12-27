@@ -429,6 +429,7 @@ class ChannelController extends Controller
     public function actionExportEbay($id, $accounts = '')
     {
 
+
         $sql = "oa_P_ebayTemplates {$id},'{$accounts}'";
         $db = yii::$app->db;
         $query = $db->createCommand($sql);
@@ -446,11 +447,6 @@ class ChannelController extends Controller
         $objPHPExcel->setActiveSheetIndex($sheetNumber);
         $sheetName = 'ebay模板';
         $objPHPExcel->getActiveSheet()->setTitle($sheetName);
-        header('Content-Type: application/vnd.ms-excel');
-        $fileName = $goods_code . "-eBay模板-" . date("d-m-Y-His") . ".xls";
-        header('Content-Disposition: attachment;filename=' . $fileName . ' ');
-        header('Cache-Control: max-age=0');
-
 
         //获取列名&设置image字段
         $firstRow = $ret[0];
@@ -496,6 +492,7 @@ class ChannelController extends Controller
             //Title
             $name = $this->actionNonOrder($data,'eBay');
             $row['Title'] = $name;
+
             //specifics 重新赋值
             $specifics = json_decode($row['specifics'], true)['specifics'];
             foreach ($specifics as $index => $map) {
@@ -508,8 +505,17 @@ class ChannelController extends Controller
                 $objPHPExcel->getActiveSheet()->setCellValue(PHPExcelTools::stringFromColumnIndex($num) . ($rowNum + 2), $row[$name]);
             }
         }
+
+
+        header('Content-Type: application/vnd.ms-excel');
+        $fileName = $goods_code . "-eBay模板-" . date("d-m-Y-His") . ".xls";
+        header('Content-Disposition: attachment;filename=' . $fileName.' ');
+        header('Cache-Control: max-age=0');
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
+
+
+
     }
 
 
@@ -596,15 +602,24 @@ class ChannelController extends Controller
             ->where("ParentCategory like :cate")
             ->orWhere("ParentCategory is null")
             ->addParams([':cate' => '%' . $cate[0]['cate'] . '%'])
-            ->all(); //
+            ->all();
 
         $data =  $this->actionNameTags($id,'oa_wishgoods');
 
-
-
+        $title_list = [];
         foreach($suffixAll as $key=>$value){
             //标题关键字
-            $name = $this->actionNonOrder($data,'Wish');
+//            $name = $this->actionNonOrder($data,'Wish');
+            while(true){
+                $title = $this->actionNonOrder($data,'Wish');
+                if(!in_array($title,$title_list)||empty($title)){
+                   $name = $title;
+                   array_push($title_list,$title);
+                   break;
+
+                }
+            }
+
             //价格判断
             $totalprice = ceil($foos[0][0]['price'] + $foos[0][0]['shipping']);
             if ($totalprice <= 2) {
@@ -679,52 +694,58 @@ class ChannelController extends Controller
     /*
      * 乱序数组
      */
+
     public  function actionNonOrder($data,$div){
 
-        $head = $data['head'];
-        $tail = $data['tail'];
-        $need = $data['need'];
-        $random = $data['random'];
-        if(empty($random)||empty($need)){
-            return;
-        }
-        //标题关键字
-        shuffle($random);
-
-        $random_str1 = array_slice($random,0,1);
-        $random_result = array_diff($random,$random_str1);
-        shuffle($random_result);
-        $random_arr = array_slice($random_result,0,4);
-        $random_str2 =  implode(' ',$random_arr);
-        shuffle($need);
-        $need_str1 = implode(' ',$need);
-        $name = trim($head.' '.$random_str1[0].' '.$need_str1.' '.$random_str2.' '.$tail);
-        $nameLen = strlen($name);
         if($div == 'eBay'){
             $max_length = 80;
-
         }
         if($div == 'Wish'){
             $max_length = 110;
         }
 
-        //while 直到小于110
-        while($nameLen > $max_length){
-            array_pop($random);
-            shuffle($random);
-            $random_str1 = array_slice($random,0,1);
-            $random_result = array_diff($random,$random_str1);
-            $random_arr = array_slice($random_result,0,4);
-            shuffle($random_result);
-            array_pop($random_result);
-            $random_str2 =  implode(' ',$random_arr);
-            shuffle($need);
-            $need_str1 = implode(' ',$need);
-            $name = $head.' '.$random_str1[0].' '.$need_str1.' '.$random_str2.' '.$tail;
-            $nameLen = strlen($name);
+        $head = [$data['head']];
+        $tail = [$data['tail']];
+        $need = array_filter($data['need']);
+        $random = array_filter($data['random']);
+        if(empty($random)||empty($need)){
+            return;
         }
-        return $name;
+
+        //判断固定部分的长度
+        $fix = implode(' ',array_merge($head,$need,$tail));
+
+        $fixLen = strlen($fix);
+        if($fixLen > $max_length){
+            return $fix;
+        }else {
+            //可用长度
+            $canuse = $max_length - $fixLen -1;
+            shuffle($random); //摇匀词库
+            $random_str1 = [array_shift($random)]; //从摇匀的词库里不放回抽一个
+            $random_result = array_diff($random,$random_str1);
+            $random_arr = array_slice($random_result,0,4);//从剩余的词库里抽四个
+            $real_len = strlen(implode(' ',array_merge($random_str1,$random_arr)));
+
+            for($i=0;$i<4;$i++){
+                if($real_len<=$canuse){
+                    break;
+                }
+                else{
+                    array_shift($random_arr); //去掉一个随机词
+                    $real_len = strlen(implode(' ',array_merge($random_str1,$random_arr)));
+                }
+            }
+            shuffle($need);
+            return  implode(' ',array_merge($head,$random_str1,$need,$random_arr,$tail));
+        }
+
+
+
     }
+
+
+
 
     /*
      * 处理多属性
