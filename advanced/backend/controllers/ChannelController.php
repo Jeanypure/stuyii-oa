@@ -160,14 +160,15 @@ class ChannelController extends Controller
             foreach ($ebay_account as $row) {
                 $ebay_map[$row['ebayName']] = $row['ebaySuffix'];
             }
-//            $inShippingService = $this->getShippingService('In');
-            $inShippingService = [];
-//            $OutShippingService = $this->getShippingService('Out');
-            $OutShippingService = [];
+            $inShippingService1 = $this->actionShipping('InFir', $templates->site, false);
+            $inShippingService2 = $this->actionShipping('InSec', $templates->site, false);
+            $OutShippingService = $this->actionShipping('OutFir', $templates->site, false);
+            //var_dump($inShippingService1);exit;
             return $this->render('editEbay', [
                 'templates' => $templates,
                 'infoId' => $id,
-                'inShippingService' => $inShippingService,
+                'inShippingService1' => $inShippingService1,
+                'inShippingService2' => $inShippingService2,
                 'outShippingService' => $OutShippingService,
                 'ebayAccount' => $ebay_map
             ]);
@@ -400,16 +401,18 @@ class ChannelController extends Controller
      * @param site_id
      * @return nothing
      */
-    public function actionShipping($type, $site_id)
+    public function actionShipping($type, $site_id, $isJson = true)
     {
-        $sql = "select nid,servicesName from oa_shippingService where type='{$type}' and siteId='{$site_id}'";
+        //$sql = "select nid,servicesName from oa_shippingService where type='{$type}' and siteId='{$site_id}'";
+        $sql = "select nid,servicesName from oa_shippingService where type = '{$type}' and siteId='{$site_id}'";
         $connection = Yii::$app->db;
         $ret = $connection->createCommand($sql)->queryAll();
-        foreach ($ret as $row) {
+        return $isJson ? json_encode($ret) : $ret;
+        /*foreach ($ret as $row) {
 //            var_dump($row);die;
             echo Html::tag('option', Html::encode($row['servicesName']), array('value' => $row['nid']));
 //            echo '<option value="'.$row['nid'].'">'.$row['servicesName'].'</option>';
-        }
+        }*/
     }
 
     /**

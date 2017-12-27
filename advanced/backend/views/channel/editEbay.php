@@ -5,6 +5,7 @@ use kartik\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\bootstrap\Tabs;
 use kartik\widgets\Select2;
+use \yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Channel */
@@ -302,37 +303,28 @@ echo '</div>';
         <div class="col-lg-6">
             <span>境内运输方式</span>
             <?=
-            $form->field($templates, 'InshippingMethod1', $shipping_templates)->dropDownList($inShippingService,
-                [
-                    'class' => 'col-lg-6',
-                    'prompt' => '--境内物流选择--',
-                ]
-            ); ?>
+            $form->field($templates, 'InshippingMethod1', $shipping_templates)->dropDownList(
+                    ArrayHelper::map($inShippingService1,'nid', 'servicesName'),
+                ['class' => 'col-lg-6', 'prompt' => '--境内物流选择--',]); ?>
             <?= $form->field($templates, 'InFirstCost1', $shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
             <?= $form->field($templates, 'InSuccessorCost1', $shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
             <?=
-            $form->field($templates, 'InshippingMethod2', $shipping_templates)->dropDownList($inShippingService,
-                [
-                    'class' => 'col-lg-6',
-                    'prompt' => '--境内物流选择--',
-                ]
-            ); ?>
+            $form->field($templates, 'InshippingMethod2', $shipping_templates)->dropDownList(
+                ArrayHelper::map($inShippingService2,'nid', 'servicesName'),
+                ['class' => 'col-lg-6', 'prompt' => '--境内物流选择--',]); ?>
             <?= $form->field($templates, 'InFirstCost2', $shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
             <?= $form->field($templates, 'InSuccessorCost2', $shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
         </div>
         <div class="col-lg-6">
             <span>境外运输方式</span>
             <?=
-            $form->field($templates, 'OutshippingMethod1', $shipping_templates)->dropDownList($outShippingService,
-                [
-                    'class' => 'col-lg-6',
-                    'prompt' => '--境外物流选择--',
-                ]
-            ); ?>
+            $form->field($templates, 'OutshippingMethod1', $shipping_templates)->dropDownList(
+                    ArrayHelper::map($outShippingService,'nid', 'servicesName'),
+                ['class' => 'col-lg-6', 'prompt' => '--境外物流选择--',]); ?>
             <?= $form->field($templates, 'OutFirstCost1', $shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
             <?= $form->field($templates, 'OutSuccessorCost1', $shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
             <?=
-            $form->field($templates, 'OutshippingMethod2', $shipping_templates)->dropDownList($outShippingService,
+            $form->field($templates, 'OutshippingMethod2', $shipping_templates)->dropDownList([],
                 [
                     'class' => 'col-lg-6',
                     'prompt' => '--境外物流选择--',
@@ -392,7 +384,7 @@ echo '</div>';
 
 <?php
 $exportUlr = URL::toRoute(['export-ebay', 'id' => $templates->nid]);
-$shippingUlr = URL::toRoute(['shipping']);
+$shippingUrl = URL::toRoute(['shipping']);
 $saveUrl = Url::to(['ebay-save', 'id' => $templates->nid]);
 $completeUrl = Url::to(['ebay-complete', 'id' => $templates->nid]);
 
@@ -456,24 +448,40 @@ $('#oatemplates-site').change(function() {
 });
 
 //站点加载出来的时候也要重新加载下物流
-loadShipping();
+//loadShipping();
 function loadShipping() {
   var select = $('#oatemplates-site option:selected').val();
   //获取站点的值
   var promt_in = '<option value="">--境内物流--</option>';
   var promt_out = '<option value="">--境外物流--</option>';
   //三个物流逐句选择
-  $.get("{$shippingUlr}",{type:'InFir',site_id:select},function(ret) {
-        ret = promt_in + ret;
-        $('#oatemplates-inshippingmethod1').html(ret);
+  $.get("{$shippingUrl}",{type:'InFir',site_id:select},function(ret) {
+      var html1 = promt_in;
+      ret = JSON.parse(ret);
+      console.log(ret);
+      $.each(ret,function(i,item) {
+            html1 += "<option value = '" + item.nid + "'>" + item.servicesName + "</option>";
+      });
+      $('#oatemplates-inshippingmethod1 > option').remove();
+      $('#oatemplates-inshippingmethod1').append(html1);
   });
-  $.get("{$shippingUlr}",{type:'InSec',site_id:select},function(ret) {
-        ret = promt_in + ret;
-        $('#oatemplates-inshippingmethod2').html(ret);
+  $.get("{$shippingUrl}",{type:'InSec',site_id:select},function(ret) {
+      var html2 = promt_in;
+      ret = JSON.parse(ret);
+      $.each(ret,function(i,item) {
+            html2 += "<option value = '" + item.nid + "'>" + item.servicesName + "</option>";
+      });
+      //ret = promt_in + ret;
+      $('#oatemplates-inshippingmethod2').html(html2);
   });
-  $.get("{$shippingUlr}",{type:'OutFir',site_id:select},function(ret) {
-        ret = promt_out + ret;
-        $('#oatemplates-outshippingmethod1').html(ret);
+  $.get("{$shippingUrl}",{type:'OutFir',site_id:select},function(ret) {
+      var html3 = promt_out;
+      ret = JSON.parse(ret);
+      $.each(ret,function(i,item) {
+            html3 += "<option value = '" + item.nid + "'>" + item.servicesName + "</option>";
+      });
+        //ret = promt_out + ret;
+        $('#oatemplates-outshippingmethod1').html(html3);
   });
 }
 //主图赋值
