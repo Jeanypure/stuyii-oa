@@ -205,7 +205,7 @@ echo '</div>';
 
     <div class="keywords">
         <div class="col-sm-1" style='margin-left:3%'>
-            <strong>关键词：</strong>
+            <strong>标题关键词：</strong>
         </div>
         <div class='all-required' style="display: none;float:right;margin-right:10%"><textarea id="all-required" style="width:200px;height:300px;">这里写内容</textarea></div>
         <br>

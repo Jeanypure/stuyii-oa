@@ -171,7 +171,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
 
 <div class="keywords">
     <div class="col-sm-1">
-        <strong>关键词：</strong>
+        <strong>标题关键词：</strong>
     </div>
 
 <!--    <div class='all-required' style="display:none;float:right;margin-right:20%"><textarea id="all-required" style="width:200px;height:300px;">这里写内容</textarea></div>-->

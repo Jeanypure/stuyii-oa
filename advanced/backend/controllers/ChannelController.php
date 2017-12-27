@@ -608,15 +608,23 @@ class ChannelController extends Controller
             ->where("ParentCategory like :cate")
             ->orWhere("ParentCategory is null")
             ->addParams([':cate' => '%' . $cate[0]['cate'] . '%'])
-            ->all(); //
+            ->all();
 
         $data =  $this->actionNameTags($id,'oa_wishgoods');
 
-
-
+        $title_list = [];
         foreach($suffixAll as $key=>$value){
             //标题关键字
-            $name = $this->actionNonOrder($data,'Wish');
+            while(true){
+                $title = $this->actionNonOrder($data,'Wish');
+                if(!in_array($title,$title_list)||empty($title)){
+                    $name = $title;
+                    array_push($title_list,$title);
+                    break;
+
+                }
+            }
+
             //价格判断
             $totalprice = ceil($foos[0][0]['price'] + $foos[0][0]['shipping']);
             if ($totalprice <= 2) {
