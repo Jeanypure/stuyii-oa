@@ -486,13 +486,23 @@ class ChannelController extends Controller
 
         $data =  $this->actionNameTags($id,'oa_templates');
         //写入单元格值
+        $title_list = []; //存放已生成标题的标题池。
         foreach ($ret as $rowNum => $row) {
             if ($count > 1) {
                 $var = $this->getVariations($count, $allRows, $picKey, $picCount, $row['nameCode']);
                 $row['Variation'] = json_encode($var);
             }
             //Title
-            $name = $this->actionNonOrder($data,'eBay');
+            $names = '';
+            while(true){
+                $title = $this->actionNonOrder($data,'eBay');
+                if(!in_array($title,$title_list)||!empty($title)){
+                    $name = $title;
+                    array_push($title_list,$title);
+                    break;
+                }
+            }
+
             $row['Title'] = $name;
             //specifics 重新赋值
             $specifics = json_decode($row['specifics'], true)['specifics'];
@@ -677,61 +687,57 @@ class ChannelController extends Controller
     /*
      * 乱序数组
      */
-    public  function actionNonOrder($data,$div){
-
+    public function actionNonOrder($data,$div){
         if($div == 'eBay'){
             $max_length = 80;
+
         }
         if($div == 'Wish'){
             $max_length = 110;
         }
-
-        $head = $data['head'];
-        $tail = $data['tail'];
-        $need = array_filter($data['need']);
-        $random = array_filter($data['random']);
+        $head = [$data['head']];
+        $tail = [$data['tail']];
+        $need = array_filter($data['need'],
+            function ($ele)
+            {
+                if(!empty($ele)){
+                    return $ele;
+                }
+            });
+        $random = array_filter($data['random'],
+            function ($ele)
+            {
+                if(!empty($ele)){
+                    return $ele;
+                }
+            });
         if(empty($random)||empty($need)){
-            return;
+            return '';
         }
-        //标题关键字
-        shuffle($random);
-        $random_str1 = array_slice($random,0,1);
-        $random_result = array_diff($random,$random_str1);
-        shuffle($random_result);
-        $random_arr = array_slice($random_result,0,4);
-        $random_str2 =  trim(implode(' ',$random_arr));
-        shuffle($need);
-        $need_str1 = trim(implode(' ',$need));
-        $name = trim($head.' '.$random_str1[0].' '.$need_str1.' '.$random_str2.' '.$tail);
-        $nameLen = strlen($name);
-
         //判断固定部分的长度
-        $fix = trim($head.' '.$need_str1.' '.$tail);
-        $fixLen = strlen($fix);
-        if($fixLen > $max_length){
-            return $fix;
-        }else {
-            while ($nameLen > $max_length) {
-
-                $random_str1 = array_slice($random, 0, 1);
-                $random_result = array_diff($random, $random_str1);
-                $random_arr = array_slice($random_result, 0, 4);
-                shuffle($random_result);
-                array_pop($random_result);
-                $random_str2 = implode(' ', $random_arr);
-                shuffle($need);
-                $need_str1 = implode(' ', $need);
-                $name = $head . ' ' . $random_str1[0] . ' ' . $need_str1 . ' ' . $random_str2 . ' ' . $tail;
-                $nameLen = strlen($name);
-
-            }
-
-            return $name;
+        $unchanged_len = strlen(implode(' ',array_merge($head,$need,$tail)));
+        if($unchanged_len>$max_length){
+            return implode(' ',array_merge($head,shuffle($need),$tail));
         }
+        //可用长度
+        $available_len = $max_length - $unchanged_len - 1;
 
+        shuffle($random); //摇匀词库
+        $random_str1 = [array_shift($random)]; //从摇匀的词库里不放回抽一个
+        $random_arr = array_slice($random,0,4);//从剩余的词库里抽四个
 
-
-
+        $real_len = strlen(implode(' ',array_merge($random_str1,$random_arr)));
+        for($i=0;$i<4;$i++){
+            if($real_len<=$available_len){
+                break;
+            }
+            else{
+                array_shift($random_arr); //去掉一个随机词
+                $real_len = strlen(implode(' ',array_merge($random_str1,$random_arr)));
+            }
+        }
+        shuffle($need);
+        return  (implode(' ',array_merge($head,$random_str1,$need,$random_arr,$tail)));
     }
 
     /*
