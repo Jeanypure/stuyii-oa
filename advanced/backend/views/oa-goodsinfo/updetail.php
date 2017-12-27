@@ -412,8 +412,10 @@ echo FormGrid::widget([ // continuation fields to row above without labels
                     Html::button('价格确定', ['id' => 'RetailPrice-set', 'type' => 'button', 'class' => 'btn']) . ' ' .
 //                '<div class="row">'.
                     Html::button('一键生成SKU', ['id' => 'sku-set', 'type' => 'button', 'class' => 'btn btn-success']) . ' ' .
-                    Html::button('保存当前数据', ['id' => 'save-only', 'type' => 'button', 'class' => 'btn btn-info']) . ' ' .
-                    Html::button('保存并完善', ['id' => 'save-complete', 'type' => 'button', 'class' => 'btn btn-primary']) . ' ' .
+                    Html::button('保存当前数据', ['id' => 'save-only', 'type' => 'button', 'class' => 'btn btn-info',
+                        'data-href' => Url::to(['/goodssku/save-only', 'pid' => $pid, 'type'=> 'goods-info'])]) . ' ' .
+                    Html::button('保存并完善', ['id' => 'save-complete', 'type' => 'button', 'class' => 'btn btn-primary',
+                        'data-href' => Url::to(['/goodssku/save-complete', 'pid' => $pid, 'type'=> 'goods-info'])]) . ' ' .
                     Html::button('导入普源', ['id' => 'data-input', 'type' => 'button', 'class' => 'btn btn-warning']) . ' ' .
                     Html::button('删除行', ['id' => 'delete-row', 'type' => 'button', 'class' => 'btn btn-danger kv-batch-delete'])
 //                '</div>'
@@ -468,6 +470,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
     $requestUrl = Url::toRoute(['/goodssku/create', 'id' => $info->pid]);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
     $requestUrl2 = Url::toRoute(['/goodssku/update']);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
     $inputUrl = Url::toRoute(['input']);
+    $deleteUrl = Url::toRoute(['/goodssku/delete']);
 
 
     $js2 = <<<JS
@@ -536,7 +539,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
                 var pid = $(this).val();
                 $(this).closest('tr').remove();
                 $.ajax({
-                    url:'/goodssku/delete',
+                    url:'{$deleteUrl}',
                     type:'post',
                     data: {id:pid},
                     success:function(res) {
@@ -708,7 +711,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
 // 保存数据的提交按钮
     $('#save-only').on('click',function() {
         var form = $('#sku-info');
-        form.attr('action', '/goodssku/save-only?pid={$pid}&type=goods-info');
+        form.attr('action', $('#save-only').data('href'));
         form.submit();
     }); 
  
@@ -718,7 +721,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
         $.ajax({
                 cache: true,
                 type: "POST",
-                url:'/goodssku/save-complete?pid={$pid}&type=goods-info',
+                url: $('#save-complete').data('href'),
                 data:$('#sku-info').serialize(),
                 // async: false,    
                 
