@@ -16,7 +16,7 @@ class OaGoodsSearch extends OaGoods
     {
         return [
             // [['id'], 'integer'],
-            [['img','cate', 'devNum', 'origin1', 'developer', 'introducer',
+            [['cate', 'devNum', 'origin1', 'developer', 'introducer',
                 'devStatus', 'checkStatus','subCate','vendor1','vendor2','vendor3',
                 'origin2','origin3','introReason','approvalNote',
             ], 'string'],
@@ -130,12 +130,13 @@ class OaGoodsSearch extends OaGoods
         // grid filtering conditions
         $query->andFilterWhere([
             'nid' => $this->nid,
-            'createDate' => $this->createDate,
-            'updateDate' => $this->updateDate,
+            'convert(varchar(10),createDate,121)' => $this->createDate,
+            'convert(varchar(10),updateDate,121)' => $this->updateDate,
 
         ]);
         $query->andFilterWhere(['like', 'cate', $this->cate])
             ->andFilterWhere(['like', 'subCate', $this->subCate])
+            ->andFilterWhere(['like', 'vendor1', $this->vendor1])
             ->andFilterWhere(['like', 'devNum', $this->devNum])
             ->andFilterWhere(['like', 'origin1', $this->origin1])
             ->andFilterWhere(['like', 'developer', $this->developer])
@@ -143,6 +144,21 @@ class OaGoodsSearch extends OaGoods
             ->andFilterWhere(['like', 'introReason', $this->introReason])
             ->andFilterWhere(['like', 'approvalNote', $this->approvalNote])
             ->andFilterWhere(['like', 'checkStatus', $this->checkStatus]);
+        if($this->hopeWeight){
+            $query->andFilterWhere(['and',['>=', 'hopeWeight', $this->hopeWeight], ['<', 'hopeWeight', $this->hopeWeight + 1]]);
+        }
+        if($this->hopeRate){
+            $query->andFilterWhere(['and',['>=', 'hopeRate', $this->hopeRate], ['<', 'hopeRate', $this->hopeRate + 1]]);
+        }
+        if($this->hopeSale){
+            $query->andFilterWhere(['and',['>=', 'hopeSale', $this->hopeSale], ['<', 'hopeSale', $this->hopeSale + 1]]);
+        }
+        if($this->hopeCost){
+            $query->andFilterWhere(['and',['>=', 'hopeCost', $this->hopeCost], ['<', 'hopeCost', $this->hopeCost + 1]]);
+        }
+        if($this->hopeMonthProfit){
+            $query->andFilterWhere(['and',['>=', 'hopeMonthProfit', $this->hopeMonthProfit], ['<', 'hopeMonthProfit', $this->hopeMonthProfit + 1]]);
+        }
         return $dataProvider;
     }
 }
