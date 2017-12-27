@@ -477,7 +477,7 @@ class ChannelController extends Controller
             //设置属性名
             $variationSpecificsSet = ['NameValueList' => []];
             foreach ($columns as $col) {
-                $map = ['name' => array_keys($col)[0], 'value' => array_values($col)[0]];
+                $map = ['Name' => array_keys($col)[0], 'Value' => array_values($col)[0]];
                 array_push($variationSpecificsSet['NameValueList'], $map);
             }
         }
@@ -553,7 +553,7 @@ class ChannelController extends Controller
                 }
             }
             foreach ($columns as $col) {
-                $map = ['name' => array_keys($col)[0], 'value' => array_values($col)[0]];
+                $map = ['Name' => array_keys($col)[0], 'Value' => array_values($col)[0]];
                 array_push($variationSpecificsSet['NameValueList'], $map);
             }
             $pic = ['VariationSpecificPictureSet' => ['PictureURL' => [$row['imageUrl']]], 'Value' => $value['value']];
