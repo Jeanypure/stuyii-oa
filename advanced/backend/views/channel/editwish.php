@@ -454,9 +454,14 @@ $('body').on('click','.down-btn',function() {
     
     });
 
+
 //删除附加图
-$('.remove-image').on('click',function() {
+$('body').on('click','.remove-image',function() {
     $(this).closest('div .form-group').remove();
+    allImags();//重新生成JSON
+    serialize();//重新生成序列
+        
+        
 });
 
 //实时刷新图片
