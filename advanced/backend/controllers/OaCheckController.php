@@ -91,12 +91,17 @@ class OaCheckController extends Controller
         $_model->updateTime =strftime('%F %T');;
         $_model->achieveStatus='待处理';
         $_model->GoodsName='';
-        $arc_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-arc-map'])->one();
-        $pur_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-pur-map'])->one();
-        $arc = $arc_model->ruleValue;
-        $pur = $pur_model->ruleValue;
-        $_model->possessMan1 = $arc;
-        $_model->Purchaser = $pur;
+        if(empty($_model->possessMan1)){
+            $arc_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-arc-map'])->one();
+            $arc = $arc_model->ruleValue;
+            $_model->possessMan1 = $arc;
+        }
+
+        if(empty($_model->Purchaser)){
+            $pur_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-pur-map'])->one();
+            $pur = $pur_model->ruleValue;
+            $_model->Purchaser = $pur;
+        }
         $_model->save(false);
         return $this->redirect(['to-check']);
 
@@ -112,7 +117,6 @@ class OaCheckController extends Controller
         $_model = new OaGoodsinfo();
         $ids = yii::$app->request->post()["id"];
         $connection = yii::$app->db;
-
         foreach ($ids as $id)
         {
             $trans = $connection->beginTransaction();
@@ -140,8 +144,11 @@ class OaCheckController extends Controller
                 $_model->possessMan1 = $arc;
                 $_model->Purchaser = $pur;
                 $model->checkStatus = '已审批';
-                if(!($_model->save(false)&&$model->update(false))) {
-                    throw new Exception ('fail to insert data into oa-goodsInfo');
+                if(!($_model->save(false))) {
+                    throw new Exception('fail to insert data into oa-goodsInfo!');
+                }
+                if(!$model->save(false)){
+                    throw new Exception('fail to update checkStatus!');
                 }
                 $trans->commit();
             }

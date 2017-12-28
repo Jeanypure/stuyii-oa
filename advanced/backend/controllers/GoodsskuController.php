@@ -131,7 +131,6 @@ class GoodsskuController extends Controller
                             $update_model->RetailPrice = $row_value['RetailPrice'];
                             $update_model->update(false);
                             echo "保存完成";
-
                         }
 
                     }
@@ -223,18 +222,23 @@ class GoodsskuController extends Controller
                     $goods_model = OaGoodsinfo::find()->where(['pid' => $pid])->one();
                     $developer = $goods_model ->developer;
                     try {
-                        $arc_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-arc-map'])->one();
-                        $pur_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-pur-map'])->one();
-                        $arc = $arc_model->ruleValue;
-                        $pur = $pur_model->ruleValue;
+
+                        if(empty($goods_model->possessMan1)){
+                            $arc_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-arc-map'])->one();
+                            $arc = $arc_model->ruleValue;
+                            $goods_model->possessMan1 = $arc;
+                        }
+                        if(empty($goods_model->Purchaser)){
+                            $pur_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-pur-map'])->one();
+                            $pur = $pur_model->ruleValue;
+                            $goods_model->Purchaser = $pur;
+                        }
                         $goods_model ->achieveStatus = '已完善';
-                        if($goods_model ->picStatus==''){
+                        if(empty($goods_model ->picStatus)){
                            $goods_model ->picStatus = '待处理';
                         }
 
                         $goods_model->updateTime =strftime('%F %T');
-                        $goods_model->possessMan1 = $arc;
-                        $goods_model->Purchaser = $pur;
                         $goods_model->update(false);
                         echo "保存完成";
                     }
@@ -248,7 +252,6 @@ class GoodsskuController extends Controller
                 if ($type=='pic-info')
                 {
                     $Rows = $request->post()['Goodssku'];
-
                     foreach ($Rows as $row_key=>$row_value)
                     {
                         $sid = $row_key;
@@ -267,7 +270,7 @@ class GoodsskuController extends Controller
                        $sql_wish = "exec P_oaGoods_TowishGoods $pid";
                        $sql_ebay = "exec P_oaGoods_ToEbayGoods $pid";
                        $connection = Yii::$app->db;
-                       $import_trans =$connection->beginTransaction();
+                       $import_trans = $connection->beginTransaction();
                        try{
                            $connection->createCommand($sql_wish)->execute();
                            $connection->createCommand($sql_ebay)->execute();
@@ -275,17 +278,15 @@ class GoodsskuController extends Controller
                            $goods_model = OaGoodsinfo::find()->where(['pid' => $pid])->one();
                            $goods_model ->picStatus = '已完善';
                            $goods_model->updateTime =strftime('%F %T');
-                           $goods_model->update();
+                           if(!$goods_model->update()){
+                                throw new Exception("fail to update picStatus");
+                           }
                            //提交事务
                            $import_trans->commit();
                            echo '保存成功';
                        }
                        catch (\Exception $er) {
-
                            $import_trans->rollBack();
-                           $goods_model ->picStatus = '待处理';
-                           $goods_model->updateTime =strftime('%F %T');
-                           $goods_model->update();
                            echo '保存失败';
                        }
                     }
@@ -353,7 +354,6 @@ class GoodsskuController extends Controller
             ]);
         }
     }
-
 
 
     /**

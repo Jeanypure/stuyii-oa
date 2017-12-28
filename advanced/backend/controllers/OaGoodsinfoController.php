@@ -228,13 +228,8 @@ class OaGoodsinfoController extends Controller
                 'lock' => $data['platFrom'],
                 'packname' => $data['packname'],
                 'goodsItem' => $goodsItem[0],
-
             ]);
-
         }
-
-
-
     }
 
 
@@ -401,8 +396,6 @@ class OaGoodsinfoController extends Controller
         catch (\Exception $e) {
             echo "批量导入失败";
         }
-
-
     }
 
     /**
@@ -415,16 +408,16 @@ class OaGoodsinfoController extends Controller
         try
         {
             $model->achieveStatus = '已完善';
-            $model->picStatus = '待处理';
-            $model->update(false);
+            if(empty($model->picStatus)){
+                $model->picStatus = '待处理';
+                $model->update(false);
+            }
             echo "标记成功";
         }
         catch (\Exception $e)
         {
             echo "标记失败";
         }
-
-
     }
 
     /**
@@ -439,7 +432,10 @@ class OaGoodsinfoController extends Controller
             {
                 $model = $this->findModel($id);
                 $model->achieveStatus = '已完善';
-                $model->picStatus = '待处理';
+                if(empty($model->picStatus)){
+                    $model->picStatus = '待处理';
+                    $model->update(false);
+                }
                 $model->update(false);
             }
             echo "标记失败";

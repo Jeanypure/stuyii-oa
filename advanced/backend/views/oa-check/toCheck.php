@@ -86,7 +86,7 @@ $('.data-view').on('click',  function () {
            type:"post",
            data:{id:ids},
            success:function(res){
-                console.log("oh yeah lots passed!");
+                console.log(res);
            }
         });
     });
