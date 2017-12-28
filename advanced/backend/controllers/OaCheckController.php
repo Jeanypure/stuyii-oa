@@ -112,7 +112,6 @@ class OaCheckController extends Controller
         $_model = new OaGoodsinfo();
         $ids = yii::$app->request->post()["id"];
         $connection = yii::$app->db;
-
         foreach ($ids as $id)
         {
             $trans = $connection->beginTransaction();
@@ -140,8 +139,11 @@ class OaCheckController extends Controller
                 $_model->possessMan1 = $arc;
                 $_model->Purchaser = $pur;
                 $model->checkStatus = '已审批';
-                if(!($_model->save(false)&&$model->update(false))) {
-                    throw new Exception ('fail to insert data into oa-goodsInfo');
+                if(!($_model->save(false))) {
+                    throw new Exception ('fail to insert data into oa-goodsInfo!');
+                }
+                if(!$model->save(false)){
+                    throw new Exception ('fail to update checkStatus!');
                 }
                 $trans->commit();
             }
