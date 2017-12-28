@@ -32,7 +32,9 @@ class OaGoodsinfoSearch extends OaGoodsinfo
     {
         return [
             [['pid','IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged'], 'integer'],
-            [['hopeWeight','picStatus','isVar','vendor1','vendor2','vendor3','developer','devDatetime','updateTime','achieveStatus','GoodsCode','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName','possessMan2','possessMan1'],'safe'],
+            [['hopeWeight','picStatus','isVar','vendor1','vendor2','vendor3','developer','devDatetime','updateTime','achieveStatus','GoodsCode',
+                'GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName',
+                'possessMan2','possessMan1'],'safe'],
 
         ];
     }
@@ -161,12 +163,8 @@ class OaGoodsinfoSearch extends OaGoodsinfo
         // grid filtering conditions
         $query->andFilterWhere([
             'pid' => $this->pid,
-            'achieveStatus' => $this->achieveStatus,
-            'GoodsCode' => $this->GoodsCode,
-            'GoodsName'=>$this->GoodsName,
+
             'SupplierName' => $this->SupplierName,
-            'AliasCnName'=>$this->AliasCnName,
-            'AliasEnName'=>$this->AliasEnName,
             'PackName'=>$this->PackName,
             'description'=>$this->description,
             'StoreName'=>$this->StoreName,
@@ -176,17 +174,24 @@ class OaGoodsinfoSearch extends OaGoodsinfo
             'IsCharged' => $this->IsCharged,
             'DictionaryName'=>$this->DictionaryName,
             'IsPowder' => $this->IsPowder,
-            'devDatetime'=>$this->devDatetime,
-            'updateTime'=>$this->updateTime,
-            'vendor1' => $this->vendor1,
-            'possessMan1' => $this->possessMan1,
-            'picStatus' => $this->picStatus,
+            'convert(varchar(10),devDatetime,121)'=>$this->devDatetime,
+            'convert(varchar(10),updateTime,121)'=>$this->updateTime,
             'isVar' => $this->isVar,
 
 
 
         ]);
 
+        $query->andFilterWhere(['like', 'possessMan1', $this->possessMan1]);
+        $query->andFilterWhere(['like', 'vendor3', $this->vendor3]);
+        $query->andFilterWhere(['like', 'vendor2', $this->vendor2]);
+        $query->andFilterWhere(['like', 'vendor1', $this->vendor1]);
+        $query->andFilterWhere(['like', 'picStatus', $this->picStatus]);
+        $query->andFilterWhere(['like', 'AliasEnName', $this->AliasEnName]);
+        $query->andFilterWhere(['like', 'AliasCnName', $this->AliasCnName]);
+        $query->andFilterWhere(['like', 'GoodsName', $this->GoodsName]);
+        $query->andFilterWhere(['like', 'achieveStatus', $this->achieveStatus]);
+        $query->andFilterWhere(['like', 'GoodsCode', $this->GoodsCode]);
         $query->andFilterWhere(['like', 'description', $this->description]);
         $query->andFilterWhere(['like', 'AliasCnName', $this->AliasCnName]);
         $query->andFilterWhere(['like', 'vendor1', $this->vendor1]);

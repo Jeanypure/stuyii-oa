@@ -144,20 +144,24 @@ class OaGoodsSearch extends OaGoods
             ->andFilterWhere(['like', 'introReason', $this->introReason])
             ->andFilterWhere(['like', 'approvalNote', $this->approvalNote])
             ->andFilterWhere(['like', 'checkStatus', $this->checkStatus]);
+        //var_dump($this->salePrice);exit;
+        if($this->salePrice){
+            $query->andFilterWhere(['and',['>=', 'salePrice', $this->salePrice], ['<', 'salePrice', ceil($this->salePrice)]]);
+        }
         if($this->hopeWeight){
-            $query->andFilterWhere(['and',['>=', 'hopeWeight', $this->hopeWeight], ['<', 'hopeWeight', $this->hopeWeight + 1]]);
+            $query->andFilterWhere(['and',['>=', 'hopeWeight', $this->hopeWeight], ['<', 'hopeWeight', ceil($this->hopeWeight )]]);
         }
         if($this->hopeRate){
-            $query->andFilterWhere(['and',['>=', 'hopeRate', $this->hopeRate], ['<', 'hopeRate', $this->hopeRate + 1]]);
+            $query->andFilterWhere(['and',['>=', 'hopeRate', $this->hopeRate], ['<', 'hopeRate', ceil($this->hopeRate )]]);
         }
         if($this->hopeSale){
-            $query->andFilterWhere(['and',['>=', 'hopeSale', $this->hopeSale], ['<', 'hopeSale', $this->hopeSale + 1]]);
+            $query->andFilterWhere(['and',['>=', 'hopeSale', $this->hopeSale], ['<', 'hopeSale', ceil($this->hopeSale)]]);
         }
         if($this->hopeCost){
-            $query->andFilterWhere(['and',['>=', 'hopeCost', $this->hopeCost], ['<', 'hopeCost', $this->hopeCost + 1]]);
+            $query->andFilterWhere(['and',['>=', 'hopeCost', $this->hopeCost], ['<', 'hopeCost', ceil($this->hopeCost)]]);
         }
         if($this->hopeMonthProfit){
-            $query->andFilterWhere(['and',['>=', 'hopeMonthProfit', $this->hopeMonthProfit], ['<', 'hopeMonthProfit', $this->hopeMonthProfit + 1]]);
+            $query->andFilterWhere(['and',['>=', 'hopeMonthProfit', $this->hopeMonthProfit], ['<', 'hopeMonthProfit', ceil($this->hopeMonthProfit)]]);
         }
         return $dataProvider;
     }
