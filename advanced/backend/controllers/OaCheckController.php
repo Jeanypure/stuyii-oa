@@ -91,12 +91,17 @@ class OaCheckController extends Controller
         $_model->updateTime =strftime('%F %T');;
         $_model->achieveStatus='待处理';
         $_model->GoodsName='';
-        $arc_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-arc-map'])->one();
-        $pur_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-pur-map'])->one();
-        $arc = $arc_model->ruleValue;
-        $pur = $pur_model->ruleValue;
-        $_model->possessMan1 = $arc;
-        $_model->Purchaser = $pur;
+        if(empty($_model->possessMan1)){
+            $arc_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-arc-map'])->one();
+            $arc = $arc_model->ruleValue;
+            $_model->possessMan1 = $arc;
+        }
+
+        if(empty($_model->Purchaser)){
+            $pur_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-pur-map'])->one();
+            $pur = $pur_model->ruleValue;
+            $_model->Purchaser = $pur;
+        }
         $_model->save(false);
         return $this->redirect(['to-check']);
 
