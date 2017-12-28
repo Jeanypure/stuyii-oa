@@ -448,10 +448,11 @@ class ChannelController extends Controller
         $objPHPExcel->setActiveSheetIndex($sheetNumber);
         $sheetName = 'ebay模板';
         $objPHPExcel->getActiveSheet()->setTitle($sheetName);
-        header('Content-Type: application/vnd.ms-excel');
-        $fileName = $goods_code . "-eBay模板-" . date("d-m-Y-His") . ".xls";
-        header('Content-Disposition: attachment;filename=' . $fileName . ' ');
-        header('Cache-Control: max-age=0');
+
+//        header('Content-Type: application/vnd.ms-excel');
+//        $fileName = $goods_code . "-eBay模板-" . date("d-m-Y-His") . ".xls";
+//        header('Content-Disposition: attachment;filename=' . $fileName . ' ');
+//        header('Cache-Control: max-age=0');
 
 
         //获取列名&设置image字段
@@ -520,8 +521,9 @@ class ChannelController extends Controller
                 $objPHPExcel->getActiveSheet()->setCellValue(PHPExcelTools::stringFromColumnIndex($num) . ($rowNum + 2), $row[$name]);
             }
         }
-        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-        $objWriter->save('php://output');
+
+//        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+//        $objWriter->save('php://output');
     }
 
 
@@ -587,9 +589,15 @@ class ChannelController extends Controller
         $objPHPExcel->setActiveSheetIndex($sheet);
         $foos[0] = OaWishgoods::find()->where(['infoid'=>$id])->all();
         $sql = ' SELECT cate FROM oa_goods WHERE nid=(SELECT goodsid FROM oa_goodsinfo WHERE pid='.$id.')';
+
         $db = yii::$app->db;
         $query = $db->createCommand($sql);
         $cate = $query->queryAll();
+        $sql_GoodsCode = 'select GoodsCode,isVar from oa_goodsinfo WHERE pid='.$id;
+        $dataGoodsCode = $db->createCommand($sql_GoodsCode)
+                        ->queryAll();
+        $GoodsCode = $dataGoodsCode[0]['GoodsCode'];
+        $isVar = $dataGoodsCode[0]['isVar'];
 
         $columnNum = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P'];
         $colName = [
@@ -609,7 +617,6 @@ class ChannelController extends Controller
             ->orWhere("ParentCategory is null")
             ->addParams([':cate' => '%' . $cate[0]['cate'] . '%'])
             ->all();
-
         $data =  $this->actionNameTags($id,'oa_wishgoods');
 
         $title_list = [];
@@ -638,9 +645,18 @@ class ChannelController extends Controller
                 $foos[0][0]['price'] = ceil($totalprice - $foos[0][0]['shipping']);
 
             }
-            $strvariant = $this->actionVariationWish($id,$value['Suffix'],$value['Rate']);
+            //主图用商品编码 拼接
+            if($isVar=='是'){
+                $strvariant = $this->actionVariationWish($id,$value['Suffix'],$value['Rate']);
+            }else{
+                $strvariant = '';
+            }
+
+
+
+
             $row = $key+2;
-            $foos[0][0]['main_image'] = 'https://www.tupianku.com/view/full/10023/'.$foos[0][0]['SKU'].'-_'.$value['MainImg'].'_.jpg' ;
+            $foos[0][0]['main_image'] = 'https://www.tupianku.com/view/full/10023/'.$GoodsCode.'-_'.$value['MainImg'].'_.jpg' ;
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$row,$foos[0][0]['SKU'].$value['Suffix']);
             $objPHPExcel->getActiveSheet()->setCellValue('B'.$row,$value['IbaySuffix']);
             $objPHPExcel->getActiveSheet()->setCellValue('C'.$row,$name);
