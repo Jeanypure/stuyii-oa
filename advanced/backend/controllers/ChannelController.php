@@ -449,10 +449,10 @@ class ChannelController extends Controller
         $sheetName = 'ebay模板';
         $objPHPExcel->getActiveSheet()->setTitle($sheetName);
 
-//        header('Content-Type: application/vnd.ms-excel');
-//        $fileName = $goods_code . "-eBay模板-" . date("d-m-Y-His") . ".xls";
-//        header('Content-Disposition: attachment;filename=' . $fileName . ' ');
-//        header('Cache-Control: max-age=0');
+        header('Content-Type: application/vnd.ms-excel');
+        $fileName = $goods_code . "-eBay模板-" . date("d-m-Y-His") . ".xls";
+        header('Content-Disposition: attachment;filename=' . $fileName . ' ');
+        header('Cache-Control: max-age=0');
 
 
         //获取列名&设置image字段
@@ -522,8 +522,8 @@ class ChannelController extends Controller
             }
         }
 
-//        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-//        $objWriter->save('php://output');
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
     }
 
 
@@ -652,9 +652,6 @@ class ChannelController extends Controller
                 $strvariant = '';
             }
 
-
-
-
             $row = $key+2;
             $foos[0][0]['main_image'] = 'https://www.tupianku.com/view/full/10023/'.$GoodsCode.'-_'.$value['MainImg'].'_.jpg' ;
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$row,$foos[0][0]['SKU'].$value['Suffix']);
@@ -743,6 +740,8 @@ class ChannelController extends Controller
                     return $ele;
                 }
             });
+
+
         if(empty($random)||empty($need)){
             return '';
         }

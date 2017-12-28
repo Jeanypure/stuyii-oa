@@ -141,7 +141,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
                 ],
                 'StoreName' => [
                     'label' => "<span style = 'color:red'>*仓库</span>",
-                    'items' => $result,
+                        'items' => $result,
                     'type' => Form::INPUT_DROPDOWN_LIST,
                 ],
                 'Season' => [

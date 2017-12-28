@@ -58,7 +58,7 @@ class OaWishgoods extends \yii\db\ActiveRecord
             'msrp' => Yii::t('app', '保留价'),
             'shipping' => Yii::t('app', '运费'),
             'shippingtime' => Yii::t('app', '运输时间'),
-            'tags' => Yii::t('app', '关键词'),
+            'tags' => Yii::t('app', '关键词tags'),
             'main_image' => Yii::t('app', '主图'),
             'extra_images' => Yii::t('app', '附加图'),
             'goodsid' => Yii::t('app', '商品ID'),

@@ -159,10 +159,8 @@ if (empty($sku->randomKeywords)) {
     <!--关键词-->
     <div class="keywords">
         <div class="cos-lg-8" style="float: inside">
-            <?php
-//            echo $form->field($sku, 'title')->textInput();
-            ?>
-            <?= $form->field($sku, 'tags')->textInput(['class' => 'tags-input'])->hint('键词不能超过10个'); ?>
+
+            <?= $form->field($sku, 'tags')->textInput(['class' => 'tags-input','style'=>"width:780px;"])->label('关键词tags')->hint('键词不能超过10个'); ?>
 
             <div class="col-sm-1" style='margin-left:3%'><strong>标题关键词：</strong></div>
             <br>
