@@ -477,7 +477,7 @@ class ChannelController extends Controller
             //设置属性名
             $variationSpecificsSet = ['NameValueList' => []];
             foreach ($columns as $col) {
-                $map = ['name' => array_keys($col)[0], 'value' => array_values($col)[0]];
+                $map = ['Name' => array_keys($col)[0], 'Value' => array_values($col)[0]];
                 array_push($variationSpecificsSet['NameValueList'], $map);
             }
         }
@@ -553,7 +553,7 @@ class ChannelController extends Controller
                 }
             }
             foreach ($columns as $col) {
-                $map = ['name' => array_keys($col)[0], 'value' => array_values($col)[0]];
+                $map = ['Name' => array_keys($col)[0], 'Value' => array_values($col)[0]];
                 array_push($variationSpecificsSet['NameValueList'], $map);
             }
             $pic = ['VariationSpecificPictureSet' => ['PictureURL' => [$row['imageUrl']]], 'Value' => $value['value']];
@@ -608,15 +608,23 @@ class ChannelController extends Controller
             ->where("ParentCategory like :cate")
             ->orWhere("ParentCategory is null")
             ->addParams([':cate' => '%' . $cate[0]['cate'] . '%'])
-            ->all(); //
+            ->all();
 
         $data =  $this->actionNameTags($id,'oa_wishgoods');
 
-
-
+        $title_list = [];
         foreach($suffixAll as $key=>$value){
             //标题关键字
-            $name = $this->actionNonOrder($data,'Wish');
+            while(true){
+                $title = $this->actionNonOrder($data,'Wish');
+                if(!in_array($title,$title_list)||empty($title)){
+                    $name = $title;
+                    array_push($title_list,$title);
+                    break;
+
+                }
+            }
+
             //价格判断
             $totalprice = ceil($foos[0][0]['price'] + $foos[0][0]['shipping']);
             if ($totalprice <= 2) {
