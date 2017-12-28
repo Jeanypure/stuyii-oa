@@ -85,8 +85,6 @@ class ChannelSearch extends Channel
     if($unit == '平台信息'){
             if($role[0]['item_name']=='部门主管'){
                 $query->andWhere(['in', 'oa_goods.developer', $users]);
-            }elseif($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='wish销售'){
-                $query->andWhere(['in', 'introducer', $users]);
             }elseif ($role[0]['item_name']=='产品开发'){
                 $query->andWhere(['in', 'oa_goods.developer', $users]);
             }elseif($role[0]['item_name']=='产品开发组长'){
