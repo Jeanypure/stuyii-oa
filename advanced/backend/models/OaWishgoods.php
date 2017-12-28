@@ -37,7 +37,7 @@ class OaWishgoods extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['SKU', 'title', 'description', 'shippingtime', 'tags', 'main_image','extra_images', 'headKeywords', 'requiredKeywords', 'randomKeywords', 'tailKeywords'], 'string'],
+            [['SKU', 'title', 'description', 'shippingtime', 'main_image','extra_images', 'headKeywords', 'requiredKeywords', 'randomKeywords', 'tailKeywords','wishtags'], 'string'],
             [['inventory', 'goodsid', 'infoid'], 'integer'],
             [['price', 'msrp', 'shipping'], 'number'],
         ];
@@ -58,11 +58,12 @@ class OaWishgoods extends \yii\db\ActiveRecord
             'msrp' => Yii::t('app', '保留价'),
             'shipping' => Yii::t('app', '运费'),
             'shippingtime' => Yii::t('app', '运输时间'),
-            'tags' => Yii::t('app', '关键词tags'),
+//            'tags' => Yii::t('app', '关键词tags'),
             'main_image' => Yii::t('app', '主图'),
             'extra_images' => Yii::t('app', '附加图'),
             'goodsid' => Yii::t('app', '商品ID'),
             'infoid' => Yii::t('app', 'Infoid'),
+            'wishtags' => Yii::t('app', '关键词tags'),
         ];
     }
 }

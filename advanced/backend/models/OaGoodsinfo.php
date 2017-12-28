@@ -74,6 +74,8 @@ class OaGoodsinfo extends GoodsCats
             'requiredKeywords' => '必选关键词',
             'randomKeywords' => '随机关键词',
             'tailKeywords' => '最后关键词',
+            'wishtags' => '关键词tags',
+
 
 
 
