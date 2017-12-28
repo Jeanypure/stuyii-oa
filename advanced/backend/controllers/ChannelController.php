@@ -889,7 +889,6 @@ class ChannelController extends Controller
 
         $sql = 'P_oa_toJoom @pid=' . $id.",@name='".$name."'";
 
-        echo $sql;die;
         $db = yii::$app->db;
         $query = $db->createCommand($sql);
         $joomRes = $query->queryAll();
