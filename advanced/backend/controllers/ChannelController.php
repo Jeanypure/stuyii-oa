@@ -449,10 +449,10 @@ class ChannelController extends Controller
         $sheetName = 'ebay模板';
         $objPHPExcel->getActiveSheet()->setTitle($sheetName);
 
-//        header('Content-Type: application/vnd.ms-excel');
-//        $fileName = $goods_code . "-eBay模板-" . date("d-m-Y-His") . ".xls";
-//        header('Content-Disposition: attachment;filename=' . $fileName . ' ');
-//        header('Cache-Control: max-age=0');
+        header('Content-Type: application/vnd.ms-excel');
+        $fileName = $goods_code . "-eBay模板-" . date("d-m-Y-His") . ".xls";
+        header('Content-Disposition: attachment;filename=' . $fileName . ' ');
+        header('Cache-Control: max-age=0');
 
 
         //获取列名&设置image字段
@@ -522,8 +522,8 @@ class ChannelController extends Controller
             }
         }
 
-//        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-//        $objWriter->save('php://output');
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
     }
 
 

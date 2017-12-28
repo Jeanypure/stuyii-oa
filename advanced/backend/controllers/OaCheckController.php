@@ -140,10 +140,10 @@ class OaCheckController extends Controller
                 $_model->Purchaser = $pur;
                 $model->checkStatus = '已审批';
                 if(!($_model->save(false))) {
-                    throw new Exception ('fail to insert data into oa-goodsInfo!');
+                    throw new Exception('fail to insert data into oa-goodsInfo!');
                 }
                 if(!$model->save(false)){
-                    throw new Exception ('fail to update checkStatus!');
+                    throw new Exception('fail to update checkStatus!');
                 }
                 $trans->commit();
             }
