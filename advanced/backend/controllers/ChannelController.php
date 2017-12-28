@@ -112,7 +112,8 @@ class ChannelController extends Controller
 
         } else {
 
-            $extra_images = explode("\n", $sku[0]['extra_images']);
+            $extra_images_All = explode("\n", $sku[0]['extra_images']);
+            $extra_images = array_filter($extra_images_All);
             return $this->render('editwish', [
                 'extra_images' => $extra_images,
                 'sku' => $sku[0],

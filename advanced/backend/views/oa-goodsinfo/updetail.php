@@ -168,14 +168,24 @@ echo FormGrid::widget([ // continuation fields to row above without labels
 
 ?>
 
+<div class="form-group">
+    <div class="col-lg-1">
+        <strong>关键词tags：</strong>
+    </div>
+    <div class="col-lg-11">
+        <?= $form->field($info, 'wishtags')->textInput(['class' => 'tags-input','style'=>"width:780px;margin-left:-100;",'placeholder' => '--tags关键词不能超过10个,逗号分隔--'])->label(false); ?>
+
+    </div>
+
+</div>
+
+
 
 <div class="keywords">
     <div class="col-sm-1">
         <strong>标题关键词：</strong>
     </div>
-
-<!--    <div class='all-required' style="display:none;float:right;margin-right:20%"><textarea id="all-required" style="width:200px;height:300px;">这里写内容</textarea></div>-->
-    <br>
+    </br>
     <?= $form->field($info,'headKeywords',['labelOptions' => ['style' => 'margin-left:3%']])->textInput(['style'=>"width:200px;margin-left:3%;",'placeholder' => '--一个关键词--'])->label('最前关键词<span style = "color:red">*</span>'); ?>
     <?= $form->field($info,'requiredKeywords')->textInput(['style'=>"width:200px;display:none;",'placeholder' => ''])->label(false); ?>
     <?= $form->field($info,'randomKeywords')->textInput(['style'=>"width:200px;display:none;",'placeholder' => ''])->label(false); ?>

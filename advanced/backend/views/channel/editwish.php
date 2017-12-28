@@ -123,6 +123,7 @@ if (empty($sku->randomKeywords)) {
     $form->field($sku, 'extra_images')->hiddenInput();
 
     echo '<div class="images">';
+//    var_dump($extra_images);die;
         foreach ($extra_images as $key=>$value){
         echo '
         <div class="form-group all-images">
@@ -160,7 +161,7 @@ if (empty($sku->randomKeywords)) {
     <div class="keywords">
         <div class="cos-lg-8" style="float: inside">
 
-            <?= $form->field($sku, 'tags')->textInput(['class' => 'tags-input','style'=>"width:780px;"])->label('关键词tags')->hint('键词不能超过10个'); ?>
+            <?= $form->field($sku, 'wishtags')->textInput(['class' => 'tags-input','style'=>"width:780px;"])->label('关键词tags')->hint('键词不能超过10个'); ?>
 
             <div class="col-sm-1" style='margin-left:3%'><strong>标题关键词：</strong></div>
             <br>
