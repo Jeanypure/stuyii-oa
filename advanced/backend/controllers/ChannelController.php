@@ -886,14 +886,11 @@ class ChannelController extends Controller
     {
         $da = $this->actionNameTags($id,'oa_wishgoods');
         $name = $this->actionNonOrder($da,'Joom');
-
+        $name = str_replace("'","''",$name);
         $sql = 'P_oa_toJoom @pid=' . $id.",@name='".$name."'";
-
         $db = yii::$app->db;
         $query = $db->createCommand($sql);
         $joomRes = $query->queryAll();
-
-
         if (empty($joomRes)) {
             return;
         }
