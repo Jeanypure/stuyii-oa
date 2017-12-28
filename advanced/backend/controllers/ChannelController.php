@@ -707,6 +707,10 @@ class ChannelController extends Controller
         if($div == 'Wish'){
             $max_length = 110;
         }
+        if($div == 'Joom'){
+            $max_length = 100;
+        }
+
         $head = [$data['head']];
         $tail = [$data['tail']];
         $need = array_filter($data['need'],
@@ -862,6 +866,7 @@ class ChannelController extends Controller
                     $num = 0;
                 }
                 $row = $data[$i];
+
                 foreach ($row as $key => $value) {
                     $row[$key] = iconv('utf-8', 'gbk', $value);
                 }
@@ -879,10 +884,17 @@ class ChannelController extends Controller
 
     public function actionExportJoom($id)
     {
-        $sql = 'P_oa_toJoom @pid=' . $id;
+        $da = $this->actionNameTags($id,'oa_wishgoods');
+        $name = $this->actionNonOrder($da,'Joom');
+
+        $sql = 'P_oa_toJoom @pid=' . $id.",@name='".$name."'";
+
+        echo $sql;die;
         $db = yii::$app->db;
         $query = $db->createCommand($sql);
         $joomRes = $query->queryAll();
+
+
         if (empty($joomRes)) {
             return;
         }
