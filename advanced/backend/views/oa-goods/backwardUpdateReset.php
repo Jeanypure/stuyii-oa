@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = '更新';
 
 $catNid = $model->catNid;
 $subCate = $model->subCate;
-$reCheckUrl = Url::toRoute('backward-recheck');
+$reCheckUrl = Url::toRoute(['backward-recheck', 'id' => $model->nid]);
 $trashUrl = Url::toRoute('backward-trash');
 $requireTemplates = ["template" => "<span style='color:red'>*{label}:</span>\n<div >{input}</div>\n{error}"];
 $JS = <<<JS
@@ -29,7 +29,7 @@ $("option:contains({$subCate})").attr("selected",true);
 $('#recheck-btn').on('click',function() {
     // $.get('{$reCheckUrl}', {id: '{$model->nid}','type':'backward-products'});
     var form = $("#update-form");
-    form.attr('action','{$reCheckUrl}?id={$model->nid}');
+    form.attr('action','{$reCheckUrl}');
     form.submit();
 })
 

@@ -128,7 +128,7 @@ Tabs::widget([
     'enableAjaxValidation' => false,
     'fieldConfig' => [
         'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
-        'labelOptions' => ['class' => 'col-lg-1 control-label'],
+        //'labelOptions' => ['class' => 'col-lg-1 control-label'],
     ]
 ]);
 ?>
@@ -137,9 +137,9 @@ Tabs::widget([
     <span>基本信息</span>
 </div>
 </br>
-<?= $form->field($templates, 'sku')->textInput() ?>
+<?= $form->field($templates, 'sku', ['labelOptions' => ['class' => 'col-lg-1 control-label'],])->textInput() ?>
 <?php
-echo $form->field($templates, 'mainPage')->textInput(['class' => 'main-page', 'style' => 'display:none']);
+echo $form->field($templates, 'mainPage', ['labelOptions' => ['class' => 'col-lg-1 control-label'],])->textInput(['class' => 'main-page', 'style' => 'display:none']);
 echo '<div class="form-group field-oatemplates-mainpage">
     <label class="col-lg-1 control-label"></label>
     <div class="col-lg-3"><input type="text" class="form-control tem-page" value="' . $templates->mainPage . '"></div>
@@ -150,7 +150,7 @@ echo '<div class="form-group field-oatemplates-mainpage">
     </a>
     </div>
 </div>'; ?>
-<?= $form->field($templates, 'extraPage')->textarea(['style' => 'display:none']); ?>
+<?= $form->field($templates, 'extraPage', ['labelOptions' => ['class' => 'col-lg-1 control-label'],])->textarea(['style' => 'display:none']); ?>
 <?php
 echo '<div class="images">';
 $images = json_decode($templates->extraPage, true)['images'];
@@ -173,16 +173,16 @@ foreach ($images as $key => $image) {
 echo '</div>';
 ?>
 </br>
-<?= $form->field($templates, 'location')->textInput(); ?>
-<?= $form->field($templates, 'country')->textInput(); ?>
-<?= $form->field($templates, 'postCode')->textInput(); ?>
-<?= $form->field($templates, 'prepareDay')->textInput(['value' => '10']); ?>
+<?= $form->field($templates, 'location',['labelOptions' => ['class' => 'col-lg-1 control-label'],])->textInput(); ?>
+<?= $form->field($templates, 'country',['labelOptions' => ['class' => 'col-lg-1 control-label'],])->textInput(); ?>
+<?= $form->field($templates, 'postCode',['labelOptions' => ['class' => 'col-lg-1 control-label'],])->textInput(); ?>
+<?= $form->field($templates, 'prepareDay',['labelOptions' => ['class' => 'col-lg-1 control-label'],])->textInput(['value' => '10']); ?>
 
 <div class="blockTitle">
     <span> 站点组</span>
 </div>
 </br>
-<?= $form->field($templates, 'site')->dropDownList([0 => '美国站', 3 => '英国站', 15 => '澳大利亚站']); ?>
+<?= $form->field($templates, 'site',['labelOptions' => ['class' => 'col-lg-1 control-label'],])->dropDownList([0 => '美国站', 3 => '英国站', 15 => '澳大利亚站']); ?>
 <div class="blockTitle">
     <span> 多属性</span>
 </div>
@@ -196,12 +196,12 @@ echo '</div>';
 </div>
 </br>
 <div>
-    <?= $form->field($templates, 'listedCate')->textInput(); ?>
-    <?= $form->field($templates, 'listedSubcate')->textInput(); ?>
-    <?= $form->field($templates, 'title')->textInput(); ?>
-    <?= $form->field($templates, 'subTitle')->textInput(); ?>
-    <?= $form->field($templates, 'requiredKeywords')->textInput(['style' => "display:none;", 'placeholder' => ''])->label(false); ?>
-    <?= $form->field($templates, 'randomKeywords')->textInput(['style' => "display:none;", 'placeholder' => ''])->label(false); ?>
+    <?= $form->field($templates, 'listedCate',['labelOptions' => ['class' => 'col-lg-1 control-label'],])->textInput(); ?>
+    <?= $form->field($templates, 'listedSubcate',['labelOptions' => ['class' => 'col-lg-1 control-label'],])->textInput(); ?>
+    <?= $form->field($templates, 'title',['labelOptions' => ['class' => 'col-lg-1 control-label'],])->textInput(); ?>
+    <?= $form->field($templates, 'subTitle',['labelOptions' => ['class' => 'col-lg-1 control-label'],])->textInput(); ?>
+    <?= $form->field($templates, 'requiredKeywords',['labelOptions' => ['class' => 'col-lg-1 control-label'],])->textInput(['style' => "display:none;", 'placeholder' => ''])->label(false); ?>
+    <?= $form->field($templates, 'randomKeywords',['labelOptions' => ['class' => 'col-lg-1 control-label'],])->textInput(['style' => "display:none;", 'placeholder' => ''])->label(false); ?>
 
     <div class="keywords">
         <div class="col-sm-1" style='margin-left:3%'>
@@ -209,7 +209,7 @@ echo '</div>';
         </div>
         <div class='all-required' style="display: none;float:right;margin-right:10%"><textarea id="all-required" style="width:200px;height:300px;">这里写内容</textarea></div>
         <br>
-        <?= $form->field($templates, 'headKeywords', ['labelOptions' => ['style' => 'margin-left:3%']])->textInput(['style' => "width:200px;margin-left:40%;", 'placeholder' => '--一个关键词--'])->label('最前关键词<span style = "color:red">*</span>'); ?>
+        <?= $form->field($templates, 'headKeywords', ['labelOptions' => ['style' => 'margin-left:6%']])->textInput(['style' => "width:200px;margin-left:40%;", 'placeholder' => '--一个关键词--'])->label('最前关键词<span style = "color:red">*</span>'); ?>
         <br>
         <div style="margin-left:5%;margin-right: 30%">
 
@@ -239,9 +239,7 @@ echo '</div>';
                 </tbody>
             </table>
         </div>
-        <div class='all-random' style="display: none;float:right;margin-right: 10%"><textarea id="all-random"
-                                                                                              style="width:200px;height:300px;">这里写关键词</textarea>
-        </div>
+        <div class='all-random' style="display: none;float:right;margin-right: 10%"><textarea id="all-random" style="width:200px;height:300px;">这里写关键词</textarea></div>
 
         <div style="margin-left:5%;margin-right: 20%">
             <label class="control-label">随机关键词<span style="color:red">*</span></label><span style="margin-left:1%"
@@ -277,19 +275,22 @@ echo '</div>';
         </div>
     </div>
     <br>
-    <?= $form->field($templates, 'tailKeywords', ['labelOptions' => ['style' => 'margin-left:3%']])->textInput(['style' => "width:200px;margin-left:40%;", 'placeholder' => '--最多一个关键词--']); ?>
-    <?= $form->field($templates, 'description', ['template' => "{label}\n<div class=\"col-lg-5\">{input}</div>\n<div class=\"col-lg-9\">{error}</div>"])->textarea(['rows' => 12]); ?>
-    <?= $form->field($templates, 'quantity')->textInput(); ?>
-    <?= $form->field($templates, 'nowPrice')->textInput(); ?>
-    <?= $form->field($templates, 'UPC')->textInput(['value' => 'Does not apply']); ?>
-    <?= $form->field($templates, 'EAN')->textInput(['value' => 'Does not apply']); ?>
+    <?= $form->field($templates, 'tailKeywords', ['labelOptions' => ['style' => 'margin-left:6%']])->textInput(['style' => "width:200px;margin-left:40%;", 'placeholder' => '--最多一个关键词--']); ?>
+    <?= $form->field($templates, 'description', [
+            'template' => "{label}\n<div class=\"col-lg-5\">{input}</div>\n<div class=\"col-lg-9\">{error}</div>",
+        'labelOptions' => ['class' => 'col-lg-1 control-label'],
+    ])->textarea(['rows' => 12]); ?>
+    <?= $form->field($templates, 'quantity',['labelOptions' => ['class' => 'col-lg-1 control-label'],])->textInput(); ?>
+    <?= $form->field($templates, 'nowPrice',['labelOptions' => ['class' => 'col-lg-1 control-label'],])->textInput(); ?>
+    <?= $form->field($templates, 'UPC',['labelOptions' => ['class' => 'col-lg-1 control-label'],])->textInput(['value' => 'Does not apply']); ?>
+    <?= $form->field($templates, 'EAN',['labelOptions' => ['class' => 'col-lg-1 control-label'],])->textInput(['value' => 'Does not apply']); ?>
 </div>
 <div class="blockTitle">
     <span>物品属性</span>
 </div>
 </br>
 <div>
-    <?= $form->field($templates, 'specifics')->textarea(['style' => 'display:none'])->label(false); ?>
+    <?= $form->field($templates, 'specifics',['labelOptions' => ['class' => 'col-lg-1 control-label'],])->textarea(['style' => 'display:none'])->label(false); ?>
     <?php
     $specifics = json_decode($templates->specifics, true)['specifics'];
     echo
@@ -427,10 +428,10 @@ $js = <<< JS
     randomCount();
    
 //样式处理开始
-    $("label[for='oatemplates-headkeywords']").after('<span style="margin-left:1%"class="head-kw"></span><div style="font-size:6px;margin-left:3%">'+
+    $("label[for='oatemplates-headkeywords']").after('<span style="margin-left:1%"class="head-kw"></span><div style="font-size:6px;margin-left:6%">'+
         '<span><label style = "color:red">说明：</label>性别定位/多个一卖等。如Women/Men/Girl/Baby/Kids/1PC/2PC/5PC/4 Colors/5Pcs Set…</span></div>');
     
-    $("label[for='oatemplates-tailkeywords']").after('<span style="margin-left:1%"class="tail-kw"></span><div style="font-size:6px;margin-left:3%">'+
+    $("label[for='oatemplates-tailkeywords']").after('<span style="margin-left:1%"class="tail-kw"></span><div style="font-size:6px;margin-left:6%">'+
         '<span><label style = "color:red">说明：</label>附加说明词。如Randomly/S-3XL/2ml/(Color: Nude)/Big Size…</span></div>');
 //样式处理结束
 
