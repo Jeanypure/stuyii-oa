@@ -44,7 +44,7 @@ class ChannelController extends Controller
     public function actionIndex()
     {
         $searchModel = new ChannelSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'','平台信息');
 
         return $this->render('index', [
             'searchModel' => $searchModel,

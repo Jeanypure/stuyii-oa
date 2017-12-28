@@ -53,7 +53,7 @@ class ChannelSearch extends Channel
      * @param  $model_name
      * @return ActiveDataProvider
      */
-    public function search($params,$model_name ='')
+    public function search($params,$model_name ='',$unit)
     {
         $query = ChannelSearch::find()->orderBy('devDatetime desc');
 
@@ -63,6 +63,38 @@ class ChannelSearch extends Channel
         }
         $query->joinWith(['oa_goods']);
         $query->joinWith(['oa_templates']);
+        //返回当前登录用户
+        $user = yii::$app->user->identity->username;
+        //根据角色 过滤
+        $role_sql = yii::$app->db->createCommand("SELECT t2.item_name FROM [user] t1,[auth_assignment] t2 
+                    WHERE  t1.id=t2.user_id and
+                    username='$user'
+                    ");
+        $role = $role_sql
+            ->queryAll();
+
+        // 返回当前用户管辖下的用户
+        $sql = "oa_P_users '{$user}'";
+        $connection = Yii::$app->db;
+        $command = $connection->createCommand($sql);
+        $result = $command->queryAll();
+        $users = [];
+        foreach ($result as $user) {
+            array_push($users, $user['userName']);
+        }
+    if($unit == '平台信息'){
+            if($role[0]['item_name']=='部门主管'){
+                $query->andWhere(['in', 'oa_goods.developer', $users]);
+            }elseif($role[0]['item_name']=='eBay销售'||$role[0]['item_name']=='SMT销售'||$role[0]['item_name']=='wish销售'){
+                $query->andWhere(['in', 'introducer', $users]);
+            }elseif ($role[0]['item_name']=='产品开发'){
+                $query->andWhere(['in', 'oa_goods.developer', $users]);
+            }elseif($role[0]['item_name']=='产品开发组长'){
+                $query->andWhere(['in', 'oa_goods.developer', $users]);
+            }elseif ($role[0]['item_name']=='美工'){
+                $query->andWhere(['in', 'possessMan1', $users]);
+            }
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
