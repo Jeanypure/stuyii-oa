@@ -170,7 +170,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
 
 <div class="form-group">
     <div class="col-lg-1">
-        <strong>关键词tags：</strong>
+        <strong>关键词Tags：</strong>
     </div>
     <div class="col-lg-11">
         <?= $form->field($info, 'wishtags')->textInput(['class' => 'tags-input','style'=>"width:780px;margin-left:-100;",'placeholder' => '--tags关键词不能超过10个,逗号分隔--'])->label(false); ?>
