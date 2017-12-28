@@ -122,12 +122,12 @@ class OaCheckController extends Controller
             $_model = clone $_model;
             $nid = $model->nid;
             $img = $model->img;
-            $_model->isNewRecord = true;
+//            $_model->isNewRecord = true;
             $_model->goodsid =$nid;
             $_model->picUrl = $img;
             $_model->developer =$developer;
             $_model->devDatetime =strftime('%F %T');
-            $_model->updatTime =strftime('%F %T');
+            $_model->updateTime =strftime('%F %T');
             $_model->achieveStatus='待处理';
             $_model->GoodsName='';
             $arc_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-arc-map'])->one();
@@ -136,6 +136,7 @@ class OaCheckController extends Controller
             $pur = $pur_model->ruleValue;
             $_model->possessMan1 = $arc;
             $_model->Purchaser = $pur;
+
             if($_model->save(false)){
                 $model->checkStatus ='已审批';
                 $model->update(['checkStatus']);

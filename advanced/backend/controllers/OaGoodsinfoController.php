@@ -308,7 +308,7 @@ class OaGoodsinfoController extends Controller
         $sql ="SELECT StoreName from B_store";
         $command = $connection->createCommand($sql);
         $result = $command->queryAll();
-        array_push($result,['StoreName'=>'']);
+        array_push($result,['StoreName'=>'义乌仓']);
         foreach ($result as $key=>$value){
             $StoreName[$key] = $value['StoreName'];
         }
