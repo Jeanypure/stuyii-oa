@@ -164,7 +164,7 @@ if (empty($sku->randomKeywords)) {
             ?>
             <?= $form->field($sku, 'tags')->textInput(['class' => 'tags-input'])->hint('键词不能超过10个'); ?>
 
-            <div class="col-sm-1" style='margin-left:3%'><strong>关键词：</strong></div>
+            <div class="col-sm-1" style='margin-left:3%'><strong>标题关键词：</strong></div>
             <br>
             <?= $form->field($sku,'headKeywords',['labelOptions' => ['style' => 'margin-left:4%']])->textInput(['style'=>"width:200px;margin-left:40%",'placeholder' => '--一个关键词--'])->label('最前关键词<span style = "color:red">*</span>'); ?>
             <?= $form->field($sku,'requiredKeywords')->hiddenInput()->label(false); ?>
@@ -492,13 +492,13 @@ $('.extra-images').change(function() {
         console.log(kw_list);
     });
 //样式处理开始
-/*/ *
+
     $("label[for='oawishgoods-headkeywords']").after('<span style="margin-left:1%"class="head-kw"></span><div style="font-size:6px;margin-left:3%">'+
         '<span><label style = "color:red">说明：</label>性别定位/多个一卖等。如Women/Men/Girl/Baby/Kids/1PC/2PC/5PC/4 Colors/5Pcs Set…</span></div>');
     
     $("label[for='oawishgoods-tailkeywords']").after('<span style="margin-left:1%"class="tail-kw"></span><div style="font-size:6px;margin-left:3%">'+
         '<span><label style = "color:red">说明：</label>附加说明词。如Randomly/S-3XL/2ml/(Color: Nude)/Big Size…</span></div>');
-//样式处理结束*/
+//样式处理结束
 
 //开始关键词处理过程
  
