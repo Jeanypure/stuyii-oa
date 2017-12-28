@@ -51,8 +51,7 @@ if (empty($sku->randomKeywords)) {
         'enableAjaxValidation' => false,
         'fieldConfig' => [
             'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-9\">{error}</div>",
-            'labelOptions' => ['class' => 'col-lg-1 control-label'],
-
+            //'labelOptions' => ['class' => 'col-md-1 control-label'],
         ]
     ]);
 
@@ -97,9 +96,9 @@ if (empty($sku->randomKeywords)) {
     <div class="blockTitle">
         <span>基本信息</span>
     </div>
-    <?= $form->field($sku, 'SKU')->textInput(); ?>
+    <?= $form->field($sku, 'SKU',['labelOptions' => ['class' => 'col-md-1 control-label']])->textInput(); ?>
     <?php
-    echo $form->field($sku, 'main_image')->hiddenInput(['class' => 'main-image']);
+    echo $form->field($sku, 'main_image', ['labelOptions' => ['class' => 'col-md-1 control-label']])->hiddenInput(['class' => 'main-image']);
     //echo $form->field($sku,'main_image')->textInput(['class'=>'main-image','style'=>'display:none']);
     echo '<div class="form-group field-oatemplates-mainpage">
          
@@ -162,11 +161,11 @@ if (empty($sku->randomKeywords)) {
             <?php
 //            echo $form->field($sku, 'title')->textInput();
             ?>
-            <?= $form->field($sku, 'tags')->textInput(['class' => 'tags-input'])->hint('键词不能超过10个'); ?>
+            <?= $form->field($sku, 'tags',['labelOptions' => ['class' => 'col-md-1 control-label']])->textInput(['class' => 'tags-input'])->hint('键词不能超过10个'); ?>
 
             <div class="col-sm-1" style='margin-left:3%'><strong>标题关键词：</strong></div>
             <br>
-            <?= $form->field($sku,'headKeywords',['labelOptions' => ['style' => 'margin-left:4%']])->textInput(['style'=>"width:200px;margin-left:40%",'placeholder' => '--一个关键词--'])->label('最前关键词<span style = "color:red">*</span>'); ?>
+            <?= $form->field($sku,'headKeywords',['labelOptions' => ['style' => 'margin-left:7%']])->textInput(['style'=>"width:200px;margin-left:40%",'placeholder' => '--一个关键词--'])->label('最前关键词<span style = "color:red">*</span>'); ?>
             <?= $form->field($sku,'requiredKeywords')->hiddenInput()->label(false); ?>
             <?= $form->field($sku,'randomKeywords')->hiddenInput()->label(false); ?>
         </div>
@@ -234,13 +233,15 @@ if (empty($sku->randomKeywords)) {
             </table>
         </div>
     </div>
-    <?= $form->field($sku,'tailKeywords',['labelOptions' => ['style' => 'margin-left:4%']])->textInput(['style'=>"width:200px;margin-left:40%",'placeholder' => '--最多一个关键词--'])->label('最后关键词<span style = "color:red">*</span>'); ?>
-    <?= $form->field($sku, 'description', ['template' => "{label}\n<div class=\"col-lg-5\">{input}</div>\n<div class=\"col-lg-9\">{error}</div>"])->textarea(['rows' => 12, 'cols' => 4]); ?>
-    <?= $form->field($sku, 'inventory')->textInput(); ?>
-    <?= $form->field($sku, 'price')->textInput(); ?>
-    <?= $form->field($sku, 'msrp')->textInput(); ?>
-    <?= $form->field($sku, 'shipping')->textInput(); ?>
-    <?= $form->field($sku, 'shippingtime')->textInput(); ?>
+    <?= $form->field($sku,'tailKeywords',['labelOptions' => ['style' => 'margin-left:7%']])->textInput(['style'=>"width:200px;margin-left:40%",'placeholder' => '--最多一个关键词--'])->label('最后关键词<span style = "color:red">*</span>'); ?>
+    <?= $form->field($sku, 'description', [
+            'template' => "{label}\n<div class=\"col-lg-5\">{input}</div>\n<div class=\"col-lg-9\">{error}</div>",
+            'labelOptions' => ['class' => 'col-md-1 control-label']])->textarea(['rows' => 12, 'cols' => 4]); ?>
+    <?= $form->field($sku, 'inventory', ['labelOptions' => ['class' => 'col-md-1 control-label']])->textInput(); ?>
+    <?= $form->field($sku, 'price', ['labelOptions' => ['class' => 'col-md-1 control-label']])->textInput(); ?>
+    <?= $form->field($sku, 'msrp', ['labelOptions' => ['class' => 'col-md-1 control-label']])->textInput(); ?>
+    <?= $form->field($sku, 'shipping', ['labelOptions' => ['class' => 'col-md-1 control-label']])->textInput(); ?>
+    <?= $form->field($sku, 'shippingtime', ['labelOptions' => ['class' => 'col-md-1 control-label']])->textInput(); ?>
 
 
     <div class="blockTitle">
@@ -493,10 +494,10 @@ $('.extra-images').change(function() {
     });
 //样式处理开始
 
-    $("label[for='oawishgoods-headkeywords']").after('<span style="margin-left:1%"class="head-kw"></span><div style="font-size:6px;margin-left:3%">'+
+    $("label[for='oawishgoods-headkeywords']").after('<span style="margin-left:1%"class="head-kw"></span><div style="font-size:6px;margin-left:7%">'+
         '<span><label style = "color:red">说明：</label>性别定位/多个一卖等。如Women/Men/Girl/Baby/Kids/1PC/2PC/5PC/4 Colors/5Pcs Set…</span></div>');
     
-    $("label[for='oawishgoods-tailkeywords']").after('<span style="margin-left:1%"class="tail-kw"></span><div style="font-size:6px;margin-left:3%">'+
+    $("label[for='oawishgoods-tailkeywords']").after('<span style="margin-left:1%"class="tail-kw"></span><div style="font-size:6px;margin-left:7%">'+
         '<span><label style = "color:red">说明：</label>附加说明词。如Randomly/S-3XL/2ml/(Color: Nude)/Big Size…</span></div>');
 //样式处理结束
 
