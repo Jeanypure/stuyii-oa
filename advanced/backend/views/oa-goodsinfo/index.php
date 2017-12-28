@@ -117,40 +117,61 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'attribute'=>'IsLiquid',
-                'width'=>'100px',
+                'width'=>'110px',
                 'value'=>function ($model, $key, $index, $widget) {
                     return $model->IsLiquid;
                 },
                 'filterType'=>GridView::FILTER_SELECT2,
-                'filter'=>ArrayHelper::map(\backend\models\OaGoodsinfo::find()->orderBy('pid')->asArray()->all(), 'pid', 'IsLiquid'),
+                'filter'=>[1 => '是', 0 => '否'],
+                //'filter'=>ArrayHelper::map(\backend\models\OaGoodsinfo::find()->orderBy('pid')->asArray()->all(), 'pid', 'IsLiquid'),
                 'filterWidgetOptions'=>[
                     'pluginOptions'=>['allowClear'=>true],
                 ],
                 'filterInputOptions'=>['placeholder'=>'是否是液体'],
-                'group'=>true,  // enable grouping
+                //'group'=>true,  // enable grouping
             ],
 
             [
                 'attribute' => 'IsPowder',
                 'width' => '100px',
+                'filterType'=>GridView::FILTER_SELECT2,
+                'filter'=>[1 => '是', 0 => '否'],
+                'filterWidgetOptions'=>[
+                    'pluginOptions'=>['allowClear'=>true],
+                ],
+                'filterInputOptions'=>['placeholder'=>'是否是粉末'],
              ],
-
             [
                 'attribute' => 'isMagnetism',
                 'width' => '100px',
+                'filterType'=>GridView::FILTER_SELECT2,
+                'filter'=>[1 => '是', 0 => '否'],
+                'filterWidgetOptions'=>[
+                    'pluginOptions'=>['allowClear'=>true],
+                ],
+                'filterInputOptions'=>['placeholder'=>'是否带磁'],
             ],
             [
                 'attribute' => 'IsCharged',
                 'width' => '100px',
+                'filterType'=>GridView::FILTER_SELECT2,
+                'filter'=>[1 => '是', 0 => '否'],
+                'filterWidgetOptions'=>[
+                    'pluginOptions'=>['allowClear'=>true],
+                ],
+                'filterInputOptions'=>['placeholder'=>'是否带电'],
             ],
-            'isVar',
-
-
+            [
+                'attribute' => 'isVar',
+                'width' => '100px',
+                'filterType'=>GridView::FILTER_SELECT2,
+                'filter'=>['是' => '是', '否' => '否'],
+                'filterWidgetOptions'=>[
+                    'pluginOptions'=>['allowClear'=>true],
+                ],
+                'filterInputOptions'=>['placeholder'=>'是否多属性'],
+            ],
         ],
-
-
-
-
     ]); ?>
 
 <?php

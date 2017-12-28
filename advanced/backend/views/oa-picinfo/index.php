@@ -220,7 +220,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
             ],
             'possessMan1',
-            'isVar',
+            [
+                'attribute' => 'isVar',
+                'width' => '100px',
+                'filterType'=>GridView::FILTER_SELECT2,
+                'filter'=>['是' => '是', '否' => '否'],
+                'filterWidgetOptions'=>[
+                    'pluginOptions'=>['allowClear'=>true],
+                ],
+                'filterInputOptions'=>['placeholder'=>'是否多属性'],
+            ],
         ],
 
 
