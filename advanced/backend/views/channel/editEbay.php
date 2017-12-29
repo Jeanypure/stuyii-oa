@@ -328,14 +328,14 @@ echo '</div>';
             $form->field($templates, 'InshippingMethod1', $shipping_templates)->dropDownList(
                     ArrayHelper::map($inShippingService1,'nid', 'servicesName'),
                 ['class' => 'col-lg-6', 'prompt' => '--境内物流选择--',]); ?>
-            <?= $form->field($templates, 'InFirstCost1', $shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
-            <?= $form->field($templates, 'InSuccessorCost1', $shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
+            <?= $form->field($templates, 'InFirstCost1', $shipping_templates)->textInput(['class'=>'cur-code','placeholder' => '--'.$currencyCode.'--']); ?>
+            <?= $form->field($templates, 'InSuccessorCost1', $shipping_templates)->textInput(['class'=>'cur-code','placeholder' => '--'.$currencyCode.'--']); ?>
             <?=
             $form->field($templates, 'InshippingMethod2', $shipping_templates)->dropDownList(
                 ArrayHelper::map($inShippingService2,'nid', 'servicesName'),
                 ['class' => 'col-lg-6', 'prompt' => '--境内物流选择--',]); ?>
-            <?= $form->field($templates, 'InFirstCost2', $shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
-            <?= $form->field($templates, 'InSuccessorCost2', $shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
+            <?= $form->field($templates, 'InFirstCost2', $shipping_templates)->textInput(['class'=>'cur-code','placeholder' => '--'.$currencyCode.'--']); ?>
+            <?= $form->field($templates, 'InSuccessorCost2', $shipping_templates)->textInput(['class'=>'cur-code','placeholder' => '--'.$currencyCode.'--']); ?>
         </div>
         <div class="col-lg-6">
             <span>境外运输方式</span>
@@ -343,8 +343,8 @@ echo '</div>';
             $form->field($templates, 'OutshippingMethod1', $shipping_templates)->dropDownList(
                     ArrayHelper::map($outShippingService,'nid', 'servicesName'),
                 ['class' => 'col-lg-6', 'prompt' => '--境外物流选择--',]); ?>
-            <?= $form->field($templates, 'OutFirstCost1', $shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
-            <?= $form->field($templates, 'OutSuccessorCost1', $shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
+            <?= $form->field($templates, 'OutFirstCost1', $shipping_templates)->textInput(['class'=>'cur-code','placeholder' => '--'.$currencyCode.'--']); ?>
+            <?= $form->field($templates, 'OutSuccessorCost1', $shipping_templates)->textInput(['class'=>'cur-code','placeholder' => '--'.$currencyCode.'--']); ?>
             <?=
             $form->field($templates, 'OutshippingMethod2', $shipping_templates)->dropDownList([],
                 [
@@ -352,8 +352,8 @@ echo '</div>';
                     'prompt' => '--境外物流选择--',
                 ]
             ); ?>
-            <?= $form->field($templates, 'OutFirstCost2', $shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
-            <?= $form->field($templates, 'OutSuccessorCost2', $shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
+            <?= $form->field($templates, 'OutFirstCost2', $shipping_templates)->textInput(['class'=>'cur-code','placeholder' => '--'.$currencyCode.'--']); ?>
+            <?= $form->field($templates, 'OutSuccessorCost2', $shipping_templates)->textInput(['class'=>'cur-code','placeholder' =>'--'.$currencyCode.'--']); ?>
         </div>
 
     </div>
@@ -466,12 +466,13 @@ $js = <<< JS
 //绑定监听事件根据站点的选择来决定物流
 
 $('#oatemplates-site').change(function() {
-  loadShipping(); 
+  loadShippingInfo(); 
 });
 
 //站点加载出来的时候也要重新加载下物流
 //loadShipping();
-function loadShipping() {
+function loadShippingInfo() {
+  
   var select = $('#oatemplates-site option:selected').val();
   //获取站点的值
   var promt_in = '<option value="">--境内物流--</option>';
@@ -480,12 +481,18 @@ function loadShipping() {
   $.get("{$shippingUrl}",{type:'InFir',site_id:select},function(ret) {
       var html1 = promt_in;
       ret = JSON.parse(ret);
-      console.log(ret);
+      var cur_code;
       $.each(ret,function(i,item) {
             html1 += "<option value = '" + item.nid + "'>" + item.servicesName + "</option>";
+            cur_code = item.currencyCode;
       });
       $('#oatemplates-inshippingmethod1 > option').remove();
       $('#oatemplates-inshippingmethod1').append(html1);
+      
+      //更改货币提示符号
+      $('.cur-code').each(function() {
+        $(this).attr('placeholder','--' +cur_code+ '--');
+      });
   });
   $.get("{$shippingUrl}",{type:'InSec',site_id:select},function(ret) {
       var html2 = promt_in;
@@ -493,7 +500,6 @@ function loadShipping() {
       $.each(ret,function(i,item) {
             html2 += "<option value = '" + item.nid + "'>" + item.servicesName + "</option>";
       });
-      //ret = promt_in + ret;
       $('#oatemplates-inshippingmethod2').html(html2);
   });
   $.get("{$shippingUrl}",{type:'OutFir',site_id:select},function(ret) {
@@ -502,7 +508,6 @@ function loadShipping() {
       $.each(ret,function(i,item) {
             html3 += "<option value = '" + item.nid + "'>" + item.servicesName + "</option>";
       });
-        //ret = promt_out + ret;
         $('#oatemplates-outshippingmethod1').html(html3);
   });
 }
@@ -860,7 +865,6 @@ $this->registerJs($js);
         }
     }
 </style>
-
 <link rel="stylesheet" href="../css/bootstrap-select.min.css">
 <script src="../plugins/jquery/1.12.3/jquery.js"></script>
 <script src="../plugins/bootstrap-select/bootstrap-select.min.js"></script>
