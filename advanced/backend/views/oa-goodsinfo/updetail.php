@@ -178,11 +178,12 @@ echo FormGrid::widget([ // continuation fields to row above without labels
 </div>
 
 <div class="keywords">
-    <div class="col-sm-1">
-        <strong>标题关键词：</strong>
+    <div class="form-group">
+        <div class="col-sm-12">
+            <strong>标题关键词：</strong>
+        </div>
     </div>
-    </br>
-    <?= $form->field($info,'headKeywords',['labelOptions' => ['style' => 'margin-left:3%']])->textInput(['style'=>"width:200px;margin-left:3%;",'placeholder' => '--一个关键词--'])->label('最前关键词<span style = "color:red">*</span>'); ?>
+    <?= $form->field($info,'headKeywords',['labelOptions' => ['style' => 'margin-left:3%']])->textInput(['style'=>"width:200px;margin-left:3%;",'placeholder' => '--一个关键词--']); ?>
     <?= $form->field($info,'requiredKeywords')->textInput(['style'=>"width:200px;display:none;",'placeholder' => ''])->label(false); ?>
     <?= $form->field($info,'randomKeywords')->textInput(['style'=>"width:200px;display:none;",'placeholder' => ''])->label(false); ?>
     <br>
