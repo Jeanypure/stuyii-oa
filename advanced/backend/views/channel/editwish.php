@@ -159,7 +159,7 @@ if (empty($sku->randomKeywords)) {
     <div class="keywords">
         <div class="cos-lg-8" style="float: inside">
             <div class="col-sm-1" style='margin-left:3%'><strong>关键词Tags:</strong></div>
-            <?= $form->field($sku, 'wishtags')->textInput(['class' => 'tags-input','style'=>"width:780px;"]); ?>
+            <?= $form->field($sku, 'wishtags')->textInput(['class' => 'tags-input','style'=>"width:780px;margin-left:-12%"]); ?>
             <div class="col-sm-1" style='margin-left:3%'><strong>标题关键词:</strong></div>
             <br>
             <?= $form->field($sku,'headKeywords',['labelOptions' => ['style' => 'margin-left:7%']])->textInput(['style'=>"width:200px;margin-left:40%",'placeholder' => '--一个关键词--'])->label('最前关键词<span style = "color:red">*</span>'); ?>
