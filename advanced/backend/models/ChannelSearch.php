@@ -53,7 +53,7 @@ class ChannelSearch extends Channel
      * @param  $model_name
      * @return ActiveDataProvider
      */
-    public function search($params,$model_name ='',$unit)
+    public function search($params,$model_name ='',$unit = '')
     {
         $query = ChannelSearch::find()->orderBy('devDatetime desc');
 

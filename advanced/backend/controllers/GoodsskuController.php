@@ -189,6 +189,22 @@ class GoodsskuController extends Controller
                         $info->isVar = '否';
                     }
                     $info->save(false);
+
+                    //更新属性信息
+                    $sql_wish = "P_oaGoods_TowishGoods $pid";
+                    $sql_ebay = "P_oaGoods_ToEbayGoods $pid";
+                    $connection = Yii::$app->db;
+                    $import_trans = $connection->beginTransaction();
+                    try{
+                        $connection->createCommand($sql_wish)->execute();
+                        $connection->createCommand($sql_ebay)->execute();
+                        $import_trans->commit();
+                    }
+                    catch (Exception $er) {
+                        $import_trans->rollBack();
+                    }
+
+                    //保存SKU信息
                     foreach ($skuRows as $row_key=>$row_value)
                     {
                         $row_value['pid'] = intval($pid); //pid传进来
@@ -246,7 +262,6 @@ class GoodsskuController extends Controller
                         echo $e;
                         echo "美工或采购填写不对,请仔细检查数据";
                     }
-                   // $this->redirect(['oa-goodsinfo/index']);
                 }
 
                 if ($type=='pic-info')

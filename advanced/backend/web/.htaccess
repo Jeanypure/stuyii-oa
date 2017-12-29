@@ -1,0 +1,20 @@
+#RewriteEngine on
+#RewriteBase /
+
+# 301
+#RewriteCond %{HTTP:Host} ^thinkcss.com$
+#RewriteRule (.*) http://www.thinkcss.com/$1 [NC,R=301]
+
+#RewriteRule ^(.*)/mgjx/$ $1/lists/indexs_abc\.php
+
+RewriteEngine on
+
+ # 如果是一个目录或者文件，就访问目录或文件
+ RewriteCond %{REQUEST_FILENAME} !-d
+
+ # 如果文件存在，就直接访问文件，不进行下面的RewriteRule
+ RewriteCond %{REQUEST_FILENAME} !-f
+
+
+ RewriteRule . index.php
+

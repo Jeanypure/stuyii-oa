@@ -154,13 +154,19 @@ class ChannelController extends Controller
         if (Yii::$app->request->isPost) {
 
         } else {
+            $connection = yii::$app->db;
             $ebay_sql = 'select ebayName,ebaySuffix from oa_ebay_suffix  ';
-            $ebay_account = Yii::$app->db->createCommand($ebay_sql)->queryAll();
+            $ebay_account = $connection->createCommand($ebay_sql)->queryAll();
             //封装成key-value
             $ebay_map = [];
             foreach ($ebay_account as $row) {
                 $ebay_map[$row['ebayName']] = $row['ebaySuffix'];
             }
+
+            //查找站点对应的货币符号
+            $site = $templates->site;
+            $currency_sql = "select isnull(currencyCode,'USD') as currencyCode from oa_ebay_country where code=$site";
+
             $inShippingService1 = $this->actionShipping('InFir', $templates->site, false);
             $inShippingService2 = $this->actionShipping('InSec', $templates->site, false);
             $OutShippingService = $this->actionShipping('OutFir', $templates->site, false);
