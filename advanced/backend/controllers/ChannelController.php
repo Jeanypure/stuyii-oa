@@ -673,7 +673,7 @@ class ChannelController extends Controller
             $objPHPExcel->getActiveSheet()->setCellValue('J'.$row,$foos[0][0]['extra_images']);
             $objPHPExcel->getActiveSheet()->setCellValue('K'.$row,$strvariant);
             $objPHPExcel->getActiveSheet()->setCellValue('L'.$row,'');
-            $objPHPExcel->getActiveSheet()->setCellValue('M'.$row,$foos[0][0]['tags']);
+            $objPHPExcel->getActiveSheet()->setCellValue('M'.$row,$foos[0][0]['wishtags']);
             $objPHPExcel->getActiveSheet()->setCellValue('N'.$row,$foos[0][0]['description']);
             $objPHPExcel->getActiveSheet()->setCellValue('O'.$row,'');
             $objPHPExcel->getActiveSheet()->setCellValue('P'.$row,'');
@@ -836,10 +836,7 @@ class ChannelController extends Controller
         $completeStatus = Channel::find()->where(['pid' => $id])->all();
 
         //动态计算产品的状态
-
-        if (!empty($completeStatus[0]->completeStatus)
-            && ($completeStatus[0]->completeStatus != 'Wish已完善' || $completeStatus[0]->completeStatus != 'Wish已完善|eBay已完善'
-                || $completeStatus[0]->completeStatus != 'eBay已完善|Wish已完善')) {
+        if (!empty($completeStatus[0]->completeStatus)) {
             $complete_status = '';
             $status = str_replace('|Wish已完善', '', $completeStatus[0]->completeStatus);
             $complete_status = $status . '|Wish已完善';
