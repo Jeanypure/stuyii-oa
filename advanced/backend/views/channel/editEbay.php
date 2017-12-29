@@ -329,7 +329,7 @@ echo '</div>';
                     ArrayHelper::map($inShippingService1,'nid', 'servicesName'),
                 ['class' => 'col-lg-6', 'prompt' => '--境内物流选择--',]); ?>
             <?= $form->field($templates, 'InFirstCost1', $shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
-            <?= $form-f>ield($templates, 'InSuccessorCost1', $shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
+            <?= $form->field($templates, 'InSuccessorCost1', $shipping_templates)->textInput(['placeholder' => '--USD--']); ?>
             <?=
             $form->field($templates, 'InshippingMethod2', $shipping_templates)->dropDownList(
                 ArrayHelper::map($inShippingService2,'nid', 'servicesName'),
