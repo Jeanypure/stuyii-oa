@@ -80,7 +80,7 @@ $attributes  = [
                     Html::button('新增行', ['id'=>'add-row','type'=>'button', 'class'=>'btn kv-batch-create']) . ' ' .
                     Html::input('text','number','',['class' => 'number-replace','placeholder'=>'数量']).' '.
                     Html::button('数量确定', ['id'=>'number','type'=>'button','class'=>'btn']).' '.
-                    Html::input('text','RetailPrice','',['class' => 'RetailPrice-replace','placeholder'=>'零售价$']).' '.
+                    Html::input('text','RetailPrice','',['class' => 'RetailPrice-replace','placeholder'=>'零售价']).' '.
                     Html::button('价格确定', ['id'=>'RetailPrice-set','type'=>'button','class'=>'btn']).''.
                     Html::input('text','UPC','',['class' => 'upc-replace','placeholder'=>'Does not apply']).' '.
                     Html::button('UPC/EAN确定', ['id'=>'ean-upc-set','type'=>'button','class'=>'btn']).' '.
