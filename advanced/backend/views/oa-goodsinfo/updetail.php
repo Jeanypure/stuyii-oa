@@ -206,7 +206,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
         <td><input value="'.$required_kws[3].'" class="required-kw-in" type="text" class=""></td>
         <td><input value="'.$required_kws[4].'" class="required-kw-in" type="text" class=""></td>
         <td><input value="'.$required_kws[5].'" class="required-kw-in" type="text" class=""></td>
-        <td><button class = "required-paste btn btn-success" data-toggle="modal" data-target = "#required-modal">批量设置</button></td>
+        <td><button type="button" class = "required-paste btn btn-success" data-toggle="modal" data-target = "#required-modal">批量设置</button></td>
     </tr>'
             ?>
             </tbody>
@@ -238,7 +238,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
                 <td><input value="'.$random_kws[7].'" class="random-kw-in" type="text" class=""></td>
                 <td><input value="'.$random_kws[8].'"  class="random-kw-in" type="text" class=""></td>
                 <td><input value="'.$random_kws[9].'" class="random-kw-in" type="text" class=""></td>
-                <td><button class = "random-paste btn btn-success" data-toggle="modal" data-target = "#random-modal">批量设置</button></td>
+                <td><button type="button" class = "random-paste btn btn-success" data-toggle="modal" data-target = "#random-modal">批量设置</button></td>
             </tr>'
             ?>
             </tbody>
