@@ -828,17 +828,17 @@ class ChannelController extends Controller
     {
 
         $completeStatus = Channel::find()->where(['pid' => $id])->all();
-
         //动态计算产品的状态
         if (!empty($completeStatus[0]->completeStatus)) {
-            $complete_status = '';
-            $status = str_replace('|Wish已完善', '', $completeStatus[0]->completeStatus);
-            $complete_status = $status . '|Wish已完善';
-            $completeStatus[0]->completeStatus = $complete_status;
+            if($completeStatus[0]->completeStatus !='Wish已完善'){
+                $complete_status = '';
+                $status = str_replace('|Wish已完善', '', $completeStatus[0]->completeStatus);
+                $complete_status = $status . '|Wish已完善';
+                $completeStatus[0]->completeStatus = $complete_status;
+            }
         } else {
             $completeStatus[0]->completeStatus = 'Wish已完善';
         }
-
         $completeStatus[0]->update(false);
 
 
