@@ -166,7 +166,9 @@ class ChannelController extends Controller
             //查找站点对应的货币符号
             $site = $templates->site;
             $currency_sql = "select isnull(currencyCode,'USD') as currencyCode from oa_ebay_country where code=$site";
+            $currency_ret = $connection->createCommand($currency_sql)->queryOne();
 
+            //加载物流信息
             $inShippingService1 = $this->actionShipping('InFir', $templates->site, false);
             $inShippingService2 = $this->actionShipping('InSec', $templates->site, false);
             $OutShippingService = $this->actionShipping('OutFir', $templates->site, false);
@@ -177,7 +179,8 @@ class ChannelController extends Controller
                 'inShippingService1' => $inShippingService1,
                 'inShippingService2' => $inShippingService2,
                 'outShippingService' => $OutShippingService,
-                'ebayAccount' => $ebay_map
+                'ebayAccount' => $ebay_map,
+                'currencyCode' =>$currency_ret['currencyCode'],
             ]);
         }
 
@@ -410,16 +413,12 @@ class ChannelController extends Controller
      */
     public function actionShipping($type, $site_id, $isJson = true)
     {
-        //$sql = "select nid,servicesName from oa_shippingService where type='{$type}' and siteId='{$site_id}'";
-        $sql = "select nid,servicesName from oa_shippingService where type = '{$type}' and siteId='{$site_id}'";
+        $sql = "select oss.nid as nid,servicesName,currencyCode from oa_shippingService as oss 
+                LEFT JOIN  oa_ebay_country as oec on  oss.siteId=oec.code
+                where oss.type = '{$type}' and oss.siteId='{$site_id}'";
         $connection = Yii::$app->db;
         $ret = $connection->createCommand($sql)->queryAll();
         return $isJson ? json_encode($ret) : $ret;
-        /*foreach ($ret as $row) {
-//            var_dump($row);die;
-            echo Html::tag('option', Html::encode($row['servicesName']), array('value' => $row['nid']));
-//            echo '<option value="'.$row['nid'].'">'.$row['servicesName'].'</option>';
-        }*/
     }
 
     /**
