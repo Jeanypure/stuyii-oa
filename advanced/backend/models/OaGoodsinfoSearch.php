@@ -133,7 +133,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => 6,
+                'pageSize' => isset($params['pageSize']) && $params['pageSize'] ? $params['pageSize'] : 6,
             ],
         ]);
 
