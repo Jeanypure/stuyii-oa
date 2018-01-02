@@ -274,20 +274,15 @@ function centerFormat($name) {
                     },
                 ],
             ],
-
             centerFormat('img'),
             centerFormat('cate'),
             centerFormat('subCate'),
             centerFormat('vendor1'),
-//            centerFormat('vendor2'),
-//            centerFormat('vendor3'),
             centerFormat('origin1'),
-//            centerFormat('origin2'),
-//            centerFormat('origin3'),
             centerFormat('devNum'),
             centerFormat('developer'),
             centerFormat('introducer'),
-//            centerFormat('devStatus'),
+            centerFormat('introReason'),
             centerFormat('checkStatus'),
             centerFormat('approvalNote'),
             centerFormat('createDate'),
@@ -297,8 +292,6 @@ function centerFormat($name) {
             centerFormat('hopeRate'),
             centerFormat('hopeSale'),
             centerFormat('hopeMonthProfit'),
-
-
         ],
     ]); ?>
 </div>

@@ -290,7 +290,7 @@ function centerFormat($name) {
             centerFormat('devNum'),
             centerFormat('developer'),
             centerFormat('introducer'),
-//            centerFormat('devStatus'),
+            centerFormat('introReason'),
             centerFormat('checkStatus'),
             centerFormat('approvalNote'),
             centerFormat('createDate'),
