@@ -41,11 +41,11 @@ class OaDataCenterController extends Controller
      * @brief show data
      * @return mixed
      */
-    public function actionTemplates(){
+    public function actionProducts(){
         $searchModel = new ChannelSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams,'oa-data-center');
 
-        return $this->render('templates',[
+        return $this->render('products',[
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
