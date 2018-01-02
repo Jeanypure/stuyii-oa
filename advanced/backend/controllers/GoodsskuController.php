@@ -84,6 +84,7 @@ class GoodsskuController extends Controller
     {
         $request = Yii::$app->request;
         $model = new Goodssku();
+
         if($request->isPost)
         {
             //提交过来的表单数据
@@ -171,7 +172,6 @@ class GoodsskuController extends Controller
     {
         $request = Yii::$app->request;
         $model = new Goodssku();
-
         if($request->isPost)
         {
             //提交过来的表单数据
