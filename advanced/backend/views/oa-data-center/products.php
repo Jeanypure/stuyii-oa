@@ -1,29 +1,39 @@
 <?php
 /**
- * @desc PhpStorm.
- * @author: Administrator
+ * @desc show products list.
+ * @author: turpure
  * @since: 2017-12-20 10:50
  */
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\ChannelSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', '平台信息');
+$this->title = Yii::t('app', '产品中心');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<div class="channel-index">
+    <p>
+        <?= Html::a(Yii::t('app', '标记已完善'), ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
+</div>
 
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
+    'pjax'=>true,
+    'striped'=>true,
+    'responsive'=>true,
+    'hover'=>true,
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
         ['class' => 'yii\grid\CheckboxColumn'],
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{view} {update}',
+            'template' =>'{view}{update}'
         ],
 
         [
@@ -53,11 +63,6 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
 
         'SupplierName',
-        [
-            'attribute'=> 'introducer',
-            'value'=>'oa_goods.introducer',
-            'label'=>'推荐人'
-        ],
         'StoreName',
         [
             'attribute'=> 'introducer',
