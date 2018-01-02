@@ -166,10 +166,6 @@ if (empty($sku->randomKeywords)) {
             <?= $form->field($sku,'requiredKeywords')->hiddenInput()->label(false); ?>
             <?= $form->field($sku,'randomKeywords')->hiddenInput()->label(false); ?>
         </div>
-        <div class="cos-lg-6" style="float: right">
-            <div class='all-required' hidden="hidden" style="margin-right:20%"><textarea id="all-required" style="width:200px;height:300px;">这里写内容</textarea></div>
-            <div class='all-random' hidden="hidden" style="margin-right: 10%"><textarea id="all-random" style="width:200px;height:300px;">这里写关键词</textarea></div>
-        </div>
         <br>
         <div style="margin-left:6%;margin-right: 50%">
             <div><label class="control-label">必选关键词<span style = "color:red">*</span></label><span style="margin-left:1%" class="required-kw"></span></div>
@@ -190,7 +186,7 @@ if (empty($sku->randomKeywords)) {
         <td><input value="'.$required_kws[3].'" name="required_kws[3]" class="required-kw-in" type="text" class=""></td>
         <td><input value="'.$required_kws[4].'" name="required_kws[4]" class="required-kw-in" type="text" class=""></td>
         <td><input value="'.$required_kws[5].'" name="required_kws[5]" class="required-kw-in" type="text" class=""></td>
-        <td><button type="button" class="required-paste">批量设置</button></td>
+        <td><button type="button" class = "required-paste btn btn-success" data-toggle="modal" data-target = "#required-modal">批量设置</button></td>
     </tr>'
                 ?>
                 </tbody>
@@ -223,7 +219,7 @@ if (empty($sku->randomKeywords)) {
                 <td><input value="'.$random_kws[7].'" name="random_kws[7]" class="random-kw-in" type="text" class=""></td>
                 <td><input value="'.$random_kws[8].'" name="random_kws[8]" class="random-kw-in" type="text" class=""></td>
                 <td><input value="'.$random_kws[9].'" name="random_kws[9]" class="random-kw-in" type="text" class=""></td>
-                <td><button type="button" class="random-paste">批量设置</button></td>
+                <td><button type="button" class = "random-paste btn btn-success" data-toggle="modal" data-target = "#random-modal">批量设置</button></td>
             </tr>'
                 ?>
                 </tbody>
@@ -280,12 +276,32 @@ Modal::begin([
     ],
     'size' => "modal-xl"
 ]);
+Modal::end();
 
+Modal::begin([
+    'id' => 'random-modal',
+    'header' => '<h4 class="modal-title">批量增加关键词</h4>',
+    'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
+    'options' => [
+        'data-backdrop' => 'static',//点击空白处不关闭弹窗
+        'data-keyboard' => false,
+    ],
+]);
+Modal::end();
+
+Modal::begin([
+    'id' => 'required-modal',
+    'header' => '<h4 class="modal-title">批量增加关键词</h4>',
+    'footer' => '<a href="#" class="required-close btn btn-primary" data-dismiss="modal">关闭</a>',
+    'options' => [
+        'data-backdrop' => 'static',//点击空白处不关闭弹窗
+        'data-keyboard' => false,
+    ],
+]);
+Modal::end();
 
 $requestUrlsku = Url::toRoute(['variations']);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
 
-
-Modal::end();
 ?>
 <script>
     //新增行的删除事件
@@ -475,25 +491,22 @@ $('.extra-images').change(function() {
 );
 
 //批量设置关键词
-
-    $(".required-paste").on('click',function() {
-        $('.all-required').removeAttr('hidden');    
-    });
     $(".random-paste").on('click',function() {
-        $('.all-random').removeAttr('hidden');    
+            if($("#all-kws").length==0){
+                $('#random-modal').find('.modal-body').html('<textarea placeholder="--多个随机关键词--" id="all-kws" style="margin-left:7%;border-style:none;width:500px;height:400px;"></textarea>');
+            }
+            //重新监听事件                                                                                        
+            var random_ele = $("#all-random");
+            listenOnTextInput(random_ele,'random');
+        });
+    $(".required-paste").on('click',function() {
+        if($("#required-kws").length==0){
+           $('#required-modal').find('.modal-body').html('<textarea placeholder="--多个必选关键词--" id="required-kws" style="margin-left:7%;border-style:none;width:500px;height:400px;"></textarea>'); 
+        }
+        requird_ele = $("#all-required");
+        listenOnTextInput(requird_ele,'required');
     });
-    requird_ele = $("#all-required");
-    random_ele = $("#all-random");
-    listenOnTextInput(requird_ele,'required');
-    requiredCount();
-    listenOnTextInput(random_ele,'random');
-    randomCount();
-    
-    $("#all-required").on('change',function(){
-        kws = $(this).val();
-        kw_list = kws.split('/n');
-        console.log(kw_list);
-    });
+ 
 //样式处理开始
 
     $("label[for='oawishgoods-headkeywords']").after('<span style="margin-left:1%"class="head-kw"></span><div style="font-size:6px;margin-left:7%">'+
@@ -603,10 +616,12 @@ $this->registerJs($js);
     }
 
     function listenOnTextInput(ele, name) {
-        ele.on('change', function () {
-            kws = $(this).val();
-            kw_list = kws.split('\n');
+        $('body').on('change',ele,function () {
+
             if (name == 'required') {
+                var kws = $("#required-kws").val();
+                //alert(kws);return;
+                var  kw_list = kws.split('\n');
                 $.each(kw_list, function (index, value) {
                     $('.required-kw-in').each(function (pos) {
                         if (index == pos) {
@@ -615,9 +630,10 @@ $this->registerJs($js);
                     })
                 });
                 requiredCount();
-                ele.attr('hidden', 'hidden');
             }
             if (name == 'random') {
+                kws = $("#all-kws").val();
+                kw_list = kws.split('\n');
                 $.each(kw_list, function (index, value) {
                     $('.random-kw-in').each(function (pos) {
                         if (index == pos) {
@@ -626,8 +642,8 @@ $this->registerJs($js);
                     })
                 });
                 randomCount();
-                ele.attr('hidden', 'hidden');
             }
+
         });
     }
 
