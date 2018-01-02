@@ -185,6 +185,10 @@ class ChannelSearch extends Channel
             ->andFilterWhere(['like', 'convert(varchar(10),devDatetime,120)', strval($this->devDatetime)])
             ->andFilterWhere(['like', 'completeStatus', $this->completeStatus])
             ->andFilterWhere(['like', 'oa_goods.introducer', $this->introducer]);
+        //var_dump($dataProvider->prepare());exit;
+        Yii::$app->db->cache(function($db) use($dataProvider){
+            $dataProvider->prepare();
+        }, 60);
         return $dataProvider;
     }
 }
