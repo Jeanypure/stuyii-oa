@@ -408,14 +408,12 @@ echo FormGrid::widget([ // continuation fields to row above without labels
                 'after' =>
                     Html::input('text', 'rowNum', '', ['class' => 'x-row', 'placeholder' => '行数']) . ' ' .
                     Html::button('新增行', ['id' => 'add-row', 'type' => 'button', 'class' => 'btn kv-batch-create']) . ' ' .
-
                     Html::input('text', 'CostPrice', '', ['class' => 'CostPrice-replace', 'placeholder' => '成本价￥']) . ' ' .
                     Html::button('成本确定', ['id' => 'CostPrice-set', 'type' => 'button', 'class' => 'btn']) . ' ' .
                     Html::input('text', 'Weight', '', ['class' => 'Weight-replace', 'placeholder' => '重量g']) . ' ' .
                     Html::button('重量确定', ['id' => 'Weight-set', 'type' => 'button', 'class' => 'btn']) . ' ' .
                     Html::input('text', 'RetailPrice', '', ['class' => 'RetailPrice-replace', 'placeholder' => '零售价$']) . ' ' .
                     Html::button('价格确定', ['id' => 'RetailPrice-set', 'type' => 'button', 'class' => 'btn']) . ' ' .
-//                '<div class="row">'.
                     Html::button('一键生成SKU', ['id' => 'sku-set', 'type' => 'button', 'class' => 'btn btn-success']) . ' ' .
                     Html::button('保存当前数据', ['id' => 'save-only', 'type' => 'button', 'class' => 'btn btn-info',
                         'data-href' => Url::to(['/goodssku/save-only', 'pid' => $pid, 'type'=> 'goods-info'])]) . ' ' .
@@ -423,7 +421,6 @@ echo FormGrid::widget([ // continuation fields to row above without labels
                         'data-href' => Url::to(['/goodssku/save-complete', 'pid' => $pid, 'type'=> 'goods-info'])]) . ' ' .
                     Html::button('导入普源', ['id' => 'data-input', 'type' => 'button', 'class' => 'btn btn-warning']) . ' ' .
                     Html::button('删除行', ['id' => 'delete-row', 'type' => 'button', 'class' => 'btn btn-danger kv-batch-delete'])
-//                '</div>'
             ]
         ]
 
@@ -493,7 +490,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
 //批量设置关键词
     $(".random-paste").on('click',function() {
             if($("#all-kws").length==0){
-                $('#random-modal').find('.modal-body').html('<textarea placeholder="--多个随机关键词--" id="all-kws" style="margin-left:7%;border-style:none;width:500px;height:100px;"></textarea>');
+                $('#random-modal').find('.modal-body').html('<textarea placeholder="--多个随机关键词--" id="all-kws" style="margin-left:7%;border-style:none;width:500px;height:400px;"></textarea>');
             }
             //重新监听事件                                                                                        
             var random_ele = $("#all-random");
@@ -501,7 +498,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
         });
     $(".required-paste").on('click',function() {
         if($("#required-kws").length==0){
-           $('#required-modal').find('.modal-body').html('<textarea placeholder="--多个必选关键词--" id="required-kws" style="margin-left:7%;border-style:none;width:500px;height:100px;"></textarea>'); 
+           $('#required-modal').find('.modal-body').html('<textarea placeholder="--多个必选关键词--" id="required-kws" style="margin-left:7%;border-style:none;width:500px;height:400px;"></textarea>'); 
         }
         requird_ele = $("#all-required");
         listenOnTextInput(requird_ele,'required');
