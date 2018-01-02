@@ -48,6 +48,9 @@ class GoodsskuSearch extends Goodssku
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => isset($params['pageSize']) && $params['pageSize'] ? $params['pageSize'] : 20,
+            ],
         ]);
 
         $this->load($params);

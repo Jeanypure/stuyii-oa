@@ -53,6 +53,9 @@ class EbaySuffixDictionarySearch extends OaEbaySuffix
         //var_dump($query->createCommand()->getRawSql());exit;
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => isset($params['pageSize']) && $params['pageSize'] ? $params['pageSize'] : 20,
+            ],
         ]);
 
         $dataProvider->setSort([

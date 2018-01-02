@@ -207,7 +207,6 @@ echo '</div>';
         <div class="col-sm-1" style='margin-left:3%'>
             <strong>标题关键词：</strong>
         </div>
-        <div class='all-required' style="display: none;float:right;margin-right:10%"><textarea id="all-required" style="width:200px;height:300px;">这里写内容</textarea></div>
         <br>
         <?= $form->field($templates, 'headKeywords', ['labelOptions' => ['style' => 'margin-left:6%']])->textInput(['style' => "width:200px;margin-left:40%;", 'placeholder' => '--一个关键词--'])->label('最前关键词<span style = "color:red">*</span>'); ?>
         <br>
@@ -233,14 +232,12 @@ echo '</div>';
         <td><input value="' . $required_kws[3] . '" class="required-kw-in" type="text" class=""></td>
         <td><input value="' . $required_kws[4] . '" class="required-kw-in" type="text" class=""></td>
         <td><input value="' . $required_kws[5] . '" class="required-kw-in" type="text" class=""></td>
-        <td><button type="button" class="required-paste">批量设置</button></td>
+        <td><button type="button" class = "required-paste btn btn-success" data-toggle="modal" data-target = "#required-modal">批量设置</button></td>
     </tr>'
                 ?>
                 </tbody>
             </table>
         </div>
-        <div class='all-random' style="display: none;float:right;margin-right: 10%"><textarea id="all-random" style="width:200px;height:300px;">这里写关键词</textarea></div>
-
         <div style="margin-left:5%;margin-right: 20%">
             <label class="control-label">随机关键词<span style="color:red">*</span></label><span style="margin-left:1%"
                                                                                             class="random-kw"></span>
@@ -267,7 +264,7 @@ echo '</div>';
                 <td><input value="' . $random_kws[7] . '" class="random-kw-in" type="text" class=""></td>
                 <td><input value="' . $random_kws[8] . '"  class="random-kw-in" type="text" class=""></td>
                 <td><input value="' . $random_kws[9] . '" class="random-kw-in" type="text" class=""></td>
-                <td><button type="button" class="random-paste">批量设置</button></td>
+                <td><button type="button" class = "random-paste btn btn-success" data-toggle="modal" data-target = "#random-modal">批量设置</button></td>
             </tr>'
                 ?>
                 </tbody>
@@ -412,20 +409,23 @@ $completeUrl = Url::to(['ebay-complete', 'id' => $templates->nid]);
 
 $js = <<< JS
 //批量设置关键词
-
-    $(".required-paste").on('click',function() {
-        // $('.all-required').css('display','');    
-        $('.all-required').toggle();   
-    });
     $(".random-paste").on('click',function() {
-        $('.all-random').toggle();     
+            if($("#all-kws").length==0){
+                $('#random-modal').find('.modal-body').html('<textarea placeholder="--多个随机关键词--" id="all-kws" style="margin-left:7%;border-style:none;width:500px;height:400px;"></textarea>');
+            }
+            //重新监听事件                                                                                        
+            var random_ele = $("#all-random");
+            listenOnTextInput(random_ele,'random');
+        });
+    $(".required-paste").on('click',function() {
+        if($("#required-kws").length==0){
+           $('#required-modal').find('.modal-body').html('<textarea placeholder="--多个必选关键词--" id="required-kws" style="margin-left:7%;border-style:none;width:500px;height:400px;"></textarea>'); 
+        }
+        requird_ele = $("#all-required");
+        listenOnTextInput(requird_ele,'required');
     });
-    requird_ele = $("#all-required");
-    random_ele = $("#all-random");
-    listenOnTextInput(requird_ele,'required');
-    requiredCount();
-    listenOnTextInput(random_ele,'random');
-    randomCount();
+ 
+   
    
 //样式处理开始
     $("label[for='oatemplates-headkeywords']").after('<span style="margin-left:1%"class="head-kw"></span><div style="font-size:6px;margin-left:6%">'+
@@ -827,10 +827,12 @@ $this->registerJs($js);
     }
 
     function listenOnTextInput(ele, name) {
-        ele.on('change', function () {
-            kws = $(this).val();
-            kw_list = kws.split('\n');
+        $('body').on('change',ele,function () {
+
             if (name == 'required') {
+                var kws = $("#required-kws").val();
+                //alert(kws);return;
+                var  kw_list = kws.split('\n');
                 $.each(kw_list, function (index, value) {
                     $('.required-kw-in').each(function (pos) {
                         if (index == pos) {
@@ -839,9 +841,10 @@ $this->registerJs($js);
                     })
                 });
                 requiredCount();
-                $('.required-paste').trigger('click');
             }
             if (name == 'random') {
+                kws = $("#all-kws").val();
+                kw_list = kws.split('\n');
                 $.each(kw_list, function (index, value) {
                     $('.random-kw-in').each(function (pos) {
                         if (index == pos) {
@@ -850,7 +853,6 @@ $this->registerJs($js);
                     })
                 });
                 randomCount();
-                $('.random-paste').trigger('click');
             }
 
         });
