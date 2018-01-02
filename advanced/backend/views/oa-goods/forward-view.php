@@ -136,6 +136,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'devNum',
             'developer',
             'introducer',
+            'introReason',
             'devStatus',
             'checkStatus',
             'createDate',
