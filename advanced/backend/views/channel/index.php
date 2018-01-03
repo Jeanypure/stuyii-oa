@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'devDatetime',
                 'value' => function ($model) {
-                    return substr(strval($model->devDatetime),0,20);
+                    return substr(strval($model->devDatetime),0,10);
                 },
             ],
             'completeStatus',

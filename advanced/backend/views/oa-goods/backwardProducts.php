@@ -158,7 +158,7 @@ class CenterFormatter {
             return [
                 'attribute' => $this->name,
                 'value' => function($data) {
-                    return "<span class='cell'>".substr($data[$this->name],0,19)."</span>";
+                    return "<span class='cell'>".substr($data[$this->name],0,10)."</span>";
 
                 },
                 'format' => 'raw',
@@ -170,7 +170,7 @@ class CenterFormatter {
             'attribute' => $this->name,
             'value' => function($data) {
                 return "<span class='cell'>".$data[$this->name]."</span>";
-//                    return $data['cate'];
+                    return $data['cate'];
             },
             'format' => 'raw',
 

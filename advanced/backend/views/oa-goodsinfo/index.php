@@ -100,7 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label'=>'开发时间',
                 'value'=>
                     function($model){
-                        return  substr($model->devDatetime,0,19);   //主要通过此种方式实现
+                        return  substr($model->devDatetime,0,10);   //主要通过此种方式实现
                     },
             ],
             [
@@ -108,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label'=>'更新时间',
                 'value'=>
                     function($model){
-                        return  substr($model->updateTime,0,19);   //主要通过此种方式实现
+                        return  substr($model->updateTime,0,10);   //主要通过此种方式实现
                     },
             ],
             'AliasCnName',
