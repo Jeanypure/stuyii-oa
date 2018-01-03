@@ -36,7 +36,6 @@ $this->params['breadcrumbs'][] = $this->title;
         //'responsive' => true,//自适应，默认为true
         'hover' => true,//鼠标移动上去时，颜色变色，默认为false
 //        'panel'=>['type'=>'primary', 'heading'=>'基本信息'],
-
         'columns' => [
             ['class' => 'kartik\grid\CheckboxColumn'],
             ['class' => 'kartik\grid\SerialColumn'],
@@ -140,11 +139,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model, $key, $index, $widget) {
                     return $model->IsLiquid;
                 },
-                'filterType' => GridView::FILTER_SELECT2,
-                'filter' => [1 => '是', 0 => '否'],
-                //'filter'=>ArrayHelper::map(\backend\models\OaGoodsinfo::find()->orderBy('pid')->asArray()->all(), 'pid', 'IsLiquid'),
-                'filterWidgetOptions' => [
-                    'pluginOptions' => ['allowClear' => true],
+                'filterType'=>GridView::FILTER_SELECT2,
+                'filter'=>[1 => '是', 0 => '否'],
+                'filterWidgetOptions'=>[
+                    'pluginOptions'=>['allowClear'=>true],
                 ],
                 'filterInputOptions' => ['placeholder' => '是否是液体'],
                 //'group'=>true,  // enable grouping
@@ -287,9 +285,7 @@ $("#complete-lots").on('click',function() {
     });
 });
 JS;
-    $this->registerJs($js);
-
-    ?>
-</div>
+$this->registerJs($js);
+?>
 
 

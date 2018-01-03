@@ -242,9 +242,18 @@ class OaGoodsinfoController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();  //OaGoodsinfo
-        OaGoods::find()->where(['nid' => $id])->delete();
-        GoodsSKU::find()->where(['pid' => $id])->delete();
+        $sql = "select isnull(completeStatus,'') as completeStatus from oa_goodsinfo where goodsid= :id";
+        try{
+            $complete_status_query = OaGoodsinfo::findBySql($sql,[":id"=>$id])->one();
+            $complete_status = $complete_status_query->completeStatus;
+            if(empty($complete_status)){
+                $this->findModel($id)->delete();  //OaGoodsinfo
+                OaGoods::find()->where(['nid' => $id])->delete();
+                GoodsSKU::find()->where(['pid' => $id])->delete();
+            }
+        }
+        catch (Exception $e){
+        }
         return $this->redirect(['index']);
     }
 

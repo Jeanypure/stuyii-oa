@@ -29,12 +29,12 @@ $requestUrl = Url::toRoute('heart');
 $viewUrl = Url::toRoute('view');
 $updateUrl = Url::toRoute('update');
 $createUrl = Url::toRoute('create');
+$delete_lot =  Url::toRoute(['oa-goods/delete-lots']);
 $js = <<<JS
 //删除按钮
     $('.index-delete').on('click',  function () {
      self = this;
      krajeeDialog.confirm("确定删除此条记录?", function (result) {
-        
         if (result) {
             id = $(self).closest('tr').data('key');
             $.post('delete',{id:id,type:'index'},function() {
@@ -48,7 +48,7 @@ $js = <<<JS
     var self = $(this);
     if(ids.length == 0) return false;
      $.ajax({
-           url:"<?= Url::to(['oa-goods/delete-lots'])?>",
+           url:'{$delete_lot}',
            type:"post",
            data:{id:ids},
            success:function(res){
@@ -102,7 +102,6 @@ $('.index-create').on('click',  function () {
         );
     }); 
     
-// todo 未通过审核的产品单独创建模态框，并增加提交审核和作废的按钮
 
 JS;
 $this->registerJs($js);
@@ -139,7 +138,7 @@ $this->registerJs($js);
                     'format' => 'raw',
 
                 ];
-                // 图片显示为图片
+            // 图片显示为图片
             }
             if ($this->name === 'img') {
                 return [
@@ -180,10 +179,7 @@ $this->registerJs($js);
         return (new CenterFormatter($name))->format();
     };
 
-    function subDateTime($Date){
-        date('Y-m-d', strtotime($Date));
-//        输出是：2009-03-30
-    }
+
 
 ?>
 <style>
@@ -194,7 +190,6 @@ $this->registerJs($js);
         text-align: center;
         width: 100px;
         height: 100px;
-        /*border:1px solid #666;*/
     }
 
     .icon-cell {

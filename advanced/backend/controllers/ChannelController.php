@@ -368,8 +368,12 @@ class ChannelController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $sql = "select isnull(completeStatus,'') as completeStatus from oa_goodsinfo where goodsid= :id";
+        $complete_status_query = OaGoodsinfo::findBySql($sql,[":id"=>$id])->one();
+        $complete_status = $complete_status_query->completeStatus;
+        if(empty($complete_status)){
+            $this->findModel($id)->delete();
+        }
         return $this->redirect(['index']);
     }
 
@@ -589,7 +593,6 @@ class ChannelController extends Controller
     //导出数据 wish平台
     public function actionExport($id)
     {
-
         $objPHPExcel = new \PHPExcel();
         $sheet = 0;
         $objPHPExcel->setActiveSheetIndex($sheet);
@@ -845,6 +848,7 @@ class ChannelController extends Controller
             $completeStatus[0]->completeStatus = 'Wish已完善';
         }
         $completeStatus[0]->update(false);
+        echo "标记Wish完善成功!";
 
 
     }

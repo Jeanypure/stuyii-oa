@@ -80,16 +80,16 @@ if (empty($sku->randomKeywords)) {
     ?>
     <div class="form-group blockTitle">
 
-        <button class="btn btn-info update-info">
+        <button class="btn btn-info update-info" type="button">
             更新
         </button>
-        <button class="btn btn-primary wish-sign">
+        <button class="btn btn-primary wish-sign" type="button">
             保存并完善
         </button>
-        <button class="btn btn-success export">
+        <button class="btn btn-success export" type="button">
             导出ibay模版
         </button>
-        <button class="btn btn-warning joom-csv">
+        <button class="btn btn-warning joom-csv" type="button">
             导出joom(csv)
         </button>
     </div>
@@ -99,7 +99,6 @@ if (empty($sku->randomKeywords)) {
     <?= $form->field($sku, 'SKU',['labelOptions' => ['class' => 'col-md-1 control-label']])->textInput(); ?>
     <?php
     echo $form->field($sku, 'main_image', ['labelOptions' => ['class' => 'col-md-1 control-label']])->hiddenInput(['class' => 'main-image']);
-    //echo $form->field($sku,'main_image')->textInput(['class'=>'main-image','style'=>'display:none']);
     echo '<div class="form-group field-oatemplates-mainpage">
          
          <label class="col-lg-1 control-label"></label>
@@ -249,16 +248,16 @@ if (empty($sku->randomKeywords)) {
 </div>
 <div class="form-group blockTitle">
 
-    <button class="btn btn-info update-info">
+    <button class="btn btn-info update-info" type="button">
         更新
     </button>
-    <button class="btn btn-primary wish-sign">
+    <button class="btn btn-primary wish-sign" type="button">
         保存并完善
     </button>
-    <button class="btn btn-success export">
+    <button class="btn btn-success export" type="button">
         导出ibay模版
     </button>
-    <button class="btn btn-warning joom-csv">
+    <button class="btn btn-warning joom-csv" type="button">
         导出joom(csv)
     </button>
 </div>
@@ -339,10 +338,10 @@ $requestUrlsku = Url::toRoute(['variations']);//弹窗的html内容，下面的j
 
 
 <?php
-$updateUrl = Url::to(['update', 'id' => $sku->infoid]);
+$updateUrl = Url::toRoute(['update', 'id' => $sku->infoid]);
 $exportUrl = Url::to(['export', 'id' => $sku->infoid]);
 $joomUrl = Url::to(['export-joom', 'id' => $sku->infoid]);
-$wishUrl = Url::to(['wish-sign', 'id' => $sku->infoid]);
+$wishUrl = Url::toRoute(['wish-sign', 'id' => $sku->infoid]);
 $js = <<< JS
 //主图赋值
 $('.main-image').val($('.tem-page').val());
@@ -447,13 +446,13 @@ $('body').on('click','.down-btn',function() {
 
   //导出数据到ibay 
     $('.export').on('click',function(){
-          window.location = '{$exportUrl}';
+          window.location.href = '{$exportUrl}';
     });
     
     //导出数据joom CSV
     $('.joom-csv').on('click',function(){
         alert('确定导出Joom模板?');
-         window.location = '{$joomUrl}';
+         window.location.href = '{$joomUrl}';
     });
     
     //标记wish已完成
