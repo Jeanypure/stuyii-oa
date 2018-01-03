@@ -216,7 +216,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'=>
                     function($model){
 
-                        return  substr($model->devDatetime,0,19);   //主要通过此种方式实现
+                        return  substr($model->devDatetime,0,10);   //主要通过此种方式实现
                     },
             ],
             'possessMan1',

@@ -96,27 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'GoodsName',
             'developer',
-            /*[
-                'attribute' => 'devDatetime',
-                'label' => '开发时间',
-                'value' =>
-                    function ($model) {
-                        return substr($model->devDatetime, 0, 10);   //主要通过此种方式实现
-                    },
-            ],*/
-            [
-                'attribute' => 'devDatetime',
-                'format' => ['date', "php:Y-m-d"],
-                //'headerOptions' => ['width' => '12%'],
-                'filter' => \kartik\widgets\DatePicker::widget([
-                    'name' => 'OaGoodsinfoSearch[devDatetime]',
-                    'value' => Yii::$app->request->get('OaGoodsinfoSearch')['devDatetime'],
-                    'convertFormat' => true,
-                    'pluginOptions' => [
-                        'locale' => ['format' => 'Y-m-d', 'separator' => '/',]
-                    ]
-                ])
-            ],
+
             [
                 'attribute' => 'updateTime',
                 'label' => '更新时间',
