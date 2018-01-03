@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'showPageSummary'=>true,
         'id' => 'picinfo',
-        'pjax'=>true,
+        //'pjax'=>true,
         'striped'=>true,
         'responsive'=>true,
         'hover'=>true,
@@ -68,9 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ];
                         return Html::a('<span  class="glyphicon glyphicon-check"></span>', '#', $options);
                     },
-
                 ],
-
             ],
             [
                 'attribute' => 'picUrl',
@@ -80,10 +78,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'width' => '100px',
             ],
-
             'GoodsCode',
             'GoodsName',
-
             [
                 'attribute' => 'vendor1',
                 'format'=>'raw',
@@ -100,10 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 } else {
                     return '';
                 }
-
             },
-
-
             ],
             [
                 'attribute' => 'vendor2',
@@ -121,9 +114,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     } else {
                         return '';
                     }
-
                 },
-
             ],
             [
                 'attribute' => 'vendor3',
@@ -141,11 +132,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     } else {
                         return '';
                     }
-
                 },
-
             ],
-
             [
                 'attribute' => 'origin1',
                 'format'=>'raw',
@@ -162,9 +150,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     } else {
                         return '';
                     }
-
                 },
-
             ],
             [
                 'attribute' => 'origin2',
@@ -182,9 +168,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     } else {
                         return '';
                     }
-
                 },
-
             ],
             [
                 'attribute' => 'originr3',
@@ -202,22 +186,30 @@ $this->params['breadcrumbs'][] = $this->title;
                     } else {
                         return '';
                     }
-
                 },
-
             ],
-
-
             'picStatus',
             'developer',
             [
                 'attribute' => 'devDatetime',
-                'label'=>'开发时间',
-                'value'=>
-                    function($model){
-
-                        return  substr($model->devDatetime,0,10);   //主要通过此种方式实现
-                    },
+                'label' => '开发时间',
+                //'format' => ['date', "php:Y-m-d"],
+                'value' => function ($model) {
+                    return substr(strval($model->devDatetime),0,10);
+                },
+                'width' => '200px',
+                //'headerOptions' => ['width' => '300px'],
+                //'filterType' => GridView::FILTER_DATE,
+                'filter' => \kartik\widgets\DatePicker::widget([
+                    'name' => 'OaGoodsinfoSearch[devDatetime]',
+                    'value' => Yii::$app->request->get('OaGoodsinfoSearch')['devDatetime'],
+                    'convertFormat' => true,
+                    'pluginOptions' => [
+                        //'autoclose' => true,
+                        'format' => 'php:Y-m-d',
+                        'todayHighlight' => true,
+                    ]
+                ])
             ],
             'possessMan1',
             [
@@ -231,12 +223,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filterInputOptions'=>['placeholder'=>'是否多属性'],
             ],
         ],
-
-
-
-
     ]); ?>
-
 
     <?php
     //创建模态框

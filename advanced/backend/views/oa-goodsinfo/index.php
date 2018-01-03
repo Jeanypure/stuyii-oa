@@ -28,12 +28,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'showPageSummary' => true,
+        'showPageSummary' => true,//显示统计栏，默认为false
         'id' => 'oa-goodsinfo',
-        'pjax' => true,
+        //'pjax' => true,
+        //'floatHeader'=>true,//向下滚动时，标题栏可以fixed，默认为false
         'striped' => true,
-        'responsive' => true,
-        'hover' => true,
+        //'responsive' => true,//自适应，默认为true
+        'hover' => true,//鼠标移动上去时，颜色变色，默认为false
 //        'panel'=>['type'=>'primary', 'heading'=>'基本信息'],
 
         'columns' => [
@@ -51,7 +52,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-target' => '#index-modal',
                             'data-id' => $key,
                             'class' => 'index-view',
-
                         ];
                         return Html::a('<span  class="glyphicon glyphicon-eye-open"></span>', '#', $options);
                     },
@@ -61,7 +61,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'aria-label' => '导入普源',
                             'data-id' => $key,
                             'class' => 'index-input',
-
                         ];
                         return Html::a('<span  class="glyphicon glyphicon-send"></span>', '#', $options);
                     },
@@ -71,13 +70,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'aria-label' => '标记已完善',
                             'data-id' => $key,
                             'class' => 'index-complete',
-
                         ];
                         return Html::a('<span  class="glyphicon glyphicon-check"></span>', '#', $options);
                     },
-
                 ],
-
             ],
             [
                 'attribute' => 'picUrl',
@@ -87,29 +83,57 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'width' => '100px',
             ],
-
             'GoodsCode',
             [
                 'attribute' => 'achieveStatus',
                 'width' => '100px',
             ],
-
             'GoodsName',
             'developer',
-
+            [
+                'attribute' => 'devDatetime',
+                //'format' => ['date', "php:Y-m-d"],
+                'value' => function ($model) {
+                    return substr(strval($model->devDatetime),0,10);
+                },
+                'width' => '250px',
+                'contentOptions' => ['width'=>'250px'],
+                'headerOptions' => ['width' => '250px'],
+                //'filterType' => GridView::FILTER_DATE,
+                'filter' => \kartik\widgets\DatePicker::widget([
+                    'name' => 'OaGoodsinfoSearch[devDatetime]',
+                    'value' => Yii::$app->request->get('OaGoodsinfoSearch')['devDatetime'],
+                    'convertFormat' => true,
+                    'pluginOptions' => [
+                        //'autoclose' => true,
+                        'format' => 'php:Y-m-d',
+                        'todayHighlight' => true,
+                    ]
+                ])
+            ],
             [
                 'attribute' => 'updateTime',
                 'label' => '更新时间',
-                'value' =>
-                    function ($model) {
-                        //return  substr($model->updateTime,0,19);   //主要通过此种方式实现
-                        return substr($model->updateTime, 0, 10);   //主要通过此种方式实现
-                    },
+                //'format' => ['date', "php:Y-m-d"],
+                'value' => function ($model) {
+                    return substr(strval($model->updateTime),0,10);
+                },
+                'width' => '300px',
+                'headerOptions' => ['width' => '300px'],
+                //'filterType' => GridView::FILTER_DATE,
+                'filter' => \kartik\widgets\DatePicker::widget([
+                    'name' => 'OaGoodsinfoSearch[updateTime]',
+                    'value' => Yii::$app->request->get('OaGoodsinfoSearch')['updateTime'],
+                    'convertFormat' => true,
+                    'pluginOptions' => [
+                        //'autoclose' => true,
+                        'format' => 'php:Y-m-d',
+                        'todayHighlight' => true,
+                    ]
+                ])
             ],
             'AliasCnName',
             'AliasEnName',
-
-
             [
                 'attribute' => 'IsLiquid',
                 'width' => '110px',
@@ -125,7 +149,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filterInputOptions' => ['placeholder' => '是否是液体'],
                 //'group'=>true,  // enable grouping
             ],
-
             [
                 'attribute' => 'IsPowder',
                 'width' => '100px',
