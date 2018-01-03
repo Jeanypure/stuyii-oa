@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
-    'pjax'=>true,
+    //'pjax'=>true,
     'striped'=>true,
     'responsive'=>true,
     'hover'=>true,
@@ -82,9 +82,24 @@ $this->params['breadcrumbs'][] = $this->title;
         'possessMan1',
         [
             'attribute' => 'devDatetime',
+            'label' => '开发时间',
+            //'format' => ['date', "php:Y-m-d"],
             'value' => function ($model) {
                 return substr(strval($model->devDatetime),0,10);
             },
+            'width' => '200px',
+            //'headerOptions' => ['width' => '300px'],
+            //'filterType' => GridView::FILTER_DATE,
+            'filter' => \kartik\widgets\DatePicker::widget([
+                'name' => 'ChannelSearch[devDatetime]',
+                'value' => Yii::$app->request->get('ChannelSearch')['devDatetime'],
+                'convertFormat' => true,
+                'pluginOptions' => [
+                    //'autoclose' => true,
+                    'format' => 'php:Y-m-d',
+                    'todayHighlight' => true,
+                ]
+            ])
         ],
         'completeStatus',
         'DictionaryName',

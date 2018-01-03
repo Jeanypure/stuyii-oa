@@ -143,49 +143,7 @@ function centerFormat($name) {
             [
                 'class' => 'yii\grid\CheckboxColumn',
             ],
-
-
             ['class' => 'kartik\grid\SerialColumn'],
-
-      /*      [ 'class' => 'kartik\grid\ActionColumn',
-                'template' =>'{view} {fail} {trash}',
-                'buttons' => [
-                    'view' => function ($url, $model, $key) {
-                        $options = [
-                            'title' => '查看',
-                            'aria-label' => '查看',
-                            'data-toggle' => 'modal',
-                            'data-target' => '#view-modal',
-                            'data-id' => $key,
-                            'class' => 'data-view',
-                        ];
-                        return Html::a('<span  class="glyphicon glyphicon-eye-open"></span>', '#', $options);
-                    },
-
-                    'fail' => function ($url, $model, $key) {
-                        $options = [
-                            'title' => '不通过',
-                            'aria-label' => '不通过',
-                            'data-toggle' => 'modal',
-                            'data-target' => '#fail-dialog',
-                            'data-id' => $key,
-                            'class' => 'data-fail',
-                        ];
-                        return Html::a('<span  class="glyphicon glyphicon-thumbs-down"></span>', '#', $options);
-                    },
-                    'trash' => function ($url, $model, $key) {
-                        $options = [
-                            'title' => '作废',
-                            'aria-label' => '作废',
-                            'data-toggle' => 'modal',
-                            'data-target' => '#fail-dialog',
-                            'data-id' => $key,
-                            'class' => 'data-fail',
-                        ];
-                        return Html::a('<span  class="glyphicon glyphicon-trash"></span>', '#', $options);
-                    }
-                ],
-            ],*/
             centerFormat('img'),
             //centerFormat('cate'),
             [
@@ -202,20 +160,55 @@ function centerFormat($name) {
             ],
             centerFormat('subCate'),
             centerFormat('vendor1'),
-//            centerFormat('vendor2'),
-//            centerFormat('vendor3'),
             centerFormat('origin1'),
-//            centerFormat('origin2'),
-//            centerFormat('origin3'),
             centerFormat('devNum'),
             centerFormat('developer'),
             centerFormat('introducer'),
-//            centerFormat('devStatus'),
             centerFormat('checkStatus'),
             centerFormat('approvalNote'),
-
-            centerFormat('createDate'),
-            centerFormat('updateDate'),
+            //centerFormat('createDate'),
+            //centerFormat('updateDate'),
+            [
+                'attribute' => 'createDate',
+                //'format' => ['date', "php:Y-m-d"],
+                'value' => function ($model) {
+                    return substr(strval($model->createDate),0,10);
+                },
+                'width' => '200px',
+                //'headerOptions' => ['width' => '200px'],
+                //'filterType' => GridView::FILTER_DATE,
+                'filter' => \kartik\widgets\DatePicker::widget([
+                    'name' => 'OaGoodsSearch[createDate]',
+                    'value' => Yii::$app->request->get('OaGoodsSearch')['createDate'],
+                    'convertFormat' => true,
+                    'pluginOptions' => [
+                        //'autoclose' => true,
+                        'format' => 'php:Y-m-d',
+                        'todayHighlight' => true,
+                    ]
+                ])
+            ],
+            [
+                'attribute' => 'updateDate',
+                'label' => '更新时间',
+                //'format' => ['date', "php:Y-m-d"],
+                'value' => function ($model) {
+                    return substr(strval($model->updateDate),0,10);
+                },
+                'width' => '200px',
+                //'headerOptions' => ['width' => '300px'],
+                //'filterType' => GridView::FILTER_DATE,
+                'filter' => \kartik\widgets\DatePicker::widget([
+                    'name' => 'OaGoodsSearch[updateDate]',
+                    'value' => Yii::$app->request->get('OaGoodsSearch')['updateDate'],
+                    'convertFormat' => true,
+                    'pluginOptions' => [
+                        //'autoclose' => true,
+                        'format' => 'php:Y-m-d',
+                        'todayHighlight' => true,
+                    ]
+                ])
+            ],
             centerFormat('salePrice'),
             centerFormat('hopeWeight'),
             centerFormat('hopeCost'),
