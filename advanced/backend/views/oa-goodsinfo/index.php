@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
@@ -19,28 +20,28 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::button('批量导入普源', ['id'=>'input-lots','class' => 'btn btn-success']) ?>
-        <?= Html::button('重新生成商品编码', ['id'=>'generate-code','class' => 'btn btn-info']) ?>
-        <?= Html::button('标记已完善', ['id'=>'complete-lots','class' => 'btn btn-primary']) ?>
+        <?= Html::button('批量导入普源', ['id' => 'input-lots', 'class' => 'btn btn-success']) ?>
+        <?= Html::button('重新生成商品编码', ['id' => 'generate-code', 'class' => 'btn btn-info']) ?>
+        <?= Html::button('标记已完善', ['id' => 'complete-lots', 'class' => 'btn btn-primary']) ?>
     </p>
     <?= GridView::widget([
 
-        'dataProvider'=> $dataProvider,
+        'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'showPageSummary'=>true,
+        'showPageSummary' => true,
         'id' => 'oa-goodsinfo',
-        'pjax'=>true,
-        'striped'=>true,
-        'responsive'=>true,
-        'hover'=>true,
+        'pjax' => true,
+        'striped' => true,
+        'responsive' => true,
+        'hover' => true,
 //        'panel'=>['type'=>'primary', 'heading'=>'基本信息'],
 
         'columns' => [
             ['class' => 'kartik\grid\CheckboxColumn'],
-            ['class'=>'kartik\grid\SerialColumn'],
+            ['class' => 'kartik\grid\SerialColumn'],
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'template' =>'{view} {update} {input} {complete} {delete}',
+                'template' => '{view} {update} {input} {complete} {delete}',
                 'buttons' => [
                     'view' => function ($url, $model, $key) {
                         $options = [
@@ -80,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'picUrl',
-                'value' =>function($model,$key, $index, $widget) {
+                'value' => function ($model, $key, $index, $widget) {
                     return "<img src='$model->picUrl' width='100' height='100'/>";
                 },
                 'format' => 'raw',
@@ -89,26 +90,40 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'GoodsCode',
             [
-            'attribute' => 'achieveStatus',
-            'width' => '100px',
+                'attribute' => 'achieveStatus',
+                'width' => '100px',
             ],
 
             'GoodsName',
             'developer',
+            /*[
+                'attribute' => 'devDatetime',
+                'label' => '开发时间',
+                'value' =>
+                    function ($model) {
+                        return substr($model->devDatetime, 0, 10);   //主要通过此种方式实现
+                    },
+            ],*/
             [
                 'attribute' => 'devDatetime',
-                'label'=>'开发时间',
-                'value'=>
-                    function($model){
-                        return  substr($model->devDatetime,0,19);   //主要通过此种方式实现
-                    },
+                'format' => ['date', "php:Y-m-d"],
+                //'headerOptions' => ['width' => '12%'],
+                'filter' => \kartik\widgets\DatePicker::widget([
+                    'name' => 'OaGoodsinfoSearch[devDatetime]',
+                    'value' => Yii::$app->request->get('OaGoodsinfoSearch')['devDatetime'],
+                    'convertFormat' => true,
+                    'pluginOptions' => [
+                        'locale' => ['format' => 'Y-m-d', 'separator' => '/',]
+                    ]
+                ])
             ],
             [
                 'attribute' => 'updateTime',
-                'label'=>'更新时间',
-                'value'=>
-                    function($model){
-                        return  substr($model->updateTime,0,19);   //主要通过此种方式实现
+                'label' => '更新时间',
+                'value' =>
+                    function ($model) {
+                        //return  substr($model->updateTime,0,19);   //主要通过此种方式实现
+                        return substr($model->updateTime, 0, 10);   //主要通过此种方式实现
                     },
             ],
             'AliasCnName',
@@ -116,82 +131,83 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
             [
-                'attribute'=>'IsLiquid',
-                'width'=>'110px',
-                'value'=>function ($model, $key, $index, $widget) {
+                'attribute' => 'IsLiquid',
+                'width' => '110px',
+                'value' => function ($model, $key, $index, $widget) {
                     return $model->IsLiquid;
                 },
-                'filterType'=>GridView::FILTER_SELECT2,
-                'filter'=>[1 => '是', 0 => '否'],
+                'filterType' => GridView::FILTER_SELECT2,
+                'filter' => [1 => '是', 0 => '否'],
                 //'filter'=>ArrayHelper::map(\backend\models\OaGoodsinfo::find()->orderBy('pid')->asArray()->all(), 'pid', 'IsLiquid'),
-                'filterWidgetOptions'=>[
-                    'pluginOptions'=>['allowClear'=>true],
+                'filterWidgetOptions' => [
+                    'pluginOptions' => ['allowClear' => true],
                 ],
-                'filterInputOptions'=>['placeholder'=>'是否是液体'],
+                'filterInputOptions' => ['placeholder' => '是否是液体'],
                 //'group'=>true,  // enable grouping
             ],
 
             [
                 'attribute' => 'IsPowder',
                 'width' => '100px',
-                'filterType'=>GridView::FILTER_SELECT2,
-                'filter'=>[1 => '是', 0 => '否'],
-                'filterWidgetOptions'=>[
-                    'pluginOptions'=>['allowClear'=>true],
+                'filterType' => GridView::FILTER_SELECT2,
+                'filter' => [1 => '是', 0 => '否'],
+                'filterWidgetOptions' => [
+                    'pluginOptions' => ['allowClear' => true],
                 ],
-                'filterInputOptions'=>['placeholder'=>'是否是粉末'],
-             ],
+                'filterInputOptions' => ['placeholder' => '是否是粉末'],
+            ],
             [
                 'attribute' => 'isMagnetism',
                 'width' => '100px',
-                'filterType'=>GridView::FILTER_SELECT2,
-                'filter'=>[1 => '是', 0 => '否'],
-                'filterWidgetOptions'=>[
-                    'pluginOptions'=>['allowClear'=>true],
+                'filterType' => GridView::FILTER_SELECT2,
+                'filter' => [1 => '是', 0 => '否'],
+                'filterWidgetOptions' => [
+                    'pluginOptions' => ['allowClear' => true],
                 ],
-                'filterInputOptions'=>['placeholder'=>'是否带磁'],
+                'filterInputOptions' => ['placeholder' => '是否带磁'],
             ],
             [
                 'attribute' => 'IsCharged',
                 'width' => '100px',
-                'filterType'=>GridView::FILTER_SELECT2,
-                'filter'=>[1 => '是', 0 => '否'],
-                'filterWidgetOptions'=>[
-                    'pluginOptions'=>['allowClear'=>true],
+                'filterType' => GridView::FILTER_SELECT2,
+                'filter' => [1 => '是', 0 => '否'],
+                'filterWidgetOptions' => [
+                    'pluginOptions' => ['allowClear' => true],
                 ],
-                'filterInputOptions'=>['placeholder'=>'是否带电'],
+                'filterInputOptions' => ['placeholder' => '是否带电'],
             ],
             [
                 'attribute' => 'isVar',
                 'width' => '100px',
-                'filterType'=>GridView::FILTER_SELECT2,
-                'filter'=>['是' => '是', '否' => '否'],
-                'filterWidgetOptions'=>[
-                    'pluginOptions'=>['allowClear'=>true],
+                'filterType' => GridView::FILTER_SELECT2,
+                'filter' => ['是' => '是', '否' => '否'],
+                'filterWidgetOptions' => [
+                    'pluginOptions' => ['allowClear' => true],
                 ],
-                'filterInputOptions'=>['placeholder'=>'是否多属性'],
+                'filterInputOptions' => ['placeholder' => '是否多属性'],
             ],
         ],
     ]); ?>
 
-<?php
-//创建模态框
-use yii\bootstrap\Modal;
-Modal::begin([
-    'id' => 'index-modal',
-    'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
-    'size' => "modal-lg"
-]);
-//echo
-Modal::end();
+    <?php
+    //创建模态框
+    use yii\bootstrap\Modal;
 
-$viewUrl = Url::toRoute('view');
-$inputUrl = Url::toRoute('input');
-$inputLotsUrl = Url::toRoute('input-lots');
-//$generateUrl = Url::toRoute('generate-code');
-$completeUrl = Url::toRoute('complete');
-$completeLotsUrl = Url::toRoute('complete-lots');
-$js = <<<JS
+    Modal::begin([
+        'id' => 'index-modal',
+        'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
+        'size' => "modal-lg"
+    ]);
+    //echo
+    Modal::end();
+
+    $viewUrl = Url::toRoute('view');
+    $inputUrl = Url::toRoute('input');
+    $inputLotsUrl = Url::toRoute('input-lots');
+    //$generateUrl = Url::toRoute('generate-code');
+    $completeUrl = Url::toRoute('complete');
+    $completeLotsUrl = Url::toRoute('complete-lots');
+    $js = <<<JS
 
 
 
@@ -268,9 +284,9 @@ $("#complete-lots").on('click',function() {
     });
 });
 JS;
-$this->registerJs($js);
+    $this->registerJs($js);
 
-?>
+    ?>
 </div>
 
 
