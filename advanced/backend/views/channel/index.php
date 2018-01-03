@@ -44,8 +44,17 @@ $this->params['breadcrumbs'][] = $this->title;
              'GoodsCode',
              'GoodsName',
             [
-                'attribute'=> 'cate',
-                'value'=>'oa_goods.cate'
+                'attribute' => 'cate',
+                'value'=>'oa_goods.cate',
+                'width' => '150px',
+                'filterType' => GridView::FILTER_SELECT2,
+                'filter' => \yii\helpers\ArrayHelper::map(\backend\models\GoodsCats::findAll(['CategoryParentID' => 0]),'CategoryName', 'CategoryName'),
+                //'filter'=>ArrayHelper::map(\backend\models\OaGoodsinfo::find()->orderBy('pid')->asArray()->all(), 'pid', 'IsLiquid'),
+                'filterWidgetOptions' => [
+                    'pluginOptions' => ['allowClear' => true],
+                ],
+                'filterInputOptions' => ['placeholder' => '-请选择-'],
+                //'group'=>true,  // enable grouping
             ],
             [
                 'attribute'=> 'subCate',

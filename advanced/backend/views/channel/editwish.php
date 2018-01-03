@@ -80,18 +80,18 @@ if (empty($sku->randomKeywords)) {
     ?>
     <div class="form-group blockTitle">
 
-        <botton class="btn btn-info update-info">
+        <button class="btn btn-info update-info">
             更新
-        </botton>
-        <botton class="btn btn-primary wish-sign">
+        </button>
+        <button class="btn btn-primary wish-sign">
             保存并完善
-        </botton>
-        <botton class="btn btn-success export">
+        </button>
+        <button class="btn btn-success export">
             导出ibay模版
-        </botton>
-        <botton class="btn btn-warning joom-csv">
+        </button>
+        <button class="btn btn-warning joom-csv">
             导出joom(csv)
-        </botton>
+        </button>
     </div>
     <div class="blockTitle">
         <span>基本信息</span>
@@ -249,18 +249,18 @@ if (empty($sku->randomKeywords)) {
 </div>
 <div class="form-group blockTitle">
 
-    <botton class="btn btn-info update-info">
+    <button class="btn btn-info update-info">
         更新
-    </botton>
-    <botton class="btn btn-primary wish-sign">
+    </button>
+    <button class="btn btn-primary wish-sign">
         保存并完善
-    </botton>
-    <botton class="btn btn-success export">
+    </button>
+    <button class="btn btn-success export">
         导出ibay模版
-    </botton>
-    <botton class="btn btn-warning joom-csv">
+    </button>
+    <button class="btn btn-warning joom-csv">
         导出joom(csv)
-    </botton>
+    </button>
 </div>
 <?php ActiveForm::end(); ?>
 

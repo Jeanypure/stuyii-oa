@@ -285,7 +285,19 @@ function centerFormat($name) {
                 ],
             ],
             centerFormat('img'),
-            centerFormat('cate'),
+            //centerFormat('cate'),
+            [
+                'attribute' => 'cate',
+                'width' => '150px',
+                'filterType' => GridView::FILTER_SELECT2,
+                'filter' => \yii\helpers\ArrayHelper::map(\backend\models\GoodsCats::findAll(['CategoryParentID' => 0]),'CategoryName', 'CategoryName'),
+                //'filter'=>ArrayHelper::map(\backend\models\OaGoodsinfo::find()->orderBy('pid')->asArray()->all(), 'pid', 'IsLiquid'),
+                'filterWidgetOptions' => [
+                    'pluginOptions' => ['allowClear' => true],
+                ],
+                'filterInputOptions' => ['placeholder' => '-请选择-'],
+                //'group'=>true,  // enable grouping
+            ],
             centerFormat('subCate'),
             centerFormat('vendor1'),
 //            centerFormat('vendor2'),
