@@ -339,10 +339,10 @@ $requestUrlsku = Url::toRoute(['variations']);//弹窗的html内容，下面的j
 
 
 <?php
-$updateUrl = Url::to(['update', 'id' => $sku->infoid]);
-$exportUrl = Url::to(['export', 'id' => $sku->infoid]);
-$joomUrl = Url::to(['export-joom', 'id' => $sku->infoid]);
-$wishUrl = Url::to(['wish-sign', 'id' => $sku->infoid]);
+$updateUrl = Url::toRoute(['update', 'id' => $sku->infoid]);
+$exportUrl = Url::toRoute(['export', 'id' => $sku->infoid]);
+$joomUrl = Url::toRoute(['export-joom', 'id' => $sku->infoid]);
+$wishUrl = Url::toRoute(['wish-sign', 'id' => $sku->infoid]);
 $js = <<< JS
 //主图赋值
 $('.main-image').val($('.tem-page').val());
