@@ -589,7 +589,6 @@ class ChannelController extends Controller
     //导出数据 wish平台
     public function actionExport($id)
     {
-
         $objPHPExcel = new \PHPExcel();
         $sheet = 0;
         $objPHPExcel->setActiveSheetIndex($sheet);
