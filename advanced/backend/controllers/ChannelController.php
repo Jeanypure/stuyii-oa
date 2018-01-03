@@ -844,6 +844,7 @@ class ChannelController extends Controller
             $completeStatus[0]->completeStatus = 'Wish已完善';
         }
         $completeStatus[0]->update(false);
+        echo "标记Wish完善成功!";
 
 
     }
