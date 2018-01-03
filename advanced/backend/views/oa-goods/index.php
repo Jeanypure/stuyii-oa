@@ -106,79 +106,84 @@ $('.index-create').on('click',  function () {
 JS;
 $this->registerJs($js);
 
-//单元格居中类
-class CenterFormatter {
-    public function __construct($name) {
-        $this->name = $name;
-    }
-    public  function format() {
-        // 超链接显示为超链接
-        if ($this->name === 'origin'||$this->name === 'origin1'||$this->name === 'origin1'
-            ||$this->name === 'origin2'||$this->name === 'origin3'||$this->name === 'vendor1'||$this->name === 'vendor2'
-            ||$this->name === 'vendor3') {
+    //单元格居中类
+    class CenterFormatter {
+        public function __construct($name) {
+            $this->name = $name;
+        }
+        public  function format() {
+            // 超链接显示为超链接
+            if ($this->name === 'origin'||$this->name === 'origin1'||$this->name === 'origin1'
+                ||$this->name === 'origin2'||$this->name === 'origin3'||$this->name === 'vendor1'||$this->name === 'vendor2'
+                ||$this->name === 'vendor3') {
+                return  [
+                    'attribute' => $this->name,
+                    'value' => function($data) {
+                        if(!empty($data[$this->name]))
+                        {
+                            try {
+                                $hostName = parse_url($data[$this->name])['host'];
+                            }
+                            catch (Exception $e){
+                                $hostName = "www.unknown.com";
+                            }
+                            return "<a class='cell' href='{$data[$this->name]}' target='_blank'>{$hostName}</a>";
+                        }
+                        else
+                        {
+                            return '';
+                        }
+
+                    },
+                    'format' => 'raw',
+
+                ];
+                // 图片显示为图片
+            }
+            if ($this->name === 'img') {
+                return [
+                    'attribute' => 'img',
+                    'value' => function($data) {
+                        return "<img src='".$data[$this->name]."' width='100' height='100'>";
+
+                    },
+                    'format' => 'raw',
+
+                ];
+            }
+            if (strpos(strtolower($this->name), 'date') || strpos(strtolower($this->name), 'time')) {
+                return [
+                    'attribute' => $this->name,
+                    'value' => function($data) {
+                        return "<span class='cell'>".substr($data[$this->name],0,10)."</span>";
+
+                    },
+                    'format' => 'raw',
+
+                ];
+
+            }
             return  [
                 'attribute' => $this->name,
                 'value' => function($data) {
-                    if(!empty($data[$this->name]))
-                    {
-                        try {
-                            $hostName = parse_url($data[$this->name])['host'];
-                        }
-                        catch (Exception $e){
-                            $hostName = "www.unknown.com";
-                        }
-                        return "<a class='cell' href='{$data[$this->name]}' target='_blank'>{$hostName}</a>";
-                    }
-                    else
-                    {
-                        return '';
-                    }
-
+                    return "<span class='cell'>".$data[$this->name]."</span>";
                 },
                 'format' => 'raw',
 
-            ];
-            // 图片显示为图片
-        }
-        if ($this->name === 'img') {
-            return [
-                'attribute' => 'img',
-                'value' => function($data) {
-                    return "<img src='".$data[$this->name]."' width='100' height='100'>";
-
-                },
-                'format' => 'raw',
 
             ];
         }
-        if (strpos(strtolower($this->name), 'date') || strpos(strtolower($this->name), 'time')) {
-            return [
-                'attribute' => $this->name,
-                'value' => function($data) {
-                    return "<span class='cell'>".substr($data[$this->name],0,19)."</span>";
-
-                },
-                'format' => 'raw',
-
-            ];
-
-        }
-        return  [
-            'attribute' => $this->name,
-            'value' => function($data) {
-                return "<span class='cell'>".$data[$this->name]."</span>";
-//                    return $data['cate'];
-            },
-            'format' => 'raw',
-
-
-        ];
-    }
-};
+    };
     //封装到格式化函数中
     function centerFormat($name) {
         return (new CenterFormatter($name))->format();
     };
+
+    function subDateTime($Date){
+        date('Y-m-d', strtotime($Date));
+//        输出是：2009-03-30
+    }
+
 ?>
 <style>
     .cell {
@@ -277,29 +282,15 @@ class CenterFormatter {
 
              centerFormat('img'),
              centerFormat('cate'),
-            centerFormat('subCate'),
-            centerFormat('vendor1'),
-//            centerFormat('vendor2'),
-//            centerFormat('vendor3'),
-            centerFormat('origin1'),
-//            centerFormat('origin2'),
-//            centerFormat('origin3'),
-//             centerFormat('devNum'),
-//             centerFormat('developer'),
+             centerFormat('subCate'),
+             centerFormat('vendor1'),
+             centerFormat('origin1'),
              centerFormat('introducer'),
              centerFormat('introReason'),
-//             centerFormat('devStatus'),
              centerFormat('checkStatus'),
              centerFormat('approvalNote'),
              centerFormat('createDate'),
              centerFormat('updateDate'),
-//            centerFormat('salePrice'),
-//            centerFormat('hopeWeight'),
-//            centerFormat('hopeRate'),
-//            centerFormat('hopeSale'),
-//            centerFormat('hopeMonthProfit'),
-
-
         ],
     ]); ?>
 
