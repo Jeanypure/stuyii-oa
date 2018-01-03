@@ -5,6 +5,7 @@ namespace backend\controllers;
 use backend\models\GoodsCats;
 use backend\models\OaForwardGoods;
 use backend\models\OaBackwardGoods;
+use backend\models\OaGoodsinfo;
 use PHPUnit\Framework\Exception;
 use Yii;
 use backend\models\OaGoods;
@@ -515,15 +516,18 @@ class OaGoodsController extends Controller
     /**
      * Deletes an existing OaGoods model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id, $type string
      * @return mixed
      */
     public function actionDelete()
     {
         $id = $_POST['id'];
         $type = $_POST['type'];
-        $this->findModel($id)->delete();
-
+        $sql = "select isnull(completeStatus,'') as completeStatus from oa_goodsinfo where goodsid= :id";
+        $complete_status_query = OaGoodsinfo::findBySql($sql,[":id"=>$id])->one();
+        $complete_status = $complete_status_query->completeStatus;
+        if(empty($complete_status)){
+            $this->findModel($id)->delete();
+        }
         return $this->redirect([$type]);
     }
 
@@ -689,8 +693,13 @@ class OaGoodsController extends Controller
     public function actionDeleteLots()
     {
         $ids = yii::$app->request->post()["id"];
+        $sql = "select isnull(completeStatus,'') as completeStatus from oa_goodsinfo where goodsid= :id";
         foreach ($ids as $id) {
-            $this->findModel($id)->delete();
+            $complete_status_query = OaGoodsinfo::findBySql($sql,[":id"=>$id])->one();
+            $complete_status = $complete_status_query->completeStatus;
+            if(empty($complete_status)){
+                $this->findModel($id)->delete();
+            }
         }
         return $this->redirect(['index']);
     }

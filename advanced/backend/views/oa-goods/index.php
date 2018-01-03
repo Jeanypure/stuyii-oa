@@ -35,7 +35,6 @@ $js = <<<JS
     $('.index-delete').on('click',  function () {
      self = this;
      krajeeDialog.confirm("确定删除此条记录?", function (result) {
-        
         if (result) {
             id = $(self).closest('tr').data('key');
             $.post('delete',{id:id,type:'index'},function() {
@@ -103,7 +102,6 @@ $('.index-create').on('click',  function () {
         );
     }); 
     
-// todo 未通过审核的产品单独创建模态框，并增加提交审核和作废的按钮
 
 JS;
 $this->registerJs($js);
