@@ -28,6 +28,7 @@ $requestUrl = Url::toRoute('heart');
 $viewUrl = Url::toRoute('view');
 $updateUrl = Url::toRoute('update');
 $createUrl = Url::toRoute('create');
+$delete_lot =  Url::toRoute(['oa-goods/delete-lots']);
 $js = <<<JS
 //删除按钮
     $('.index-delete').on('click',  function () {
@@ -47,7 +48,7 @@ $js = <<<JS
     var self = $(this);
     if(ids.length == 0) return false;
      $.ajax({
-           url:"<?= Url::to(['oa-goods/delete-lots'])?>",
+           url:'{$delete_lot}',
            type:"post",
            data:{id:ids},
            success:function(res){
@@ -138,7 +139,7 @@ $this->registerJs($js);
                     'format' => 'raw',
 
                 ];
-                // 图片显示为图片
+            // 图片显示为图片
             }
             if ($this->name === 'img') {
                 return [
@@ -179,10 +180,7 @@ $this->registerJs($js);
         return (new CenterFormatter($name))->format();
     };
 
-    function subDateTime($Date){
-        date('Y-m-d', strtotime($Date));
-//        输出是：2009-03-30
-    }
+
 
 ?>
 <style>
@@ -193,7 +191,6 @@ $this->registerJs($js);
         text-align: center;
         width: 100px;
         height: 100px;
-        /*border:1px solid #666;*/
     }
 
     .icon-cell {

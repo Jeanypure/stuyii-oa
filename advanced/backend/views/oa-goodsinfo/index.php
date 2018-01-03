@@ -33,8 +33,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'striped'=>true,
         'responsive'=>true,
         'hover'=>true,
-//        'panel'=>['type'=>'primary', 'heading'=>'基本信息'],
-
         'columns' => [
             ['class' => 'kartik\grid\CheckboxColumn'],
             ['class'=>'kartik\grid\SerialColumn'],
@@ -113,8 +111,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'AliasCnName',
             'AliasEnName',
-
-
             [
                 'attribute'=>'IsLiquid',
                 'width'=>'110px',
@@ -123,14 +119,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'filterType'=>GridView::FILTER_SELECT2,
                 'filter'=>[1 => '是', 0 => '否'],
-                //'filter'=>ArrayHelper::map(\backend\models\OaGoodsinfo::find()->orderBy('pid')->asArray()->all(), 'pid', 'IsLiquid'),
                 'filterWidgetOptions'=>[
                     'pluginOptions'=>['allowClear'=>true],
                 ],
                 'filterInputOptions'=>['placeholder'=>'是否是液体'],
-                //'group'=>true,  // enable grouping
             ],
-
             [
                 'attribute' => 'IsPowder',
                 'width' => '100px',
@@ -269,8 +262,17 @@ $("#complete-lots").on('click',function() {
 });
 JS;
 $this->registerJs($js);
-
 ?>
 </div>
+<style>
+    .cell {
+        Word-break: break-all;
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+        width: 100px;
+        height: 100px;
+    }
+</style>
 
 

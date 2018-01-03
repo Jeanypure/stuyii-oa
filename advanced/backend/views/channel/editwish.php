@@ -447,13 +447,13 @@ $('body').on('click','.down-btn',function() {
 
   //导出数据到ibay 
     $('.export').on('click',function(){
-          window.location = '{$exportUrl}';
+          window.location.href = '{$exportUrl}';
     });
     
     //导出数据joom CSV
     $('.joom-csv').on('click',function(){
         alert('确定导出Joom模板?');
-         window.location = '{$joomUrl}';
+         window.location.href = '{$joomUrl}';
     });
     
     //标记wish已完成
