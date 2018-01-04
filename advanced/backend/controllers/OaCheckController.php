@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use PHPUnit\Framework\Exception;
 use Yii;
 use backend\models\OaGoods;
 use backend\models\OaGoodsSearch;
@@ -69,42 +70,55 @@ class OaCheckController extends Controller
     public function actionPass()
     {
         $request = yii::$app->request->post()['OaGoods'];
+        $connection = yii::$app->db;
         $id = $request['nid'];
         $approvalNote = $request['approvalNote'];
         $model = $this->findModel($id);
-        $cate = $model->cate;
-        $_model = new OaGoodsinfo();
-        $model ->checkStatus = '已审批';
-        $model ->approvalNote = $approvalNote;
-        $model ->updateDate = strftime('%F %T');
-        $model->update(false);
-        //审批状态改变之后就插入数据到OaGoodsInfo
-        $code = $this->generateCode($cate);
-        $nid = $model->nid;
-        $img = $model->img;
-        $developer = $model->developer;
-        $_model->goodsid =$nid;
-        $_model->GoodsCode =$code;
-        $_model->picUrl = $img;
-        $_model->developer =$developer;
-        $_model->devDatetime =strftime('%F %T');;
-        $_model->updateTime =strftime('%F %T');;
-        $_model->achieveStatus='待处理';
-        $_model->GoodsName='';
-        if(empty($_model->possessMan1)){
-            $arc_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-arc-map'])->one();
-            $arc = $arc_model->ruleValue;
-            $_model->possessMan1 = $arc;
-        }
+        $trans = $connection->beginTransaction();
+        try{
+            $cate = $model->cate;
+            $_model = new OaGoodsinfo();
+            $model ->checkStatus = '已审批';
+            $model ->approvalNote = $approvalNote;
+            $model ->updateDate = strftime('%F %T');
+            $model->update(false);
+            //审批状态改变之后就插入数据到OaGoodsInfo
+            $code = $this->generateCode($cate);
+            $nid = $model->nid;
+            $img = $model->img;
+            $developer = $model->developer;
+            $_model->goodsid =$nid;
+            $_model->GoodsCode =$code;
+            $_model->picUrl = $img;
+            $_model->developer =$developer;
+            $_model->devDatetime =strftime('%F %T');;
+            $_model->updateTime =strftime('%F %T');;
+            $_model->achieveStatus='待处理';
+            $_model->GoodsName='';
+            if(empty($_model->possessMan1)){
+                $arc_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-arc-map'])->one();
+                $arc = $arc_model->ruleValue;
+                $_model->possessMan1 = $arc;
+            }
 
-        if(empty($_model->Purchaser)){
-            $pur_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-pur-map'])->one();
-            $pur = $pur_model->ruleValue;
-            $_model->Purchaser = $pur;
+            if(empty($_model->Purchaser)){
+                $pur_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-pur-map'])->one();
+                $pur = $pur_model->ruleValue;
+                $_model->Purchaser = $pur;
+            }
+            if($_model->save(false)){
+                $trans->commit();
+//                return "保存成功";
+            }
+            else {
+                throw new Exception('Fail to save data');
+            }
         }
-        $_model->save(false);
+        catch (Exception $e){
+            $trans->rollBack();
+//            return "保存失败！";
+        }
         return $this->redirect(['to-check']);
-
     }
 
 
@@ -427,20 +441,26 @@ class OaCheckController extends Controller
     {
         $connection = Yii::$app->db;
         $b_previous_code = $connection->createCommand(
-            "select  isnull(goodscode,'UN0000') as maxCode from b_goods where nid in 
-            (select  max(bgs.nid) from B_Goods as bgs left join B_GoodsCats as bgc
-            on bgs.GoodsCategoryID= bgc.nid where bgc.CategoryParentName='$cate' and len(goodscode)=6 )"
+            "select isnull(goodscode,'UN0000') as maxCode from b_goods where nid in 
+            (select max(bgs.nid) from B_Goods as bgs left join B_GoodsCats as bgc
+            on bgs.GoodsCategoryID= bgc.nid where bgc.CategoryParentName='$cate' and len(goodscode)=6)"
         )->queryOne();
 
         $oa_previous_code = $connection->createCommand(
             "select isnull(goodscode,'UN0000') as maxCode from oa_goodsinfo
             where pid in (select max(pid) from oa_goodsinfo as info LEFT join 
             oa_goods as og on info.goodsid=og.nid where cate = '$cate')")->queryOne();
+
+        $oa_goodsId_query= $connection->createCommand("select max(nid) as maxNid from oa_goods")->queryOne();
+        $oa_maxNid = $oa_goodsId_query['maxNid'];
+
         //按规则生成编码
+        $b_max_code =$b_previous_code['maxCode'];
+        $oa_max_code = str_replace('-test','',$oa_previous_code['maxCode']);
 
-        $b_max_code = $b_previous_code['maxCode'];
-        $oa_max_code = $oa_previous_code['maxCode'];
-
+        if(is_numeric($oa_max_code)){
+            return strval($oa_maxNid).'-test';
+        }
         if(intval(substr($b_max_code,2,4))>=intval(substr($oa_max_code,2,4))) {
             $max_code = $b_max_code;
         }
@@ -449,6 +469,7 @@ class OaCheckController extends Controller
         }
         $head = substr($max_code,0,2);
         $tail = intval(substr($max_code,2,4));
+        $code = $oa_maxNid;
         while($tail<=9999)
         {
             $tail = $tail + 1;
@@ -456,18 +477,18 @@ class OaCheckController extends Controller
             $code = $head.$zero_bit.$tail;
             //检查SKU是否已经存在
             $check_oa_goods = $connection->createCommand(
-                "select * from oa_goodsinfo where goodscode= '$code'"
+                "select pid from oa_goodsinfo where goodscode like '$code"."%'"
             )->queryOne();
             $check_b_goods = $connection->createCommand(
-                "select * from b_goods where goodscode= '$code'"
+                "select nid from b_goods where goodscode='$code'"
             )->queryOne();
             if((empty($check_oa_goods) && empty($check_b_goods))) {
                 break;
             }
-
+            else{
+                $code = $oa_maxNid;
+            }
         }
         return $code.'-test';
-
-
     }
 }
