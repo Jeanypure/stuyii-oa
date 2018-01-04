@@ -1,9 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-//use yii\grid\GridView;
 use kartik\grid\GridView;
-use kartik\dialog\Dialog;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
@@ -16,7 +14,6 @@ $this->params['breadcrumbs'][] = $this->title;
 use yii\bootstrap\Modal;
 Modal::begin([
     'id' => 'tocheck-modal',
-//    'header' => '<h4 class="modal-title">认领产品</h4>',
     'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
     'size' => "modal-lg"
 ]);
@@ -90,7 +87,6 @@ $('.data-view').on('click',  function () {
            }
         });
     });
-    
     
     //批量作废
    $('.trash-lots').on('click',function() {
@@ -218,7 +214,6 @@ function centerFormat($name) {
         <?= Html::a('批量未通过',"javascript:void(0);",  ['title'=>'failLots','class' => 'fail-lots btn btn-warning']) ?>
 
         <?= Html::a('批量作废',"javascript:void(0);",  ['title'=>'trashLots','class' => 'trash-lots btn btn-danger']) ?>
-
     </p>
     <?= GridView::widget([
         'bootstrap' => true,
@@ -230,8 +225,6 @@ function centerFormat($name) {
             [
                 'class' => 'yii\grid\CheckboxColumn',
             ],
-
-
             ['class' => 'kartik\grid\SerialColumn'],
 
             [ 'class' => 'kartik\grid\ActionColumn',
@@ -285,18 +278,15 @@ function centerFormat($name) {
                 ],
             ],
             centerFormat('img'),
-            //centerFormat('cate'),
             [
                 'attribute' => 'cate',
                 'width' => '150px',
                 'filterType' => GridView::FILTER_SELECT2,
                 'filter' => \yii\helpers\ArrayHelper::map(\backend\models\GoodsCats::findAll(['CategoryParentID' => 0]),'CategoryName', 'CategoryName'),
-                //'filter'=>ArrayHelper::map(\backend\models\OaGoodsinfo::find()->orderBy('pid')->asArray()->all(), 'pid', 'IsLiquid'),
                 'filterWidgetOptions' => [
                     'pluginOptions' => ['allowClear' => true],
                 ],
                 'filterInputOptions' => ['placeholder' => '-请选择-'],
-                //'group'=>true,  // enable grouping
             ],
             centerFormat('subCate'),
             centerFormat('vendor1'),
@@ -305,8 +295,6 @@ function centerFormat($name) {
             centerFormat('developer'),
             centerFormat('introducer'),
             centerFormat('checkStatus'),
-            //centerFormat('createDate'),
-            //centerFormat('updateDate'),
             [
                 'attribute' => 'createDate',
                 //'format' => ['date', "php:Y-m-d"],
@@ -314,14 +302,11 @@ function centerFormat($name) {
                     return substr(strval($model->createDate),0,10);
                 },
                 'width' => '200px',
-                //'headerOptions' => ['width' => '200px'],
-                //'filterType' => GridView::FILTER_DATE,
                 'filter' => \kartik\widgets\DatePicker::widget([
                     'name' => 'OaGoodsSearch[createDate]',
                     'value' => Yii::$app->request->get('OaGoodsSearch')['createDate'],
                     'convertFormat' => true,
                     'pluginOptions' => [
-                        //'autoclose' => true,
                         'format' => 'php:Y-m-d',
                         'todayHighlight' => true,
                     ]
@@ -330,19 +315,15 @@ function centerFormat($name) {
             [
                 'attribute' => 'updateDate',
                 'label' => '更新时间',
-                //'format' => ['date', "php:Y-m-d"],
                 'value' => function ($model) {
                     return substr(strval($model->updateDate),0,10);
                 },
                 'width' => '200px',
-                //'headerOptions' => ['width' => '300px'],
-                //'filterType' => GridView::FILTER_DATE,
                 'filter' => \kartik\widgets\DatePicker::widget([
                     'name' => 'OaGoodsSearch[updateDate]',
                     'value' => Yii::$app->request->get('OaGoodsSearch')['updateDate'],
                     'convertFormat' => true,
                     'pluginOptions' => [
-                        //'autoclose' => true,
                         'format' => 'php:Y-m-d',
                         'todayHighlight' => true,
                     ]
@@ -354,8 +335,6 @@ function centerFormat($name) {
             centerFormat('hopeRate'),
             centerFormat('hopeSale'),
             centerFormat('hopeMonthProfit'),
-
-
         ],
     ]); ?>
 </div>
