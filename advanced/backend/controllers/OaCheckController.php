@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use PHPUnit\Framework\Exception;
 use Yii;
 use backend\models\OaGoods;
 use backend\models\OaGoodsSearch;
@@ -69,42 +70,55 @@ class OaCheckController extends Controller
     public function actionPass()
     {
         $request = yii::$app->request->post()['OaGoods'];
+        $connection = yii::$app->db;
         $id = $request['nid'];
         $approvalNote = $request['approvalNote'];
         $model = $this->findModel($id);
-        $cate = $model->cate;
-        $_model = new OaGoodsinfo();
-        $model ->checkStatus = '已审批';
-        $model ->approvalNote = $approvalNote;
-        $model ->updateDate = strftime('%F %T');
-        $model->update(false);
-        //审批状态改变之后就插入数据到OaGoodsInfo
-        $code = $this->generateCode($cate);
-        $nid = $model->nid;
-        $img = $model->img;
-        $developer = $model->developer;
-        $_model->goodsid =$nid;
-        $_model->GoodsCode =$code;
-        $_model->picUrl = $img;
-        $_model->developer =$developer;
-        $_model->devDatetime =strftime('%F %T');;
-        $_model->updateTime =strftime('%F %T');;
-        $_model->achieveStatus='待处理';
-        $_model->GoodsName='';
-        if(empty($_model->possessMan1)){
-            $arc_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-arc-map'])->one();
-            $arc = $arc_model->ruleValue;
-            $_model->possessMan1 = $arc;
-        }
+        $trans = $connection->beginTransaction();
+        try{
+            $cate = $model->cate;
+            $_model = new OaGoodsinfo();
+            $model ->checkStatus = '已审批';
+            $model ->approvalNote = $approvalNote;
+            $model ->updateDate = strftime('%F %T');
+            $model->update(false);
+            //审批状态改变之后就插入数据到OaGoodsInfo
+            $code = $this->generateCode($cate);
+            $nid = $model->nid;
+            $img = $model->img;
+            $developer = $model->developer;
+            $_model->goodsid =$nid;
+            $_model->GoodsCode =$code;
+            $_model->picUrl = $img;
+            $_model->developer =$developer;
+            $_model->devDatetime =strftime('%F %T');;
+            $_model->updateTime =strftime('%F %T');;
+            $_model->achieveStatus='待处理';
+            $_model->GoodsName='';
+            if(empty($_model->possessMan1)){
+                $arc_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-arc-map'])->one();
+                $arc = $arc_model->ruleValue;
+                $_model->possessMan1 = $arc;
+            }
 
-        if(empty($_model->Purchaser)){
-            $pur_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-pur-map'])->one();
-            $pur = $pur_model->ruleValue;
-            $_model->Purchaser = $pur;
+            if(empty($_model->Purchaser)){
+                $pur_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-pur-map'])->one();
+                $pur = $pur_model->ruleValue;
+                $_model->Purchaser = $pur;
+            }
+            if($_model->save(false)){
+                $trans->commit();
+                return "保存成功";
+            }
+            else {
+                throw new Exception('Fail to save data');
+            }
         }
-        $_model->save(false);
-        return $this->redirect(['to-check']);
-
+        catch (Exception $e){
+            $trans->rollBack();
+            return "保存失败！";
+        }
+//        return $this->redirect(['to-check']);
     }
 
 
