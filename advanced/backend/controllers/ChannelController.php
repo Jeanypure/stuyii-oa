@@ -368,7 +368,7 @@ class ChannelController extends Controller
      */
     public function actionDelete($id)
     {
-        $sql = "select isnull(completeStatus,'') as completeStatus from oa_goodsinfo where goodsid= :id";
+        $sql = "select isnull(completeStatus,'') as completeStatus from oa_goodsinfo where pid= :id";
         $complete_status_query = OaGoodsinfo::findBySql($sql,[":id"=>$id])->one();
         $complete_status = $complete_status_query->completeStatus;
         if(empty($complete_status)){
