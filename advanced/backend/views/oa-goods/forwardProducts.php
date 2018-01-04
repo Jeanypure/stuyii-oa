@@ -50,10 +50,11 @@ $('.forward-view').on('click',  function () {
 $('.forward-delete').on('click',  function () {
      self = this;
      krajeeDialog.confirm("确定删除此条记录?", function (result) {
-        
         if (result) {
             id = $(self).closest('tr').data('key');
-            $.post('{$deleteUrl}',{id:id,type:'forward-products'},function() {
+            $.post('{$deleteUrl}',{id:id,type:'forward-products'},function(result) {
+            alert(result);
+            window.location.reload(); //刷新当前页面
             });
             }
             });
@@ -241,6 +242,7 @@ function centerFormat($name) {
                 'buttons' => [
                     'delete' => function ($url, $model, $key) {
                         $options = [
+                            'type'=>'button',
                             'title' => '删除',
                             'aria-label' => '删除',
                             'data-id' => $key,

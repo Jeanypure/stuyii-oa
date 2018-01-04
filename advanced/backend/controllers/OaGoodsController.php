@@ -524,11 +524,13 @@ class OaGoodsController extends Controller
         $type = $_POST['type'];
         $sql = "select isnull(completeStatus,'') as completeStatus from oa_goodsinfo where goodsid= :id";
         $complete_status_query = OaGoodsinfo::findBySql($sql,[":id"=>$id])->one();
-        $complete_status = $complete_status_query->completeStatus;
-        if(empty($complete_status)){
+
+        if(empty($complete_status_query)){
             $this->findModel($id)->delete();
+            echo '删除成功!';
+        }else{
+            echo '已完善的产品不能轻易删除!';
         }
-        return $this->redirect([$type]);
     }
 
 
