@@ -108,7 +108,7 @@ class OaCheckController extends Controller
             }
             if($_model->save(false)){
                 $trans->commit();
-                return "保存成功";
+//                return "保存成功";
             }
             else {
                 throw new Exception('Fail to save data');
@@ -116,9 +116,9 @@ class OaCheckController extends Controller
         }
         catch (Exception $e){
             $trans->rollBack();
-            return "保存失败！";
+//            return "保存失败！";
         }
-//        return $this->redirect(['to-check']);
+        return $this->redirect(['to-check']);
     }
 
 
@@ -477,10 +477,10 @@ class OaCheckController extends Controller
             $code = $head.$zero_bit.$tail;
             //检查SKU是否已经存在
             $check_oa_goods = $connection->createCommand(
-                "select * from oa_goodsinfo where goodscode= '$code'"
+                "select pid from oa_goodsinfo where goodscode like '$code"."%'"
             )->queryOne();
             $check_b_goods = $connection->createCommand(
-                "select * from b_goods where goodscode= '$code'"
+                "select nid from b_goods where goodscode='$code'"
             )->queryOne();
             if((empty($check_oa_goods) && empty($check_b_goods))) {
                 break;
