@@ -427,20 +427,26 @@ class OaCheckController extends Controller
     {
         $connection = Yii::$app->db;
         $b_previous_code = $connection->createCommand(
-            "select  isnull(goodscode,'UN0000') as maxCode from b_goods where nid in 
-            (select  max(bgs.nid) from B_Goods as bgs left join B_GoodsCats as bgc
-            on bgs.GoodsCategoryID= bgc.nid where bgc.CategoryParentName='$cate' and len(goodscode)=6 )"
+            "select isnull(goodscode,'UN0000') as maxCode from b_goods where nid in 
+            (select max(bgs.nid) from B_Goods as bgs left join B_GoodsCats as bgc
+            on bgs.GoodsCategoryID= bgc.nid where bgc.CategoryParentName='$cate' and len(goodscode)=6)"
         )->queryOne();
 
         $oa_previous_code = $connection->createCommand(
             "select isnull(goodscode,'UN0000') as maxCode from oa_goodsinfo
             where pid in (select max(pid) from oa_goodsinfo as info LEFT join 
             oa_goods as og on info.goodsid=og.nid where cate = '$cate')")->queryOne();
+
+        $oa_goodsId_query= $connection->createCommand("select max(nid) as maxNid from os_goods")->queryOne();
+        $oa_maxNid = $oa_goodsId_query['maxNid'];
+
         //按规则生成编码
+        $b_max_code =$b_previous_code['maxCode'];
+        $oa_max_code = str_replace('-test','',$oa_previous_code['maxCode']);
 
-        $b_max_code = $b_previous_code['maxCode'];
-        $oa_max_code = $oa_previous_code['maxCode'];
-
+        if(is_numeric($oa_max_code)){
+            return strval($oa_maxNid).'-test';
+        }
         if(intval(substr($b_max_code,2,4))>=intval(substr($oa_max_code,2,4))) {
             $max_code = $b_max_code;
         }
@@ -449,6 +455,7 @@ class OaCheckController extends Controller
         }
         $head = substr($max_code,0,2);
         $tail = intval(substr($max_code,2,4));
+        $code = $oa_maxNid;
         while($tail<=9999)
         {
             $tail = $tail + 1;
@@ -464,10 +471,10 @@ class OaCheckController extends Controller
             if((empty($check_oa_goods) && empty($check_b_goods))) {
                 break;
             }
-
+            else{
+                $code = $oa_maxNid;
+            }
         }
         return $code.'-test';
-
-
     }
 }

@@ -307,8 +307,49 @@ function centerFormat($name) {
             centerFormat('introReason'),
             centerFormat('checkStatus'),
             centerFormat('approvalNote'),
-            centerFormat('createDate'),
-            centerFormat('updateDate'),
+            //centerFormat('createDate'),
+            //centerFormat('updateDate'),
+            [
+                'attribute' => 'createDate',
+                //'format' => ['date', "php:Y-m-d"],
+                'value' => function ($model) {
+                    return substr(strval($model->createDate),0,10);
+                },
+                'width' => '200px',
+                //'headerOptions' => ['width' => '200px'],
+                //'filterType' => GridView::FILTER_DATE,
+                'filter' => \kartik\widgets\DatePicker::widget([
+                    'name' => 'OaGoodsSearch[createDate]',
+                    'value' => Yii::$app->request->get('OaGoodsSearch')['createDate'],
+                    'convertFormat' => true,
+                    'pluginOptions' => [
+                        //'autoclose' => true,
+                        'format' => 'php:Y-m-d',
+                        'todayHighlight' => true,
+                    ]
+                ])
+            ],
+            [
+                'attribute' => 'updateDate',
+                'label' => '更新时间',
+                //'format' => ['date', "php:Y-m-d"],
+                'value' => function ($model) {
+                    return substr(strval($model->updateDate),0,10);
+                },
+                'width' => '200px',
+                //'headerOptions' => ['width' => '300px'],
+                //'filterType' => GridView::FILTER_DATE,
+                'filter' => \kartik\widgets\DatePicker::widget([
+                    'name' => 'OaGoodsSearch[updateDate]',
+                    'value' => Yii::$app->request->get('OaGoodsSearch')['updateDate'],
+                    'convertFormat' => true,
+                    'pluginOptions' => [
+                        //'autoclose' => true,
+                        'format' => 'php:Y-m-d',
+                        'todayHighlight' => true,
+                    ]
+                ])
+            ],
             centerFormat('salePrice'),
             centerFormat('hopeWeight'),
             centerFormat('hopeRate'),
