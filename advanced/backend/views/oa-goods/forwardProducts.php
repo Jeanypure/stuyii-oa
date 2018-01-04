@@ -32,6 +32,7 @@ $createUrl = Url::toRoute('forward-create');
 $approve = Url::toRoute('approve');
 $approveLots = Url::toRoute('approve-lots');
 $deleteUrl = Url::toRoute('delete');
+$deleteLots = Url::toRoute('delete-lots');
 
 $js = <<<JS
 $('.glyphicon-eye-open').addClass('icon-cell');
@@ -52,7 +53,7 @@ $('.forward-delete').on('click',  function () {
      krajeeDialog.confirm("确定删除此条记录?", function (result) {
         if (result) {
             id = $(self).closest('tr').data('key');
-            $.post('{$deleteUrl}',{id:id,type:'forward-products'},function(result) {
+            $.post('{$deleteUrl}',{id:id},function(result) {
             alert(result);
             window.location.reload(); //刷新当前页面
             });
@@ -112,6 +113,23 @@ $('.approve').on('click',function(){
            }
         });
     });
+   
+   //批量删除
+   $('.delete-lots').on('click',function() {
+     var ids = $("#oa-check").yiiGridView("getSelectedRows");
+      if(ids.length == 0) return false;
+      $.ajax({
+          url:"{$deleteLots}",
+          type:"post",
+          data:{'id':ids},
+          dataType:"json",
+          success:function(result) {
+            alert(result);
+            window.location.reload();
+          }
+      });
+   });
+   
     
 
 

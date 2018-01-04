@@ -515,27 +515,61 @@ class OaGoodsController extends Controller
 
     /**
      * Deletes an existing OaGoods model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * If deletion is successful echo
      * @return mixed
      */
     public function actionDelete()
     {
         $id = $_POST['id'];
-        $type = $_POST['type'];
         $sql = "select isnull(completeStatus,'') as completeStatus from oa_goodsinfo where goodsid= :id";
         $complete_status_query = OaGoodsinfo::findBySql($sql,[":id"=>$id])->one();
-
-        if(empty($complete_status_query)){
+        if(!empty($complete_status_query)){
+            $completeStatus = $complete_status_query->completeStatus;
+            if(empty($completeStatus)){
+                $this->findModel($id)->delete();
+                echo '删除成功!';
+            }else{
+                echo '已完善的产品不能轻易删除!';
+            }
+        }else{
             $this->findModel($id)->delete();
             echo '删除成功!';
-        }else{
-            echo '已完善的产品不能轻易删除!';
         }
+
     }
 
 
+    /**
+     *  lots fail simultaneously
+     * @param null
+     * @return mixed
+     */
+    public function actionDeleteLots()
+    {
+        if(!empty($_POST)){
+            $ids =$_POST["id"];
+            $sql = "select isnull(completeStatus,'') as completeStatus from oa_goodsinfo where goodsid= :id";
+            if(!empty($ids)){
+                foreach ($ids as $id) {
+                    $complete_status_query = OaGoodsinfo::findBySql($sql,[":id"=>$id])->one();
+                    if(!empty($complete_status_query)){
+                        $completeStatus = $complete_status_query->completeStatus;
+                        if(empty($completeStatus)){
+                            $this->findModel($id)->delete();
+                            echo '删除成功!';
+                        }else{
+                            echo '已完善的产品不能轻易删除!';
+                        }
+                    }else{
+                        $this->findModel($id)->delete();
+                    }
+                }
+                echo '删除成功!';
+            }
+        }
 
 
+    }
 
 
     /**
@@ -688,35 +722,11 @@ class OaGoodsController extends Controller
     }
 
     /**
-     *  lots fail simultaneously
-     * @param null
-     * @return mixed
-     */
-    public function actionDeleteLots()
-    {
-        $ids = yii::$app->request->post()["id"];
-        $sql = "select isnull(completeStatus,'') as completeStatus from oa_goodsinfo where goodsid= :id";
-        foreach ($ids as $id) {
-            $complete_status_query = OaGoodsinfo::findBySql($sql,[":id"=>$id])->one();
-            $complete_status = $complete_status_query->completeStatus;
-            if(empty($complete_status)){
-                $this->findModel($id)->delete();
-            }
-        }
-        return $this->redirect(['index']);
-    }
-
-    /**
      *  read uploading templates locally
      */
 
     public function actionTemplate()
     {
-
-        // template in csv formatter
-//        $template = htmlspecialchars_decode(file_get_contents('template.xlsx'));
-//        $outfile='template.xlsx';
-//        header('Content-type: application/octet-stream; charset=utf8');
         $template = htmlspecialchars_decode(file_get_contents('template.csv'));
         $outfile = 'template.csv';
         $template = htmlspecialchars_decode(file_get_contents('template.csv'));
