@@ -30,9 +30,8 @@ $createUrl = Url::toRoute('backward-create');
 $approve = Url::toRoute('approve');
 $approveLots = Url::toRoute('approve-lots');
 $deleteUrl = Url::toRoute('delete');
+$deleteLots = Url::toRoute('delete-lots');
 $js = <<<JS
-
-
 $('.glyphicon-eye-open').addClass('icon-cell');
 $('.wrapper').addClass('body-color');
 // 查看框
@@ -49,10 +48,11 @@ $('.backward-view').on('click',  function () {
 $('.backward-delete').on('click',  function () {
      self = this;
      krajeeDialog.confirm("确定删除此条记录?", function (result) {
-        
         if (result) {
             id = $(self).closest('tr').data('key');
-            $.post('{$deleteUrl}',{id:id,type:'backward-products'},function() {
+            $.post('{$deleteUrl}',{id:id},function(res) {
+                alert(res);
+                window.location.reload();
             });
             }
             });
@@ -109,6 +109,22 @@ $('.approve-lots').on('click',function() {
         });
     });
 
+//批量删除
+   $('.delete-lots').on('click',function() {
+     var ids = $("#oa-check").yiiGridView("getSelectedRows");
+      if(ids.length == 0) return false;
+      $.ajax({
+          url:"{$deleteLots}",
+          type:"post",
+          data:{'id':ids},
+          dataType:"json",
+          success:function(result) {
+            alert(result);
+            window.location.reload();
+          }
+      });
+   });
+   
 JS;
 $this->registerJs($js);
 //单元格居中类
