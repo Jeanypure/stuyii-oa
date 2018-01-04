@@ -91,45 +91,63 @@ $this->params['breadcrumbs'][] = $this->title;
             'developer',
             [
                 'attribute' => 'devDatetime',
+                'format' => 'raw',
                 //'format' => ['date', "php:Y-m-d"],
                 'value' => function ($model) {
-                    return substr(strval($model->devDatetime),0,10);
+                    return "<span class='cell'>" . substr(strval($model->devDatetime), 0, 10) . "</span>";
                 },
-                'width' => '250px',
-                'contentOptions' => ['width'=>'250px'],
-                'headerOptions' => ['width' => '250px'],
-                //'filterType' => GridView::FILTER_DATE,
-                'filter' => \kartik\widgets\DatePicker::widget([
-                    'name' => 'OaGoodsinfoSearch[devDatetime]',
-                    'value' => Yii::$app->request->get('OaGoodsinfoSearch')['devDatetime'],
-                    'convertFormat' => true,
+                'width' => '200px',
+                'filterType' => GridView::FILTER_DATE_RANGE,
+                'filterWidgetOptions' => [
                     'pluginOptions' => [
-                        //'autoclose' => true,
+                        'value' => Yii::$app->request->get('OaGoodsinfoSearch')['devDatetime'],
+                        'convertFormat' => true,
+                        'useWithAddon' => true,
                         'format' => 'php:Y-m-d',
                         'todayHighlight' => true,
+                        'locale'=>[
+                            'format' => 'YYYY-MM-DD',
+                            'separator'=>'/',
+                            'applyLabel' => '确定',
+                            'cancelLabel' => '取消',
+                            'daysOfWeek'=>false,
+                        ],
+                        'opens'=>'left',
+                        //起止时间的最大间隔
+                        /*'dateLimit' =>[
+                            'days' => 300
+                        ]*/
                     ]
-                ])
+                ]
             ],
             [
                 'attribute' => 'updateTime',
                 'label' => '更新时间',
-                //'format' => ['date', "php:Y-m-d"],
+                'format' => "raw",
                 'value' => function ($model) {
-                    return substr(strval($model->updateTime),0,10);
+                    return "<span class='cell'>" . substr(strval($model->updateTime), 0, 10) . "</span>";
                 },
-                'width' => '300px',
-                'headerOptions' => ['width' => '300px'],
-                //'filterType' => GridView::FILTER_DATE,
-                'filter' => \kartik\widgets\DatePicker::widget([
-                    'name' => 'OaGoodsinfoSearch[updateTime]',
-                    'value' => Yii::$app->request->get('OaGoodsinfoSearch')['updateTime'],
-                    'convertFormat' => true,
+                'width' => '200px',
+                'filterType' => GridView::FILTER_DATE_RANGE,
+                'filterWidgetOptions' => [
                     'pluginOptions' => [
-                        //'autoclose' => true,
-                        'format' => 'php:Y-m-d',
+                        'value' => Yii::$app->request->get('OaGoodsinfoSearch')['updateTime'],
+                        'convertFormat' => true,
                         'todayHighlight' => true,
+                        'locale'=>[
+                            'format' => 'YYYY-MM-DD',
+                            'separator'=>'/',
+                            'applyLabel' => '确定',
+                            'cancelLabel' => '取消',
+                            'daysOfWeek'=>false,
+                        ],
+                        'opens'=>'left',
+                        //起止时间的最大间隔
+                        /*'dateLimit' =>[
+                            'days' => 300
+                        ]*/
                     ]
-                ])
+                ]
             ],
             'AliasCnName',
             'AliasEnName',

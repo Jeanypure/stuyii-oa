@@ -128,12 +128,25 @@ class OaGoodsSearch extends OaGoods
             return $dataProvider;
         }
         // grid filtering conditions
-        $query->andFilterWhere([
-            'nid' => $this->nid,
-            'convert(varchar(10),createDate,121)' => $this->createDate,
-            'convert(varchar(10),updateDate,121)' => $this->updateDate,
+        $query->andFilterWhere(['nid' => $this->nid,]);
+        if($this->createDate){
+            $createDate = explode('/', $this->createDate);
+            $query->andFilterWhere([
+                'and',
+                ['>=', 'convert(varchar(10),createDate,121)', $createDate[0]],
+                ['<=', 'convert(varchar(10),createDate,121)', $createDate[1]],
+            ]);
+        }
+        if($this->updateDate){
+            $updateDate = explode('/', $this->updateDate);
+            $query->andFilterWhere([
+                'and',
+                ['>=', 'convert(varchar(10),updateDate,121)', $updateDate[0]],
+                ['<=', 'convert(varchar(10),updateDate,121)', $updateDate[1]],
+            ]);
+        }
 
-        ]);
+
         $query->andFilterWhere(['like', 'cate', $this->cate])
             ->andFilterWhere(['like', 'subCate', $this->subCate])
             ->andFilterWhere(['like', 'vendor1', $this->vendor1])
