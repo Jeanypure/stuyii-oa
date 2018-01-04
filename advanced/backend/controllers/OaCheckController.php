@@ -451,7 +451,7 @@ class OaCheckController extends Controller
             where pid in (select max(pid) from oa_goodsinfo as info LEFT join 
             oa_goods as og on info.goodsid=og.nid where cate = '$cate')")->queryOne();
 
-        $oa_goodsId_query= $connection->createCommand("select max(nid) as maxNid from os_goods")->queryOne();
+        $oa_goodsId_query= $connection->createCommand("select max(nid) as maxNid from oa_goods")->queryOne();
         $oa_maxNid = $oa_goodsId_query['maxNid'];
 
         //按规则生成编码
