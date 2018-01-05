@@ -31,6 +31,22 @@ $updateUrl = Url::toRoute('update');
 $createUrl = Url::toRoute('create');
 $delete_lot =  Url::toRoute(['oa-goods/delete-lots']);
 $js = <<<JS
+krajeeYiiConfirm = function(dialog) {
+        dialog = dialog || 'krajeeDialog';
+        var krajeeDialog = window[dialog] || '';
+        if (!krajeeDialog) {
+            return;
+        }
+        yii.confirm = function (message, ok, cancel) {
+            krajeeDialog.confirm(message, function(result) {
+                if (result) {
+                    !ok || ok();
+                } else {
+                    !cancel || cancel();
+                }
+            });
+        };
+    };
 //删除按钮
     $('.index-delete').on('click',  function () {
      self = this;
