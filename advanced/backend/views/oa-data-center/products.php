@@ -82,24 +82,34 @@ $this->params['breadcrumbs'][] = $this->title;
         'possessMan1',
         [
             'attribute' => 'devDatetime',
-            'label' => '开发时间',
+            'format' => 'raw',
             //'format' => ['date', "php:Y-m-d"],
             'value' => function ($model) {
-                return substr(strval($model->devDatetime),0,10);
+                return "<span class='cell'>" . substr(strval($model->devDatetime), 0, 10) . "</span>";
             },
             'width' => '200px',
-            //'headerOptions' => ['width' => '300px'],
-            //'filterType' => GridView::FILTER_DATE,
-            'filter' => \kartik\widgets\DatePicker::widget([
-                'name' => 'ChannelSearch[devDatetime]',
-                'value' => Yii::$app->request->get('ChannelSearch')['devDatetime'],
-                'convertFormat' => true,
+            'filterType' => GridView::FILTER_DATE_RANGE,
+            'filterWidgetOptions' => [
                 'pluginOptions' => [
-                    //'autoclose' => true,
+                    'value' => Yii::$app->request->get('ChannelSearch')['devDatetime'],
+                    'convertFormat' => true,
+                    'useWithAddon' => true,
                     'format' => 'php:Y-m-d',
                     'todayHighlight' => true,
+                    'locale'=>[
+                        'format' => 'YYYY-MM-DD',
+                        'separator'=>'/',
+                        'applyLabel' => '确定',
+                        'cancelLabel' => '取消',
+                        'daysOfWeek'=>false,
+                    ],
+                    'opens'=>'left',
+                    //起止时间的最大间隔
+                    /*'dateLimit' =>[
+                        'days' => 300
+                    ]*/
                 ]
-            ])
+            ]
         ],
         'completeStatus',
         'DictionaryName',

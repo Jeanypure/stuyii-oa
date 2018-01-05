@@ -29,7 +29,8 @@
         "phpoffice/phpexcel": "dev-develop",
         "kartik-v/yii2-widget-select2": "@dev",
         "kartik-v/yii2-editable": "*",
-        "nterms/yii2-pagesize-widget": "*"
+        "nterms/yii2-pagesize-widget": "*",
+        "kartik-v/yii2-date-range": "dev-master"
 
 
     },

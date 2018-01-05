@@ -157,12 +157,29 @@ class ChannelSearch extends Channel
             'IsCharged' => $this->IsCharged,
             'DeclaredValue' => $this->DeclaredValue,
             'goodsid' => $this->goodsid,
-            'updateTime' => $this->updateTime,
             'SupplierID' => $this->SupplierID,
             'StoreID' => $this->StoreID,
             'bgoodsid' => $this->bgoodsid,
             'isVar' => $this->isVar,
         ]);
+
+        if($this->devDatetime){
+            $createDate = explode('/', $this->devDatetime);
+            $query->andFilterWhere([
+                'and',
+                ['>=', 'convert(varchar(10),devDatetime,121)', $createDate[0]],
+                ['<=', 'convert(varchar(10),devDatetime,121)', $createDate[1]],
+            ]);
+        }
+        if($this->updateTime){
+            $updateDate = explode('/', $this->updateTime);
+            $query->andFilterWhere([
+                'and',
+                ['>=', 'convert(varchar(10),updateTime,121)', $updateDate[0]],
+                ['<=', 'convert(varchar(10),updateTime,121)', $updateDate[1]],
+            ]);
+        }
+
 
         $query
             ->andFilterWhere(['like', 'description', $this->description])
@@ -185,7 +202,6 @@ class ChannelSearch extends Channel
             ->andFilterWhere(['like', 'AttributeName', $this->AttributeName])
             ->andFilterWhere(['like', 'oa_goods.cate', $this->cate])
             ->andFilterWhere(['like', 'oa_goods.subCate', $this->subCate])
-            ->andFilterWhere(['like', 'convert(varchar(10),devDatetime,120)', strval($this->devDatetime)])
             ->andFilterWhere(['like', 'completeStatus', $this->completeStatus])
             ->andFilterWhere(['like', 'oa_goods.introducer', $this->introducer]);
         //var_dump($dataProvider->prepare());exit;

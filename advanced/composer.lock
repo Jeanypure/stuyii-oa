@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0e506d5bf52d54261c749c58d5a5aab8",
+    "content-hash": "10171c6614cc0b24d216a02fe44b99df",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -803,6 +803,60 @@
                 "yii2"
             ],
             "time": "2017-08-29T13:04:56+00:00"
+        },
+        {
+            "name": "kartik-v/yii2-date-range",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-date-range.git",
+                "reference": "70fd9597e24cf6c03004b345cae3c078708b373a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/kartik-v/yii2-date-range/70fd9597e24cf6c03004b345cae3c078708b373a.zip",
+                "reference": "70fd9597e24cf6c03004b345cae3c078708b373a",
+                "shasum": ""
+            },
+            "require": {
+                "kartik-v/yii2-krajee-base": "*"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.6.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "kartik\\daterange\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "An advanced Yii 2 date range picker input for based on bootstrap-daterangepicker plugin.",
+            "homepage": "https://github.com/kartik-v/yii2-date-range",
+            "keywords": [
+                "bootstrap",
+                "bootstrap 3",
+                "date",
+                "date-range",
+                "extension",
+                "range",
+                "time",
+                "widget",
+                "yii2"
+            ],
+            "time": "2017-12-08T03:08:09+00:00"
         },
         {
             "name": "kartik-v/yii2-dialog",
@@ -5213,7 +5267,8 @@
         "kartik-v/yii2-grid": 20,
         "kartik-v/yii2-widgets": 20,
         "phpoffice/phpexcel": 20,
-        "kartik-v/yii2-widget-select2": 20
+        "kartik-v/yii2-widget-select2": 20,
+        "kartik-v/yii2-date-range": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

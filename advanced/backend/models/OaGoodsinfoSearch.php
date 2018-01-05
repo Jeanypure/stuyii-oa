@@ -163,7 +163,6 @@ class OaGoodsinfoSearch extends OaGoodsinfo
         // grid filtering conditions
         $query->andFilterWhere([
             'pid' => $this->pid,
-
             'SupplierName' => $this->SupplierName,
             'PackName'=>$this->PackName,
             'description'=>$this->description,
@@ -174,13 +173,24 @@ class OaGoodsinfoSearch extends OaGoodsinfo
             'IsCharged' => $this->IsCharged,
             'DictionaryName'=>$this->DictionaryName,
             'IsPowder' => $this->IsPowder,
-            'convert(varchar(10),devDatetime,121)'=>$this->devDatetime,
-            'convert(varchar(10),updateTime,121)'=>$this->updateTime,
             'isVar' => $this->isVar,
-
-
-
         ]);
+        if($this->devDatetime){
+            $createDate = explode('/', $this->devDatetime);
+            $query->andFilterWhere([
+                'and',
+                ['>=', 'convert(varchar(10),devDatetime,121)', $createDate[0]],
+                ['<=', 'convert(varchar(10),devDatetime,121)', $createDate[1]],
+            ]);
+        }
+        if($this->updateTime){
+            $updateDate = explode('/', $this->updateTime);
+            $query->andFilterWhere([
+                'and',
+                ['>=', 'convert(varchar(10),updateTime,121)', $updateDate[0]],
+                ['<=', 'convert(varchar(10),updateTime,121)', $updateDate[1]],
+            ]);
+        }
 
         $query->andFilterWhere(['like', 'possessMan1', $this->possessMan1]);
         $query->andFilterWhere(['like', 'vendor3', $this->vendor3]);
