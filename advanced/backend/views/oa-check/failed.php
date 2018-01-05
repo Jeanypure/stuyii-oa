@@ -25,6 +25,9 @@ Modal::end();
 
 
 $viewUrl = Url::toRoute('view');
+$passUrl = Url::toRoute(['pass']);
+$deleteUrl = Url::toRoute(['delete']);
+
 $js = <<<JS
 // 查看框
 $('.data-view').on('click',  function () {
@@ -40,12 +43,29 @@ $('.data-view').on('click',  function () {
             var id = $(this).closest('tr').data('key');
             krajeeDialog.confirm("确定作废？", function(result) {
                 if(result){
-                    $.post('/oa-check/delete?id=' + id );
+                    $.post('{$deleteUrl}?id=' + id );
                 }
             });
 
         });
        
+   $('.glyphicon-eye-open').addClass('icon-cell');
+        $('.wrapper').addClass('body-color');
+
+        //通过对话框
+        $('.data-pass').on('click', function () {
+            var id = $(this).closest('tr').data('key');
+            krajeeDialog.confirm("确定通过审批？", function(result) {
+                if(result){
+                    $.post('{$passUrl}',{'OaGoods[nid]':id},
+                    function(msg) {
+                        //krajeeDialog.alert(msg, function(res) {
+                            location.reload();
+                        //});
+                    });
+                }
+            });
+        })
 
 JS;
 $this->registerJs($js);
@@ -312,19 +332,7 @@ function centerFormat($name) {
 //    }
     $(function () {
 
-        $('.glyphicon-eye-open').addClass('icon-cell');
-        $('.wrapper').addClass('body-color');
 
-        //通过对话框
-        $('.data-pass').on('click', function () {
-            var id = $(this).closest('tr').data('key');
-            krajeeDialog.confirm("确定通过审批？", function(result) {
-                if(result){
-                    $.get('/oa-check/pass?id=' + id );
-                }
-            });
-
-        })
 
 
         });

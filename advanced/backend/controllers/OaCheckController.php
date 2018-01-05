@@ -72,7 +72,7 @@ class OaCheckController extends Controller
         $request = yii::$app->request->post()['OaGoods'];
         $connection = yii::$app->db;
         $id = $request['nid'];
-        $approvalNote = $request['approvalNote'];
+        $approvalNote = isset($request['approvalNote'])?$request['approvalNote']:'';
         $model = $this->findModel($id);
         $trans = $connection->beginTransaction();
         try{
@@ -106,19 +106,15 @@ class OaCheckController extends Controller
                 $pur = $pur_model->ruleValue;
                 $_model->Purchaser = $pur;
             }
-            if($_model->save(false)){
-                $trans->commit();
-//                return "保存成功";
-            }
-            else {
-                throw new Exception('Fail to save data');
-            }
-        }
-        catch (Exception $e){
+            $_model->save(false);
+            $trans->commit();
+            $msg = "审核成功";
+        } catch (Exception $e){
             $trans->rollBack();
-//            return "保存失败！";
+            $msg = "审核失败";
         }
-        return $this->redirect(['to-check']);
+        return $msg;
+        //return $this->redirect(['to-check']);
     }
 
 
@@ -199,8 +195,9 @@ class OaCheckController extends Controller
         $model ->checkStatus = '未通过';
         $model ->approvalNote = $approvalNote;
         $model ->updateDate = strftime('%F %T');
-        $model->update(false);
-        return $this->redirect(['to-check']);
+        $res = $model->update(false);
+        return $res ? '保存成功' : '保存失败';
+        //return $this->redirect(['to-check']);
     }
 
 
