@@ -91,7 +91,7 @@ class EbaySuffixDictionaryController extends Controller
                     $ebayPaypal->mapType = 'high';
                     $ebayPaypal->save();
                     //增加PayPal账号绑定数量
-                    OaPaypal::updateAll(['usedNum' => new Expression('COALESCE("employee_num",0)+1')], ['nid' => $post['highEbayPaypal']]);
+                    OaPaypal::updateAll(['usedNum' => new Expression('COALESCE("usedNum",0)+1')], ['nid' => $post['highEbayPaypal']]);
                 }
                 //保存小额账号
                 if (isset($post['lowEbayPaypal']) and $post['lowEbayPaypal']) {
@@ -101,7 +101,7 @@ class EbaySuffixDictionaryController extends Controller
                     $ebayPaypal->mapType = 'low';
                     $ebayPaypal->save();
                     //增加PayPal账号绑定数量
-                    OaPaypal::updateAll(['usedNum' => new Expression('COALESCE("employee_num",0)+1')], ['nid' => $post['highEbayPaypal']]);
+                    OaPaypal::updateAll(['usedNum' => new Expression('COALESCE("usedNum",0)+1')], ['nid' => $post['highEbayPaypal']]);
                 }
                 $transaction->commit();
             } catch (Exception $e) {
