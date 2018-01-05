@@ -97,7 +97,7 @@ class OaCheckController extends Controller
             $_model->GoodsName='';
             if(empty($_model->possessMan1)){
                 $arc_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-arc-map'])->one();
-                $arc = $arc_model->ruleValue;
+                $arc = $arc_model?$arc_model->ruleValue:'';
                 $_model->possessMan1 = $arc;
             }
 
