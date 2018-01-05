@@ -228,11 +228,8 @@ class ChannelController extends Controller
             $template->setAttributes($data, true);
 
             //动态计算产品的状态
-            $complete_status = '';
-            if (!empty($info->completeStatus)) {
-                $status = str_replace('|eBay已完善', '', $info->completeStatus);
-                $complete_status = $status . '|eBay已完善';
-            }
+            $status = str_replace('|eBay已完善', '', $info->completeStatus);
+            $complete_status = $status . '|eBay已完善';
             $info->completeStatus = $complete_status;
             if ($template->update(true) && $info->save(false)) {
                 echo "保存成功";
@@ -837,19 +834,12 @@ class ChannelController extends Controller
 
         $completeStatus = Channel::find()->where(['pid' => $id])->all();
         //动态计算产品的状态
-        if (!empty($completeStatus[0]->completeStatus)) {
-            if($completeStatus[0]->completeStatus !='Wish已完善'){
-                $complete_status = '';
-                $status = str_replace('|Wish已完善', '', $completeStatus[0]->completeStatus);
-                $complete_status = $status . '|Wish已完善';
-                $completeStatus[0]->completeStatus = $complete_status;
-            }
-        } else {
-            $completeStatus[0]->completeStatus = 'Wish已完善';
-        }
+        $status = str_replace('Wish已完善', '', $completeStatus[0]->completeStatus);
+        $complete_status = 'Wish已完善' . $status;
+        $completeStatus[0]->completeStatus = $complete_status;
+
         $completeStatus[0]->update(false);
         echo "标记Wish完善成功!";
-
 
     }
 
