@@ -4,31 +4,21 @@ use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
 use yii\helpers\Url;
 
-
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\OaGoodsinfoSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = '图片信息';
 $this->params['breadcrumbs'][] = $this->title;
-
 //格式化超链接
-
-
 
 ?>
 <?php echo '<br>'?>
 <div class="oa-goodsinfo-index">
-
     <p>
-
-        <?= Html::button('标记已完善', ['id'=>'complete-lots','class' => 'btn btn-success']);
-
-        ?>
+        <?= Html::button('标记已完善', ['id'=>'complete-lots','class' => 'btn btn-success']); ?>
     </p>
-
     <?= GridView::widget([
-
         'dataProvider'=> $dataProvider,
         'filterModel' => $searchModel,
         'showPageSummary'=>true,
@@ -38,7 +28,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'responsive'=>true,
         'hover'=>true,
 //        'panel'=>['type'=>'primary', 'heading'=>'基本信息'],
-
         'columns' => [
             ['class'=>'kartik\grid\SerialColumn'],
             ['class' => 'kartik\grid\CheckboxColumn'],
@@ -54,7 +43,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-target' => '#index-modal',
                             'data-id' => $key,
                             'class' => 'index-view',
-
                         ];
                         return Html::a('<span  class="glyphicon glyphicon-eye-open"></span>', '#', $options);
                     },
@@ -64,7 +52,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'aria-label' => '标记图片已完善',
                             'data-id' => $key,
                             'class' => 'index-complete',
-
                         ];
                         return Html::a('<span  class="glyphicon glyphicon-check"></span>', '#', $options);
                     },
@@ -192,24 +179,34 @@ $this->params['breadcrumbs'][] = $this->title;
             'developer',
             [
                 'attribute' => 'devDatetime',
-                'label' => '开发时间',
+                'format' => 'raw',
                 //'format' => ['date', "php:Y-m-d"],
                 'value' => function ($model) {
-                    return substr(strval($model->devDatetime),0,10);
+                    return "<span class='cell'>" . substr(strval($model->devDatetime), 0, 10) . "</span>";
                 },
                 'width' => '200px',
-                //'headerOptions' => ['width' => '300px'],
-                //'filterType' => GridView::FILTER_DATE,
-                'filter' => \kartik\widgets\DatePicker::widget([
-                    'name' => 'OaGoodsinfoSearch[devDatetime]',
-                    'value' => Yii::$app->request->get('OaGoodsinfoSearch')['devDatetime'],
-                    'convertFormat' => true,
+                'filterType' => GridView::FILTER_DATE_RANGE,
+                'filterWidgetOptions' => [
                     'pluginOptions' => [
-                        //'autoclose' => true,
+                        'value' => Yii::$app->request->get('OaGoodsinfoSearch')['devDatetime'],
+                        'convertFormat' => true,
+                        'useWithAddon' => true,
                         'format' => 'php:Y-m-d',
                         'todayHighlight' => true,
+                        'locale'=>[
+                            'format' => 'YYYY-MM-DD',
+                            'separator'=>'/',
+                            'applyLabel' => '确定',
+                            'cancelLabel' => '取消',
+                            'daysOfWeek'=>false,
+                        ],
+                        'opens'=>'left',
+                        //起止时间的最大间隔
+                        /*'dateLimit' =>[
+                            'days' => 300
+                        ]*/
                     ]
-                ])
+                ]
             ],
             'possessMan1',
             [
@@ -293,18 +290,14 @@ $('.index-view').on('click',  function () {
          $(this).append(url);
          $(this).attr('style','width: 6;')
          }
-        
     });
-    
     }
-      
+    
     }
     // linkFormatter();
-    
+   
 JS;
-    $this->registerJs($js);
-
-    ?>
+    $this->registerJs($js); ?>
 </div>
 
 

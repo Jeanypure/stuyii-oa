@@ -296,6 +296,10 @@ function centerFormat($name) {
             [
                 'attribute' => 'cate',
                 'width' => '150px',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    return "<span class='cell'>" . $data->cate . "</span>";
+                },
                 'filterType' => GridView::FILTER_SELECT2,
                 'filter' => \yii\helpers\ArrayHelper::map(GoodsCats::findAll(['CategoryParentID' => 0]),'CategoryName', 'CategoryName'),
                 //'filter'=>ArrayHelper::map(\backend\models\OaGoodsinfo::find()->orderBy('pid')->asArray()->all(), 'pid', 'IsLiquid'),
@@ -318,44 +322,63 @@ function centerFormat($name) {
             //centerFormat('updateDate'),
             [
                 'attribute' => 'createDate',
+                'format' => 'raw',
                 //'format' => ['date', "php:Y-m-d"],
                 'value' => function ($model) {
-                    return substr(strval($model->createDate),0,10);
+                    return "<span class='cell'>" . substr(strval($model->createDate), 0, 10) . "</span>";
                 },
                 'width' => '200px',
-                //'headerOptions' => ['width' => '200px'],
-                //'filterType' => GridView::FILTER_DATE,
-                'filter' => \kartik\widgets\DatePicker::widget([
-                    'name' => 'OaGoodsSearch[createDate]',
-                    'value' => Yii::$app->request->get('OaGoodsSearch')['createDate'],
-                    'convertFormat' => true,
+                'filterType' => GridView::FILTER_DATE_RANGE,
+                'filterWidgetOptions' => [
                     'pluginOptions' => [
-                        //'autoclose' => true,
+                        'value' => Yii::$app->request->get('OaGoodsSearch')['createDate'],
+                        'convertFormat' => true,
+                        'useWithAddon' => true,
                         'format' => 'php:Y-m-d',
                         'todayHighlight' => true,
+                        'locale'=>[
+                            'format' => 'YYYY-MM-DD',
+                            'separator'=>'/',
+                            'applyLabel' => '确定',
+                            'cancelLabel' => '取消',
+                            'daysOfWeek'=>false,
+                        ],
+                        'opens'=>'left',
+                        //起止时间的最大间隔
+                        /*'dateLimit' =>[
+                            'days' => 300
+                        ]*/
                     ]
-                ])
+                ]
             ],
             [
                 'attribute' => 'updateDate',
                 'label' => '更新时间',
-                //'format' => ['date', "php:Y-m-d"],
+                'format' => "raw",
                 'value' => function ($model) {
-                    return substr(strval($model->updateDate),0,10);
+                    return "<span class='cell'>" . substr(strval($model->updateDate), 0, 10) . "</span>";
                 },
                 'width' => '200px',
-                //'headerOptions' => ['width' => '300px'],
-                //'filterType' => GridView::FILTER_DATE,
-                'filter' => \kartik\widgets\DatePicker::widget([
-                    'name' => 'OaGoodsSearch[updateDate]',
-                    'value' => Yii::$app->request->get('OaGoodsSearch')['updateDate'],
-                    'convertFormat' => true,
+                'filterType' => GridView::FILTER_DATE_RANGE,
+                'filterWidgetOptions' => [
                     'pluginOptions' => [
-                        //'autoclose' => true,
-                        'format' => 'php:Y-m-d',
+                        'value' => Yii::$app->request->get('OaGoodsSearch')['updateDate'],
+                        'convertFormat' => true,
                         'todayHighlight' => true,
+                        'locale'=>[
+                            'format' => 'YYYY-MM-DD',
+                            'separator'=>'/',
+                            'applyLabel' => '确定',
+                            'cancelLabel' => '取消',
+                            'daysOfWeek'=>false,
+                        ],
+                        'opens'=>'left',
+                        //起止时间的最大间隔
+                        /*'dateLimit' =>[
+                            'days' => 300
+                        ]*/
                     ]
-                ])
+                ]
             ],
             centerFormat('salePrice'),
             centerFormat('hopeWeight'),
