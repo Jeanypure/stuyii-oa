@@ -10,6 +10,7 @@ use kartik\builder\TabularForm;
 use kartik\grid\GridView;
 use yii\helpers\Html;
 use kartik\dialog\Dialog;
+use \yii\helpers\Url;
 
 //动态的添加列
 $pictureKey = $columns['pictureKey'];
@@ -102,6 +103,8 @@ echo Dialog::widget([
     'libName' => 'krajeeDialogCust',
     'options' => ['draggable' => true, 'closable' => true], // custom options
 ]);
+$deleteVarUrl = Url::to(['channel/delete-var']);
+$varSaveUrl = Url::to(['channel/var-save', 'id' => $tid]);
 $js = <<< JS
 
 // 加载图片关联的所有选项
@@ -239,7 +242,7 @@ $('table').on('click','.remove-col',function() {
 
 $('#delete-row').click(function() {
     var ids = [];
-    $("[name='selection[]']:radio:checked").each(function() {
+    $("[name='selection[]']:checkbox:checked").each(function() {
         id = $(this).closest('tr').attr('data-key');
         $(this).closest('tr').remove();  
         if(id){
@@ -249,7 +252,7 @@ $('#delete-row').click(function() {
     // ajax方式提交数据到后台删除
     if(ids){
         $.ajax({
-            url:'/channel/delete-var',
+            url:'{$deleteVarUrl}',
             type:'post',
             data:{id:ids},
             success: function (ret) {
@@ -272,7 +275,7 @@ $('#add-row').click(function() {
         
         var checkBoxTd =$(
             '<td class="skip-export kv-align-center kv-align-middle kv-row-select" style="width:50px;" data-col-seq="1">' +
-            '<input type="radio" class="kv-row-radio" name="selection[]" >' +
+            '<input type="checkbox" class="kv-row-radio" name="selection[]" >' +
              '</td>');
         row.append(checkBoxTd);
         
@@ -397,7 +400,7 @@ $('#add-row').click(function() {
         $(this).parents('tr').remove();//前端删除
         if(id){
             $.ajax({
-            url:'/channel/delete-var',
+            url:'{$deleteVarUrl}',
             type:'post',
             data:{id:id},
             success: function(res) {
@@ -440,7 +443,7 @@ $('#save-only').click(function() {
    // console.log(varForm);
    $.ajax({
        type: "POST",
-       url: '/channel/var-save?id={$tid}',
+       url: '{$varSaveUrl}',
         // dataType:'json',
        data:varForm,
        success: function(data) {

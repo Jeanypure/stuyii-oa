@@ -38,6 +38,12 @@ return [
     ],
     'language' => 'zh-CN',
     'components' => [
+        'redis' => [
+            'class' => 'yii\redis\Connection',
+            'hostname' => '127.0.0.1',
+            'port' => 6379,
+            'database' => 0,
+        ],
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
             'defaultRoles' => ['guest'],
@@ -106,7 +112,6 @@ return [
     ],
     'params' => $params,
     //语言
-    'language' => 'zh-CN',
     //时区
     'timeZone' => 'Asia/Chongqing',
 ];
