@@ -190,17 +190,19 @@ class GoodsskuController extends Controller
                     }
                     $info->save(false);
 
-                    //更新属性信息
+                 //更新属性信息
                     $sql_wish = "P_oaGoods_TowishGoods $pid";
                     $sql_ebay = "P_oaGoods_ToEbayGoods $pid";
                     $connection = Yii::$app->db;
                     $import_trans = $connection->beginTransaction();
                     try{
+
                         $connection->createCommand($sql_wish)->execute();
                         $connection->createCommand($sql_ebay)->execute();
                         $import_trans->commit();
                     }
                     catch (Exception $er) {
+
                         $import_trans->rollBack();
                     }
 
