@@ -274,7 +274,6 @@ class GoodsskuController extends Controller
                         $update_model->linkurl = $row_value['linkurl'];
                         $update_model->save(false);
                     }
-
                     //图片验空
                    $pic_url = array_column($Rows, 'linkurl');
                    $val_count = array_count_values($pic_url);

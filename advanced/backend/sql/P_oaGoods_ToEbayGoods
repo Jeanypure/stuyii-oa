@@ -1,0 +1,178 @@
+ALTER PROCEDURE [dbo].[P_oaGoods_ToEbayGoods]
+@pid int
+AS
+BEGIN
+  -- routine body goes here, e.g.
+  -- SELECT 'Navicat for SQL Server'
+	Set XACT_ABORT ON;
+
+	BEGIN TRAN toeBay
+		--生成10张预处理图片
+	select  top 10 (row_number() over (ORDER BY nid)) as row into #imageTab from oa_goods
+	DECLARE  @sku varchar(20)
+	DECLARE @goodsCode varchar(20)
+	DECLARE @images varchar(max)
+	DECLARE @haveBeen INT
+	set @haveBeen = (select count(*) from oa_templates where infoid=@pid)
+	set @sku = (select sku from B_Goods where nid in (select bgoodsid from oa_goodsinfo where pid=@pid))
+	set @goodsCode = (select goodsCode from B_Goods where nid in (select bgoodsid from oa_goodsinfo where pid=@pid))
+	set @images =  (select '"https://www.tupianku.com/view/full/10023/'+@goodsCode+'-_'+ convert(varchar,row) +'_.jpg",'  from #imageTab  for xml path(''))
+
+	set @images = '{"images":["https://www.tupianku.com/view/full/10023/'+@goodscode+'-_00_.jpg",' + left(@images,len(@images)-1) + ']}'
+
+	if @haveBeen=0
+	Begin
+		insert into oa_templates (goodsid,location,country,postCode,prepareDay,	site,	listedCate,listedSubcate,title,subTitle,description,quantity,	nowPrice,UPC,
+			EAN,Brand,MPN,Color,Type,Material,IntendedUse,unit,
+			bundleListing,
+			shape,
+			features,
+			regionManufacture,
+			reserveField,
+			InshippingMethod1,
+			InFirstCost1,
+			InSuccessorCost1,
+			InshippingMethod2,
+			InFirstCost2,
+			InSuccessorCost2,
+			OutshippingMethod1,
+			OutFirstCost1,
+			OutSuccessorCost1,
+			OutShiptoCountry1,
+			OutshippingMethod2,
+			OutFirstCost2,
+			OutSuccessorCost2,
+			OutShiptoCountry2,
+			mainPage,
+			extraPage,
+			sku,
+			infoid,
+			specifics,
+			IbayTemplate,
+			headKeywords,
+			requiredKeywords ,
+			randomKeywords ,
+			tailKeywords
+		)
+			SELECT
+				 ofo.goodsid,
+				'Shanghai' as location,
+				'CN' as country,
+				'' as postCode,
+				10 as prepareDay,
+				'0' as site,
+				'' as listedCate,
+				'' as listedSubcate,
+				'' as title,
+				'' as subTitle,
+		    ofo.description as description,
+				6 as quantity,
+        og.salePrice as nowPrice,
+        'Does not apply' as UPC,
+        'Does not apply' as EAN,
+        '' as Brand,
+        '' as MPN,
+        '' as Color,
+        '' as Type,
+        '' as Material,
+        '' as IntendedUse,
+        '' as unit,
+        '' as bundleListing,
+        '' as shape,
+        '' as features,
+        '' as regionManufacture,
+        '' as reserveField,
+        23 as InshippingMethod1,
+        Null as InFirstCost1,
+        Null as InSuccessorCost1,
+       Null as InshippingMethod2,
+       Null as InFirstCost2,
+       Null as InSuccessorCost2,
+        93 as OutshippingMethod1,
+			Null as OutFirstCost1,
+			Null as OutSuccessorCost1,
+        '' as OutShiptoCountry1,
+      Null as OutshippingMethod2,
+        Null as OutFirstCost2,
+       Null as OutSuccessorCost2,
+        '' as OutShiptoCountry2,
+				'https://www.tupianku.com/view/full/10023/' + @goodsCode + '-_0_.jpg' as mainPage,
+				@images as extraPage,
+    		@sku as sku,
+    		pid as infoid,
+				'{"specifics":[{"Brand":"Unbranded"}]}' as specifics,
+				'pr110' as IbayTemplate,
+			headKeywords,
+			requiredKeywords ,
+			randomKeywords ,
+			tailKeywords
+
+		from oa_goodsinfo as ofo
+		LEFT JOIN oa_goods as og on ofo.goodsid = og.nid
+		where ofo.pid=@pid
+
+
+
+		--导入templateVar
+		DECLARE  @tid int
+		set @tid = (select nid from oa_templates where infoid=@pid)
+
+		insert into oa_templatesVar (
+			tid,
+			sku,
+			quantity,
+			retailPrice,
+			imageUrl,
+			property
+		)
+  	SELECT
+			@tid,
+			sku,
+			5,
+			RetailPrice,
+			linkurl,
+			'{"columns":[{"Color":"'+property1+'"},{"Size":"'+property2+'"},{"款式3":"'+ property3+'"},{"UPC":"Does not apply"}],"pictureKey":"Color"}' as property
+		from oa_goodssku as ogs LEFT JOIN oa_goodsinfo  as ofo on ogs.pid = ofo.pid where ofo.pid =@pid
+
+	END
+
+	--如果已经导过
+	if @haveBeen>0
+	BEGIN
+		update ots set
+		goodsid=ofo.goodsid,
+		description= ofo.description,
+		nowPrice= og.salePrice,
+		mainPage='https://www.tupianku.com/view/full/10023/' + @goodsCode + '-_0_.jpg',
+		extraPage=@images ,
+		sku=@sku,
+		infoid=pid,
+		specifics='{"specifics":[{"Brand":"Unbranded"}]}',
+		IbayTemplate='pr110' ,
+		headKeywords=ofo.headKeywords,
+		requiredKeywords = ofo.requiredKeywords ,
+		randomKeywords = ofo.randomKeywords ,
+		tailKeywords = ofo.tailKeywords
+		from oa_templates as ots
+		LEFT JOIN oa_goodsinfo as ofo on ots.infoid=ofo.pid
+		LEFT JOIN oa_goods as og on ofo.goodsid = og.nid
+		where ofo.pid=@pid
+
+		--更新或插入多属性信息
+		--2017-12-28James暂时先不写多属性信息
+		--Jenny 2018-01-16 多属性信息 更新
+
+
+
+
+
+	END
+	drop table #imageTab
+	if @@error<>0
+		BEGIN
+			ROLLBACK TRAN toeBay
+		END
+	ELSE
+		COMMIT TRAN toeBay
+
+END

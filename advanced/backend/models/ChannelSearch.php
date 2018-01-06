@@ -94,6 +94,7 @@ class ChannelSearch extends Channel
             }
         }
 
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
