@@ -220,6 +220,8 @@ class OaGoodsinfoController extends Controller
                     'pageSize' => 150,
                 ],
             ]);
+            //设置默认仓库
+            $info->StoreName = '义乌仓';
             return $this->render('updetail',[
                 'info'=>$info,
                 'pid' =>$id,
