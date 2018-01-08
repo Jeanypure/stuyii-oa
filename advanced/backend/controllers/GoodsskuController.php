@@ -115,8 +115,7 @@ class GoodsskuController extends Controller
                             $_model = clone $model;
                             //配合rules 进行安全检查;需要改变的数据都要声明下类型。
                             $_model ->setAttributes($row_value,true); //逐行入库
-                            $_model->save();
-                            echo "新增成功";
+                            $_model->save(false);
 
                         }
                         //更新行
@@ -131,11 +130,10 @@ class GoodsskuController extends Controller
                             $update_model->Weight = $row_value['Weight'];
                             $update_model->RetailPrice = $row_value['RetailPrice'];
                             $update_model->update(false);
-                            echo "保存完成";
                         }
 
                     }
-                    $this->redirect(['oa-goodsinfo/update','id'=>$pid]);
+                      echo "保存完成";
                 }
 
                 if($type == 'pic-info')
@@ -244,12 +242,12 @@ class GoodsskuController extends Controller
                         if(empty($goods_model->possessMan1)){
                             $arc_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-arc-map'])->one();
                             $arc = $arc_model->ruleValue;
-                            $goods_model->possessMan1 = $arc;
+                            $goods_model->possessMan1 = $arc?$arc:'';
                         }
                         if(empty($goods_model->Purchaser)){
                             $pur_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-pur-map'])->one();
                             $pur = $pur_model->ruleValue;
-                            $goods_model->Purchaser = $pur;
+                            $goods_model->Purchaser = $pur?$pur:'';
                         }
                         $goods_model ->achieveStatus = '已完善';
                         if(empty($goods_model ->picStatus)){
