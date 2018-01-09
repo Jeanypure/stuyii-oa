@@ -68,7 +68,18 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $sql_AMT = "P_oa_New_Product_Performance";
+        $DataAMT = Yii::$app->db->createCommand($sql_AMT)
+            ->queryAll();
+        $salername = array_column($DataAMT, 'salername');
+        $l_AMT = array_column($DataAMT, 'l_AMT');
+//        var_dump($salername);
+//        var_dump($l_AMT);
+//        die;
+        return $this->render('index',[
+            'salername'=>$salername,
+            'l_AMT'=>$l_AMT,
+        ]);
     }
 
     /**
