@@ -31,7 +31,8 @@
         "kartik-v/yii2-editable": "*",
         "nterms/yii2-pagesize-widget": "*",
         "kartik-v/yii2-date-range": "dev-master",
-        "yiisoft/yii2-redis": "^2.0"
+        "yiisoft/yii2-redis": "^2.0",
+        "hisune/echarts-php": "^1.0"
 
 
     },
