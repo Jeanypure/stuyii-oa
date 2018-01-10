@@ -40,7 +40,7 @@ $this->registerJs($js);
 
             function init_chart(id,row_data) {
                 // 基于准备好的dom，初始化echarts实例
-                var myChart = echarts.init(document.getElementById('main'));
+                var myChart = echarts.init(document.getElementById('main'),'macarons');
                 var data = eval("("+row_data+")");
                 var salername = data.salername;
                 var l_AMT = data.l_AMT;
