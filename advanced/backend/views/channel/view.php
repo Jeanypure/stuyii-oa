@@ -29,14 +29,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
 
         'attributes' => [
-
-                'oa_goods.vendor1:url',
-                'oa_goods.vendor2:url',
-                'oa_goods.vendor3:url',
-                'oa_goods.origin1:url',
-                'oa_goods.origin2:url',
-                'oa_goods.origin3:url',
-//            'pid',
+            ['attribute'=>'oa_goods.vendor1','format'=>['url',['target'=>'_blank']]],
+            ['attribute'=>'oa_goods.vendor2','format'=>['url',['target'=>'_blank']]],
+            ['attribute'=>'oa_goods.vendor3','format'=>['url',['target'=>'_blank']]],
+            ['attribute'=>'oa_goods.origin1','format'=>['url',['target'=>'_blank']]],
+            ['attribute'=>'oa_goods.origin2','format'=>['url',['target'=>'_blank']]],
+            ['attribute'=>'oa_goods.origin3','format'=>['url',['target'=>'_blank']]],
             'IsLiquid',
             'IsPowder',
             'isMagnetism',
