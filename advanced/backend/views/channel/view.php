@@ -6,8 +6,8 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Channel */
 
-$this->title = $model->pid;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Channels'), 'url' => ['index']];
+$this->title = $model->GoodsCode.'-'.$model->GoodsName;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '平台信息'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="channel-view">
@@ -27,8 +27,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= DetailView::widget([
         'model' => $model,
+
         'attributes' => [
-            'pid',
+
+                'oa_goods.vendor1:url',
+                'oa_goods.vendor2:url',
+                'oa_goods.vendor3:url',
+                'oa_goods.origin1:url',
+                'oa_goods.origin2:url',
+                'oa_goods.origin3:url',
+//            'pid',
             'IsLiquid',
             'IsPowder',
             'isMagnetism',

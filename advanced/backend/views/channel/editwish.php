@@ -14,7 +14,7 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Channel */
 $this->title = '编辑模板';
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Channels'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '平台信息'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $sku->infoid, 'url' => ['view', 'id' => $sku->infoid]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 

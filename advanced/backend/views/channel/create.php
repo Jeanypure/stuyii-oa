@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $model backend\models\Channel */
 
 $this->title = Yii::t('app', 'Create Channel');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Channels'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '平台信息'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="channel-create">
