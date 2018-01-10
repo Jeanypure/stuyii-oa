@@ -22,7 +22,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login','error'],
+                        'actions' => ['login','error','dev-data'],
                         'allow' => true,
                     ],
                     [
@@ -73,16 +73,25 @@ class SiteController extends Controller
             ->queryAll();
         $salername = array_column($DataAMT, 'salername');
         $l_AMT = array_column($DataAMT, 'l_AMT');
-//        var_dump($salername);
-//        var_dump($l_AMT);
-//        die;
+
+
         return $this->render('index',[
             'salername'=>$salername,
             'l_AMT'=>$l_AMT,
         ]);
     }
 
-    /**
+    public  function actionDevData(){
+        $sql_AMT = "P_oa_New_Product_Performance";
+        $DataAMT = Yii::$app->db->createCommand($sql_AMT)
+            ->queryAll();
+          $data['salername'] = array_column($DataAMT, 'salername');
+        $data['l_AMT'] = array_column($DataAMT, 'l_AMT');
+        echo json_encode($data);
+
+    }
+
+    /*
      * Login action.
      *
      * @return string
