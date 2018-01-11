@@ -72,7 +72,7 @@ class SiteController extends Controller
     }
 
     public  function actionDevData(){
-        $sql_AMT = "P_oa_New_Product_Performance_demo";
+        $sql_AMT = "P_oa_New_Product_Performance";
         $DataAMT = Yii::$app->db->createCommand($sql_AMT)
             ->queryAll();
         $data['salername'] = array_column($DataAMT, 'salername');
