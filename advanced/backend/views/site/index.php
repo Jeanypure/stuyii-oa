@@ -1,15 +1,13 @@
 <?php
-
 /* @var $this yii\web\View */
 use yii\helpers\Url;
+use  yii\helpers\Html;
 
 $this->title = '主页';
-//$failLotsUrl = Url::toRoute('fail-lots');
 $todevdata = Url::toRoute('dev-data');
 $js = <<< JS
 //设置背景色
 $('body').css('background','#FFF');
-
 //删除H1
 $('h1').remove();
   $(function () {
@@ -17,48 +15,102 @@ $('h1').remove();
             $.ajax({
                 url:'{$todevdata}', 
                 success:function (data) {
-                    init_chart('main',data);
+                    init_chart('main222',data);
                 }
             });
         });
-
 JS;
 $this->registerJs($js);
 ?>
 
-
-
 <div class="site-index">
     <body>
-
     <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
     <div id="main" style="width: 1000px;height:600px;">
-        <script src="https://cdn.bootcss.com/echarts/3.8.5/echarts.min.js"></script>
+        <!-- ECharts单文件引入 标签式单文件引入-->
+        <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+        <?php
+        echo Html::jsFile('@web/js/LRU.js');
+        echo Html::jsFile('@web/js/color.js');
+        ?>
+        <script >
+            var colorList = [
+                '#C1232B','#B5C334','#FCCE10','#E87C25','#27727B',
+                '#FE8463','#9BCA63','#FAD860','#F3A43B','#60C0DD',
+                '#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0',
+                '#ff7f50','#87cefa','#da70d6','#32cd32','#6495ed',
+                '#ff69b4','#ba55d3','#cd5c5c','#ffa500','#40e0d0'
+            ];
+            var itemStyle = {
+                normal: {
+                    color: function(params) {
+                        if (params.dataIndex < 0) {
+                            // for legend
+                            return lift(
+                                colorList[colorList.length -1], params.seriesIndex * 0.1
+                            );
+                        }
+                        else {
+                            // for bar
+                            return lift(
+                                colorList[params.dataIndex], params.seriesIndex * 0.1
+                            );
+                        }
+                    }
+                }
+            };
+        </script>
         <script type="text/javascript">
-
-
-
             function init_chart(id,row_data) {
                 // 基于准备好的dom，初始化echarts实例
                 var myChart = echarts.init(document.getElementById('main'),'macarons');
                 var data = eval("("+row_data+")");
                 var salername = data.salername;
-                var l_AMT = data.l_AMT;
-                var value = data.value;
-                // 指定图表的配置项和数据
+                var OneMonth = data.OneMonth;
+                var ThreeMonth = data.ThreeMonth;
+                var SixMonth = data.SixMonth;
+                // 使用刚指定的配置项和数据显示图表。
                 option = {
                     title: {
                         x: 'center',
-                        text: '30天销售额[1个月新品]',
-                        subtext: 'Rainbow bar example',
-                        link: 'http://echarts.baidu.com/doc/example.html'
+                        text: '2017-2018年幽然实业开发员新品销售额($)',
+                        subtext: '数据来源企划部',
+                        sublink: 'http://data.stats.gov.cn/search/keywordlist2?keyword=%E5%9F%8E%E9%95%87%E5%B1%85%E6%B0%91%E6%B6%88%E8%B4%B9'
                     },
                     tooltip: {
-                        trigger: 'item'
+                        borderRadius:8,
+                        trigger: 'axis',
+                        backgroundColor: 'rgba(255,255,255,0.7)',
+                        axisPointer: {
+                            type: 'shadow'
+                        },
+                        formatter: function(params) {
+                            // for text color
+                            var color = colorList[params[0].dataIndex];
+                            var res = '<div style="color:' + color + '">';
+                            res += '<strong>' + params[0].name + '销售额（$）</strong>'
+                            for (var i = 0, l = params.length; i < l; i++) {
+                                res += '<br/>' + params[i].seriesName + ' : ' + params[i].value
+                            }
+                            res += '</div>';
+                            return res;
+                        }
+                    },
+                    legend: {
+                        x: 'right',
+                        data:['1月','3月','6月'],
+                        selected: {
+                            '3月' : false,
+                            '6月' : false
+                        },
+                        selectedMode : 'single'
                     },
                     toolbox: {
                         show: true,
+                        orient: 'vertical',
+                        y: 'center',
                         feature: {
+                            mark: {show: true},
                             dataView: {show: true, readOnly: false},
                             restore: {show: true},
                             saveAsImage: {show: true}
@@ -66,79 +118,45 @@ $this->registerJs($js);
                     },
                     calculable: true,
                     grid: {
-                        borderWidth: 0,
                         y: 80,
-                        y2: 60
+                        y2: 40,
+                        x2: 40
                     },
                     xAxis: [
                         {
                             type: 'category',
-                            show: false,
                             data: salername
                         }
                     ],
                     yAxis: [
                         {
-                            type: 'value',
-                            show: false
+                            type: 'value'
                         }
                     ],
                     series: [
                         {
-                            name: '30天销售额[1个月新品]',
+                            name: '1月',
                             type: 'bar',
-                            itemStyle: {
-                                normal: {
-                                    color: function(params) {
-                                        // build a color map as your need.
-                                        var colorList = [
-                                            '#C1232B','#B5C334','#FCCE10','#E87C25','#27727B',
-                                            '#FE8463','#9BCA63','#FAD860','#F3A43B','#60C0DD',
-                                            '#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'
-                                        ];
-                                        return colorList[params.dataIndex]
-                                    },
-                                    label: {
-                                        show: true,
-                                        position: 'top',
-                                        formatter: '{b}\n{c}'
-                                    }
-                                }
-                            },
-                            data: l_AMT,
-                            markPoint: {
-                                tooltip: {
-                                    trigger: 'item',
-                                    backgroundColor: 'rgba(0,0,0,0)',
-                                    formatter: function(params){
-                                        return '<img src="'
-                                            + params.data.symbol.replace('image://', '')
-                                            + '"/>';
-                                    }
-                                },
-                                data: [
-                                    {xAxis:0, y: 350, name:'Line', symbolSize:20, symbol: 'image://../asset/ico/折线图.png'},
-                                    {xAxis:1, y: 350, name:'Bar', symbolSize:20, symbol: 'image://../asset/ico/柱状图.png'},
-                                    {xAxis:2, y: 350, name:'Scatter', symbolSize:20, symbol: 'image://../asset/ico/散点图.png'},
-                                    {xAxis:3, y: 350, name:'K', symbolSize:20, symbol: 'image://../asset/ico/K线图.png'},
-                                    {xAxis:4, y: 350, name:'Pie', symbolSize:20, symbol: 'image://../asset/ico/饼状图.png'},
-                                    {xAxis:5, y: 350, name:'Radar', symbolSize:20, symbol: 'image://../asset/ico/雷达图.png'},
-                                    {xAxis:6, y: 350, name:'Chord', symbolSize:20, symbol: 'image://../asset/ico/和弦图.png'},
-                                    {xAxis:7, y: 350, name:'Force', symbolSize:20, symbol: 'image://../asset/ico/力导向图.png'},
-                                    {xAxis:8, y: 350, name:'Map', symbolSize:20, symbol: 'image://../asset/ico/地图.png'},
-                                    {xAxis:9, y: 350, name:'Gauge', symbolSize:20, symbol: 'image://../asset/ico/仪表盘.png'},
-                                    {xAxis:10, y: 350, name:'Funnel', symbolSize:20, symbol: 'image://../asset/ico/漏斗图.png'},
-                                ]
-                            }
-                        }
+                            itemStyle: itemStyle,
+                            data: OneMonth
+                        },
+                        {
+                            name: '3月',
+                            type: 'bar',
+                            itemStyle: itemStyle,
+                            data: ThreeMonth
+                        },
+                        {
+                            name: '6月',
+                            type: 'bar',
+                            itemStyle: itemStyle,
+                            data: SixMonth
+                        },
+
                     ]
                 };
-
-
-                // 使用刚指定的配置项和数据显示图表。
                 myChart.setOption(option);
             }
-
         </script>
     </div>
     </body>

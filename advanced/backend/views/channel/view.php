@@ -27,7 +27,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= DetailView::widget([
         'model' => $model,
-
         'attributes' => [
             ['attribute'=>'oa_goods.vendor1','format'=>['url',['target'=>'_blank']]],
             ['attribute'=>'oa_goods.vendor2','format'=>['url',['target'=>'_blank']]],
