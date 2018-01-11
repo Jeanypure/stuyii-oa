@@ -73,7 +73,7 @@ $this->registerJs($js);
                 option = {
                     title: {
                         x: 'center',
-                        text: '近30天销售额($)',
+                        text: '开发员-近30天销售额($)',
                         subtext: '数据来源企划部',
                         sublink: 'http://data.stats.gov.cn/search/keywordlist2?keyword=%E5%9F%8E%E9%95%87%E5%B1%85%E6%B0%91%E6%B6%88%E8%B4%B9'
                     },
@@ -130,7 +130,8 @@ $this->registerJs($js);
                     ],
                     yAxis: [
                         {
-                            type: 'value'
+                            type: 'value',
+                            name : '销售额($)',
                         }
                     ],
                     series: [
