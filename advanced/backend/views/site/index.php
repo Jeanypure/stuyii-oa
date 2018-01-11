@@ -73,7 +73,7 @@ $this->registerJs($js);
                 option = {
                     title: {
                         x: 'center',
-                        text: '2017-2018年幽然实业开发员新品销售额($)',
+                        text: '近30天销售额($)',
                         subtext: '数据来源企划部',
                         sublink: 'http://data.stats.gov.cn/search/keywordlist2?keyword=%E5%9F%8E%E9%95%87%E5%B1%85%E6%B0%91%E6%B6%88%E8%B4%B9'
                     },
@@ -98,10 +98,10 @@ $this->registerJs($js);
                     },
                     legend: {
                         x: 'right',
-                        data:['1月','3月','6月'],
+                        data:['1个月新品','3个月新品','6个月新品'],
                         selected: {
-                            '3月' : false,
-                            '6月' : false
+                            '3个月新品' : false,
+                            '6个月新品' : false
                         },
                         selectedMode : 'single'
                     },
@@ -135,19 +135,19 @@ $this->registerJs($js);
                     ],
                     series: [
                         {
-                            name: '1月',
+                            name: '1个月新品',
                             type: 'bar',
                             itemStyle: itemStyle,
                             data: OneMonth
                         },
                         {
-                            name: '3月',
+                            name: '3个月新品',
                             type: 'bar',
                             itemStyle: itemStyle,
                             data: ThreeMonth
                         },
                         {
-                            name: '6月',
+                            name: '6个月新品',
                             type: 'bar',
                             itemStyle: itemStyle,
                             data: SixMonth
