@@ -68,27 +68,18 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $sql_AMT = "P_oa_New_Product_Performance";
-        $DataAMT = Yii::$app->db->createCommand($sql_AMT)
-            ->queryAll();
-        $salername = array_column($DataAMT, 'salername');
-        $l_AMT = array_column($DataAMT, 'l_AMT');
-
-
-        return $this->render('index',[
-            'salername'=>$salername,
-            'l_AMT'=>$l_AMT,
-        ]);
+        return $this->render('index');
     }
 
     public  function actionDevData(){
-        $sql_AMT = "P_oa_New_Product_Performance";
+        $sql_AMT = "P_oa_New_Product_Performance_demo";
         $DataAMT = Yii::$app->db->createCommand($sql_AMT)
             ->queryAll();
-          $data['salername'] = array_column($DataAMT, 'salername');
-        $data['l_AMT'] = array_column($DataAMT, 'l_AMT');
+        $data['salername'] = array_column($DataAMT, 'salername');
+        $data['OneMonth'] = array_column($DataAMT, 'OneMonth');
+        $data['ThreeMonth'] = array_column($DataAMT, 'ThreeMonth');
+        $data['SixMonth'] = array_column($DataAMT, 'SixMonth');
         echo json_encode($data);
-
     }
 
     /*
@@ -120,7 +111,6 @@ class SiteController extends Controller
     public function actionLogout()
     {
         Yii::$app->user->logout();
-
         return $this->goHome();
     }
 }
