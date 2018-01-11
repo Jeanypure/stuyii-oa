@@ -87,7 +87,7 @@ class SiteController extends Controller
      * @return array
      */
     public  function actionIntroData(){
-        $sql_AMT = "P_oa_New_Product_Performance_demo";
+        $sql_AMT = "P_oa_Intro_Product_Performance";
         $DataAMT = Yii::$app->db->createCommand($sql_AMT)->queryAll();
         $data['introducer'] = array_column($DataAMT, 'introducer');
         $data['OneMonth'] = array_column($DataAMT, 'OneMonth');
