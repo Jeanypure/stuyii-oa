@@ -22,7 +22,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login','error','dev-data'],
+                        'actions' => ['login','error','dev-data','intro-data'],
                         'allow' => true,
                     ],
                     [
@@ -73,13 +73,27 @@ class SiteController extends Controller
 
     public  function actionDevData(){
         $sql_AMT = "P_oa_New_Product_Performance";
-        $DataAMT = Yii::$app->db->createCommand($sql_AMT)
-            ->queryAll();
+        $DataAMT = Yii::$app->db->createCommand($sql_AMT) ->queryAll();
         $data['salername'] = array_column($DataAMT, 'salername');
         $data['OneMonth'] = array_column($DataAMT, 'OneMonth');
         $data['ThreeMonth'] = array_column($DataAMT, 'ThreeMonth');
         $data['SixMonth'] = array_column($DataAMT, 'SixMonth');
-        echo json_encode($data);
+        $result['salername'] = $data;
+        $result['introducer'] = $this->actionIntroData();
+        echo json_encode($result);
+    }
+    /**
+     * Introducer data
+     * @return array
+     */
+    public  function actionIntroData(){
+        $sql_AMT = "P_oa_Intro_Product_Performance";
+        $DataAMT = Yii::$app->db->createCommand($sql_AMT)->queryAll();
+        $data['introducer'] = array_column($DataAMT, 'introducer');
+        $data['OneMonth'] = array_column($DataAMT, 'OneMonth');
+        $data['ThreeMonth'] = array_column($DataAMT, 'ThreeMonth');
+        $data['SixMonth'] = array_column($DataAMT, 'SixMonth');
+        return $data;
     }
 
     /*
