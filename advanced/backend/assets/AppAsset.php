@@ -18,8 +18,6 @@ class AppAsset extends AssetBundle
         'plugins/bootbox/bootbox.min.js',
         'plugins/app.min.js',
         'plugins/layer/layer.js',
-        'plugins/chartjs/macarons.js',
-        'plugins/chartjs/echart.min.js',
         'js/pageSize.js',
     ];
     public $depends = [
