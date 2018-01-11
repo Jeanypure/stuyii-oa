@@ -1,0 +1,169 @@
+ALTER PROCEDURE [dbo].[P_oa_New_Product_Performance]
+--@devStartTime VARCHAR(20),
+--@devEndTime VARCHAR(20)
+-- l_qty	销售数量
+-- l_AMT	销售额
+-- costmoney	销售成本
+-- Interest	利润
+-- salername	开发员
+
+AS
+BEGIN
+SET NOCOUNT ON;
+			DECLARE @ordertimeStart VARCHAR(20);
+			DECLARE	@ordertimeEnd VARCHAR(20);
+			SET @ordertimeStart = (select CONVERT(varchar(10),dateadd(day, -30, getdate()),120));
+			SET @ordertimeEnd = (select CONVERT(varchar(10), getdate(),120));
+--
+
+--开发员 新品 1个月 3个月 6个月
+--1个月
+			DECLARE @OneMonthStart VARCHAR(20);
+			DECLARE @OneMonthEnd VARCHAR(20);
+			SET @OneMonthStart = (select CONVERT(varchar(10),dateadd(day, -30, getdate()),120));
+			SET @OneMonthEnd = (select CONVERT(varchar(10), getdate(),120));
+--3个月
+			DECLARE @ThreeMonthStart VARCHAR(20);
+			DECLARE @ThreeMonthEnd VARCHAR(20);
+			SET @ThreeMonthStart = (select CONVERT(varchar(10),dateadd(day, -90, getdate()),120));
+			SET @ThreeMonthEnd = (select CONVERT(varchar(10), getdate(),120));
+--6个月
+			DECLARE @SixMonthStart VARCHAR(20);
+			DECLARE @SixMonthEnd VARCHAR(20);
+			SET @SixMonthStart = (select CONVERT(varchar(10),dateadd(day, -180, getdate()),120));
+			SET @SixMonthEnd = (select CONVERT(varchar(10), getdate(),120));
+
+			CREATE TABLE #fGoods (
+			sku VARCHAR (100),
+			l_qty INT,
+			l_AMT money,
+			costmoney money,
+			Interest money
+		)
+INSERT INTO #fGoods SELECT
+			IsNull(d.SKU, '') AS SKU,
+			SUM (d.l_qty) AS l_qty,
+			SUM (
+				isnull(
+					d.l_amt * isnull(b.ExchangeRate, 1),
+					0
+				)
+			) AS l_AMT,
+			SUM (d.costprice) AS costmoney,
+			SUM (
+				d.l_amt * isnull(b.ExchangeRate, 1) - d.costprice
+			) AS Interest
+		FROM
+			P_TradeDtUn (nolock) d
+		LEFT OUTER JOIN p_tradeUn (nolock) m ON m.nid = d.tradenid
+		LEFT OUTER JOIN B_CurrencyCode (nolock) b ON b.currencycode = m.currencycode
+		WHERE
+			1 = 1
+		AND DateAdd(HOUR, 8, ordertime) >= @ordertimeStart
+		AND DateAdd(HOUR, 8, ordertime) <= @ordertimeEnd
+		AND SUFFIX IN (SELECT DictionaryName from B_Dictionary WHERE CategoryID=12 )
+		--AND D.SKU = '7A003501'
+		AND (IsNull(d.Sku, '') <> '')
+		GROUP BY
+			IsNull(d.SKU, '')
+		UNION ALL
+			SELECT
+				IsNull(d.SKU, '') AS SKU,
+				SUM (d.l_qty) AS l_qty,
+				SUM (
+					isnull(
+						d.l_amt * isnull(b.ExchangeRate, 1),
+						0
+					)
+				) AS l_AMT,
+				SUM (d.costprice) AS costmoney,
+				SUM (
+					d.l_amt * isnull(b.ExchangeRate, 1) - d.costprice
+				) AS Interest
+			FROM
+				p_tradedt (nolock) d
+			LEFT OUTER JOIN p_trade (nolock) m ON m.nid = d.tradenid
+			LEFT OUTER JOIN B_CurrencyCode (nolock) b ON b.currencycode = m.currencycode
+			WHERE
+				1 = 1
+			AND DateAdd(HOUR, 8, ordertime) >= @ordertimeStart
+			AND DateAdd(HOUR, 8, ordertime) <= @ordertimeEnd
+			AND SUFFIX IN (SELECT DictionaryName from B_Dictionary WHERE CategoryID=12)
+			--AND D.SKU = '7A003501'
+			AND (IsNull(d.Sku, '') <> '')
+			GROUP BY
+				IsNull(d.SKU, '')
+			UNION ALL
+				SELECT
+					IsNull(d.SKU, '') AS SKU,
+					SUM (d.l_qty) AS l_qty,
+					SUM (
+						isnull(
+							d.l_amt * isnull(b.ExchangeRate, 1),
+							0
+						)
+					) AS l_AMT,
+					SUM (d.costprice) AS costmoney,
+					SUM (
+						d.l_amt * isnull(b.ExchangeRate, 1) - d.costprice
+					) AS Interest
+				FROM
+					P_TradeDt_His (nolock) d
+				LEFT OUTER JOIN P_Trade_His (nolock) m ON m.nid = d.tradenid
+				LEFT OUTER JOIN B_CurrencyCode b ON b.currencycode = m.currencycode
+				WHERE
+					1 = 1
+
+				AND DateAdd(HOUR, 8, ordertime) >= @ordertimeStart
+				AND DateAdd(HOUR, 8, ordertime) <= @ordertimeEnd
+				AND SUFFIX IN (SELECT DictionaryName from B_Dictionary WHERE CategoryID=12)
+			  -- AND D.SKU = '7A003501'
+				AND (IsNull(d.Sku, '') <> '')
+				GROUP BY
+					IsNull(d.SKU, '')
+
+			SELECT
+					'OneMonth' AS timeGroup,
+					 case WHEN g.salername ='' THEN '其他' ELSE g.salername  END as salername,
+					--SUM (d.l_qty) AS l_qty,  												--销售数量
+			    cast(round(SUM (d.l_amt)/(SELECT ExchangeRate from B_CurrencyCode where CURRENCYCODE='USD' ),1)   as   numeric(5,0)) AS l_AMT													--销售额
+						--SUM (d.Interest) AS Interest										--利润
+			    INTO #TmpAllGroupAMT
+         FROM    #fGoods d
+					LEFT OUTER JOIN B_GoodsSKU (nolock) gs ON isnull(gs.SKU, '') = isnull(d.SKU, '')
+					LEFT OUTER JOIN B_Goods (nolock) g ON g.NID = gs.GoodsID
+					WHERE g.CreateDate BETWEEN @OneMonthStart AND @OneMonthEnd
+					GROUP BY	g.salername
+
+					UNION
+					SELECT
+					'ThreeMonth' AS timeGroup,
+						case WHEN g.salername ='' THEN '其他' ELSE g.salername  END as salername,
+					--SUM (d.l_qty) AS l_qty,  												--销售数量
+				  cast(round(SUM (d.l_amt)/(SELECT ExchangeRate from B_CurrencyCode where CURRENCYCODE='USD' ),1)   as   numeric(5,0)) AS l_AMT													--销售额
+						--SUM (d.Interest) AS Interest										--利润
+			    FROM #fGoods d
+					LEFT OUTER JOIN B_GoodsSKU (nolock) gs ON isnull(gs.SKU, '') = isnull(d.SKU, '')
+					LEFT OUTER JOIN B_Goods (nolock) g ON g.NID = gs.GoodsID
+					WHERE g.CreateDate BETWEEN @ThreeMonthStart AND @ThreeMonthEnd
+					GROUP BY	g.salername
+					UNION
+				  SELECT
+						'SixMonth' AS timeGroup,
+							case WHEN g.salername ='' THEN '其他' ELSE g.salername  END as salername,
+						--SUM (d.l_qty) AS l_qty,  												--销售数量
+						cast(round(SUM (d.l_amt)/(SELECT ExchangeRate from B_CurrencyCode where CURRENCYCODE='USD' ),1)   as   numeric(5,0)) AS l_AMT													--销售额
+							--SUM (d.Interest) AS Interest										--利润
+						FROM #fGoods d
+						LEFT OUTER JOIN B_GoodsSKU (nolock) gs ON isnull(gs.SKU, '') = isnull(d.SKU, '')
+						LEFT OUTER JOIN B_Goods (nolock) g ON g.NID = gs.GoodsID
+						WHERE g.CreateDate BETWEEN @SixMonthStart AND @SixMonthEnd
+						GROUP BY	g.salername
+
+SELECT *  into #TmpAllGroupAMT_tmp FROM #TmpAllGroupAMT pivot( MAX(l_AMT) FOR timeGroup IN ([OneMonth],[ThreeMonth],[SixMonth]))a
+select salername,ISNULL(OneMonth, 0) as OneMonth, isNull(ThreeMonth,0) as ThreeMonth, isNull(SixMonth,0) as SixMonth from #TmpAllGroupAMT_tmp
+
+DROP TABLE #fGoods
+DROP TABLE #TmpAllGroupAMT
+DROP Table #TmpAllGroupAMT_tmp
+END
