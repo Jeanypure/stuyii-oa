@@ -67,9 +67,9 @@ $this->registerJs($js);
     <body>
     <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
     <div class="row">
-        <div id="salername"  style="width: 820px;height:600px;" class="col-lg-6" >
+        <div id="salername"  style="width: 800px;height:480px;" class="col-lg-6" >
         </div>
-        <div id="introducer" style="width: 820px;height:600px;" class="col-lg-6">
+        <div id="introducer" style="width: 800px;height:480px;" class="col-lg-6">
         </div>
     </div>
     <script type="text/javascript">
