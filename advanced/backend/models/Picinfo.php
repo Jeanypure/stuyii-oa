@@ -44,7 +44,7 @@ class Picinfo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged', 'goodsid'], 'integer'],
+            [['stockUp','IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged', 'goodsid'], 'integer'],
             [['description', 'GoodsName', 'AliasCnName', 'AliasEnName', 'PackName', 'Season', 'DictionaryName', 'SupplierName', 'StoreName', 'Purchaser', 'possessMan1', 'possessMan2', 'picUrl'], 'string'],
             [['DeclaredValue'], 'number'],
         ];
