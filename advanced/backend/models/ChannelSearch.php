@@ -30,7 +30,7 @@ class ChannelSearch extends Channel
     public function rules()
     {
         return [
-            [['pid', 'IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged', 'goodsid', 'SupplierID', 'StoreID', 'bgoodsid'], 'integer'],
+            [['stockUp','pid', 'IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged', 'goodsid', 'SupplierID', 'StoreID', 'bgoodsid'], 'integer'],
             [['introducer','isVar','cate','subCate','description', 'GoodsName', 'AliasCnName', 'AliasEnName', 'PackName', 'Season', 'DictionaryName', 'SupplierName', 'StoreName',
                'completeStatus', 'Purchaser', 'possessMan1', 'possessMan2', 'picUrl', 'GoodsCode', 'achieveStatus', 'devDatetime', 'developer', 'updateTime', 'picStatus', 'AttributeName','cate','subCat'], 'safe'],
             [['DeclaredValue'], 'number'],
@@ -138,6 +138,7 @@ class ChannelSearch extends Channel
                     'label' => '推荐人'
                 ],
                 'isVar',
+                'stockUp',
             ]
         ]);
 
@@ -204,6 +205,7 @@ class ChannelSearch extends Channel
             ->andFilterWhere(['like', 'oa_goods.cate', $this->cate])
             ->andFilterWhere(['like', 'oa_goods.subCate', $this->subCate])
             ->andFilterWhere(['like', 'completeStatus', $this->completeStatus])
+            ->andFilterWhere(['like', 'stockUp', $this->stockUp])
             ->andFilterWhere(['like', 'oa_goods.introducer', $this->introducer]);
         Yii::$app->db->cache(function($db) use($dataProvider){
             $dataProvider->prepare();

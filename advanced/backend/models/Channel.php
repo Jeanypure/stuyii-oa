@@ -104,6 +104,7 @@ class Channel extends \yii\db\ActiveRecord
             'cate' => Yii::t('app', '主类目'),
             'subCate' => Yii::t('app', '子类目'),
             'isVar' => Yii::t('app', '是否多属性'),
+            'stockUp' => Yii::t('app', '是否备货'),
         ];
     }
 

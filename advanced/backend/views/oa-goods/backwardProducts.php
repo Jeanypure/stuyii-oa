@@ -385,6 +385,7 @@ function centerFormat($name) {
             centerFormat('hopeRate'),
             centerFormat('hopeSale'),
             centerFormat('hopeMonthProfit'),
+            centerFormat('stockUp'),
         ],
     ]); ?>
 </div>

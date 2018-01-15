@@ -21,7 +21,7 @@ class OaGoodsSearch extends OaGoods
                 'origin2','origin3','introReason','approvalNote',
             ], 'string'],
             [['hopeRate','salePrice', 'hopeWeight','hopeMonthProfit','hopeSale','hopeCost','nid'], 'number'],
-            [['cate','subCate','createDate', 'updateDate',], 'safe'],
+            [['stockUp','cate','subCate','createDate', 'updateDate',], 'safe'],
         ];
     }
     /**
@@ -156,7 +156,8 @@ class OaGoodsSearch extends OaGoods
             ->andFilterWhere(['like', 'introducer', $this->introducer])
             ->andFilterWhere(['like', 'introReason', $this->introReason])
             ->andFilterWhere(['like', 'approvalNote', $this->approvalNote])
-            ->andFilterWhere(['like', 'checkStatus', $this->checkStatus]);
+            ->andFilterWhere(['like', 'checkStatus', $this->checkStatus])
+            ->andFilterWhere(['like', 'stockUp', $this->stockUp]);
         //var_dump($this->salePrice);exit;
         if($this->salePrice){
             $query->andFilterWhere(['and',['>=', 'salePrice', $this->salePrice], ['<', 'salePrice', ceil($this->salePrice)]]);
