@@ -23,7 +23,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login','error','dev-data','intro-data','per-day-num'],
+                        'actions' => ['login', 'error', 'dev-data', 'intro-data', 'per-day-num'],
                         'allow' => true,
                     ],
                     [
@@ -72,14 +72,15 @@ class SiteController extends Controller
         return $this->render('index');
     }
 
-    public  function actionDevData(){
+    public function actionDevData()
+    {
         $sql_AMT = "P_oa_New_Product_Performance_demo";
-        $DataAMT = Yii::$app->db->createCommand($sql_AMT) ->queryAll();
-        foreach ($DataAMT as $key=>$value){
-                if($value['Distinguished']=='l_AMT'){
-                $Data['l_AMT'][]=$value;
-            }else{
-                $Data['CodeNum'][]=$value;
+        $DataAMT = Yii::$app->db->createCommand($sql_AMT)->queryAll();
+        foreach ($DataAMT as $key => $value) {
+            if ($value['Distinguished'] == 'l_AMT') {
+                $Data['l_AMT'][] = $value;
+            } else {
+                $Data['CodeNum'][] = $value;
             }
 
         }
@@ -93,7 +94,7 @@ class SiteController extends Controller
         $dataCodeNum['ThreeMonth'] = array_column($Data['CodeNum'], 'ThreeMonth');
         $dataCodeNum['SixMonth'] = array_column($Data['CodeNum'], 'SixMonth');
 //推荐人信息
-        $IntroData =  $this->actionIntroData();
+        $IntroData = $this->actionIntroData();
         $introAMT['introducer'] = array_column($IntroData['l_AMT'], 'introducer');
         $introAMT['OneMonth'] = array_column($IntroData['l_AMT'], 'OneMonth');
         $introAMT['ThreeMonth'] = array_column($IntroData['l_AMT'], 'ThreeMonth');
@@ -107,22 +108,24 @@ class SiteController extends Controller
 //        $PerDayNum = $this->actionPerDayNum();
         $result['salername'] = $dataAMT;
         $result['codenum'] = $dataCodeNum;
-        $result['introducer'] =$introAMT ;
-        $result['introCodeNum'] =$introCodeNum ;
+        $result['introducer'] = $introAMT;
+        $result['introCodeNum'] = $introCodeNum;
         echo json_encode($result);
     }
+
     /**
      * Introducer data
      * @return array
      */
-    public  function actionIntroData(){
+    public function actionIntroData()
+    {
         $sql_AMT = "P_oa_Intro_Product_Performance";
         $DataAMT = Yii::$app->db->createCommand($sql_AMT)->queryAll();
-        foreach ($DataAMT as $key=>$value){
-            if($value['Distinguished']=='l_AMT'){
-                $Data['l_AMT'][]=$value;
-            }else{
-                $Data['CodeNum'][]=$value;
+        foreach ($DataAMT as $key => $value) {
+            if ($value['Distinguished'] == 'l_AMT') {
+                $Data['l_AMT'][] = $value;
+            } else {
+                $Data['CodeNum'][] = $value;
             }
         }
         return $Data;
@@ -131,10 +134,28 @@ class SiteController extends Controller
     /**
      * @return string|\yii\web\Response
      */
-    public function actionPerDayNum(){
+    public function actionPerDayNum()
+    {
         $sql = "P_oa_nearDaysCodeNum";
         $Data = Yii::$app->db->createCommand($sql)->queryAll();
-        return $Data;
+        $SalerName = array_unique(array_column($Data, 'SalerName'));
+        $CreateDate = array_unique(array_column($Data, 'CreateDate'));
+var_dump($SalerName);die;
+        $da = [];
+        foreach ($SalerName as $k => $v) {
+            $amt = [];
+            foreach ($Data as $key => $value) {
+
+                if ($v == $value['SalerName']) {
+                    $amt[] =  empty($value['CodeNum'])?0:$value['CodeNum'];
+                }
+//                var_dump($v);
+//                var_dump($value['SalerName']);
+            }
+                     $da [] = $amt;
+        }
+var_dump($da);die;
+//        return $Data;
 
     }
 
