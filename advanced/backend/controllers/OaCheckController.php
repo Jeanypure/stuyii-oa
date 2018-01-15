@@ -95,6 +95,7 @@ class OaCheckController extends Controller
             $_model->updateTime =strftime('%F %T');;
             $_model->achieveStatus='待处理';
             $_model->GoodsName='';
+            $_model->stockUp=$model->stockUp;
             if(empty($_model->possessMan1)){
                 $arc_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-arc-map'])->one();
                 $arc = $arc_model?$arc_model->ruleValue:'';
@@ -152,6 +153,7 @@ class OaCheckController extends Controller
                 $pur = $pur_model->ruleValue;
                 $_model->possessMan1 = $arc;
                 $_model->Purchaser = $pur;
+                $_model->stockUp = $model->stockUp;
                 $model->checkStatus = '已审批';
                 if(!($_model->save(false))) {
                     throw new Exception('fail to insert data into oa-goodsInfo!');
