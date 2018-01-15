@@ -19,6 +19,7 @@ $('h1').remove();
                   init_chart('num-salername',data);
                   init_chart('introducer',data);
                   init_chart('num-introducer',data);
+                  char_line('per-day-num',data);
                     
                    
                 }
@@ -81,6 +82,11 @@ $this->registerJs($js);
         </div>
         <div id="num-introducer" style="width: 800px;height:480px;" class="col-lg-6">
         </div>
+    </div>
+    <div class="row">
+        <div id="per-day-num"  style="width: 1600px;height:580px;" class="col-lg-12" >
+        </div>
+
     </div>
     <script type="text/javascript">
         function init_chart(id,row_data) {
@@ -205,6 +211,83 @@ $this->registerJs($js);
 
                 ]
             };
+            myChart.setOption(option);
+        }
+    </script>
+    <script>
+        function  char_line(id,row_data) {
+            var myChart = echarts.init(document.getElementById(id));
+            var data = eval("("+row_data+")");
+            var salername = data.dev;
+            var CreateDate = data.CreateDate;
+            var value = data.value;
+            console.log(salername);
+            console.log(CreateDate);
+            console.log(value);
+            var line = new Array();
+            for(var index in value){
+                var single_line=  {
+                    name:salername[index],
+                    type:'line',
+                    stack: '产品款数',
+//                    itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                    data:value[index],
+                    markPoint : {
+                        data : [
+                            {type : 'max', name: '最大值'},
+                            {type : 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine : {
+                        data : [
+                            {type : 'average', name: '平均值'}
+                        ]
+                    }
+                };
+                line.push(single_line);
+            }
+            option = {
+                title : {
+                    text: '近30天每天开出款数',
+                    subtext: '企划部'
+                },
+                tooltip : {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:salername
+                },
+                toolbox: {
+                    show : true,
+                    orient: 'vertical',
+                    y: 'center',
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+//                        boundaryGap : false,
+                        data : CreateDate
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value} 个'
+                        }
+                    }
+                ],
+                series : line
+            };
+
             myChart.setOption(option);
         }
     </script>

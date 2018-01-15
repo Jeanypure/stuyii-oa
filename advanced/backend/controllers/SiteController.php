@@ -105,11 +105,15 @@ class SiteController extends Controller
         $introCodeNum['ThreeMonth'] = array_column($IntroData['CodeNum'], 'ThreeMonth');
         $introCodeNum['SixMonth'] = array_column($IntroData['CodeNum'], 'SixMonth');
 //每天产品数
-//        $PerDayNum = $this->actionPerDayNum();
+        $PerDayNum = $this->actionPerDayNum();
         $result['salername'] = $dataAMT;
         $result['codenum'] = $dataCodeNum;
         $result['introducer'] = $introAMT;
         $result['introCodeNum'] = $introCodeNum;
+
+        $result['CreateDate'] = $PerDayNum['CreateDate'];
+        $result['dev'] = $PerDayNum['SalerName'];
+        $result['value'] = $PerDayNum['value'];
         echo json_encode($result);
     }
 
@@ -140,22 +144,21 @@ class SiteController extends Controller
         $Data = Yii::$app->db->createCommand($sql)->queryAll();
         $SalerName = array_unique(array_column($Data, 'SalerName'));
         $CreateDate = array_unique(array_column($Data, 'CreateDate'));
-var_dump($SalerName);die;
+        $CreateDate = array_values($CreateDate);
         $da = [];
         foreach ($SalerName as $k => $v) {
             $amt = [];
             foreach ($Data as $key => $value) {
-
                 if ($v == $value['SalerName']) {
                     $amt[] =  empty($value['CodeNum'])?0:$value['CodeNum'];
                 }
-//                var_dump($v);
-//                var_dump($value['SalerName']);
             }
                      $da [] = $amt;
         }
-var_dump($da);die;
-//        return $Data;
+        $result['CreateDate'] = $CreateDate;
+        $result['SalerName'] = $SalerName;
+        $result['value'] = $da;
+        return $result;
 
     }
 
@@ -192,3 +195,7 @@ var_dump($da);die;
         return $this->goHome();
     }
 }
+
+
+
+
