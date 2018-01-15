@@ -41,7 +41,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => '主图',
                 'format' => 'raw',
             ],
-             'GoodsCode',
+            [
+                'attribute' => 'GoodsCode',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    if($model->stockUp) {
+                        return '<strong style="color:red">'. $model->GoodsCode.'</strong>';
+                    }
+                    return $model->GoodsCode;
+                }
+            ],
              'GoodsName',
             [
                 'attribute' => 'cate',
