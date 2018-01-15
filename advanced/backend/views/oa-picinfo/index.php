@@ -65,7 +65,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'width' => '100px',
             ],
-            'GoodsCode',
+            [
+                'attribute' => 'GoodsCode',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    if($model->stockUp) {
+                        return '<strong style="color:red">'. $model->GoodsCode.'</strong>';
+                    }
+                    return $model->GoodsCode;
+                }
+            ],
             'GoodsName',
             [
                 'attribute' => 'vendor1',
