@@ -37,3 +37,6 @@ phpunit.phar
 /advanced/backend/web/php-info.php
 /demo.sql
 /todo
+/advanced/composer.json
+/advanced/composer.lock
+/.gitignore

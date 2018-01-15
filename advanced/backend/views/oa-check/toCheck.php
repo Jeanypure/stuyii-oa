@@ -24,6 +24,9 @@ $viewUrl = Url::toRoute('view');
 $failUrl = Url::toRoute('fail');
 $passUrl = Url::toRoute('pass-form');
 $failUrl = Url::toRoute('fail-form');
+$failLotsUrl = Url::toRoute('fail-lots');
+$passLotsUrl = Url::toRoute('pass-lots');
+$trashLotsUrl = Url::toRoute('trash-lots');
 
 $js = <<<JS
 
@@ -64,7 +67,7 @@ $('.data-view').on('click',  function () {
     var self = $(this);
     if(ids.length == 0) return false;
      $.ajax({
-           url:"/oa-check/fail-lots",
+           url:"{$failLotsUrl}",
            type:"post",
            data:{id:ids},
            success:function(res){
@@ -79,7 +82,7 @@ $('.data-view').on('click',  function () {
     var self = $(this);
     if(ids.length == 0) return false;
      $.ajax({
-           url:"/oa-check/pass-lots",
+           url:"{$passLotsUrl}",
            type:"post",
            data:{id:ids},
            success:function(res){
@@ -94,7 +97,7 @@ $('.data-view').on('click',  function () {
     var self = $(this);
     if(ids.length == 0) return false;
      $.ajax({
-           url:"/oa-check/trash-lots",
+           url:"{$trashLotsUrl}",
            type:"post",
            data:{id:ids},
            success:function(res){

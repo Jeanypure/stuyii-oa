@@ -1018,7 +1018,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/ae4ecc6656c523228711c243bdcbc2d4a4295409",
+                "url": "https://files.phpcomposer.com/files/kartik-v/yii2-grid/ae4ecc6656c523228711c243bdcbc2d4a4295409.zip",
                 "reference": "ae4ecc6656c523228711c243bdcbc2d4a4295409",
                 "shasum": ""
             },

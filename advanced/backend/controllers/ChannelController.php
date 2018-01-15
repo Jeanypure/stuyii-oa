@@ -781,7 +781,7 @@ class ChannelController extends Controller
      * 处理多属性
      * @param $id int 商品ID
      */
-    function actionVariationWish($id, $sub, $rate)
+    public function actionVariationWish($id, $sub, $rate)
     {
 
         $variants = Wishgoodssku::find()->where(['pid' => $id])->all();
