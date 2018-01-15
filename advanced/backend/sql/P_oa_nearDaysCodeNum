@@ -1,0 +1,48 @@
+ALTER PROCEDURE [dbo].[P_oa_nearDaysCodeNum]
+AS
+BEGIN
+	SET  NOCOUNT  ON
+			DECLARE @OneMonthStart VARCHAR(20);
+			DECLARE @OneMonthEnd VARCHAR(20);
+			SET @OneMonthStart = (select CONVERT(varchar(10),dateadd(day, -30, getdate()),120));
+			SET @OneMonthEnd = (select CONVERT(varchar(10), getdate(),120));
+
+		select ISNULL(SalerName, '') as SalerName, COUNT(GoodsCode) as CodeNum,CreateDate
+		INTO #TmpCodeDate
+		FROM B_Goods
+		where CreateDate BETWEEN @OneMonthStart AND @OneMonthEnd
+    AND  ISNULL(GoodsCode, '')  is not null
+		AND ISNULL(SalerName, '') is not null
+		GROUP BY SalerName ,CreateDate
+
+
+
+   --列转行
+DECLARE @cols VARCHAR (MAX)
+
+SELECT  @cols =  COALESCE (@cols + ',[' +  CONVERT(NVARCHAR, [CreateDate], 23) + ']',
+               '[' + CONVERT(NVARCHAR, [CreateDate], 23)+ ']')
+               FROM  (SELECT DISTINCT [CreateDate] FROM #TmpCodeDate) PV
+               ORDER BY [CreateDate]
+
+
+
+  DECLARE @query NVARCHAR(MAX)
+
+  SET @query = '
+             SELECT * FROM
+              (
+                SELECT * FROM #TmpCodeDate
+              ) x
+            PIVOT
+            (
+              SUM(CodeNum)
+            FOR [CreateDate] IN ('+  @cols  +')
+            ) p'
+
+  EXEC SP_EXECUTESQL @query
+
+
+	drop table #TmpCodeDate
+
+END
