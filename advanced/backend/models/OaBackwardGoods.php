@@ -42,7 +42,7 @@ class OaBackwardGoods extends GoodsCats
                 'developer','introducer','introReason','devStatus','checkStatus',
                 'salePrice','hopeWeight','hopeRate','hopeSale','hopeCost',
                 'hopeMonthProfit','createDate','updateDate','approvalNote'],'string'],
-            [['cate', 'subCate','salePrice','hopeWeight','hopeRate','hopeSale',],'safe']
+            [['stockUp','cate', 'subCate','salePrice','hopeWeight','hopeRate','hopeSale',],'safe']
         ];
     }
 
