@@ -75,6 +75,7 @@ class OaBackwardGoods extends GoodsCats
             'hopeMonthProfit' => '预估月毛利($)',
             'createDate' => '创建时间',
             'updateDate' => '更新时间',
+            'stockUp' => '备货',
         ];
     }
 
