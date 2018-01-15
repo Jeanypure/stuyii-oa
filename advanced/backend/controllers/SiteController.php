@@ -1,5 +1,6 @@
 <?php
 namespace backend\controllers;
+header("content-Type: text/html; charset=Utf-8");
 
 use Yii;
 use yii\web\Controller;
@@ -22,7 +23,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login','error','dev-data','intro-data'],
+                        'actions' => ['login','error','dev-data','intro-data','per-day-num'],
                         'allow' => true,
                     ],
                     [
@@ -72,14 +73,42 @@ class SiteController extends Controller
     }
 
     public  function actionDevData(){
-        $sql_AMT = "P_oa_New_Product_Performance";
+        $sql_AMT = "P_oa_New_Product_Performance_demo";
         $DataAMT = Yii::$app->db->createCommand($sql_AMT) ->queryAll();
-        $data['salername'] = array_column($DataAMT, 'salername');
-        $data['OneMonth'] = array_column($DataAMT, 'OneMonth');
-        $data['ThreeMonth'] = array_column($DataAMT, 'ThreeMonth');
-        $data['SixMonth'] = array_column($DataAMT, 'SixMonth');
-        $result['salername'] = $data;
-        $result['introducer'] = $this->actionIntroData();
+        foreach ($DataAMT as $key=>$value){
+                if($value['Distinguished']=='l_AMT'){
+                $Data['l_AMT'][]=$value;
+            }else{
+                $Data['CodeNum'][]=$value;
+            }
+
+        }
+        $dataAMT['salername'] = array_column($Data['l_AMT'], 'salername');
+        $dataAMT['OneMonth'] = array_column($Data['l_AMT'], 'OneMonth');
+        $dataAMT['ThreeMonth'] = array_column($Data['l_AMT'], 'ThreeMonth');
+        $dataAMT['SixMonth'] = array_column($Data['l_AMT'], 'SixMonth');
+
+        $dataCodeNum['salername'] = array_column($Data['CodeNum'], 'salername');
+        $dataCodeNum['OneMonth'] = array_column($Data['CodeNum'], 'OneMonth');
+        $dataCodeNum['ThreeMonth'] = array_column($Data['CodeNum'], 'ThreeMonth');
+        $dataCodeNum['SixMonth'] = array_column($Data['CodeNum'], 'SixMonth');
+//推荐人信息
+        $IntroData =  $this->actionIntroData();
+        $introAMT['introducer'] = array_column($IntroData['l_AMT'], 'introducer');
+        $introAMT['OneMonth'] = array_column($IntroData['l_AMT'], 'OneMonth');
+        $introAMT['ThreeMonth'] = array_column($IntroData['l_AMT'], 'ThreeMonth');
+        $introAMT['SixMonth'] = array_column($IntroData['l_AMT'], 'SixMonth');
+
+        $introCodeNum['introducer'] = array_column($IntroData['CodeNum'], 'introducer');
+        $introCodeNum['OneMonth'] = array_column($IntroData['CodeNum'], 'OneMonth');
+        $introCodeNum['ThreeMonth'] = array_column($IntroData['CodeNum'], 'ThreeMonth');
+        $introCodeNum['SixMonth'] = array_column($IntroData['CodeNum'], 'SixMonth');
+//每天产品数
+//        $PerDayNum = $this->actionPerDayNum();
+        $result['salername'] = $dataAMT;
+        $result['codenum'] = $dataCodeNum;
+        $result['introducer'] =$introAMT ;
+        $result['introCodeNum'] =$introCodeNum ;
         echo json_encode($result);
     }
     /**
@@ -89,14 +118,28 @@ class SiteController extends Controller
     public  function actionIntroData(){
         $sql_AMT = "P_oa_Intro_Product_Performance";
         $DataAMT = Yii::$app->db->createCommand($sql_AMT)->queryAll();
-        $data['introducer'] = array_column($DataAMT, 'introducer');
-        $data['OneMonth'] = array_column($DataAMT, 'OneMonth');
-        $data['ThreeMonth'] = array_column($DataAMT, 'ThreeMonth');
-        $data['SixMonth'] = array_column($DataAMT, 'SixMonth');
-        return $data;
+        foreach ($DataAMT as $key=>$value){
+            if($value['Distinguished']=='l_AMT'){
+                $Data['l_AMT'][]=$value;
+            }else{
+                $Data['CodeNum'][]=$value;
+            }
+        }
+        return $Data;
     }
 
-    /*
+    /**
+     * @return string|\yii\web\Response
+     */
+    public function actionPerDayNum(){
+        $sql = "P_oa_nearDaysCodeNum";
+        $Data = Yii::$app->db->createCommand($sql)->queryAll();
+        return $Data;
+
+    }
+
+
+    /**
      * Login action.
      *
      * @return string

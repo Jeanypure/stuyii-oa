@@ -15,8 +15,11 @@ $('h1').remove();
                 url:'{$todevdata}', 
                 success:function (data) {
                    // var da = JSON.parse(data);  //推荐方法
-                    init_chart('introducer',data);
-                    init_chart('salername',data);
+                  init_chart('salername',data);
+                  init_chart('num-salername',data);
+                  init_chart('introducer',data);
+                  init_chart('num-introducer',data);
+                    
                    
                 }
             });
@@ -71,31 +74,54 @@ $this->registerJs($js);
         </div>
         <div id="introducer" style="width: 800px;height:480px;" class="col-lg-6">
         </div>
+
+    </div>
+    <div class="row">
+        <div id="num-salername"  style="width: 800px;height:480px;" class="col-lg-6" >
+        </div>
+        <div id="num-introducer" style="width: 800px;height:480px;" class="col-lg-6">
+        </div>
     </div>
     <script type="text/javascript">
         function init_chart(id,row_data) {
             // 基于准备好的dom，初始化echarts实例
             var myChart = echarts.init(document.getElementById(id));
             var data = eval("("+row_data+")");
+            var role,itemType,nameType,OneMonth,ThreeMonth,SixMonth;
             if(id == 'salername'){
-                var role = '开发员';
-                var nameType  = data.salername.salername;
-                var OneMonth = data.salername.OneMonth;
-                var ThreeMonth = data.salername.ThreeMonth;
-                var SixMonth = data.salername.SixMonth;
-            }
-            else{
-                var role = '推荐人';
-                var nameType  = data.introducer.introducer;
-                var OneMonth = data.introducer.OneMonth;
-                var ThreeMonth = data.introducer.ThreeMonth;
-                var SixMonth = data.introducer.SixMonth;
+                 role = '开发员-';
+                 itemType = '销售额($)';
+                 nameType  = data.salername.salername;
+                 OneMonth = data.salername.OneMonth;
+                 ThreeMonth = data.salername.ThreeMonth;
+                 SixMonth = data.salername.SixMonth;
+            } else if(id == 'num-salername'){
+                 role = '开发员-';
+                 itemType =  '新品款数(个)';
+                 nameType  = data.codenum.salername;
+                 OneMonth = data.codenum.OneMonth;
+                 ThreeMonth = data.codenum.ThreeMonth;
+                 SixMonth = data.codenum.SixMonth;
+            }else if(id == 'introducer') {
+                 role = '推荐人-';
+                itemType =  '销售额($)';
+                 nameType  = data.introducer.introducer;
+                 OneMonth = data.introducer.OneMonth;
+                 ThreeMonth = data.introducer.ThreeMonth;
+                 SixMonth = data.introducer.SixMonth;
+            }else if(id == 'num-introducer') {
+                 role = '推荐人-';
+                 itemType =  '推荐成功款数(个)';
+                 nameType  = data.introCodeNum.introducer;
+                 OneMonth = data.introCodeNum.OneMonth;
+                 ThreeMonth = data.introCodeNum.ThreeMonth;
+                 SixMonth = data.introCodeNum.SixMonth;
             }
             // 使用刚指定的配置项和数据显示图表。
             option = {
                 title: {
                     x: 'center',
-                    text: role +'-近30天销售额($)',
+                    text: role +itemType,
                     subtext: '数据来源企划部',
                     sublink: 'http://data.stats.gov.cn/search/keywordlist2?keyword=%E5%9F%8E%E9%95%87%E5%B1%85%E6%B0%91%E6%B6%88%E8%B4%B9'
                 },
@@ -110,7 +136,7 @@ $this->registerJs($js);
                         // for text color
                         var color = colorList[params[0].dataIndex];
                         var res = '<div style="color:' + color + '">';
-                        res += '<strong>' + params[0].name + '销售额（$）</strong>'
+                        res += '<strong>' + params[0].name +'</strong>'
                         for (var i = 0, l = params.length; i < l; i++) {
                             res += '<br/>' + params[i].seriesName + ' : ' + params[i].value
                         }
@@ -153,7 +179,8 @@ $this->registerJs($js);
                 yAxis: [
                     {
                         type: 'value',
-                        name : '销售额($)',
+                        name : itemType,
+
                     }
                 ],
                 series: [

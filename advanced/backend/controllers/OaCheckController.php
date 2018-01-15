@@ -114,7 +114,6 @@ class OaCheckController extends Controller
             $msg = "审核失败";
         }
         return $msg;
-        //return $this->redirect(['to-check']);
     }
 
 
@@ -161,12 +160,14 @@ class OaCheckController extends Controller
                     throw new Exception('fail to update checkStatus!');
                 }
                 $trans->commit();
+                $msg = "审核成功";
             }
             catch (Exception $e){
                 $trans->rollBack();
+                $msg = "审核失败";
             }
         }
-        return $this->redirect(['to-check']);
+        return $msg;
     }
 
     /**
