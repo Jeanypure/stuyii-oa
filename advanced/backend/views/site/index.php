@@ -248,7 +248,7 @@ $this->registerJs($js);
             }
             option = {
                 title : {
-                    text: '近30天每天开出款数',
+                    text: '近30天每天开款数',
                     subtext: '企划部'
                 },
                 tooltip : {
@@ -281,7 +281,7 @@ $this->registerJs($js);
                     {
                         type : 'value',
                         axisLabel : {
-                            formatter: '{value} 个'
+                            formatter: '{value}款'
                         }
                     }
                 ],
