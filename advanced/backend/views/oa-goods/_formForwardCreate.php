@@ -85,6 +85,8 @@ $getSubCateUrl = Url::toRoute(['oa-goods/forward-create','typeid'=>1, ]);
 
     <?php echo  $form->field($model, 'hopeMonthProfit')->textInput(['readonly' => 'true','placeholder' => '--自动计算--']) ?>
 
+    <?php echo  $form->field($model, 'stockUp')->checkbox()?>
+
 
     <div class="form-group">
         <?= Html::submitButton('创建', ['id' => 'create-btn','class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
