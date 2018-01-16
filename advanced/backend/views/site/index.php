@@ -23,19 +23,14 @@ $('h1').remove();
                 }
             });
         }); 
-  
 		$(document).on('ajaxStart', function(){
 			$('.loading').show();
 			return false;
 		});
-
-
 		$(document).on('ajaxComplete',function(e,x,o){
 			$('.loading').hide();
 			return false;
 		});
-
-
 JS;
 $this->registerJs($js);
 ?>
@@ -261,7 +256,8 @@ $this->registerJs($js);
                     trigger: 'axis'
                 },
                 legend: {
-                    data:salername
+                    data:salername,
+                    selectedMode : 'single'
                 },
                 toolbox: {
                     show : true,
