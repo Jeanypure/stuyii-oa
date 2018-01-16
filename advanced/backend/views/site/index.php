@@ -20,12 +20,17 @@ $('h1').remove();
                   init_chart('introducer',data);
                   init_chart('num-introducer',data);
                   char_line('per-day-num',data);
-                    
-                   
                 }
             });
-
         }); 
+		$(document).on('ajaxStart', function(){
+			$('.loading').show();
+			return false;
+		});
+		$(document).on('ajaxComplete',function(e,x,o){
+			$('.loading').hide();
+			return false;
+		});
 JS;
 $this->registerJs($js);
 ?>
@@ -63,13 +68,18 @@ $this->registerJs($js);
                         );
                     }
                 },
-                barBorderRadius:[5, 5, 5, 5]
+                barBorderRadius:[5,8,8,8]
             },
 
         };
     </script>
     <body>
     <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="loading" style="display: none;"><center><img src="/img/loading.gif"></center></div>
+        </div>
+    </div>
     <div class="row">
         <div id="salername"  style="width: 800px;height:480px;" class="col-lg-6" >
         </div>
@@ -132,7 +142,7 @@ $this->registerJs($js);
                     sublink: 'http://data.stats.gov.cn/search/keywordlist2?keyword=%E5%9F%8E%E9%95%87%E5%B1%85%E6%B0%91%E6%B6%88%E8%B4%B9'
                 },
                 tooltip: {
-                    borderRadius:5,
+//                    borderRadius:5,
                     trigger: 'axis',
                     backgroundColor: 'rgba(255,255,255,0.7)',
                     axisPointer: {
@@ -221,28 +231,20 @@ $this->registerJs($js);
             var salername = data.dev;
             var CreateDate = data.CreateDate;
             var value = data.value;
-            console.log(salername);
-            console.log(CreateDate);
-            console.log(value);
             var line = new Array();
             for(var index in value){
                 var single_line=  {
                     name:salername[index],
                     type:'line',
                     stack: '产品款数',
-//                    itemStyle: {normal: {areaStyle: {type: 'default'}}},
                     data:value[index],
-                    markPoint : {
-                        data : [
-                            {type : 'max', name: '最大值'},
-                            {type : 'min', name: '最小值'}
-                        ]
-                    },
-                    markLine : {
-                        data : [
-                            {type : 'average', name: '平均值'}
-                        ]
-                    }
+                    itemStyle: {normal: {areaStyle: {type: 'default'}}},
+//                    markPoint : {
+//                        data : [
+//                            {type : 'max', name: '最大值'},
+//                            {type : 'min', name: '最小值'}
+//                        ]
+//                    },
                 };
                 line.push(single_line);
             }
@@ -255,7 +257,8 @@ $this->registerJs($js);
                     trigger: 'axis'
                 },
                 legend: {
-                    data:salername
+                    data:salername,
+                    selectedMode : 'single'
                 },
                 toolbox: {
                     show : true,
@@ -273,7 +276,6 @@ $this->registerJs($js);
                 xAxis : [
                     {
                         type : 'category',
-//                        boundaryGap : false,
                         data : CreateDate
                     }
                 ],
