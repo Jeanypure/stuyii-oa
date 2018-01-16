@@ -424,6 +424,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
                     Html::button('保存并完善', ['id' => 'save-complete', 'type' => 'button', 'class' => 'btn btn-primary',
                         'data-href' => Url::to(['/goodssku/save-complete', 'pid' => $pid, 'type'=> 'goods-info'])]) . ' ' .
                     Html::button('导入普源', ['id' => 'data-input', 'type' => 'button', 'class' => 'btn btn-warning']) . ' ' .
+                    Html::button('生成采购单', ['id' => 'make-order', 'type' => 'button', 'class' => 'btn' ]) . ' ' .
                     Html::button('删除行', ['id' => 'delete-row', 'type' => 'button', 'class' => 'btn btn-danger kv-batch-delete'])
             ]
         ]
@@ -487,10 +488,42 @@ echo FormGrid::widget([ // continuation fields to row above without labels
     $requestUrl2 = Url::toRoute(['/goodssku/update']);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
     $inputUrl = Url::toRoute(['input']);
     $deleteUrl = Url::toRoute(['/goodssku/delete']);
-
+    $make_flag = $info->stockUp?$info->stockUp:0;
+    $import_flag = $info->bgoodsid?$info->bgoodsid:0;
 
     $js2 = <<<JS
-
+    
+// 生成采购单
+    $("#make-order").on('click',function() {
+        if({$import_flag} > 0){
+             if({$make_flag} == 1){
+            var total = 0;
+            $('.stockNum').each(function(index,ele) {
+              var num = $(this).val();
+              if(!num){
+                num = '0';
+              }
+              console.log(typeof(parseInt(num)));
+              total += parseInt(num);
+            });
+            if(total>50){
+                alert("备货数量超过50，请调整备货数量！")
+            }
+            else{
+            //生成采购单的动作！
+            }
+        }
+        else {
+            alert('不是备货产品,不能生成采购单！');
+    }
+        }
+        else{
+            alert("还未导入普源，不能生成采购单！");
+        }
+       
+    });
+    
+    
 //批量设置关键词
     $(".random-paste").on('click',function() {
             if($("#all-kws").length==0){
