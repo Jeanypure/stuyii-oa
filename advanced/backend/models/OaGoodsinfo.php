@@ -75,6 +75,7 @@ class OaGoodsinfo extends GoodsCats
             'randomKeywords' => '随机关键词',
             'tailKeywords' => '最后关键词',
             'wishtags' => '关键词tags',
+            'stockUp' => '是否备货',
 
 
 

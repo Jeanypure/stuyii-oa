@@ -113,6 +113,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'completeStatus',
             'DictionaryName',
             'isVar',
+            'stockUp',
 
         ],
     ]); ?>

@@ -31,11 +31,10 @@ class OaGoodsinfoSearch extends OaGoodsinfo
     public function rules()
     {
         return [
-            [['pid','IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged'], 'integer'],
+            [['stockUp','pid','IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged'], 'integer'],
             [['hopeWeight','picStatus','isVar','vendor1','vendor2','vendor3','developer','devDatetime','updateTime','achieveStatus','GoodsCode',
                 'GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description','Season','StoreName','DictionaryName',
                 'possessMan2','possessMan1'],'safe'],
-
         ];
     }
 
@@ -205,6 +204,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
         $query->andFilterWhere(['like', 'description', $this->description]);
         $query->andFilterWhere(['like', 'AliasCnName', $this->AliasCnName]);
         $query->andFilterWhere(['like', 'vendor1', $this->vendor1]);
+        $query->andFilterWhere(['like', 'stockUp', $this->stockUp]);
         $query->andFilterWhere(['like', 'oa_goods.developer', $this->developer]);
 
         return $dataProvider;

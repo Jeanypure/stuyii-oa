@@ -78,6 +78,7 @@ class OaGoods extends GoodsCats
             'createDate' => '创建时间',
             'updateDate' => '更新时间',
             'approvalNote' => '审批备注',
+            'stockUp' => '是否备货',
         ];
     }
 

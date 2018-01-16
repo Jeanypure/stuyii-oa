@@ -214,6 +214,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 'filterInputOptions' => ['placeholder' => '是否多属性'],
             ],
+            'stockUp',
         ],
     ]); ?>
 
