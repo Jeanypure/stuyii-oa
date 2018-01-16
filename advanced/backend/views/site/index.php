@@ -238,6 +238,7 @@ $this->registerJs($js);
                     type:'line',
                     stack: '产品款数',
                     data:value[index],
+                    itemStyle: {normal: {areaStyle: {type: 'default'}}},
 //                    markPoint : {
 //                        data : [
 //                            {type : 'max', name: '最大值'},
