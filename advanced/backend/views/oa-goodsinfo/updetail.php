@@ -25,6 +25,7 @@ $this->params['breadcrumbs'][] = '更新数据';
 $bannedNames = explode(',', $info->DictionaryName);
 $catNid = $goodsItem->catNid;
 $subCate = $goodsItem->subCate;
+$stock_flag = $info->stockUp?false:true;
 if (empty($info->requiredKeywords)) {
     $required_kws = [];
     for ($i = 0; $i <= 5; $i++) {
@@ -395,9 +396,9 @@ echo FormGrid::widget([ // continuation fields to row above without labels
             'RetailPrice' => ['label' => '零售价', 'type' => TabularForm::INPUT_TEXT,
                 'options' => ['class' => 'RetailPrice'],
             ],
-//            'stockNum' => ['label' => '备货数量', 'type' => TabularForm::INPUT_TEXT,
-//                'options' => ['class' => 'stockNum'],
-//            ],
+            'stockNum' => ['label' => '备货数量', 'type' => TabularForm::INPUT_TEXT,
+                'options' => ['class' => 'stockNum', 'readonly' => $stock_flag ],
+            ],
 
         ],
 
@@ -591,14 +592,25 @@ echo FormGrid::widget([ // continuation fields to row above without labels
             
             //循环添加循环框
             var inputNames= ['sku','property1','property2',
-            'property3','CostPrice','Weight','RetailPrice']
+            'property3','CostPrice','Weight','RetailPrice','stockNum']
             for (var i=3; i<inputNames.length + 3;i++){
-                var td = $('<td class="kv-align-top" data-col-seq="'+ i +'" >' +
+                if(inputNames[i-3] == 'stockNum'){
+                    var td = $('<td class="kv-align-top" data-col-seq="'+ i +'" >' +
+                             '<div class="form-group">' +
+                                '<input type="text"  name="Goodssku[New-'+ row_count +']['+ inputNames[i-3] +']" readonly class="form-control  '+ inputNames[i-3] +'">' +
+                                 
+                             '</div>' +
+                           '</td>');
+                }
+                else {
+                    var td = $('<td class="kv-align-top" data-col-seq="'+ i +'" >' +
                              '<div class="form-group">' +
                                 '<input type="text"  name="Goodssku[New-'+ row_count +']['+ inputNames[i-3] +']" class="form-control  '+ inputNames[i-3] +'">' +
                                  
                              '</div>' +
                            '</td>');
+                }
+                
                 row.append(td);
             }
             
