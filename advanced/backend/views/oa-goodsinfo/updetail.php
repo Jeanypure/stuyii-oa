@@ -395,6 +395,9 @@ echo FormGrid::widget([ // continuation fields to row above without labels
             'RetailPrice' => ['label' => '零售价', 'type' => TabularForm::INPUT_TEXT,
                 'options' => ['class' => 'RetailPrice'],
             ],
+//            'stockNum' => ['label' => '备货数量', 'type' => TabularForm::INPUT_TEXT,
+//                'options' => ['class' => 'stockNum'],
+//            ],
 
         ],
 

@@ -19,7 +19,7 @@ class GoodsskuSearch extends Goodssku
     {
         return [
 //            [['sid', 'pid'], 'integer'],
-            [['pid','sku', 'property1', 'property2', 'property3', 'memo1', 'memo2', 'memo3', 'memo4','CostPrice', 'Weight', 'RetailPrice','linkurl'], 'safe'],
+            [['stockNum','pid','sku', 'property1', 'property2', 'property3', 'memo1', 'memo2', 'memo3', 'memo4','CostPrice', 'Weight', 'RetailPrice','linkurl'], 'safe'],
 //            [['CostPrice', 'Weight', 'RetailPrice'], 'number'],
         ];
     }
@@ -77,6 +77,7 @@ class GoodsskuSearch extends Goodssku
             ->andFilterWhere(['like', 'memo1', $this->memo1])
             ->andFilterWhere(['like', 'memo2', $this->memo2])
             ->andFilterWhere(['like', 'memo3', $this->memo3])
+            ->andFilterWhere(['like', 'stockNum', $this->stockNum])
             ->andFilterWhere(['like', 'memo4', $this->memo4]);
 
         return $dataProvider;
