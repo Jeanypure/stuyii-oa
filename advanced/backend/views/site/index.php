@@ -10,19 +10,19 @@ $js = <<< JS
 $('body').css('background','#FFF');
 //删除H1
 $('h1').remove();
-  $(function () {
-            $.ajax({
-                url:'{$todevdata}', 
-                success:function (data) {
-                   // var da = JSON.parse(data);  //推荐方法
-                  init_chart('salername',data);
-                  init_chart('num-salername',data);
-                  init_chart('introducer',data);
-                  init_chart('num-introducer',data);
-                  char_line('per-day-num',data);
-                }
-            });
-        }); 
+        $(function () {
+                $.ajax({
+                    url:'{$todevdata}', 
+                    success:function (data) {
+                       // var da = JSON.parse(data);  //推荐方法
+                      init_chart('salername',data);
+                      init_chart('num-salername',data);
+                      init_chart('introducer',data);
+                      init_chart('num-introducer',data);
+                      char_line('per-day-num',data);
+                    }
+                });
+            }); 
 		$(document).on('ajaxStart', function(){
 			$('.loading').show();
 			return false;
@@ -70,7 +70,6 @@ $this->registerJs($js);
                 },
                 barBorderRadius:[5,8,8,8]
             },
-
         };
     </script>
     <body>
