@@ -38,9 +38,9 @@ class Goodssku extends \yii\db\ActiveRecord
     {
         return [
 //            [['pid'], 'required'],
-            [['stockNum','pid'], 'integer'],
+            [['pid'], 'integer'],
             [['sku', 'property1', 'property2', 'property3', 'memo1', 'memo2', 'memo3', 'memo4','CostPrice', 'Weight', 'RetailPrice','linkurl'], 'string'],
-            [['linkurl'],'safe'],
+            [['stockNum', 'linkurl'],'safe'],
         ];
     }
 
