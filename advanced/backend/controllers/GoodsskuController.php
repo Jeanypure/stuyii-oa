@@ -129,6 +129,7 @@ class GoodsskuController extends Controller
                             $update_model->CostPrice = $row_value['CostPrice'];
                             $update_model->Weight = $row_value['Weight'];
                             $update_model->RetailPrice = $row_value['RetailPrice'];
+                            $update_model->stockNum = $row_value['stockNum'];
                             $update_model->update(false);
                         }
 
@@ -228,6 +229,7 @@ class GoodsskuController extends Controller
                             $update_model->CostPrice = $row_value['CostPrice'];
                             $update_model->Weight = $row_value['Weight'];
                             $update_model->RetailPrice = $row_value['RetailPrice'];
+                            $update_model->stockNum = $row_value['stockNum'];
                             $update_model->update(false);
 
                         }
@@ -312,6 +314,23 @@ class GoodsskuController extends Controller
             }
 
         }
+    }
+
+    /**
+     * @brief make purchasing orders
+     * @param string goodsCode
+     * @return mixed
+     */
+    public function actionMakeOrders($goodsCode)
+    {
+        $sql = "exec oa_P_make_orders '{$goodsCode}'";
+        $connection = yii::$app->db;
+        $ret = $connection->createCommand($sql)->queryOne();
+        $bill_number = $ret['billNumber'];
+        if($bill_number === 0){
+            return '采购单生成失败！';
+        }
+        return "生成采购单:'{$bill_number}'";
     }
 
     /**
