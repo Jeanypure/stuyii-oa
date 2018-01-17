@@ -220,6 +220,15 @@ function centerFormat($name) {
                 ],
             ],
             centerFormat('img'),
+            [
+                'attribute' => 'stockUp',
+                'width' => '150px',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    $value = $data->stockUp?'是':'否';
+                    return "<span class='cell'>" . $value . "</span>";
+                },
+            ],
             //centerFormat('cate'),
             [
                 'attribute' => 'cate',
@@ -313,8 +322,6 @@ function centerFormat($name) {
             centerFormat('hopeRate'),
             centerFormat('hopeSale'),
             centerFormat('hopeMonthProfit'),
-            centerFormat('stockUp'),
-
 
         ],
     ]); ?>

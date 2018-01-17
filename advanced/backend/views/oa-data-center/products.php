@@ -61,6 +61,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 return $model->GoodsCode;
             }
         ],
+        [
+            'attribute' => 'stockUp',
+            'width' => '150px',
+            'format' => 'raw',
+            'value' => function ($data) {
+                $value = $data->stockUp?'是':'否';
+                return "<span class='cell'>" . $value . "</span>";
+            },
+        ],
         'GoodsName',
         [
             'attribute' => 'cate',
@@ -123,7 +132,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'completeStatus',
         'DictionaryName',
         'isVar',
-        'stockUp',
 
     ],
 ]); ?>
