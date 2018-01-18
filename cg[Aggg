@@ -1,0 +1,278 @@
+[33mcommit e37f04ffdc09c9ba9c80c0152253725c1592a97c[m[33m ([m[1;36mHEAD -> [m[1;32mdev[m[33m)[m
+Merge: 542a017 1cad8ed
+Author: yxq <595551242@qq.com>
+Date:   Wed Jan 17 15:08:58 2018 +0800
+
+    Merge branch 'dev' of github.com:turpure/stuyii-oa into dev
+
+[33mcommit 1cad8ed6c0544ea7b34b2201ee2cf33458220b81[m
+Merge: 9ed9935 43037fb
+Author: turpure <p812816627@163.com>
+Date:   Wed Jan 17 13:36:35 2018 +0800
+
+    Merge branch 'test' of github.com:view-iseekapp/stuyii-oa into dev
+
+[33mcommit 542a017a19bf6e2b55a20e2caca595f63b1902cd[m
+Author: yxq <595551242@qq.com>
+Date:   Wed Jan 17 11:03:50 2018 +0800
+
+    sku保存失败！
+
+[33mcommit a2c2428c36f35b106b653d9f4a26d0c18e47f2ff[m
+Merge: 234ebf7 9ed9935
+Author: yxq <595551242@qq.com>
+Date:   Tue Jan 16 18:09:51 2018 +0800
+
+    Merge branch 'dev' of github.com:turpure/stuyii-oa into dev
+
+[33mcommit 9ed9935119231ac98aaf6326faf8f60ec00a1ae6[m
+Merge: 9284a01 d75a6fd
+Author: turpure <p812816627@163.com>
+Date:   Tue Jan 16 18:08:04 2018 +0800
+
+    Merge branch 'master' of https://github.com/lijingjing17721480297/stuyii-oa into dev
+
+[33mcommit 9284a010fff7d4618418ae85487a2f8825b4de2a[m
+Author: turpure <p812816627@163.com>
+Date:   Tue Jan 16 18:07:33 2018 +0800
+
+    make purchasing order
+
+[33mcommit d75a6fd397ed20e119d44d389502347e8a6d5a58[m
+Author: Jeany <wakakajingjing@gmail.com>
+Date:   Tue Jan 16 17:59:00 2018 +0800
+
+    line style change
+
+[33mcommit 6e5a49f19551863052aea2fef6b888e23b4323c3[m
+Author: Jeany <wakakajingjing@gmail.com>
+Date:   Tue Jan 16 16:18:31 2018 +0800
+
+    set selectedMode single
+
+[33mcommit b3a6b7c0bf7533f42aaa70ae571536018c785c2d[m
+Author: Jeany <wakakajingjing@gmail.com>
+Date:   Tue Jan 16 16:02:59 2018 +0800
+
+    add ajaxStart and ajaxComplete load.gif
+
+[33mcommit 234ebf73b83d91d51fbef1a8cb1c7168f5803362[m
+Merge: 098744b c0ab4d8
+Author: yxq <595551242@qq.com>
+Date:   Tue Jan 16 14:58:20 2018 +0800
+
+    Merge branch 'dev' of github.com:turpure/stuyii-oa into dev
+
+[33mcommit c0ab4d8ca05e57a8edbd601c81f0bdfed2adba73[m
+Author: turpure <p812816627@163.com>
+Date:   Tue Jan 16 13:49:30 2018 +0800
+
+    add readonly options
+
+[33mcommit 098744b7fa7ca08ea024e600da54ea15500cc7a3[m
+Merge: 67146ff a27ea37
+Author: yxq <595551242@qq.com>
+Date:   Tue Jan 16 10:26:08 2018 +0800
+
+    Merge branch 'dev' of github.com:turpure/stuyii-oa into dev
+
+[33mcommit a27ea37826f06196445fce0c88e0ce2f3c045cb2[m
+Merge: d706137 f8499d1
+Author: turpure <p812816627@163.com>
+Date:   Tue Jan 16 09:57:04 2018 +0800
+
+    Merge branch 'master' of https://github.com/lijingjing17721480297/stuyii-oa into dev
+
+[33mcommit d706137025800705c0359cec1a6af590f285958e[m
+Author: turpure <p812816627@163.com>
+Date:   Tue Jan 16 09:55:38 2018 +0800
+
+    add stockNum
+
+[33mcommit 67146ff9812168fa0057579e1ff4149182c67593[m
+Merge: b8aad57 6d56757
+Author: yxq <595551242@qq.com>
+Date:   Tue Jan 16 09:34:57 2018 +0800
+
+    Merge branch 'dev' of github.com:turpure/stuyii-oa into dev
+
+[33mcommit f8499d1c3565a6f631af95a9724dd8886a59a651[m
+Author: Jeany <wakakajingjing@gmail.com>
+Date:   Mon Jan 15 17:57:43 2018 +0800
+
+    tiny mend
+
+[33mcommit d83747596a19f5b9cc45737db24e2dcdda0b126c[m
+Author: Jeany <wakakajingjing@gmail.com>
+Date:   Mon Jan 15 17:49:19 2018 +0800
+
+    per-day-num line
+
+[33mcommit 6d567572ce3ad1ef217e9733afcc4610d5b4fb58[m
+Author: turpure <p812816627@163.com>
+Date:   Mon Jan 15 17:30:15 2018 +0800
+
+    pass stockUp value to goods-info
+
+[33mcommit 7c0cff3c9b3acda751c58ee0bf0b1c13c0b5c708[m
+Author: turpure <p812816627@163.com>
+Date:   Mon Jan 15 16:45:02 2018 +0800
+
+    show stockUp field
+
+[33mcommit 1eda975af1c1ade13ccdb58c9289799dfd595f5c[m
+Merge: 582c19f 78d017e
+Author: Jeany <wakakajingjing@gmail.com>
+Date:   Mon Jan 15 15:42:08 2018 +0800
+
+    Merge branch 'dev' of github.com:turpure/stuyii-oa
+
+[33mcommit b8aad57548ac59199dab2aff371e14ad1abdc729[m
+Merge: dda4f6e 78d017e
+Author: yxq <595551242@qq.com>
+Date:   Mon Jan 15 15:39:47 2018 +0800
+
+    Merge branch 'dev' of github.com:turpure/stuyii-oa into dev
+
+[33mcommit 78d017e464619c5eb9f5215f2ffc8df36626b1ef[m
+Author: turpure <p812816627@163.com>
+Date:   Mon Jan 15 15:38:50 2018 +0800
+
+    alternative stlye of goodsCode
+
+[33mcommit 582c19f49c09c2463e7e0a4d998f4443e47219e8[m
+Merge: 3a35d10 777c2d3
+Author: Jeany <wakakajingjing@gmail.com>
+Date:   Mon Jan 15 15:06:31 2018 +0800
+
+    Merge branch 'dev' of github.com:turpure/stuyii-oa
+
+[33mcommit 3a35d10856eb40ed643cbc940cb0cb582832ec6d[m
+Author: Jeany <wakakajingjing@gmail.com>
+Date:   Mon Jan 15 15:05:31 2018 +0800
+
+    test per day num
+
+[33mcommit dda4f6e294e5784580fc5db10fb7844b84cbcc10[m
+Merge: 752e46e 777c2d3
+Author: yxq <595551242@qq.com>
+Date:   Mon Jan 15 15:03:27 2018 +0800
+
+    Merge branch 'dev' of github.com:turpure/stuyii-oa into dev
+
+[33mcommit 777c2d3f8e6aa625166825b182fbf8eb3baf4e2b[m
+Merge: d6830af ad45bd5
+Author: turpure <p812816627@163.com>
+Date:   Mon Jan 15 15:01:39 2018 +0800
+
+    commit by lijingjing
+
+[33mcommit 752e46eab68ee9605defb4d34d19bb66d699fadd[m
+Merge: 24e4777 d6830af
+Author: yxq <595551242@qq.com>
+Date:   Mon Jan 15 14:59:20 2018 +0800
+
+    Merge branch 'dev' of github.com:turpure/stuyii-oa into dev
+
+[33mcommit d6830afed4a41cf8296f8c6db916b6a6cc8a452d[m
+Author: turpure <p812816627@163.com>
+Date:   Mon Jan 15 14:57:18 2018 +0800
+
+    add stockUp label
+
+[33mcommit 4868228e4df455893966b29ec317565fc2e795ea[m
+Author: turpure <p812816627@163.com>
+Date:   Mon Jan 15 14:55:10 2018 +0800
+
+    add stockUp for backward
+
+[33mcommit 4d5492e789381e847ffe05f0b238796c53fbeda7[m
+Author: turpure <p812816627@163.com>
+Date:   Mon Jan 15 14:49:32 2018 +0800
+
+    add stockUp while forward updating
+
+[33mcommit 5759b5740555131847dd476a6ca7e3e9b4ebcb2a[m
+Author: turpure <p812816627@163.com>
+Date:   Mon Jan 15 14:48:17 2018 +0800
+
+    add stockUp while forward updating
+
+[33mcommit 19333190d24d28759f50ee9e1e008de251273869[m
+Author: turpure <p812816627@163.com>
+Date:   Mon Jan 15 14:34:52 2018 +0800
+
+    add stockUp checkbox
+
+[33mcommit 0c153fbabe11a2fdc63fa05e0c7c629da0a6b905[m
+Author: turpure <p812816627@163.com>
+Date:   Mon Jan 15 14:17:30 2018 +0800
+
+    add stockUp field
+
+[33mcommit ad45bd5a3b848551450c8d8f7a41af111d2901c5[m
+Author: Jeany <wakakajingjing@gmail.com>
+Date:   Mon Jan 15 10:54:33 2018 +0800
+
+    there are no redirect after Tocheck PassLosts
+
+[33mcommit 539a6b9dc95e451ea162374590ce7e35640cfb4b[m
+Author: Jeany <wakakajingjing@gmail.com>
+Date:   Sat Jan 13 17:50:51 2018 +0800
+
+    codeNum add
+
+[33mcommit 24e4777850a08497ffe386492854550a7413dcb0[m
+Merge: 868805c bf376f7
+Author: yxq <595551242@qq.com>
+Date:   Fri Jan 12 09:22:00 2018 +0800
+
+    Merge branch 'dev' of github.com:turpure/stuyii-oa into dev
+
+[33mcommit bf376f7eeefbeb042a3471d2661bf1af72aa3cd2[m
+Merge: eb5c46e f41d0d3
+Author: turpure <p812816627@163.com>
+Date:   Thu Jan 11 19:50:30 2018 +0800
+
+    Merge branch 'master' of https://github.com/lijingjing17721480297/stuyii-oa into dev
+
+[33mcommit f41d0d30bacd2f341f03700912969130fe8351a8[m
+Author: Jeany <wakakajingjing@gmail.com>
+Date:   Thu Jan 11 18:03:06 2018 +0800
+
+    canvas height and width adjust
+
+[33mcommit 868805ca8b13401a51fb47bd61f3f82fdc25169f[m
+Merge: 43037fb eb5c46e
+Author: yxq <595551242@qq.com>
+Date:   Thu Jan 11 17:41:11 2018 +0800
+
+    Merge branch 'dev' of github.com:turpure/stuyii-oa into dev
+
+[33mcommit eb5c46e354f16d713240f7b2fe7f83bfde4e5b7e[m
+Merge: 3f5a94a 8df9684
+Author: turpure <p812816627@163.com>
+Date:   Thu Jan 11 17:39:26 2018 +0800
+
+    add report by jeany
+
+[33mcommit 8df968456ff0052408759af748cbffbca2b69585[m
+Author: Jeany <wakakajingjing@gmail.com>
+Date:   Thu Jan 11 17:33:25 2018 +0800
+
+    change Procedure
+
+[33mcommit 208186f7ef4bd2ad153301777cbc77dc4b130a41[m
+Author: Jeany <wakakajingjing@gmail.com>
+Date:   Thu Jan 11 17:29:19 2018 +0800
+
+    introducer data add to index
+
+[33mcommit 43037fb53eb1abd1e2e7e320b38e97c2e3efcdf6[m[33m ([m[1;31morigin/test[m[33m)[m
+Merge: 3d4f8b0 3f5a94a
+Author: yxq <595551242@qq.com>
+Date:   Thu Jan 11 13:46:41 2018 +0800
+
+    Merge branch 'dev' of github.com:turpure/stuyii-oa into dev
+
+[33mcommit 3f5a94a64189aaf6ec5e2837afaada1a63a5e5ab[m

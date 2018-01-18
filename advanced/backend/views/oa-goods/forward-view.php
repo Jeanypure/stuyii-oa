@@ -25,6 +25,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => Html::a("<a target='_blank' href=$model->img>$model->img</a>",$model->img),
             ],
+            [
+                'attribute' => 'stockUp',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    $value = $data->stockUp?'是':'否';
+                    return $value;
+                },
+            ],
             'cate',
             'subCate',
             [
@@ -130,9 +138,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
             ],
-
-
-
             'devNum',
             'developer',
             'introducer',
@@ -146,6 +151,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'hopeRate',
             'hopeSale',
             'hopeMonthProfit',
+
         ],
     ]) ?>
 

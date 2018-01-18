@@ -38,6 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => Html::a("<a target='_blank' href=$model->origin1>$model->origin1</a>",$model->origin1),
             ],
+
 //            'origin2',
 //            'origin3',
 //            'devNum',

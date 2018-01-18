@@ -75,6 +75,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->GoodsCode;
                 }
             ],
+            [
+                'attribute' => 'stockUp',
+                'width' => '150px',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    $value = $data->stockUp?'是':'否';
+                    return "<span class='cell'>" . $value . "</span>";
+                },
+            ],
             'GoodsName',
             [
                 'attribute' => 'vendor1',
@@ -228,7 +237,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 'filterInputOptions'=>['placeholder'=>'是否多属性'],
             ],
-            'stockUp',
         ],
     ]); ?>
 

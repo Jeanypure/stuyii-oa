@@ -488,6 +488,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
     $requestUrl2 = Url::toRoute(['/goodssku/update']);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
     $inputUrl = Url::toRoute(['input']);
     $deleteUrl = Url::toRoute(['/goodssku/delete']);
+    $makeOrdersUrl = Url::toRoute(['/goodssku/make-orders','goodsCode' => $info->GoodsCode]);
     $make_flag = $info->stockUp?$info->stockUp:0;
     $import_flag = $info->bgoodsid?$info->bgoodsid:0;
 
@@ -495,6 +496,8 @@ echo FormGrid::widget([ // continuation fields to row above without labels
     
 // 生成采购单
     $("#make-order").on('click',function() {
+         $(this).attr('disabled','disabled');
+         var button = $(this);
         if({$import_flag} > 0){
              if({$make_flag} == 1){
             var total = 0;
@@ -511,6 +514,16 @@ echo FormGrid::widget([ // continuation fields to row above without labels
             }
             else{
             //生成采购单的动作！
+            $.ajax(
+                {
+                type:"POST",
+                url:'{$makeOrdersUrl}',
+                success: function(data) {
+                  alert(data);
+                  button.attr('disabled',false);
+                }
+                }
+            );
             }
         }
         else {
@@ -520,7 +533,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
         else{
             alert("还未导入普源，不能生成采购单！");
         }
-       
+       button.attr('disabled',false);
     });
     
     

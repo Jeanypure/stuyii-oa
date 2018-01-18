@@ -54,6 +54,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'picUrl:url',
             'goodsid',
             'GoodsCode',
+            [
+                'attribute' => 'stockUp',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    $value = $data->stockUp?'是':'否';
+                    return $value;
+                },
+            ],
             'achieveStatus',
             'devDatetime',
             'developer',
