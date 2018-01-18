@@ -130,9 +130,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
             ],
-
-
-
             'devNum',
             'developer',
             'introducer',
@@ -146,6 +143,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'hopeRate',
             'hopeSale',
             'hopeMonthProfit',
+            [
+                'attribute' => 'stockUp',
+
+            ]
         ],
     ]) ?>
 

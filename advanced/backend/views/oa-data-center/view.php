@@ -60,6 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'StoreID',
             'AttributeName',
             'bgoodsid',
+            'stockUp'
         ],
     ]) ?>
 </div
