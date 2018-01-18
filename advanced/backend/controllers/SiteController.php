@@ -1,6 +1,5 @@
 <?php
 namespace backend\controllers;
-header("content-Type: text/html; charset=Utf-8");
 
 use Yii;
 use yii\web\Controller;
@@ -82,7 +81,6 @@ class SiteController extends Controller
             } else {
                 $Data['CodeNum'][] = $value;
             }
-
         }
         $dataAMT['salername'] = array_column($Data['l_AMT'], 'salername');
         $dataAMT['OneMonth'] = array_column($Data['l_AMT'], 'OneMonth');
