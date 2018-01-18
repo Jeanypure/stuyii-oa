@@ -26,6 +26,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             'GoodsName',
             'GoodsCode',
+            [
+                'attribute' => 'stockUp',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    $value = $data->stockUp?'是':'否';
+                    return $value;
+                },
+            ],
             'SupplierName',
             'AliasCnName',
             'AliasEnName',
