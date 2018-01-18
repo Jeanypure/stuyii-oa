@@ -19,6 +19,7 @@ Modal::begin([
     'id' => 'view-modal',
 //    'header' => '<h4 class="modal-title">认领产品</h4>',
     'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
+    'size' => "modal-lg"
 ]);
 //echo
 Modal::end();

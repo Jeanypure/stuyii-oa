@@ -96,9 +96,8 @@ $this->registerJs($js);
             var myChart = echarts.init(document.getElementById(id));
             var data = eval("("+row_data+")");
             var catNumber,catName,maxValue;
-
             if(id=='catNum'){
-                role='类目款数';
+                role='款数';
                 maxValue = '' ;
                 catNumber = data.catNum;
                 catName = data.name;

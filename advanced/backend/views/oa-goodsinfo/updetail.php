@@ -329,7 +329,8 @@ echo FormGrid::widget([ // continuation fields to row above without labels
 
     ?>
 
-    <?php echo Html::submitButton($info->isNewRecord ? '创建' : '更新', ['class' => $info->isNewRecord ? 'btn btn-success' : 'btn btn-info']);
+    <?php
+    echo Html::submitButton( '保存基本信息', ['class' =>  'btn btn-danger','style' => 'margin-left:8%']);
     ActiveForm::end();
     echo "<br>";
     ?>
