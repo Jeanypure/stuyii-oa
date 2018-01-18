@@ -24,7 +24,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => Html::a("<a target='_blank' href=$model->picUrl>点我查看</a>",$model->picUrl),
 
             ],
-            'GoodsCode',
+            [
+                'attribute' => 'GoodsCode',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    $value = $data->stockUp?'<strong style="color:red;">'.$data->GoodsCode.'</strong>':$data->GoodsCode;
+                    return $value;
+                },
+            ],
             [
                 'attribute' => 'stockUp',
                 'format' => 'raw',
