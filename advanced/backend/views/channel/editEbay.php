@@ -17,6 +17,7 @@ $shipping_templates = [
     "template" => "<div > {label} </div><div class='col-lg-6'>{input}</div>{hint}{error}",
     'labelOptions' => ['class' => 'col-lg-2 control-label']
 ];
+$stock_value = $templates->stockUp?'是':'否';
 if (empty($templates->requiredKeywords)) {
     $required_kws = [];
     for ($i = 0; $i <= 5; $i++) {
@@ -138,6 +139,7 @@ Tabs::widget([
 </div>
 </br>
 <?= $form->field($templates, 'sku', ['labelOptions' => ['class' => 'col-lg-1 control-label'],])->textInput() ?>
+<?= $form->field($templates, 'stockUp', ['labelOptions' => ['class' => 'col-lg-1 control-label'],])->textInput(['readonly' => true, 'value' => $stock_value]) ?>
 <?php
 echo $form->field($templates, 'mainPage', ['labelOptions' => ['class' => 'col-lg-1 control-label'],])->textInput(['class' => 'main-page', 'style' => 'display:none']);
 echo '<div class="form-group field-oatemplates-mainpage">

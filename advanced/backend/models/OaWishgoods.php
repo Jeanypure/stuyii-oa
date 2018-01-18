@@ -40,6 +40,7 @@ class OaWishgoods extends \yii\db\ActiveRecord
             [['SKU', 'title', 'description', 'shippingtime', 'main_image','extra_images', 'headKeywords', 'requiredKeywords', 'randomKeywords', 'tailKeywords','wishtags'], 'string'],
             [['inventory', 'goodsid', 'infoid'], 'integer'],
             [['price', 'msrp', 'shipping'], 'number'],
+            [['stockUp'],'safe']
         ];
     }
 
@@ -64,6 +65,7 @@ class OaWishgoods extends \yii\db\ActiveRecord
             'goodsid' => Yii::t('app', '商品ID'),
             'infoid' => Yii::t('app', 'Infoid'),
             'wishtags' => Yii::t('app', '关键词tags'),
+            'stockUp' => Yii::t('app', '是否备货'),
         ];
     }
 }
