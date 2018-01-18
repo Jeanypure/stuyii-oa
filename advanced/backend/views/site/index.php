@@ -53,6 +53,10 @@ $this->registerJs($js);
             '#ff69b4','#ba55d3','#cd5c5c','#ffa500','#40e0d0'
         ];
         var itemStyle = {
+            //柱形图圆角，鼠标移上去效果，如果只是一个数字则说明四个参数全部设置为那么多
+            emphasis: {
+                barBorderRadius: [8,8,8,8]
+            },
             normal: {
                 color: function(params) {
                     if (params.dataIndex < 0) {
@@ -68,7 +72,7 @@ $this->registerJs($js);
                         );
                     }
                 },
-                barBorderRadius:[5,8,8,8]
+                barBorderRadius:[8,8,8,8]
             },
         };
     </script>
@@ -80,22 +84,17 @@ $this->registerJs($js);
         </div>
     </div>
     <div class="row">
-        <div id="salername"  style="width: 800px;height:480px;" class="col-lg-6" >
-        </div>
-        <div id="introducer" style="width: 800px;height:480px;" class="col-lg-6">
-        </div>
+        <div id="salername"  style="width: 800px;height:480px;" class="col-lg-6" ></div>
+        <div id="introducer" style="width: 800px;height:480px;" class="col-lg-6"></div>
 
     </div>
     <div class="row">
-        <div id="num-salername"  style="width: 800px;height:480px;" class="col-lg-6" >
-        </div>
-        <div id="num-introducer" style="width: 800px;height:480px;" class="col-lg-6">
-        </div>
+        <div id="num-salername"  style="width: 800px;height:480px;" class="col-lg-6" ></div>
+        <div id="num-introducer" style="width: 800px;height:480px;" class="col-lg-6"></div>
     </div>
     <div class="row">
-        <div id="per-day-num"  style="width: 1600px;height:580px;" class="col-lg-12" >
-        </div>
-
+        <div id="per-day-num"  style="width: 1600px;height:580px;" class="col-lg-12" ></div>
+        <input id="selectall" type="button" value="全不选" flag="1"/>
     </div>
     <script type="text/javascript">
         function init_chart(id,row_data) {
@@ -288,8 +287,29 @@ $this->registerJs($js);
                 ],
                 series : line
             };
-
             myChart.setOption(option);
+            var selectArr = myChart.getOption().legend.data;
+
+            $('#selectall').click(function(){
+                var flag = $(this).attr('flag');
+                var val =false;
+                if(flag == 1){
+                    val = false;
+                    $(this).attr('flag',0);
+                    $(this).val('全选中');
+                }else{
+                    val = true;
+                    $(this).attr('flag',1);
+                    $(this).val('全不选');
+                }
+                var obj = {};
+                for(var key in selectArr){
+                    obj[selectArr[key]] = val;
+                }
+                option.legend.selected = obj;
+                myChart.clear();
+                myChart.setOption(option);
+            });
         }
     </script>
     </body>
