@@ -16,6 +16,7 @@ $subCate = $model->subCate;
 $updateCheckUrl = Url::toRoute(['backward-update-check', 'id' => $model->nid]);
 $checkStatus = $model->checkStatus;
 $requireTemplates = ["template" => "<span style='color:red'>*{label}:</span>\n<div >{input}</div>\n{error}"];
+$stock_editable = $checkStatus ==='已审批'?true:false;
 
 $JS = <<<JS
 
@@ -97,7 +98,7 @@ $this->registerJs($JS);
         <?php echo  $form->field($model, 'hopeWeight')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'hopeCost')->textInput(['placeholder' => '--选填--']) ?>
         <?php echo  $form->field($model, 'hopeMonthProfit')->textInput(['readonly'=>'true','placeholder' => '--选填--']) ?>
-        <?php echo  $form->field($model, 'stockUp')->checkbox() ?>
+        <?php echo  $form->field($model, 'stockUp')->checkbox(['disabled' => $stock_editable]) ?>
 
 
         <div class="form-group">
