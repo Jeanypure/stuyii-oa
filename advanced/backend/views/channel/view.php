@@ -53,7 +53,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'DeclaredValue',
             'picUrl:url',
             'goodsid',
-            'GoodsCode',
+            [
+                'attribute' => 'GoodsCode',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    $value = $data->stockUp?'<strong style="color:red;">'.$data->GoodsCode.'</strong>':$data->GoodsCode;
+                    return $value;
+                },
+            ],
             [
                 'attribute' => 'stockUp',
                 'format' => 'raw',
