@@ -64,6 +64,7 @@ echo "<div style='margin-left: 8px'><a href= '$info->picUrl'  target='_blank' ><
 ?>
 
 <?php
+$stock = $info->stockUp?'是':'否';
 $form = ActiveForm::begin([]);
 
 echo FormGrid::widget([ // continuation fields to row above without labels
@@ -74,8 +75,18 @@ echo FormGrid::widget([ // continuation fields to row above without labels
         [
             'attributes' => [
                 'picUrl' => [
-                    'label' => "商品图片链接",
-                    'options' => ['class' => 'picUrl', 'style' => "margin-left: 7px;width:50%"],
+                    'label' => '商品图片链接',
+                    'options' => ['class' => 'picUrl', 'style' => 'margin-left: 7px;'],
+                ],
+                'stockUp' => [
+                    'label' => '是否备货',
+                    'options' => [
+                        'value' => $stock,
+                        'readonly' => true,
+                        'class' => 'stockUp',
+                        'style' => 'margin-right: 7px;'
+                    ],
+
                 ],
             ],
         ],
@@ -142,7 +153,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
                 ],
                 'StoreName' => [
                     'label' => "<span style = 'color:red'>*仓库</span>",
-                        'items' => $result,
+                    'items' => $result,
                     'type' => Form::INPUT_DROPDOWN_LIST,
                 ],
                 'Season' => [
@@ -329,7 +340,8 @@ echo FormGrid::widget([ // continuation fields to row above without labels
 
     ?>
 
-    <?php echo Html::submitButton($info->isNewRecord ? '创建' : '更新', ['class' => $info->isNewRecord ? 'btn btn-success' : 'btn btn-info']);
+    <?php
+    echo Html::submitButton( '保存基本信息', ['class' =>  'btn btn-danger','style' => 'margin-left:8%']);
     ActiveForm::end();
     echo "<br>";
     ?>
