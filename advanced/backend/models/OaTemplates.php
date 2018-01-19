@@ -70,6 +70,7 @@ class OaTemplates extends \yii\db\ActiveRecord
             [['infoid','goodsid', 'prepareDay', 'quantity'], 'integer'],
             [['headKeywords','requiredKeywords','randomKeywords','tailKeywords','IbayTemplate','specifics','sku','mainPage','extraPage','location', 'country', 'postCode', 'site', 'listedCate', 'listedSubcate', 'title', 'subTitle', 'description', 'UPC', 'EAN', 'Brand', 'MPN', 'Color', 'Type', 'Material', 'IntendedUse', 'unit', 'bundleListing', 'shape', 'features', 'regionManufacture', 'reserveField', 'InshippingMethod1', 'InshippingMethod2', 'OutshippingMethod1', 'OutShiptoCountry1', 'OutshippingMethod2', 'OutShiptoCountry2'], 'string'],
             [['nowPrice', 'InFirstCost1', 'InSuccessorCost1', 'InFirstCost2', 'InSuccessorCost2', 'OutFirstCost1', 'OutSuccessorCost1', 'OutFirstCost2', 'OutSuccessorCost2'], 'number'],
+            [['stockUp',],'safe']
         ];
     }
 
@@ -131,6 +132,7 @@ class OaTemplates extends \yii\db\ActiveRecord
             'requiredKeywords' => '最前关键词',
             'randomKeywords' => '最前关键词',
             'tailKeywords' => '最后关键词',
+            'stockUp' => '是否备货',
         ];
     }
 

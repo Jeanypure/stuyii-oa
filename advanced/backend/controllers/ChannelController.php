@@ -98,8 +98,11 @@ class ChannelController extends Controller
         if (!$sku) {
             throw new NotFoundHttpException("The product was not found.");
         }
-        if ($sku[0]->load(Yii::$app->request->post())) {
+        $post = Yii::$app->request->post();
+        unset($post['OaWishgoods']['stockUp']);
+        if ($sku[0]->load($post)) {
             $dataPost = $_POST;
+
             $sku[0]['main_image'] = $dataPost['main_image'];
             unset($sku[0]['extra_images']);
             foreach ($dataPost["extra_images"] as $key => $value) {
@@ -107,8 +110,10 @@ class ChannelController extends Controller
 
             }
             $sku[0]['extra_images'] = rtrim($sku[0]['extra_images'], "\n");
-            $sku[0]->update(false);
-            echo '更新成功！';
+            if($sku[0]->update(false)) {
+                return '保存成功！';
+            }
+            return '保存失败！';
 
         } else {
 
@@ -196,8 +201,8 @@ class ChannelController extends Controller
     public function actionEbaySave($id)
     {
         $template = OaTemplates::find()->where(['nid' => $id])->one();
-
         $data = $_POST['OaTemplates'];
+        unset($data['stockUp']);
         //设置默认物流
         try {
             $template->setAttributes($data, true);
@@ -223,12 +228,14 @@ class ChannelController extends Controller
         $template = OaTemplates::find()->where(['nid' => $id])->one();
         $info = OaGoodsinfo::find()->where(['pid' => $infoId])->one();
         $data = $_POST['OaTemplates'];
+        unset($data['stockUp']);
         //设置默认物流
         try {
             $template->setAttributes($data, true);
 
             //动态计算产品的状态
-            $status = str_replace('|eBay已完善', '', $info->completeStatus);
+            $old_status = $info->completeStatus?$info->completeStatus:'';
+            $status = str_replace('|eBay已完善', '', $old_status);
             $complete_status = $status . '|eBay已完善';
             $info->completeStatus = $complete_status;
             if ($template->update(true) && $info->save(false)) {
@@ -832,15 +839,19 @@ class ChannelController extends Controller
     public function actionWishSign($id)
     {
 
-        $completeStatus = Channel::find()->where(['pid' => $id])->all();
+        $info = OaGoodsinfo::find()->where(['pid' => $id])->one();
         //动态计算产品的状态
-        $status = str_replace('Wish已完善', '', $completeStatus[0]->completeStatus);
-        $complete_status = 'Wish已完善' . $status;
-        $completeStatus[0]->completeStatus = $complete_status;
 
-        $completeStatus[0]->update(false);
-        echo "标记Wish完善成功!";
-
+        $old_status = $info->completeStatus?$info->completeStatus:'';
+        $status = str_replace('|Wish已完善', '', $old_status);
+        $complete_status = $status .'|Wish已完善';
+        $info->completeStatus = $complete_status;
+        $ret = $info->save(false);
+        if($ret){
+            $this->actionUpdate($id);
+            return "标记成功!";
+        }
+        return "标记失败!";
     }
 
     /**

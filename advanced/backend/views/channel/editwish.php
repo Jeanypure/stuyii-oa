@@ -17,7 +17,7 @@ $this->title = '编辑模板';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '平台信息'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $sku->infoid, 'url' => ['view', 'id' => $sku->infoid]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
-
+$stock_value = $sku->stockUp?'是':'否';
 //$bannedNames = explode(',', $info->DictionaryName);
 //$catNid = $goodsItem->catNid;
 //$subCate = $goodsItem->subCate;
@@ -97,6 +97,7 @@ if (empty($sku->randomKeywords)) {
         <span>基本信息</span>
     </div>
     <?= $form->field($sku, 'SKU',['labelOptions' => ['class' => 'col-md-1 control-label']])->textInput(); ?>
+    <?= $form->field($sku, 'stockUp', ['labelOptions' => ['class' => 'col-lg-1 control-label'],])->textInput(['readonly' => true, 'value' => $stock_value]) ?>
     <?php
     echo $form->field($sku, 'main_image', ['labelOptions' => ['class' => 'col-md-1 control-label']])->hiddenInput(['class' => 'main-image']);
     echo '<div class="form-group field-oatemplates-mainpage">
@@ -460,6 +461,7 @@ $('body').on('click','.down-btn',function() {
         $.ajax({
             type:"POST",
             url:'{$wishUrl}',
+            data:$('#all-info').serialize(),
             success:function(res) {
                 alert(res);
               
