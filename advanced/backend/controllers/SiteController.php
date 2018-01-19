@@ -112,6 +112,13 @@ class SiteController extends Controller
         $result['CreateDate'] = $PerDayNum['CreateDate'];
         $result['dev'] = $PerDayNum['SalerName'];
         $result['value'] = $PerDayNum['value'];
+
+        //美工每天产品数
+        $artPerDayNum = $this->artPerDayNum();
+        $result['artDate'] = $artPerDayNum['picCompleteTime'];
+        $result['art'] = $artPerDayNum['possessMan1'];
+        $result['artValue'] = $artPerDayNum['value'];
+
         echo json_encode($result);
     }
 
@@ -156,6 +163,32 @@ class SiteController extends Controller
         $result['CreateDate'] = $CreateDate;
         $result['SalerName'] = $SalerName;
         $result['value'] = $da;
+        return $result;
+
+    }/**
+     * @return string|\yii\web\Response
+     */
+    public function artPerDayNum()
+    {
+        $sql = "P_oa_art_near_days_code_num";
+        $Data = Yii::$app->db->createCommand($sql)->queryAll();
+        $possessMan1 = array_unique(array_column($Data, 'possessMan1'));
+        $picCompleteTime = array_unique(array_column($Data, 'picCompleteTime'));
+        $picCompleteTime = array_values($picCompleteTime);
+        $da = [];
+        foreach ($possessMan1 as $k => $v) {
+            $amt = [];
+            foreach ($Data as $key => $value) {
+                if ($v == $value['possessMan1']) {
+                    $amt[] =  empty($value['CodeNum'])?0:$value['CodeNum'];
+                }
+            }
+                     $da [] = $amt;
+        }
+        $result['picCompleteTime'] = $picCompleteTime;
+        $result['possessMan1'] = $possessMan1;
+        $result['value'] = $da;
+        //print_r($result);exit;
         return $result;
 
     }

@@ -20,6 +20,7 @@ $('h1').remove();
                       init_chart('introducer',data);
                       init_chart('num-introducer',data);
                       char_line('per-day-num',data);
+                      char_line('art-per-day-num',data);
                     }
                 });
             }); 
@@ -95,6 +96,9 @@ $this->registerJs($js);
     <div class="row">
         <div id="per-day-num"  style="width: 1600px;height:580px;" class="col-lg-12" ></div>
         <input id="selectall" type="button" value="全不选" flag="1"/>
+    </div>
+    <div class="row">
+        <div id="art-per-day-num"  style="width: 1600px;height:580px;" class="col-lg-12" ></div>
     </div>
     <script type="text/javascript">
         function init_chart(id,row_data) {
@@ -226,9 +230,21 @@ $this->registerJs($js);
         function  char_line(id,row_data) {
             var myChart = echarts.init(document.getElementById(id));
             var data = eval("("+row_data+")");
-            var salername = data.dev;
-            var CreateDate = data.CreateDate;
-            var value = data.value;
+            var text,subtext,salername,value,CreateDate;
+            if(id == 'per-day-num'){
+                text = '近30天每天开款数';
+                subtext = '数据来源企划部';
+                CreateDate = data.CreateDate;
+                salername = data.dev;
+                value = data.value;
+            }
+            if(id == 'art-per-day-num'){
+                text = '美工-近30天每天开款数';
+                subtext = '数据来源企划部';
+                CreateDate = data.artDate;
+                salername = data.art;
+                value = data.artValue;
+            }
             var line = new Array();
             for(var index in value){
                 var single_line=  {
@@ -248,8 +264,8 @@ $this->registerJs($js);
             }
             option = {
                 title : {
-                    text: '近30天每天开款数',
-                    subtext: '企划部'
+                    text: text,
+                    subtext: subtext
                 },
                 tooltip : {
                     trigger: 'axis'
@@ -290,7 +306,8 @@ $this->registerJs($js);
             myChart.setOption(option);
             var selectArr = myChart.getOption().legend.data;
 
-            $('#selectall').click(function(){
+            if(id == 'per-day-num'){
+                $('#selectall').click(function(){
                 var flag = $(this).attr('flag');
                 var val =false;
                 if(flag == 1){
@@ -310,6 +327,7 @@ $this->registerJs($js);
                 myChart.clear();
                 myChart.setOption(option);
             });
+            }
         }
     </script>
     </body>
