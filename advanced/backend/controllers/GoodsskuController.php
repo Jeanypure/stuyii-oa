@@ -114,9 +114,9 @@ class GoodsskuController extends Controller
                         {
                             $_model = clone $model;
                             //配合rules 进行安全检查;需要改变的数据都要声明下类型。
-                            $_model ->setAttributes($row_value,true); //逐行入库
-                            $_model->save(false);
-
+                            //$_model ->setAttributes($row_value,true); //逐行入库
+                            $_model->attributes = $row_value;
+                            $_model->save();
                         }
                         //更新行
                         else
