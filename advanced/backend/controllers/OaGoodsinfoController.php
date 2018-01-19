@@ -119,7 +119,9 @@ class OaGoodsinfoController extends Controller
             throw new NotFoundHttpException("The product was not found.");
         }
 
-        if($info->load(Yii::$app->request->post())){
+        $post = Yii::$app->request->post();
+        unset($post['OaGoodsinfo']['stockUp']);
+        if($info->load($post)){
             $SupplerName = $updata['OaGoodsinfo']['SupplierName'];
             // 如果该查询没有结果则返回 false
             $Suppler = Yii::$app->db->createCommand("SELECT * from  B_Supplier WHERE SupplierName='$SupplerName'")

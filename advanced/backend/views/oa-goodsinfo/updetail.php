@@ -363,25 +363,14 @@ echo FormGrid::widget([ // continuation fields to row above without labels
             'class' => '\kartik\grid\ActionColumn',
             'template' => '{delete}',
             'buttons' => [
-                'view' => function ($url, $model, $key) {
-                    $options = [
-                        'title' => '查看',
-                        'aria-label' => '查看',
-                        'data-toggle' => 'modal',
-                        'data-target' => '#view-modal',
-                        'data-id' => $key,
-                        'class' => 'data-view',
-                    ];
-                    return Html::a('<span  class="glyphicon glyphicon-eye-open"></span>', 'goodssku/delete', $options);
-                },
                 'delete' => function ($url, $model, $key) {
-                    $url = '/goodssku/delete?id=' . $key;
+                    $delete_url = Url::to(['/goodssku/delete','id' => $key]);
                     $options = [
                         'title' => '删除',
                         'aria-label' => '删除',
                         'data-id' => $key,
                     ];
-                    return Html::a('<span  class="glyphicon glyphicon-trash"></span>', $url, $options);
+                    return Html::a('<span  class="glyphicon glyphicon-trash"></span>', $delete_url, $options);
                 },
                 'width' => '60px'
             ],
@@ -606,6 +595,7 @@ echo FormGrid::widget([ // continuation fields to row above without labels
 
 //能删除新增空行的删除行
     $('#delete-row').on('click', function() {
+        var sid_list = [];
         $("input[name='selection[]']:checkbox:checked").each(function(){
             // alert($(this).val());
             // 如果是新增行,就直接删除
@@ -613,17 +603,20 @@ echo FormGrid::widget([ // continuation fields to row above without labels
                 $(this).closest('tr').remove();
             }
             else{
-                var pid = $(this).val();
+                var sid = $(this).val();
+                sid_list.push(sid);
                 $(this).closest('tr').remove();
-                $.ajax({
-                    url:'{$deleteUrl}',
-                    type:'post',
-                    data: {id:pid},
-                    success:function(res) {
-                    }
-                });
             }           
-        })
+        });
+      
+        $.ajax({
+                   url:'{$deleteUrl}',
+                   type:'post',
+                   data: {id:sid_list},
+                   success:function(res) {
+                       alert(res);
+                    }
+               });
     });
 
   

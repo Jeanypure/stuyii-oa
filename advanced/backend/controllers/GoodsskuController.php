@@ -189,22 +189,6 @@ class GoodsskuController extends Controller
                     }
                     $info->save(false);
 
-                 //更新属性信息
-                    $sql_wish = "P_oaGoods_TowishGoods $pid";
-                    $sql_ebay = "P_oaGoods_ToEbayGoods $pid";
-                    $connection = Yii::$app->db;
-                    $import_trans = $connection->beginTransaction();
-                    try{
-
-                        $connection->createCommand($sql_wish)->execute();
-                        $connection->createCommand($sql_ebay)->execute();
-                        $import_trans->commit();
-                    }
-                    catch (Exception $er) {
-
-                        $import_trans->rollBack();
-                    }
-
                     //保存SKU信息
                     foreach ($skuRows as $row_key=>$row_value)
                     {
@@ -235,7 +219,21 @@ class GoodsskuController extends Controller
                         }
 
                     }
+                    //更新属性信息
+                    $sql_wish = "P_oaGoods_TowishGoods $pid";
+                    $sql_ebay = "P_oaGoods_ToEbayGoods $pid";
+                    $connection = Yii::$app->db;
+                    $import_trans = $connection->beginTransaction();
+                    try{
 
+                        $connection->createCommand($sql_wish)->execute();
+                        $connection->createCommand($sql_ebay)->execute();
+                        $import_trans->commit();
+                    }
+                    catch (Exception $er) {
+
+                        $import_trans->rollBack();
+                    }
                     //更新产品状态
                     $goods_model = OaGoodsinfo::find()->where(['pid' => $pid])->one();
                     $developer = $goods_model ->developer;
@@ -397,18 +395,54 @@ class GoodsskuController extends Controller
      */
     public function actionDelete($id=null)
     {
+        //业务逻辑上删除goodsSku,oa_templatesVar ,oa_wishGoodsSku
         $request = Yii::$app->request;
+        $connection = Yii::$app->db;
         if ($request->isGet)
         {
+            $py_sql = "delete from b_goodsSku where nid  in (select goodsSkuId from oa_goodssku where sid={$id})".
+            $ebay_sql = "delete from oa_templatesVar where sid={$id}";
+            $wish_sql = "delete from oa_wishgoodssku where sid={$id}";
             $sku = Goodssku::find()->where(['sid'=>$id])->one();
             $pid = $sku['pid'];
-            $this->findModel($id)->delete();
+            $delete_trans = $connection->beginTransaction();
+            try{
+                $this->findModel($id)->delete();
+                $connection->createCommand($py_sql)->execute();
+                $connection->createCommand($ebay_sql)->execute();
+                $connection->createCommand($wish_sql)->execute();
+                $delete_trans->commit();
+            }
+            catch (\Exception $why){
+                $delete_trans->rollBack();
+            }
             return $this->redirect(['oa-goodsinfo/update','id'=>$pid]);}
         if ($request->isPost)
         {
-            $id =  $_POST['id'];
-            $this->findModel($id)->delete();
-            echo "{'msg':'Deleted'}";
+            $id_list =  $_POST['id'];
+            $trans = $connection->beginTransaction();
+            try{
+                if(\is_array($id_list)){
+                    foreach ($id_list as $sid){
+                        $py_sql = "delete from b_goodsSku where nid  in (select goodsSkuId from oa_goodssku where sid={$sid})".
+                        $ebay_sql = "delete from oa_templatesVar where sid={$sid}";
+                        $wish_sql = "delete from oa_wishgoodssku where sid={$sid}";
+                        $this->findModel($sid)->delete();
+                        $connection->createCommand($py_sql)->execute();
+                        $connection->createCommand($ebay_sql)->execute();
+                        $connection->createCommand($wish_sql)->execute();
+                    }
+                    $trans->commit();
+                    echo '删除成功！' ;
+                }
+                else{
+                    throw new Exception('param is not an array!');
+                }
+            }
+            catch (\Exception $why){
+                $trans->rollBack() ;
+                echo '删除失败！' ;
+            }
         }
 
     }
