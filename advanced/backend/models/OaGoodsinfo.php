@@ -34,7 +34,7 @@ class OaGoodsinfo extends GoodsCats
     {
         return [
             [['IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged','goodsid'], 'integer'],
-            [['headKeywords','requiredKeywords','randomKeywords','tailKeywords','isVar','completeStatus','picStatus','updateTime','developer','devDatetime','GoodsCode','achieveStatus','description','SupplierName','Season','StoreName','PackName','DictionaryName','GoodsName'], 'string'],
+            [['headKeywords','requiredKeywords','randomKeywords','tailKeywords','isVar','completeStatus','picStatus','picCompleteTime','updateTime','developer','devDatetime','GoodsCode','achieveStatus','description','SupplierName','Season','StoreName','PackName','DictionaryName','GoodsName'], 'string'],
             [['StoreName','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description',], 'required'],
             [['stockUp','wishtags','completeStatus','DictionaryName','vendor1'],'safe'],
         ];
@@ -65,6 +65,7 @@ class OaGoodsinfo extends GoodsCats
             'devDatetime' => '开发时间',
             'achieveStatus' => '属性状态',
             'picStatus' => '图片状态',
+            'picCompleteTime' => '标记图片完成时间',
             'developer' => '开发员',
             'Purchaser' => '采购',
             'possessMan1' => '美工',

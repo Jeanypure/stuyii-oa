@@ -197,6 +197,7 @@ class OaPicinfoController extends Controller
         try
         {
             $model->picStatus = '已完善';
+            $model->picCompleteTime = date('Y-m-d H:i:s', time());
             $model->update(false);
             echo "标记成功";
         }
@@ -221,6 +222,7 @@ class OaPicinfoController extends Controller
                 $model = $this->findModel($id);
 
                 $model->picStatus = '已完善';
+                $model->picCompleteTime = date('Y-m-d H:i:s', time());
                 $model->update(false);
             }
             echo "标记完成";
