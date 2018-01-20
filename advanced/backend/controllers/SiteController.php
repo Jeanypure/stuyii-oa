@@ -84,7 +84,6 @@ class SiteController extends Controller
             $DataAMT = Yii::$app->db->createCommand($sql_AMT)->queryAll();
             $cache->set($today,$DataAMT);
         }
-        $DataAMT = Yii::$app->db->createCommand($sql_AMT)->queryAll();
         foreach ($DataAMT as $key => $value) {
             if ($value['Distinguished'] == 'l_AMT') {
                 $Data['l_AMT'][] = $value;
