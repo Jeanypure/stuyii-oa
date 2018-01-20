@@ -82,7 +82,7 @@ class SiteController extends Controller
         }
         else {
             $DataAMT = Yii::$app->db->createCommand($sql_AMT)->queryAll();
-            $cache->set($today,$DataAMT);
+            $cache->set($today,$DataAMT,86400);
         }
         foreach ($DataAMT as $key => $value) {
             if ($value['Distinguished'] == 'l_AMT') {
@@ -146,7 +146,7 @@ class SiteController extends Controller
         }
         else {
             $DataAMT = Yii::$app->db->createCommand($sql_AMT)->queryAll();
-            $cache->set($today,$DataAMT);
+            $cache->set($today,$DataAMT,86400);
         }
         foreach ($DataAMT as $key => $value) {
             if ($value['Distinguished'] == 'l_AMT') {
@@ -172,7 +172,7 @@ class SiteController extends Controller
         }
         else {
             $Data = Yii::$app->db->createCommand($sql)->queryAll();
-            $cache->set($today,$Data);
+            $cache->set($today,$Data,86400);
         }
         $SalerName = array_unique(array_column($Data, 'SalerName'));
         $CreateDate = array_unique(array_column($Data, 'CreateDate'));
@@ -206,7 +206,7 @@ class SiteController extends Controller
         }
         else {
             $Data = Yii::$app->db->createCommand($sql)->queryAll();
-            $cache->set($today,$Data);
+            $cache->set($today,$Data,86400);
         }
         $possessMan1 = array_unique(array_column($Data, 'possessMan1'));
         $picCompleteTime = array_unique(array_column($Data, 'picCompleteTime'));
