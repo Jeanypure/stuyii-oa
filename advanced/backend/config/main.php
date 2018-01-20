@@ -83,7 +83,10 @@ return [
             'class' => 'yii\caching\FileCache',
             'cachePath' => '@runtime/cache2',
         ],
-
+        'local_cache' => [
+            'class' => 'yii\caching\ApcCache',
+            'useApcu' => true ,
+        ],
         'urlManager' => [
             'enablePrettyUrl' => false,
             'showScriptName' => false,

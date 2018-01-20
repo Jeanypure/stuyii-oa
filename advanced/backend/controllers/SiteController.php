@@ -73,7 +73,17 @@ class SiteController extends Controller
 
     public function actionDevData()
     {
-        $sql_AMT = "P_oa_New_Product_Performance_demo";
+        $cache = Yii::$app->local_cache;
+        $sql_AMT = "P_oa_New_Product_Performance";
+        $today = 'dev-'.date('y-m-d');
+        $ret = $cache->get($today);
+        if($ret !== false){
+            $DataAMT = $ret;
+        }
+        else {
+            $DataAMT = Yii::$app->db->createCommand($sql_AMT)->queryAll();
+            $cache->set($today,$DataAMT);
+        }
         $DataAMT = Yii::$app->db->createCommand($sql_AMT)->queryAll();
         foreach ($DataAMT as $key => $value) {
             if ($value['Distinguished'] == 'l_AMT') {
@@ -129,7 +139,16 @@ class SiteController extends Controller
     public function actionIntroData()
     {
         $sql_AMT = "P_oa_Intro_Product_Performance";
-        $DataAMT = Yii::$app->db->createCommand($sql_AMT)->queryAll();
+        $cache = Yii::$app->local_cache;
+        $today = 'intro-'.date('y-m-d');
+        $ret = $cache->get($today);
+        if($ret !== false){
+            $DataAMT = $ret;
+        }
+        else {
+            $DataAMT = Yii::$app->db->createCommand($sql_AMT)->queryAll();
+            $cache->set($today,$DataAMT);
+        }
         foreach ($DataAMT as $key => $value) {
             if ($value['Distinguished'] == 'l_AMT') {
                 $Data['l_AMT'][] = $value;
@@ -146,7 +165,16 @@ class SiteController extends Controller
     public function actionPerDayNum()
     {
         $sql = "P_oa_nearDaysCodeNum";
-        $Data = Yii::$app->db->createCommand($sql)->queryAll();
+        $cache = Yii::$app->local_cache;
+        $today = 'per-'.date('y-m-d');
+        $ret = $cache->get($today);
+        if($ret !== false){
+            $Data = $ret;
+        }
+        else {
+            $Data = Yii::$app->db->createCommand($sql)->queryAll();
+            $cache->set($today,$Data);
+        }
         $SalerName = array_unique(array_column($Data, 'SalerName'));
         $CreateDate = array_unique(array_column($Data, 'CreateDate'));
         $CreateDate = array_values($CreateDate);
@@ -171,7 +199,16 @@ class SiteController extends Controller
     public function artPerDayNum()
     {
         $sql = "P_oa_art_near_days_code_num";
-        $Data = Yii::$app->db->createCommand($sql)->queryAll();
+        $cache = Yii::$app->local_cache;
+        $today = 'art-'.date('y-m-d');
+        $ret = $cache->get($today);
+        if($ret !== false){
+            $Data = $ret;
+        }
+        else {
+            $Data = Yii::$app->db->createCommand($sql)->queryAll();
+            $cache->set($today,$Data);
+        }
         $possessMan1 = array_unique(array_column($Data, 'possessMan1'));
         $picCompleteTime = array_unique(array_column($Data, 'picCompleteTime'));
         $picCompleteTime = array_values($picCompleteTime);
