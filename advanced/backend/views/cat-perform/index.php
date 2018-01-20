@@ -102,7 +102,7 @@ $this->registerJs($js);
                 catNumber = data.catNum;
                 catName = data.name;
             }else if(id=='catAmt'){
-                role='销售额$';
+                role='销售额($)';
                 maxValue = '' ;
                 catNumber = data.catAmt;
                 catName = data.name;
@@ -113,7 +113,7 @@ $this->registerJs($js);
             // 使用刚指定的配置项和数据显示图表。
             option = {
                 title : {
-                    text: '近30天类别表现-'+role,
+                    text: '30天-类目'+role,
                     subtext: '企划部',
                     x:'center'
                 },
