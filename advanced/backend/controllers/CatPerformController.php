@@ -18,15 +18,23 @@ class CatPerformController extends Controller
     }
 
     public function actionCategory(){
-      $sql = 'P_oa_CategoryPerformance';
-      $result =  Yii::$app->db->createCommand($sql)->queryAll();
+        $sql = 'P_oa_CategoryPerformance';
+        $cache = Yii::$app->local_cache;
+        $today = 'category-'.date('y-m-d');
+        $ret = $cache->get($today);
+        if(!empty($ret)){
+            $result = $ret;
+        }else{
+            $result =  Yii::$app->db->createCommand($sql)->queryAll();
+            $cache->set($today,$result,86400);
+        }
         foreach ($result as $key => $value) {
             if ($value['Distinguished'] == 'catNum') {
                 $va['value'] =(int) $value['value'];
                 $va['name'] = $value['name'];
                 $Data['catNum'][] = $va;
             } else {
-                $va['value'] = (int)$value['value'];
+                $va['value'] = (int) $value['value'];
                 $va['name'] = $value['name'];
                 $Data['catAmt'][] = $va;
             }
