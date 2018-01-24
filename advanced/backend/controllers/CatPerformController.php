@@ -62,10 +62,10 @@ class CatPerformController extends Controller
         $create = explode(' - ',$data['create_range']);
         $data['create_start'] = (!empty($create[0]))?$create[0]:'';
         $data['create_end'] = (!empty($create[1]))?$create[1]:'';
-
-        $sql = "P_oa_Category '".$data['type']."' ,'".$data['order_start']."','".$data['order_end']."','".$data['create_start']."','".$data['create_end']."'";  //P_oa_Category 0 ,'2018-01-01','2018-01-23','',''
-//        $result = Yii::$app->db->createCommand($sql)->queryAll();
-        $res = EntryForm::findBySql($sql)->all();
+        $sql = "P_oa_CategoryPerformance_demo '".$data['type']."' ,'".$data['order_start']."','".$data['order_end']."','".$data['create_start']."','".$data['create_end']."'";  //P_oa_Category 0 ,'2018-01-01','2018-01-23','',''
+        $result = Yii::$app->db->createCommand($sql)->queryAll();
+        var_dump($result);die;
+//        $res = EntryForm::findBySql($sql);
         $dataProvider = new ActiveDataProvider([
             'query' => $res
         ]);
