@@ -9,6 +9,7 @@
 use yii\helpers\Url;
 use  yii\helpers\Html;
 
+
 $this->title = '类别表现';
 $cat = Url::toRoute('category');
 $js = <<< JS
@@ -90,6 +91,7 @@ $this->registerJs($js);
     </div>
 
 
+
     <script type="text/javascript">
         function init_chart(id,row_data) {
             // 基于准备好的dom，初始化echarts实例
@@ -102,7 +104,7 @@ $this->registerJs($js);
                 catNumber = data.catNum;
                 catName = data.name;
             }else if(id=='catAmt'){
-                role='销售额$';
+                role='销售额($)';
                 maxValue = '' ;
                 catNumber = data.catAmt;
                 catName = data.name;
@@ -113,7 +115,7 @@ $this->registerJs($js);
             // 使用刚指定的配置项和数据显示图表。
             option = {
                 title : {
-                    text: '近30天类别表现-'+role,
+                    text: '30天-类目'+role,
                     subtext: '企划部',
                     x:'center'
                 },
@@ -162,11 +164,6 @@ $this->registerJs($js);
             myChart.setOption(option);
         }
     </script>
-    <script type="text/javascript">
-
-
-    </script>
-
     </body>
 </div>
 

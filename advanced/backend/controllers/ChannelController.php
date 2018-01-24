@@ -177,7 +177,6 @@ class ChannelController extends Controller
             $inShippingService1 = $this->actionShipping('InFir', $templates->site, false);
             $inShippingService2 = $this->actionShipping('InSec', $templates->site, false);
             $OutShippingService = $this->actionShipping('OutFir', $templates->site, false);
-            //var_dump($inShippingService1);exit;
             return $this->render('editEbay', [
                 'templates' => $templates,
                 'infoId' => $id,
@@ -728,7 +727,6 @@ class ChannelController extends Controller
     public function actionNonOrder($data,$div){
         if($div == 'eBay'){
             $max_length = 80;
-
         }
         if($div == 'Wish'){
             $max_length = 110;
@@ -736,7 +734,6 @@ class ChannelController extends Controller
         if($div == 'Joom'){
             $max_length = 100;
         }
-
         $head = [$data['head']];
         $tail = [$data['tail']];
         $need = array_filter($data['need'],
@@ -753,8 +750,6 @@ class ChannelController extends Controller
                     return $ele;
                 }
             });
-
-
         if(empty($random)||empty($need)){
             return '';
         }
@@ -765,11 +760,9 @@ class ChannelController extends Controller
         }
         //可用长度
         $available_len = $max_length - $unchanged_len - 1;
-
         shuffle($random); //摇匀词库
         $random_str1 = [array_shift($random)]; //从摇匀的词库里不放回抽一个
         $random_arr = array_slice($random,0,4);//从剩余的词库里抽四个
-
         $real_len = strlen(implode(' ',array_merge($random_str1,$random_arr)));
         for($i=0;$i<4;$i++){
             if($real_len<=$available_len){
