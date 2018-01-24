@@ -90,11 +90,6 @@ return [
         'urlManager' => [
             'enablePrettyUrl' => false,
             'showScriptName' => false,
-            /*'rules' => [
-                '<controller:(post|comment)>/<id:\d+>/<action:(create|update|delete)>' => '<controller>/<action>',
-                '<controller:(post|comment)>/<id:\d+>' => '<controller>/view',
-                '<controller:(post|comment)>' => '<controller>/index',
-            ],*/
         ],
 
 
