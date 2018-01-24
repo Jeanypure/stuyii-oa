@@ -9,6 +9,7 @@
 use yii\helpers\Url;
 use  yii\helpers\Html;
 
+
 $this->title = '类别表现';
 $cat = Url::toRoute('category');
 $js = <<< JS
@@ -90,6 +91,7 @@ $this->registerJs($js);
     </div>
 
 
+
     <script type="text/javascript">
         function init_chart(id,row_data) {
             // 基于准备好的dom，初始化echarts实例
@@ -162,11 +164,6 @@ $this->registerJs($js);
             myChart.setOption(option);
         }
     </script>
-    <script type="text/javascript">
-
-
-    </script>
-
     </body>
 </div>
 

@@ -44,7 +44,11 @@ use yii\bootstrap\Modal;
 Modal::begin([
     'id' => 'templates-modal',
     'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">关闭</a>',
-    'size' => "modal-xl"
+    'size' => "modal-xl",
+    'options'=>[
+        'data-backdrop'=>'static',//点击空白处不关闭弹窗
+        'data-keyboard'=>false,
+    ],
 ]);
 //echo
 Modal::end();
