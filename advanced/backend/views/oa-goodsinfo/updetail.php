@@ -799,10 +799,10 @@ echo FormGrid::widget([ // continuation fields to row above without labels
                 type: "POST",
                 url: $('#save-only').data('href'),
                 data:$('#sku-info').serialize(),
-                // async: false,    
-                
+                // async: false, 
                 success: function(data) {
                     alert(data);
+                    location.reload();
                 }
             });
     }); 
@@ -816,9 +816,9 @@ echo FormGrid::widget([ // continuation fields to row above without labels
                 url: $('#save-complete').data('href'),
                 data:$('#sku-info').serialize(),
                 // async: false,    
-                
                 success: function(data) {
                     alert(data);
+                    location.reload();
                 }
             });
     });
