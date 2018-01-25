@@ -3,7 +3,6 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\OaGoods;
 /**
  * OaGoodsSearch represents the model behind the search form about `backend\models\OaGoods`.
  */
@@ -158,7 +157,6 @@ class OaGoodsSearch extends OaGoods
             ->andFilterWhere(['like', 'approvalNote', $this->approvalNote])
             ->andFilterWhere(['like', 'checkStatus', $this->checkStatus])
             ->andFilterWhere(['like', 'stockUp', $this->stockUp]);
-        //var_dump($this->salePrice);exit;
         if($this->salePrice){
             $query->andFilterWhere(['and',['>=', 'salePrice', $this->salePrice], ['<', 'salePrice', ceil($this->salePrice)]]);
         }

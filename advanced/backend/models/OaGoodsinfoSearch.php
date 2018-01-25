@@ -67,8 +67,7 @@ class OaGoodsinfoSearch extends OaGoodsinfo
                     WHERE  t1.id=t2.user_id and
                     username='$user'
                     ");
-        $role = $role_sql
-            ->queryAll();
+        $role = $role_sql->queryAll();
 
         // 返回当前用户管辖下的用户
         $sql = "oa_P_users '{$user}'";
@@ -135,22 +134,6 @@ class OaGoodsinfoSearch extends OaGoodsinfo
                 'pageSize' => isset($params['pageSize']) && $params['pageSize'] ? $params['pageSize'] : 6,
             ],
         ]);
-
-        // 增加关联字段的排序
-
-//        $dataProvider->setSort([
-//            'attributes' => [
-//                /* 其它字段不要动 */
-//                /* 下面这段是加入的 */
-//                /*=============*/
-//                'oa_goods.developer' => [
-//                    'asc' => ['oa_goods.developer' => SORT_ASC],
-//                    'desc' => ['oa_goods.developer' => SORT_DESC],
-//                    'label' => '供应商连接1'
-//                ],
-//                /*=============*/
-//            ]
-//        ]);
         $this->load($params);
 
         if (!$this->validate()) {
