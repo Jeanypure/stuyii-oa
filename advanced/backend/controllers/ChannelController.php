@@ -786,7 +786,7 @@ class ChannelController extends Controller
     public function actionVariationWish($id, $sub, $rate)
     {
 
-        $variants = Wishgoodssku::find()->where(['pid' => $id])->all();
+        $variants = Wishgoodssku::find()->where(['pid' => $id])->orderBy('sid')->all();
         $variation = [];
         $varitem = [];
         if (!isset($variants) || empty($variants)) {
