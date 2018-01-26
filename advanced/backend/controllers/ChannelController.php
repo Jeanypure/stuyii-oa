@@ -134,7 +134,7 @@ class ChannelController extends Controller
     public function actionVariations($id)
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Wishgoodssku::find()->where(['pid' => $id]),
+            'query' => Wishgoodssku::find()->where(['pid' => $id])->orderBy('sid'),
             'pagination' => [
                 'pageSize' => 200,
 
@@ -786,7 +786,7 @@ class ChannelController extends Controller
     public function actionVariationWish($id, $sub, $rate)
     {
 
-        $variants = Wishgoodssku::find()->where(['pid' => $id])->all();
+        $variants = Wishgoodssku::find()->where(['pid' => $id])->orderBy('sid')->all();
         $variation = [];
         $varitem = [];
         if (!isset($variants) || empty($variants)) {
