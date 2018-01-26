@@ -646,12 +646,23 @@ echo FormGrid::widget([ // continuation fields to row above without labels
             'property3','CostPrice','Weight','RetailPrice','stockNum']
             for (var i=3; i<inputNames.length + 3;i++){
                 if(inputNames[i-3] == 'stockNum'){
+                    if ({$make_flag} == 0){
                     var td = $('<td class="kv-align-top" data-col-seq="'+ i +'" >' +
                              '<div class="form-group">' +
                                 '<input type="text"  name="Goodssku[New-'+ row_count +']['+ inputNames[i-3] +']" readonly class="form-control  '+ inputNames[i-3] +'">' +
                                  
                              '</div>' +
                            '</td>');
+                    }
+                    else {
+                        var td = $('<td class="kv-align-top" data-col-seq="'+ i +'" >' +
+                             '<div class="form-group">' +
+                                '<input type="text"  name="Goodssku[New-'+ row_count +']['+ inputNames[i-3] +']" class="form-control  '+ inputNames[i-3] +'">' +
+                                 
+                             '</div>' +
+                           '</td>');
+                    }
+                    
                 }
                 else {
                     var td = $('<td class="kv-align-top" data-col-seq="'+ i +'" >' +
