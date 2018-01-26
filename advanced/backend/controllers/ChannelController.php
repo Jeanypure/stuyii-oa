@@ -134,7 +134,7 @@ class ChannelController extends Controller
     public function actionVariations($id)
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Wishgoodssku::find()->where(['pid' => $id]),
+            'query' => Wishgoodssku::find()->where(['pid' => $id])->orderBy('sid'),
             'pagination' => [
                 'pageSize' => 200,
 
