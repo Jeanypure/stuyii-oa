@@ -200,7 +200,7 @@ class SiteController extends Controller
         $sql = "P_oa_art_near_days_code_num";
         $cache = Yii::$app->local_cache;
         $today = 'art-'.date('y-m-d');
-        $cache->delete($today);
+        //$cache->delete($today);
         $ret = $cache->get($today);
         if($ret !== false){
             $Data = $ret;
