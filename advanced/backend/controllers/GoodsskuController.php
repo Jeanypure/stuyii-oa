@@ -32,7 +32,7 @@ class GoodsskuController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST','GET'],
+                    'delete' => ['POST', 'GET'],
                 ],
             ],
         ];
@@ -54,7 +54,6 @@ class GoodsskuController extends Controller
     }
 
 
-
     /**
      *  SKU info
      */
@@ -62,16 +61,16 @@ class GoodsskuController extends Controller
     public function actionInfo($id)
     {
 
-        $model = Goodssku::find()->where(['pid'=>1])->one();
+        $model = Goodssku::find()->where(['pid' => 1])->one();
         $dataProvider = new ActiveDataProvider([
-            'query' => Goodssku::find()->where(['pid'=>$id]),
+            'query' => Goodssku::find()->where(['pid' => $id]),
             'pagination' => [
                 'pageSize' => 25,
             ],
         ]);
-        return $this->renderAjax('info',[
-            'info'=> $model,
-            'dataProvider'=>$dataProvider
+        return $this->renderAjax('info', [
+            'info' => $model,
+            'dataProvider' => $dataProvider
         ]);
     }
 
@@ -80,47 +79,38 @@ class GoodsskuController extends Controller
      *  save sku data only
      */
 
-    public function actionSaveOnly($pid,$type)
+    public function actionSaveOnly($pid, $type)
     {
         $request = Yii::$app->request;
         $model = new Goodssku();
 
-        if($request->isPost)
-        {
+        if ($request->isPost) {
             //提交过来的表单数据
-            try
-
-            {
-                if($type == 'goods-info')
-                {
+            try {
+                if ($type == 'goods-info') {
                     $skuRows = $request->post()['Goodssku'];
 
                     //根据SKU行数来判断是否是多属性
                     $count = count($skuRows);
-                    $info = OaGoodsinfo::find()->where(['pid'=>$pid])->one();
-                    if($count>1){
+                    $info = OaGoodsinfo::find()->where(['pid' => $pid])->one();
+                    if ($count > 1) {
                         $info->isVar = '是';
-                    }
-                    else{
+                    } else {
                         $info->isVar = '否';
                     }
                     $info->save(false);
-                    foreach ($skuRows as $row_key=>$row_value)
-                    {
+                    foreach ($skuRows as $row_key => $row_value) {
                         $row_value['pid'] = intval($pid); //pid传进来
                         $sid = $row_key;
                         //新增行
-                        if(strstr($row_key,'New'))
-                        {
+                        if (strstr($row_key, 'New')) {
                             $_model = clone $model;
                             //配合rules 进行安全检查;需要改变的数据都要声明下类型。
                             //$_model ->setAttributes($row_value,true); //逐行入库
                             $_model->attributes = $row_value;
                             $_model->save();
-                        }
-                        //更新行
-                        else
-                        {
+                        } //更新行
+                        else {
                             $update_model = Goodssku::find()->where(['sid' => $sid])->one();
                             $update_model->sku = $row_value['sku'];
                             $update_model->property1 = $row_value['property1'];
@@ -134,27 +124,23 @@ class GoodsskuController extends Controller
                         }
 
                     }
-                      echo "保存完成";
+                    echo "保存完成";
                 }
 
-                if($type == 'pic-info')
-                {
+                if ($type == 'pic-info') {
                     $Rows = $request->post()['Goodssku'];
-                    foreach ($Rows as $row_key=>$row_value)
-                    {
+                    foreach ($Rows as $row_key => $row_value) {
                         $sid = $row_key;
                         $update_model = Goodssku::find()->where(['sid' => $sid])->one();
                         $update_model->linkurl = $row_value['linkurl'];
                         $update_model->save(false);
 
                     }
-                    $this->redirect(['oa-picinfo/update','id'=>$pid]);
+                    $this->redirect(['oa-picinfo/update', 'id' => $pid]);
                 }
 
 
-            }
-            catch (Exception  $e)
-            {
+            } catch (Exception  $e) {
                 echo $e;
             }
 
@@ -162,49 +148,40 @@ class GoodsskuController extends Controller
     }
 
 
-
     /**
      *  save and complete sku data
      */
 
-    public function actionSaveComplete($pid,$type)
+    public function actionSaveComplete($pid, $type)
     {
         $request = Yii::$app->request;
         $model = new Goodssku();
-        if($request->isPost)
-        {
+        if ($request->isPost) {
             //提交过来的表单数据
-            try
-            {
-                if($type=='goods-info')
-                {
+            try {
+                if ($type == 'goods-info') {
                     $skuRows = $request->post()['Goodssku'];
                     $count = count($skuRows);
-                    $info = OaGoodsinfo::find()->where(['pid'=>$pid])->one();
-                    if($count>1){
+                    $info = OaGoodsinfo::find()->where(['pid' => $pid])->one();
+                    if ($count > 1) {
                         $info->isVar = '是';
-                    }
-                    else{
+                    } else {
                         $info->isVar = '否';
                     }
                     $info->save(false);
 
                     //保存SKU信息
-                    foreach ($skuRows as $row_key=>$row_value)
-                    {
+                    foreach ($skuRows as $row_key => $row_value) {
                         $row_value['pid'] = intval($pid); //pid传进来
                         $sid = $row_key;
                         //新增行
-                        if(strstr($row_key,'New'))
-                        {
+                        if (strstr($row_key, 'New')) {
                             $_model = clone $model;
                             //配合rules 进行安全检查;需要改变的数据都要声明下类型。
-                            $_model ->setAttributes($row_value,true); //逐行入库
+                            $_model->setAttributes($row_value, true); //逐行入库
                             $_model->save(false);
-                        }
-                        //更新行
-                        else
-                        {
+                        } //更新行
+                        else {
                             $update_model = Goodssku::find()->where(['sid' => $sid])->one();
                             $update_model->sku = $row_value['sku'];
                             $update_model->property1 = $row_value['property1'];
@@ -224,90 +201,83 @@ class GoodsskuController extends Controller
                     $sql_ebay = "P_oaGoods_ToEbayGoods $pid";
                     $connection = Yii::$app->db;
                     $import_trans = $connection->beginTransaction();
-                    try{
+                    try {
 
                         $connection->createCommand($sql_wish)->execute();
                         $connection->createCommand($sql_ebay)->execute();
                         $import_trans->commit();
-                    }
-                    catch (Exception $er) {
+                    } catch (Exception $er) {
 
                         $import_trans->rollBack();
                     }
                     //更新产品状态
                     $goods_model = OaGoodsinfo::find()->where(['pid' => $pid])->one();
-                    $developer = $goods_model ->developer;
+                    $developer = $goods_model->developer;
                     try {
 
-                        if(empty($goods_model->possessMan1)){
+                        if (empty($goods_model->possessMan1)) {
                             $arc_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-arc-map'])->one();
                             $arc = $arc_model->ruleValue;
-                            $goods_model->possessMan1 = $arc?$arc:'';
+                            $goods_model->possessMan1 = $arc ? $arc : '';
                         }
-                        if(empty($goods_model->Purchaser)){
+                        if (empty($goods_model->Purchaser)) {
                             $pur_model = OaSysRules::find()->where(['ruleKey' => $developer])->andWhere(['ruleType' => 'dev-pur-map'])->one();
                             $pur = $pur_model->ruleValue;
-                            $goods_model->Purchaser = $pur?$pur:'';
+                            $goods_model->Purchaser = $pur ? $pur : '';
                         }
-                        $goods_model ->achieveStatus = '已完善';
-                        if(empty($goods_model ->picStatus)){
-                           $goods_model ->picStatus = '待处理';
+                        $goods_model->achieveStatus = '已完善';
+                        if (empty($goods_model->picStatus)) {
+                            $goods_model->picStatus = '待处理';
                         }
 
-                        $goods_model->updateTime =strftime('%F %T');
+                        $goods_model->updateTime = strftime('%F %T');
                         $goods_model->update(false);
                         echo "保存完成";
-                    }
-                    catch (\Exception $e) {
+                    } catch (\Exception $e) {
                         echo $e;
                         echo "美工或采购填写不对,请仔细检查数据";
                     }
                 }
 
-                if ($type=='pic-info')
-                {
+                if ($type == 'pic-info') {
                     $Rows = $request->post()['Goodssku'];
-                    foreach ($Rows as $row_key=>$row_value)
-                    {
+                    foreach ($Rows as $row_key => $row_value) {
                         $sid = $row_key;
                         $update_model = Goodssku::find()->where(['sid' => $sid])->one();
                         $update_model->linkurl = $row_value['linkurl'];
                         $update_model->save(false);
                     }
                     //图片验空
-                   $pic_url = array_column($Rows, 'linkurl');
-                   $val_count = array_count_values($pic_url);
-                   $res = array_key_exists('',  $val_count);
-
+                    $pic_url = array_column($Rows, 'linkurl');
+                    $val_count = array_count_values($pic_url);
+                    $res = array_key_exists('', $val_count);
                     //图片全不为空时，开产品导入ebay和wish模板
-                   if(!$res){
-                       $sql_wish = "exec P_oaGoods_TowishGoods $pid";
-                       $sql_ebay = "exec P_oaGoods_ToEbayGoods $pid";
-                       $connection = Yii::$app->db;
-                       $import_trans = $connection->beginTransaction();
-                       try{
-                           $connection->createCommand($sql_wish)->execute();
-                           $connection->createCommand($sql_ebay)->execute();
-                           //更新商品状态
-                           $goods_model = OaGoodsinfo::find()->where(['pid' => $pid])->one();
-                           $goods_model ->picStatus = '已完善';
-                           $goods_model->updateTime =strftime('%F %T');
-                           if(!$goods_model->update()){
+                    if (!$res) {
+                        $sql_wish = "exec P_oaGoods_TowishGoods $pid";
+                        $sql_ebay = "exec P_oaGoods_ToEbayGoods $pid";
+                        $connection = Yii::$app->db;
+                        $import_trans = $connection->beginTransaction();
+                        try {
+                            $connection->createCommand($sql_wish)->execute();
+                            $connection->createCommand($sql_ebay)->execute();
+                            //更新商品状态
+                            $goods_model = OaGoodsinfo::find()->where(['pid' => $pid])->one();
+                            $goods_model->picStatus = '已完善';
+                            $goods_model->picCompleteTime = date('Y-m-d H:i:s', time());
+                            $goods_model->updateTime = strftime('%F %T');
+                            if (!$goods_model->update()) {
                                 throw new Exception("fail to update picStatus");
-                           }
-                           //提交事务
-                           $import_trans->commit();
-                           echo '保存成功';
-                       }
-                       catch (\Exception $er) {
-                           $import_trans->rollBack();
-                           echo '保存失败';
-                       }
+                            }
+                            //提交事务
+                            $import_trans->commit();
+                            echo '保存成功';
+                        } catch (\Exception $er) {
+                            $import_trans->rollBack();
+                            echo '保存失败';
+                        }
                     }
                 }
-            }
-            catch (Exception  $e)
-            {
+            } catch (Exception  $e) {
                 echo $e;
             }
 
@@ -325,7 +295,7 @@ class GoodsskuController extends Controller
         $connection = yii::$app->db;
         $ret = $connection->createCommand($sql)->queryOne();
         $bill_number = $ret['billNumber'];
-        if($bill_number === 0){
+        if ($bill_number === 0) {
             return '采购单生成失败！';
         }
         return "生成采购单:'{$bill_number}'";
@@ -348,14 +318,14 @@ class GoodsskuController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate($id =null)
+    public function actionCreate($id = null)
     {
 
         $model = new Goodssku();
 
-        if ($model->load(Yii::$app->request->post())&&$model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $pid = $_POST['Goodssku']['pid'];
-            $this->redirect(['oa-goodsinfo/update','id'=>$pid]);
+            $this->redirect(['oa-goodsinfo/update', 'id' => $pid]);
 //            Yii::$app->response->format = Response::FORMAT_JSON;
 //            return ['result' =>$model->save() ];
         } else {
@@ -378,7 +348,7 @@ class GoodsskuController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $pid = $_POST['Goodssku']['pid'];
-            return $this->redirect(['oa-goodsinfo/update','id'=>$pid]);
+            return $this->redirect(['oa-goodsinfo/update', 'id' => $pid]);
         } else {
             return $this->renderAjax('update', [
                 'model' => $model,
@@ -393,39 +363,37 @@ class GoodsskuController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id=null)
+    public function actionDelete($id = null)
     {
         //业务逻辑上删除goodsSku,oa_templatesVar ,oa_wishGoodsSku
         $request = Yii::$app->request;
         $connection = Yii::$app->db;
-        if ($request->isGet)
-        {
-            $py_sql = "delete from b_goodsSku where nid  in (select goodsSkuId from oa_goodssku where sid={$id})".
-            $ebay_sql = "delete from oa_templatesVar where sid={$id}";
+        if ($request->isGet) {
+            $py_sql = "delete from b_goodsSku where nid  in (select goodsSkuId from oa_goodssku where sid={$id})" .
+                $ebay_sql = "delete from oa_templatesVar where sid={$id}";
             $wish_sql = "delete from oa_wishgoodssku where sid={$id}";
-            $sku = Goodssku::find()->where(['sid'=>$id])->one();
+            $sku = Goodssku::find()->where(['sid' => $id])->one();
             $pid = $sku['pid'];
             $delete_trans = $connection->beginTransaction();
-            try{
+            try {
                 $this->findModel($id)->delete();
                 $connection->createCommand($py_sql)->execute();
                 $connection->createCommand($ebay_sql)->execute();
                 $connection->createCommand($wish_sql)->execute();
                 $delete_trans->commit();
-            }
-            catch (\Exception $why){
+            } catch (\Exception $why) {
                 $delete_trans->rollBack();
             }
-            return $this->redirect(['oa-goodsinfo/update','id'=>$pid]);}
-        if ($request->isPost)
-        {
-            $id_list =  $_POST['id'];
+            return $this->redirect(['oa-goodsinfo/update', 'id' => $pid]);
+        }
+        if ($request->isPost) {
+            $id_list = $_POST['id'];
             $trans = $connection->beginTransaction();
-            try{
-                if(\is_array($id_list)){
-                    foreach ($id_list as $sid){
-                        $py_sql = "delete from b_goodsSku where nid  in (select goodsSkuId from oa_goodssku where sid={$sid})".
-                        $ebay_sql = "delete from oa_templatesVar where sid={$sid}";
+            try {
+                if (\is_array($id_list)) {
+                    foreach ($id_list as $sid) {
+                        $py_sql = "delete from b_goodsSku where nid  in (select goodsSkuId from oa_goodssku where sid={$sid})" .
+                            $ebay_sql = "delete from oa_templatesVar where sid={$sid}";
                         $wish_sql = "delete from oa_wishgoodssku where sid={$sid}";
                         $this->findModel($sid)->delete();
                         $connection->createCommand($py_sql)->execute();
@@ -433,15 +401,13 @@ class GoodsskuController extends Controller
                         $connection->createCommand($wish_sql)->execute();
                     }
                     $trans->commit();
-                    echo '删除成功！' ;
-                }
-                else{
+                    echo '删除成功！';
+                } else {
                     throw new Exception('param is not an array!');
                 }
-            }
-            catch (\Exception $why){
-                $trans->rollBack() ;
-                echo '删除失败！' ;
+            } catch (\Exception $why) {
+                $trans->rollBack();
+                echo '删除失败！';
             }
         }
 

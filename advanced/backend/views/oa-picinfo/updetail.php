@@ -104,14 +104,15 @@ ActiveForm::end();
 
 $requestUrl = Url::toRoute(['/goodssku/create','id'=>$info->pid]);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
 $requestUrl2 = Url::toRoute(['/goodssku/update']);//弹窗的html内容，下面的js会调用获得该页面的Html内容，直接填充在弹框中
-
+$saveUrl = Url::toRoute(['/goodssku/save-only', 'pid' => $pid, 'type' => 'pic-info']);//保存数据
+$completeUrl = Url::toRoute(['/goodssku/save-complete', 'pid' => $pid, 'type' => 'pic-info']);//保存数据
 $js2 = <<<JS
 
     
 // 保存数据的提交按钮
     $('#save-only').on('click',function() {
         $.ajax({
-            url:'/goodssku/save-only?pid={$pid}&type=pic-info',
+            url:'{$saveUrl}',
             type:'post',
             data:$('#sku-info').serialize(),
             success:function (ret) {
@@ -123,7 +124,7 @@ $js2 = <<<JS
 // 保存并完善的提交按钮
     $('#save-complete').on('click',function() {
         $.ajax({
-            url:'/goodssku/save-complete?pid={$pid}&type=pic-info',
+            url:'{$completeUrl}',
             type:'post',
             data:$('#sku-info').serialize(),
             success:function (ret) {

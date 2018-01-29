@@ -206,7 +206,8 @@ class SiteController extends Controller
         }
         else {
             $Data = Yii::$app->db->createCommand($sql)->queryAll();
-            $cache->set($today,$Data,86400);
+            $cache->set($today,$Data,0);
+            //$cache->set($today,$Data,86400);
         }
         $possessMan1 = array_unique(array_column($Data, 'possessMan1'));
         $picCompleteTime = array_unique(array_column($Data, 'picCompleteTime'));

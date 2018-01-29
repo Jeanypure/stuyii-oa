@@ -34,7 +34,9 @@ class OaGoodsinfo extends GoodsCats
     {
         return [
             [['IsLiquid', 'IsPowder', 'isMagnetism', 'IsCharged','goodsid'], 'integer'],
-            [['headKeywords','requiredKeywords','randomKeywords','tailKeywords','isVar','completeStatus','picStatus','picCompleteTime','updateTime','developer','devDatetime','GoodsCode','achieveStatus','description','SupplierName','Season','StoreName','PackName','DictionaryName','GoodsName'], 'string'],
+            [['headKeywords','requiredKeywords','randomKeywords','tailKeywords','isVar','completeStatus','picStatus','picCompleteTime',
+                'updateTime','developer','devDatetime','GoodsCode','achieveStatus','description','SupplierName','Season','StoreName',
+                'PackName','DictionaryName','GoodsName'], 'string'],
             [['StoreName','GoodsName','SupplierName', 'AliasCnName','AliasEnName','PackName','description',], 'required'],
             [['stockUp','wishtags','completeStatus','DictionaryName','vendor1'],'safe'],
         ];
