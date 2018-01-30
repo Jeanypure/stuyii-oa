@@ -61,7 +61,7 @@ class ProductPerformController extends \yii\web\Controller
                 'pageSize' => 20,
             ],
             'sort' => [
-                'attributes' => ['l_AMT', 'non_l_AMT'],
+                'attributes' => ['l_AMT', 'l_qty'],
             ],
         ]);
 

@@ -24,8 +24,8 @@ $('h1').remove();
                     url:'{$cat}', 
                     success:function (data) {
                        // var da = JSON.parse(data);  //推荐方法
-                      init_chart('catNum',data);
                       init_chart('catAmt',data);
+                      init_chart('catNum',data);
                     }
                 });
             }); 
@@ -147,12 +147,12 @@ $this->registerJs($js);
             var catNumber, catName, maxValue;
             if (id == 'catNum') {
                 role = '款数';
-                maxValue = '';
+                maxValue = data.maxValue;
                 catNumber = data.catNum;
                 catName = data.name;
             } else if (id == 'catAmt') {
                 role = '销售额($)';
-                maxValue = '';
+                maxValue = data.maxValue;
                 catNumber = data.catAmt;
                 catName = data.name;
             }
@@ -185,8 +185,7 @@ $this->registerJs($js);
                                     x: '25%',
                                     width: '50%',
                                     funnelAlign: 'left',
-                                    max: 1548
-//                                    max: maxValue
+                                    max: maxValue
                                 }
                             }
                         },

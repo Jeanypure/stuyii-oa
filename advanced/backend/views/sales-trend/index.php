@@ -1,29 +1,37 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Administrator
+ * Date: 2018-01-17
+ * Time: 11:44
+ */
 
+use yii\helpers\Url;
 use  yii\helpers\Html;
 use \kartik\form\ActiveForm;
+//use yii\widgets\ActiveForm;
+use kartik\select2\Select2;
 use kartik\daterange\DateRangePicker;
+use \kartik\date\DatePicker;
 
-$this->title = '类别表现';
 
+$this->title = '销售走势';
 ?>
-<?php //echo $this->render('_search'); ?>
-<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
-      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<!-- ECharts单文件引入 标签式单文件引入-->
-<script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
-<?php
-echo Html::jsFile('@web/js/LRU.js');
-echo Html::jsFile('@web/js/color.js');
-?>
-
-<div class="product-perform-index">
-
+<div class="cat-perform-index">
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- ECharts单文件引入 标签式单文件引入-->
+    <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+    <?php
+    echo Html::jsFile('@web/js/LRU.js');
+    echo Html::jsFile('@web/js/color.js');
+    ?>
     <!--搜索框开始-->
     <div class="box-body row">
         <?php $form = ActiveForm::begin([
-            'action' => ['dev-perform/index'],
-            'method' => 'get',
+            'action' => ['sales-trend/index'],
+            'method' => 'post',
             'options' => ['class' => 'form-inline drp-container form-group col-lg-12'],
             'fieldConfig' => [
                 'template' => '{label}<div class="form-group text-right">{input}{error}</div>',
@@ -35,32 +43,32 @@ echo Html::jsFile('@web/js/color.js');
         <?= $form->field($model, 'type', [
             'template' => '{label}{input}',
             'options' => ['class' => 'col-lg-2']
-        ])->dropDownList(['0' => '交易时间', '1' => '发货时间'], ['placeholder' => '交易类型'])->label('交易类型:'); ?>
+        ])->dropDownList(['1' => '按天', '2' => '按月'], ['placeholder' => '类型'])->label('类型:'); ?>
+
+        <?= $form->field($model, 'cat', ['template' => '{label}{input}', 'options' => ['class' => 'col-lg-3']])->label('商品编码:') ?>
 
         <?= $form->field($model, 'order_range', [
             'template' => '{label}{input}{error}',
             //'addon' => ['prepend' => ['content' => '<i class="glyphicon glyphicon-calendar"></i>']],
             'options' => ['class' => 'col-lg-3']
-        ])->widget(DateRangePicker::classname(), [
+        ])->widget(DatePicker::classname(), [
             'pluginOptions' => [
-                'autoUpdateOnInit' => true,
-                'startDate' => date("Y-m-01"),
-                'endDate' => date("Y-m-d"),
                 //'autoclose'=>true,
                 'format' => 'yyyy-mm-dd',
             ]
-        ])->label("<span style = 'color:red'>* 时间必选:</span>"); ?>
+        ])->label("<span style = 'color:red'>* 开始时间:</span>"); ?>
 
         <?= $form->field($model, 'create_range', [
             'template' => '{label}{input}{error}',
             //'addon' => ['prepend' => ['content' => '<i class="glyphicon glyphicon-calendar"></i>']],
             'options' => ['class' => 'col-lg-3']
-        ])->widget(DateRangePicker::classname(), [
+        ])->widget(DatePicker::classname(), [
             'pluginOptions' => [
                 'autoclose' => true,
                 'format' => 'yyyy-mm-dd'
             ]
-        ])->label("开发时间:"); ?>
+        ])->label("<span style = 'color:red'>* 结束时间:</span>"); ?>
+
 
         <div class="">
             <?= Html::submitButton('<i class="glyphicon glyphicon-hand-up"></i> 确定', ['class' => 'btn btn-primary']); ?>
@@ -77,9 +85,9 @@ echo Html::jsFile('@web/js/color.js');
             </div>
         </div>
     </div>
-    <div class="row" style="margin-top: 20px">
-        <div id="devSale" style="width: 800px;height:480px;" class="col-lg-6" data-lis="1"></div>
-        <div id="devSaleNum" style="width: 800px;height:480px;" class="col-lg-6"></div>
+    <div class="row">
+        <div id="sales" style="width: 1600px;height:480px;" class="col-lg-12"></div>
+        <div id="sales-volume" style="width: 1600px;height:480px;" class="col-lg-12"></div>
     </div>
 </div>
 <script>
@@ -96,8 +104,7 @@ echo Html::jsFile('@web/js/color.js');
                 if (params.dataIndex < 0) {
                     // for legend
                     return lift(colorList[colorList.length - 1], params.seriesIndex * 0.1);
-                }
-                else {
+                } else {
                     // for bar
                     return lift(colorList[params.dataIndex], params.seriesIndex * 0.1);
                 }
@@ -106,78 +113,81 @@ echo Html::jsFile('@web/js/color.js');
         },
     };
 </script>
-
-
 <script type="text/javascript">
-    //window.onload = function () {
-    var sale = '<?php echo json_encode($sale);?>';
-    var saleNum = '<?php echo json_encode($saleNum);?>';
-    init_chart('devSale', sale);
-    init_chart('devSaleNum', saleNum);
-
-    function init_chart(id, row_data) {
-        // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById(id));
+    var list = '<?php echo json_encode($list);?>';
+    var list1 = '<?php echo json_encode($list1);?>';
+    char_line('sales', list);
+    char_line('sales-volume', list1);
+    function char_line(id, row_data) {
+        var myChart1 = echarts.init(document.getElementById(id));
         var data = eval("(" + row_data + ")");
-        var catNumber, catName, maxValue, role;
-        maxValue = data.maxValue;
-        catNumber = data.data;
-        catName = data.name;
-        if (id == 'devSaleNum') {
+        var salername, value, CreateDate,role;
+        if(id == 'sales'){
             role = '销量(款数)';
-        } else if (id == 'devSale') {
+        }else if(id == 'sales-volume'){
             role = '销售额($)';
         }
-        // 使用刚指定的配置项和数据显示图表。
-        option = {
+        CreateDate = data.date;
+        salername = data.name;
+        value = data.value;
+
+        var line = new Array();
+        for (var index in value) {
+            var single_line = {
+                name: salername[index],
+                type: 'line',
+                stack: '产品款数',
+                data: value[index],
+                itemStyle: {normal: {areaStyle: {type: 'default'}}},
+            };
+            line.push(single_line);
+        }
+        option1 = {
             title: {
                 text: role,
-                subtext: '企划部',
-                x: 'center'
+                subtext: '数据来源企划部'
             },
             tooltip: {
-                trigger: 'item',
-                formatter: "{a} <br/>{b} : {c} ({d}%)"
+                trigger: 'axis'
             },
             legend: {
-                orient: 'vertical',
-                x: 'left',
-                data: catName
+                data: salername,
+                selectedMode: 'single'
             },
             toolbox: {
                 show: true,
+                orient: 'vertical',
+                y: 'center',
                 feature: {
                     mark: {show: true},
                     dataView: {show: true, readOnly: false},
-                    magicType: {
-                        show: true,
-                        type: ['pie', 'funnel'],
-                        option: {
-                            funnel: {
-                                x: '25%',
-                                width: '50%',
-                                funnelAlign: 'left',
-                                max: maxValue
-                            }
-                        }
-                    },
+                    magicType: {show: true, type: ['line', 'bar']},
                     restore: {show: true},
                     saveAsImage: {show: true}
                 }
             },
             calculable: true,
-            series: [
+            xAxis: [
                 {
-                    name: '访问来源',
-                    type: 'pie',
-                    radius: '55%',
-                    center: ['50%', '60%'],
-                    data: catNumber
+                    type: 'category',
+                    data: CreateDate
                 }
-            ]
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value}'
+                    }
+                }
+            ],
+            series: line
         };
-        myChart.setOption(option);
+        myChart1.setOption(option1);
     }
-
-    //}
 </script>
+
+
+
+
+
