@@ -114,10 +114,10 @@ $this->title = '销售走势';
     };
 </script>
 <script type="text/javascript">
-    var list = '<?php echo json_encode($list);?>';
-    var list1 = '<?php echo json_encode($list1);?>';
-    char_line('sales', list);
-    char_line('sales-volume', list1);
+    var salesData = '<?php echo json_encode($salesData);?>';
+    var salesVolumeData = '<?php echo json_encode($salesVolumeData);?>';
+    char_line('sales', salesData);
+    char_line('sales-volume', salesVolumeData);
     function char_line(id, row_data) {
         var myChart1 = echarts.init(document.getElementById(id));
         var data = eval("(" + row_data + ")");
