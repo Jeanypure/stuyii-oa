@@ -119,6 +119,37 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                 ]
             ],
+            [
+                'attribute' => 'updateTime',
+                'format' => 'raw',
+                //'format' => ['date', "php:Y-m-d"],
+                'value' => function ($model) {
+                    return "<span class='cell'>" . substr(strval($model->updateTime), 0, 10) . "</span>";
+                },
+                'width' => '200px',
+                'filterType' => GridView::FILTER_DATE_RANGE,
+                'filterWidgetOptions' => [
+                    'pluginOptions' => [
+                        'value' => Yii::$app->request->get('ChannelSearch')['updateTime'],
+                        'convertFormat' => true,
+                        'useWithAddon' => true,
+                        'format' => 'php:Y-m-d',
+                        'todayHighlight' => true,
+                        'locale'=>[
+                            'format' => 'YYYY-MM-DD',
+                            'separator'=>'/',
+                            'applyLabel' => '确定',
+                            'cancelLabel' => '取消',
+                            'daysOfWeek'=>false,
+                        ],
+                        'opens'=>'left',
+                        //起止时间的最大间隔
+                        /*'dateLimit' =>[
+                            'days' => 300
+                        ]*/
+                    ]
+                ]
+            ],
             'completeStatus',
             'DictionaryName',
             'isVar',

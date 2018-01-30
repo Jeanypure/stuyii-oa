@@ -43,7 +43,7 @@ $this->title = '销售走势';
         <?= $form->field($model, 'type', [
             'template' => '{label}{input}',
             'options' => ['class' => 'col-lg-2']
-        ])->dropDownList(['1' => '按天', '2' => '按月'], ['placeholder' => '类型'])->label('类型:'); ?>
+        ])->dropDownList(['0' => '按天', '1' => '按月'], ['placeholder' => '类型'])->label('类型:'); ?>
 
         <?= $form->field($model, 'cat', ['template' => '{label}{input}', 'options' => ['class' => 'col-lg-3']])->label('商品编码:') ?>
 
@@ -56,7 +56,7 @@ $this->title = '销售走势';
                 //'autoclose'=>true,
                 'format' => 'yyyy-mm-dd',
             ]
-        ])->label("<span style = 'color:red'>* 开始时间:</span>"); ?>
+        ])->label("<span style = 'color:red'>* 交易开始时间:</span>"); ?>
 
         <?= $form->field($model, 'create_range', [
             'template' => '{label}{input}{error}',
@@ -67,7 +67,7 @@ $this->title = '销售走势';
                 'autoclose' => true,
                 'format' => 'yyyy-mm-dd'
             ]
-        ])->label("<span style = 'color:red'>* 结束时间:</span>"); ?>
+        ])->label("<span style = 'color:red'>* 交易结束时间:</span>"); ?>
 
 
         <div class="">

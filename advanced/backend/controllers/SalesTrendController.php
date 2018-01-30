@@ -5,6 +5,7 @@ namespace backend\controllers;
 
 use backend\models\EntryForm;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 class SalesTrendController extends \yii\web\Controller
 {
@@ -21,15 +22,34 @@ class SalesTrendController extends \yii\web\Controller
             $model->create_range = $get['EntryForm']['create_range'];
         }else{
             $data['type'] = 0;
+            $data['cat'] = '';
             $data['order_range'] = date('Y-m-d',strtotime("-30 day"));
             $data['create_range'] = date('Y-m-d');
             $model->order_range = $data['order_range'];//设置开始时间初始值
             $model->create_range = $data['create_range'];//设置结束时间初始值
         }
-        //$sql = "P_oa_DeveloperPerformance " . $data['type'] . " ,'" . $data['order_start'] . "','" . $data['order_end'] . "','" . $data['create_start'] . "','" . $data['create_end'] ."'";
+        $sql = "P_oa_AMTtrend 0,'" . $data['order_range'] . "','" . $data['create_range'] . "','" . $data['type'] . "','" . $data['cat'] ."'";
         //缓存数据
+        $cache = Yii::$app->local_cache;
+        $ret = $cache->get($sql);
+        if($ret !== false){
+            $result = $ret;
+        } else {
+            $result = Yii::$app->db->createCommand($sql)->queryAll();
+            $cache->set($sql,$result,86400);
+        }
+        //处理数据
+        if($data['type']){//按月
+            $date = array_unique(ArrayHelper::getColumn($result,'ordermonth'));
+        }else{//按天
+            $date = array_unique(ArrayHelper::getColumn($result,'ordertime'));
+        }
+        $name = array_unique(ArrayHelper::getColumn($result,'ADDRESSOWNER'));
+        $value = [];
+
+        var_dump($name);exit;
         //获取销售额数据
-        $date = ['2017-12-31','2018-01-01','2018-01-02','2018-01-03','2018-01-04','2018-01-05','2018-01-06','2018-01-07','2018-01-08','2018-01-09'];
+        /*$date = ['2017-12-31','2018-01-01','2018-01-02','2018-01-03','2018-01-04','2018-01-05','2018-01-06','2018-01-07','2018-01-08','2018-01-09'];
         $name = ['张三','李四','王五','赵六','孙琦','周吧','五九'];
         $value = [
             [1,2,3,4,5,6,7,8,9,10],
@@ -39,7 +59,7 @@ class SalesTrendController extends \yii\web\Controller
             [1,2,3,4,5,6,7,8,9,10],
             [1,2,3,4,5,6,7,8,9,10],
             [1,2,3,4,5,6,7,8,9,10],
-        ];
+        ];*/
         //$salesVolumeData = $this->getSalesVolumeData($model->type, $model->code, $model->start, $model->end);
         $salesVolumeData = [
             'date' => $date,
