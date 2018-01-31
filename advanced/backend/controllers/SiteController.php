@@ -200,7 +200,6 @@ class SiteController extends Controller
         $sql = "P_oa_art_near_days_code_num";
         $cache = Yii::$app->local_cache;
         $today = 'art-'.date('y-m-d');
-        //$cache->delete($today);
         $ret = $cache->get($today);
         if($ret !== false){
             $Data = $ret;
@@ -225,7 +224,6 @@ class SiteController extends Controller
         $result['picCompleteTime'] = $picCompleteTime;
         $result['possessMan1'] = $possessMan1;
         $result['value'] = $da;
-        //print_r($result);exit;
         return $result;
 
     }

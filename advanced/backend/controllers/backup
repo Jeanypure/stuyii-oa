@@ -1,0 +1,123 @@
+ALTER PROCEDURE [dbo].[P_oa_AMTtrend]
+--销售额走势  可以按产品查询
+	@DateFlag INT = 0,                            --时间标记 0 按天 1 按月
+	@ordertimeStart VARCHAR(20),
+	@ordertimeEnd VARCHAR(20),
+	@GoodsCode VARCHAR(50) = ''
+		-- l_qty	销售数量
+		-- l_AMT	销售额
+
+AS
+BEGIN
+SET NOCOUNT ON;
+		--显示这款产品 各个平台的销售额走势+销量走势2张图[上下放]，平台引用普源辅助字典-卖家简称 里的编码，没有销售额的按0显示即可。
+		--SELECT top 10  SUFFIX,	ADDRESSOWNER,SKU 		FROM P_Trade e LEFT JOIN P_TradeDt  t ON e.NID=t.TradeNID  WHERE SKU LIKE '%Y1706%';
+
+		select convert(varchar(10),dateadd(day,number,@ordertimeStart),121) as dt
+		into #tmpDate
+		from master.dbo.spt_values  where type ='P'
+		and number <=DATEDIFF(day, @ordertimeStart,  @ordertimeEnd)
+
+		--select * FROM #tmpDate
+
+		DECLARE @ExchangeRate DECIMAL(10,2);
+		SET @ExchangeRate = (SELECT ExchangeRate FROM B_CurrencyCode WHERE CURRENCYCODE='USD')
+
+			CREATE TABLE #fGoods (
+				ADDRESSOWNER VARCHAR (20),
+				ordertime VARCHAR (20),                              --2018-01-30默认取了交易时间
+				l_qty INT,
+				l_AMT money
+			 )
+
+
+			INSERT INTO #fGoods
+			SELECT
+				isnull(ADDRESSOWNER,'') AS ADDRESSOWNER,
+				CONVERT(varchar(100),DATEADD(HOUR,8,isnull(ordertime,'')), 23) AS ordertime,
+				SUM (d.l_qty) AS l_qty,
+				SUM (isnull(d.l_amt * isnull(b.ExchangeRate, 1),0)) AS l_AMT
+
+			FROM
+				P_TradeDtUn (nolock) d
+			LEFT OUTER JOIN p_tradeUn (nolock) m ON m.nid = d.tradenid
+			LEFT OUTER JOIN B_CurrencyCode (nolock) b ON b.currencycode = m.currencycode
+			WHERE
+			  ((@DateFlag=1 and convert(varchar(10),m.CLOSINGDATE,121) between @ordertimeStart and @ordertimeEnd)
+					or (@DateFlag=0 and convert(varchar(10),DATEADD(HOUR,8,m.ORDERTIME),121) between @ordertimeStart and @ordertimeEnd))
+			AND ((@GoodsCode='') or ( @GoodsCode<>'' AND ( D.Sku IN (
+					SELECT gs.SKU
+					FROM B_GoodsSku (nolock) gs
+					LEFT OUTER JOIN B_goods (nolock) g ON g.nid = gs.goodsid
+					WHERE g.goodscode = @GoodsCode
+				))
+			))
+			AND (IsNull(d.Sku, '') <> '')
+			GROUP BY isnull(ADDRESSOWNER,''),CONVERT(varchar(100),DATEADD(HOUR,8,isnull(ordertime,'')), 23)   --CONVERT(varchar(100),DATEADD(HOUR,8,isnull(ordertime,'')), 23)
+			UNION ALL
+				SELECT
+					isnull(ADDRESSOWNER,'') AS ADDRESSOWNER,
+					CONVERT(varchar(100),DATEADD(HOUR,8,isnull(ordertime,'')), 23) AS ordertime,
+					SUM (d.l_qty) AS l_qty,
+					SUM (
+						isnull(
+							d.l_amt * isnull(b.ExchangeRate, 1),
+							0
+						)
+					) AS l_AMT
+
+				FROM
+					p_tradedt (nolock) d
+				LEFT OUTER JOIN p_trade (nolock) m ON m.nid = d.tradenid
+				LEFT OUTER JOIN B_CurrencyCode (nolock) b ON b.currencycode = m.currencycode
+				WHERE
+				((@DateFlag=1  and  convert(varchar(10),m.CLOSINGDATE,121) between @ordertimeStart and @ordertimeEnd)
+						or (@DateFlag=0 and convert(varchar(10),DATEADD(HOUR,8,m.ORDERTIME),121) between @ordertimeStart and @ordertimeEnd))
+				AND ((@GoodsCode='') or ( @GoodsCode<>'' AND ( D.Sku IN (
+					SELECT gs.SKU
+					FROM B_GoodsSku (nolock) gs
+					LEFT OUTER JOIN B_goods (nolock) g ON g.nid = gs.goodsid
+					WHERE g.goodscode = @GoodsCode
+				))
+			))
+				AND (IsNull(d.Sku, '') <> '')
+				GROUP BY 	isnull(ADDRESSOWNER,''),CONVERT(varchar(100),DATEADD(HOUR,8,isnull(ordertime,'')), 23)
+				UNION ALL
+					SELECT
+						isnull(ADDRESSOWNER,'') AS ADDRESSOWNER,
+						CONVERT(varchar(100),DATEADD(HOUR,8,isnull(ordertime,'')), 23) AS ordertime,
+						SUM (d.l_qty) AS l_qty,
+						SUM (
+							isnull(
+								d.l_amt * isnull(b.ExchangeRate, 1),
+								0
+							)
+						) AS l_AMT
+					FROM
+						P_TradeDt_His (nolock) d
+					LEFT OUTER JOIN P_Trade_His (nolock) m ON m.nid = d.tradenid
+					LEFT OUTER JOIN B_CurrencyCode b ON b.currencycode = m.currencycode
+					WHERE
+					((@DateFlag=1  and  convert(varchar(10),m.CLOSINGDATE,121) between @ordertimeStart and @ordertimeEnd)
+						or (@DateFlag=0 and convert(varchar(10),DATEADD(HOUR,8,m.ORDERTIME),121) between @ordertimeStart and @ordertimeEnd))
+					AND ((@GoodsCode='') or ( @GoodsCode<>'' AND ( D.Sku IN (
+							SELECT gs.SKU
+							FROM B_GoodsSku (nolock) gs
+							LEFT OUTER JOIN B_goods (nolock) g ON g.nid = gs.goodsid
+							WHERE g.goodscode = @GoodsCode
+						))
+					))
+					AND (IsNull(d.Sku, '') <> '')
+					GROUP BY isnull(ADDRESSOWNER,''),CONVERT(varchar(100),DATEADD(HOUR,8,isnull(ordertime,'')), 23)
+
+
+		SELECT DISTINCT ADDRESSOWNER INTO #TmpOwner FROM #fGoods
+
+		SELECT * into #TmpOwnerDate  from #TmpOwner t1 CROSS JOIN #tmpDate  t2
+
+		SELECT s.ordertime,s.ADDRESSOWNER,s.l_qty,s.l_AMT FROM  #fGoods s LEFT JOIN #TmpOwnerDate e ON  s.ADDRESSOWNER=e.ADDRESSOWNER AND e.dt=s.ordertime ORDER BY e.dt ASC
+
+			DROP TABLE 	#fGoods
+			DROP TABLE  #tmpDate
+			DROP TABLE  #TmpOwner
+END
