@@ -31,7 +31,7 @@ $this->title = '销售走势';
     <div class="box-body row">
         <?php $form = ActiveForm::begin([
             'action' => ['sales-trend/index'],
-            'method' => 'post',
+            'method' => 'get',
             'options' => ['class' => 'form-inline drp-container form-group col-lg-12'],
             'fieldConfig' => [
                 'template' => '{label}<div class="form-group text-right">{input}{error}</div>',
