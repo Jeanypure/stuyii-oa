@@ -54,6 +54,7 @@ class CatPerformController extends Controller
                 $Data['catAmt'][] = $va;
             }
         }
+        $Data['maxValue'] = max(ArrayHelper::getColumn($result,'value'));
         $Data['name'] = array_column($Data['catNum'], 'name');
         echo json_encode($Data);
     }

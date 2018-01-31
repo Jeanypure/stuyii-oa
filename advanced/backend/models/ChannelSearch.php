@@ -117,6 +117,7 @@ class ChannelSearch extends Channel
                 'Purchaser',
                 'possessMan1',
                 'devDatetime',
+                'updateTime',
                 'achieveStatus',
                 'DictionaryName',
                 'completeStatus',

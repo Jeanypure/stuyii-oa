@@ -1,5 +1,7 @@
 <?php
 namespace backend\controllers;
+use backend\models\Goodssku;
+use backend\models\OaGoods;
 use backend\models\OaGoodsinfo;
 use backend\unitools\PHPExcelTools;
 use Yii;
@@ -10,6 +12,7 @@ use backend\models\ChannelSearch;
 use backend\models\WishSuffixDictionary;
 use backend\models\OaWishgoods;
 use backend\models\Wishgoodssku;
+use yii\db\Exception;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -375,7 +378,13 @@ class ChannelController extends Controller
         $complete_status_query = OaGoodsinfo::findBySql($sql,[":id"=>$id])->one();
         $complete_status = $complete_status_query->completeStatus;
         if(empty($complete_status)){
-            $this->findModel($id)->delete();
+            try{
+                $this->findModel($id)->delete();
+                OaGoods::deleteAll(['nid' => $id]);
+                Goodssku::deleteAll(['pid' => $id]);
+            }
+            catch (Exception $e){
+            }
         }
         return $this->redirect(['index']);
     }
